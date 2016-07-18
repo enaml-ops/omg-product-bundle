@@ -1,0 +1,37 @@
+package: github.com/enaml-ops/omg-cli
+import:
+- package: github.com/pivotalservices/gtils
+  version: master
+  subpackages:
+  - osutils
+- package: github.com/pkg/sftp
+  version: master
+- package: github.com/kr/fs
+  version: master
+- package: github.com/pkg/errors
+  version: master
+- package: github.com/cloudfoundry/bosh-init
+  version: afa267bec2ba83d7572075ca34ac4c000a29023d
+  repo: https://github.com/sneal/bosh-init.git
+  vcs: git
+  subpackages:
+  - cmd
+  - logger
+  - ui
+  - ui/fmt
+- package: github.com/codegangsta/cli
+  version: master
+- package: github.com/hashicorp/go-plugin
+  version: master
+- package: github.com/xchapter7x/lo
+  version: master
+- package: github.com/pivotal-golang/clock
+- package: github.com/enaml-ops/enaml
+  version: master
+  subpackages:
+  - enamlbosh
+  - cloudproperties/aws
+  - cloudproperties/azure
+- package: github.com/onsi/ginkgo
+- package: github.com/onsi/gomega
+- package: github.com/hashicorp/yamux

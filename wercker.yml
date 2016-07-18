@@ -1,0 +1,146 @@
+box: golang
+
+build:
+  steps:
+    - setup-go-workspace
+
+    # Gets the dependencies
+    - script:
+        name: go get
+        code: |
+          cd $WERCKER_SOURCE_DIR
+          go version
+          go get github.com/Masterminds/glide
+          export PATH=$WERCKER_SOURCE_DIR/bin:$PATH
+          glide --version
+          glide install
+
+    # Test the project
+    - script:
+        name: go test
+        code: |
+          LOG_LEVEL=debug go test $(glide novendor) -v -cover -race
+
+    - script:
+        name: set release id variable for version
+        code: |
+          go get github.com/xchapter7x/versioning
+          export WERCKER_GITHUB_CREATE_RELEASE_ID=`versioning bump_patch`
+
+    - script:
+        name: compile built in product plugins
+        code: |
+          GOOS=darwin go build -o concourse-plugin-osx ./products/concourse/cmd/concourse-plugin/main.go
+          GOOS=linux go build -o concourse-plugin-linux ./products/concourse/cmd/concourse-plugin/main.go
+          GOOS=darwin go build -o vault-plugin-osx ./products/vault/cmd/vault/main.go
+          GOOS=linux go build -o vault-plugin-linux ./products/vault/cmd/vault/main.go
+          GOOS=darwin go build -o redis-plugin-osx ./products/redis/cmd/redis/main.go
+          GOOS=linux go build -o redis-plugin-linux ./products/redis/cmd/redis/main.go
+          GOOS=darwin go build -o cloudfoundry-plugin-osx ./products/cloudfoundry/cmd/cloudfoundry/main.go
+          GOOS=linux go build -o cloudfoundry-plugin-linux ./products/cloudfoundry/cmd/cloudfoundry/main.go
+
+    - script:
+        name: add repo to artifact
+        code: |
+          cp -R ./ ${WERCKER_OUTPUT_DIR}
+
+  after-steps:
+    - slack-notifier:
+        url: $SLACK_URL
+        channel: enaml
+        username: robo-enaml
+        notify_on: failed
+        branch: master
+
+deploy-pre-release:
+  steps:
+    - setup-go-workspace
+    - script:
+        name: install-packages
+        code: |
+          sudo apt-get install -y openssh-client wget
+          ls -la
+          pwd
+          echo ${WERCKER_OUTPUT_DIR}
+          ls -la ${WERCKER_OUTPUT_DIR}
+
+    - wercker/add-ssh-key@1.0.2:
+        keyname: PCF_GITHUB_KEY
+
+    - wercker/add-to-known_hosts@1.4.0:
+        hostname: github.com
+        fingerprint: 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48
+
+    - script:
+        name: set release id variable for version
+        code: |
+          go get github.com/xchapter7x/versioning
+          export WERCKER_GITHUB_CREATE_RELEASE_ID=`versioning bump_patch`-`git rev-parse HEAD | cut -c1-6`
+
+    - github-create-release:
+        token: $GITHUB_TOKEN
+        tag: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        title: omg-product-bundles $WERCKER_GITHUB_CREATE_RELEASE_ID
+        draft: true
+        prerelease: ${IS_PRE_RELEASE}
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: concourse-plugin-linux
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: concourse-plugin-osx
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: vault-plugin-linux
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: vault-plugin-osx
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: redis-plugin-linux
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: redis-plugin-osx
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: cloudfoundry-plugin-linux
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: cloudfoundry-plugin-osx
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - script:
+        name: add repo to artifact
+        code: |
+          cp -R ./ ${WERCKER_OUTPUT_DIR}
+
+  after-steps:
+    - slack-notifier:
+        url: $SLACK_URL
+        channel: enaml
+        username: robo-enaml
+        notify_on: failed
+        branch: master

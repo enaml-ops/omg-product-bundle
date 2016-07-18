@@ -22,3 +22,26 @@ _testmain.go
 *.exe
 *.test
 *.prof
+vendor
+.DS_Store
+.cache
+omg
+.wercker/
+
+# build generated output
+plugin/registry/fixtures/testplugin-darwin
+plugin/registry/fixtures/testplugin-linux
+sample/
+.plugins/
+_builds/
+_projects/
+_steps/
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode
+bosh-init-wrapper
+products/cloudfoundry/cmd/cloudfoundry/cloudfoundry
+products/cloudfoundry/cmd/passgen/passgen
+products/cloudfoundry/cmd/certgen/certgen
