@@ -12,7 +12,9 @@
 **in order to easily deploy products omg provides plugins. we maintain core product plugings for you in this bundle**
 
 
-### to download a product please go here: https://github.com/enaml-ops/omg-cli/releases/latest
+### to download a product please go here: 
+https://github.com/enaml-ops/omg-product-bundle/releases/latest
+
 Currently under development
 - vault
 - concourse
