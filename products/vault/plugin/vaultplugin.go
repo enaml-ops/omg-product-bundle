@@ -7,8 +7,8 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-cli/pluginlib/product"
 	"github.com/enaml-ops/omg-cli/pluginlib/util"
-	"github.com/enaml-ops/omg-cli/plugins/products/vault/enaml-gen/consul"
-	vaultlib "github.com/enaml-ops/omg-cli/plugins/products/vault/enaml-gen/vault"
+	"github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/consul"
+	vaultlib "github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/vault"
 	"github.com/xchapter7x/lo"
 )
 

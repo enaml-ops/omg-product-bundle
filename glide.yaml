@@ -1,4 +1,4 @@
-package: github.com/enaml-ops/omg-cli
+package: github.com/enaml-ops/omg-product-bundle
 import:
 - package: github.com/pivotalservices/gtils
   version: master
@@ -35,3 +35,4 @@ import:
 - package: github.com/onsi/ginkgo
 - package: github.com/onsi/gomega
 - package: github.com/hashicorp/yamux
+- package: github.com/enaml-ops/omg-cli

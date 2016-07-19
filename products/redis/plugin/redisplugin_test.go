@@ -6,7 +6,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	. "github.com/enaml-ops/omg-cli/plugins/products/redis/plugin"
+	. "github.com/enaml-ops/omg-product-bundle/products/redis/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

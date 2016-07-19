@@ -4,7 +4,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	. "github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/plugin"
+	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 )
 
 var _ = Describe("Cloud Foundry Plugin", func() {

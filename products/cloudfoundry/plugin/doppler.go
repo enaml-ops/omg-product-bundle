@@ -5,8 +5,8 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/enaml-gen/doppler"
-	"github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/enaml-gen/syslog_drain_binder"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/doppler"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/syslog_drain_binder"
 )
 
 //NewDopplerPartition -

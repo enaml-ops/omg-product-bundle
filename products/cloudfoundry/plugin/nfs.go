@@ -3,7 +3,7 @@ package cloudfoundry
 import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	nfslib "github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/enaml-gen/debian_nfs_server"
+	nfslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/debian_nfs_server"
 )
 
 //NewNFSPartition -

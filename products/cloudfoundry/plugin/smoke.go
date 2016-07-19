@@ -5,7 +5,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/enaml-gen/smoke-tests"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/smoke-tests"
 )
 
 //NewSmokeErrand - errand definition for smoke tests

@@ -3,7 +3,7 @@ package concourse_test
 import (
 	"io/ioutil"
 
-	. "github.com/enaml-ops/omg-cli/plugins/products/concourse"
+	. "github.com/enaml-ops/omg-product-bundle/products/concourse"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

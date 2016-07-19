@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/enaml-ops/omg-cli/plugins/products/concourse/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/concourse/plugin"
 	"github.com/enaml-ops/omg-cli/pluginlib/product"
 )
 

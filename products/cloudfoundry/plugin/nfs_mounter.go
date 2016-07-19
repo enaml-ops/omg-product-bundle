@@ -3,7 +3,7 @@ package cloudfoundry
 import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	nfsmounterlib "github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/enaml-gen/nfs_mounter"
+	nfsmounterlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/nfs_mounter"
 )
 
 //NewNFSMounter - Creates a new NFS Mounter

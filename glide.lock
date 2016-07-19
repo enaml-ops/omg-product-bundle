@@ -1,5 +1,5 @@
-hash: 5c02cc328958b86f282e239e9deed30f23a2fe90a85262f8af81e18fb9eb9e26
-updated: 2016-07-18T18:59:42.209135436-04:00
+hash: de2a2ff3edcf9896875247c8cff43521ea01b0d6685d11c7e58dced1b0042117
+updated: 2016-07-18T19:53:49.262158985-04:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -21,65 +21,8 @@ imports:
 - name: github.com/enaml-ops/omg-cli
   version: 3e2920c16e3b528e36ac3a25368e48aed2a2b2ff
   subpackages:
-  - plugins/products/bosh-init/enaml-gen/aws_cpi
-  - plugins/products/bosh-init/enaml-gen/blobstore
-  - plugins/products/bosh-init/enaml-gen/cpi
-  - plugins/products/bosh-init/enaml-gen/director
-  - plugins/products/bosh-init/enaml-gen/health_monitor
-  - plugins/products/bosh-init/enaml-gen/nats
-  - plugins/products/bosh-init/enaml-gen/postgres
-  - plugins/products/bosh-init/enaml-gen/registry
-  - plugins/products/bosh-init/enaml-gen/uaa
-  - plugins/products/bosh-init/enaml-gen/vsphere_cpi
   - pluginlib/product
-  - plugins/products/cloudfoundry/plugin
   - pluginlib/util
-  - plugins/products/cf-mysql/enaml-gen/bootstrap
-  - plugins/products/cf-mysql/enaml-gen/mysql
-  - plugins/products/cf-mysql/enaml-gen/proxy
-  - plugins/products/cloudfoundry/enaml-gen/acceptance-tests
-  - plugins/products/cloudfoundry/enaml-gen/auctioneer
-  - plugins/products/cloudfoundry/enaml-gen/bbs
-  - plugins/products/cloudfoundry/enaml-gen/cc_uploader
-  - plugins/products/cloudfoundry/enaml-gen/cloud_controller_clock
-  - plugins/products/cloudfoundry/enaml-gen/cloud_controller_ng
-  - plugins/products/cloudfoundry/enaml-gen/cloud_controller_worker
-  - plugins/products/cloudfoundry/enaml-gen/consul_agent
-  - plugins/products/cloudfoundry/enaml-gen/converger
-  - plugins/products/cloudfoundry/enaml-gen/debian_nfs_server
-  - plugins/products/cloudfoundry/enaml-gen/doppler
-  - plugins/products/cloudfoundry/enaml-gen/etcd
-  - plugins/products/cloudfoundry/enaml-gen/etcd_metrics_server
-  - plugins/products/cloudfoundry/enaml-gen/file_server
-  - plugins/products/cloudfoundry/enaml-gen/garden
-  - plugins/products/cloudfoundry/enaml-gen/gorouter
-  - plugins/products/cloudfoundry/enaml-gen/haproxy
-  - plugins/products/cloudfoundry/enaml-gen/loggregator_trafficcontroller
-  - plugins/products/cloudfoundry/enaml-gen/metron_agent
-  - plugins/products/cloudfoundry/enaml-gen/nats
-  - plugins/products/cloudfoundry/enaml-gen/nfs_mounter
-  - plugins/products/cloudfoundry/enaml-gen/nsync
-  - plugins/products/cloudfoundry/enaml-gen/rep
-  - plugins/products/cloudfoundry/enaml-gen/route_emitter
-  - plugins/products/cloudfoundry/enaml-gen/route_registrar
-  - plugins/products/cloudfoundry/enaml-gen/smoke-tests
-  - plugins/products/cloudfoundry/enaml-gen/ssh_proxy
-  - plugins/products/cloudfoundry/enaml-gen/stager
-  - plugins/products/cloudfoundry/enaml-gen/syslog_drain_binder
-  - plugins/products/cloudfoundry/enaml-gen/tps
-  - plugins/products/cloudfoundry/enaml-gen/uaa
-  - plugins/products/concourse/enaml-gen/atc
-  - plugins/products/concourse/enaml-gen/baggageclaim
-  - plugins/products/concourse/enaml-gen/garden
-  - plugins/products/concourse/enaml-gen/groundcrew
-  - plugins/products/concourse/enaml-gen/postgresql
-  - plugins/products/concourse/enaml-gen/tsa
-  - plugins/products/concourse/plugin
-  - plugins/products/concourse
-  - plugins/products/redis/plugin
-  - plugins/products/vault/plugin
-  - plugins/products/vault/enaml-gen/consul
-  - plugins/products/vault/enaml-gen/vault
 - name: github.com/hashicorp/go-plugin
   version: 8cf118f7a2f0c7ef1c82f66d4f6ac77c7e27dc12
 - name: github.com/hashicorp/yamux

@@ -6,8 +6,8 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-cli/pluginlib/util"
-	"github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/enaml-gen/bbs"
-	"github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/enaml-gen/etcd"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/bbs"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd"
 	"github.com/xchapter7x/lo"
 )
 

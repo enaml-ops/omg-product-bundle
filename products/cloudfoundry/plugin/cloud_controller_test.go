@@ -3,12 +3,12 @@ package cloudfoundry_test
 import (
 	//"fmt"
 
-	. "github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/plugin"
+	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"gopkg.in/yaml.v2"
 
-	ccnglib "github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/enaml-gen/cloud_controller_ng"
+	ccnglib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_ng"
 )
 
 var _ = Describe("Cloud Controller Partition", func() {

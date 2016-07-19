@@ -5,7 +5,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	mysqllib "github.com/enaml-ops/omg-cli/plugins/products/cf-mysql/enaml-gen/mysql"
+	mysqllib "github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/mysql"
 )
 
 //NewMySQLPartition -

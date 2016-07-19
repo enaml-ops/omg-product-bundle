@@ -3,7 +3,7 @@ package cloudfoundry
 import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	bstraplib "github.com/enaml-ops/omg-cli/plugins/products/cf-mysql/enaml-gen/bootstrap"
+	bstraplib "github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/bootstrap"
 )
 
 func NewBootstrapPartition(c *cli.Context) InstanceGrouper {
