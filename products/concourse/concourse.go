@@ -24,7 +24,7 @@ const (
 	gardenReleaseVer     string = "0.337.0"
 	gardenReleaseURL     string = "https://bosh.io/d/github.com/cloudfoundry-incubator/garden-linux-release"
 	gardenReleaseSHA     string = "d1d81d56c3c07f6f9f04ebddc68e51b8a3cf541d"
-	stemcellName         string = "ubuntu-trusty"
+	stemcellOS           string = "ubuntu-trusty"
 	stemcellVer          string = "3232.4"
 	stemcellURL          string = "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent"
 	stemcellSHA          string = "ac920cae17c7159dee3bf1ebac727ce2d01564e9"
@@ -124,7 +124,7 @@ func (d *Deployment) Initialize(cloudConfig []byte) (err error) {
 	d.manifest.SetDirectorUUID(d.DirectorUUID)
 	d.manifest.AddRemoteRelease(concourseReleaseName, concourseReleaseVer, concourseReleaseURL, concourseReleaseSHA)
 	d.manifest.AddRemoteRelease(gardenReleaseName, gardenReleaseVer, gardenReleaseURL, gardenReleaseSHA)
-	d.manifest.AddRemoteStemcell(stemcellName, d.StemcellAlias, stemcellVer, d.StemcellURL, d.StemcellSHA)
+	d.manifest.AddRemoteStemcell(stemcellOS, d.StemcellAlias, stemcellVer, d.StemcellURL, d.StemcellSHA)
 
 	update := d.CreateUpdate()
 	d.manifest.SetUpdate(update)
