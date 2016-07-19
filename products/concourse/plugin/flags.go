@@ -3,7 +3,7 @@ package concourseplugin
 import (
 	"strings"
 
-	"github.com/codegangsta/cli"
+	"github.com/enaml-ops/omg-cli/pluginlib/pcli"
 )
 
 type flagBucket struct {
@@ -41,7 +41,7 @@ func getFlag(input string) (flag string) {
 	return
 }
 
-func generateFlags() (flags []cli.Flag) {
+func generateFlags() (flags []pcli.Flag) {
 	var flagList = map[string]flagBucket{
 		boshDirectorUUID: flagBucket{
 			Desc:   "bosh director uuid (bosh status --uuid)",
@@ -134,13 +134,13 @@ func generateFlags() (flags []cli.Flag) {
 	}
 	for _, v := range flagList {
 		if v.StringSlice {
-			flags = append(flags, cli.StringSliceFlag{
+			flags = append(flags, pcli.StringSliceFlag{
 				Name:   getFlag(v.EnvVar),
 				Usage:  v.Desc,
 				EnvVar: v.EnvVar,
 			})
 		} else {
-			flags = append(flags, cli.StringFlag{
+			flags = append(flags, pcli.StringFlag{
 				Name:   getFlag(v.EnvVar),
 				Value:  "",
 				Usage:  v.Desc,

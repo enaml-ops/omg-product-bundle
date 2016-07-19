@@ -5,6 +5,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-cli/pluginlib/pcli"
 	"github.com/enaml-ops/omg-cli/pluginlib/product"
 	"github.com/enaml-ops/omg-cli/pluginlib/util"
 	"github.com/xchapter7x/lo"
@@ -43,8 +44,8 @@ func init() {
 }
 
 //GetFlags -
-func (s *Plugin) GetFlags() (flags []cli.Flag) {
-	return []cli.Flag{
+func (s *Plugin) GetFlags() (flags []pcli.Flag) {
+	return []pcli.Flag{
 		// shared for all instance groups:
 		createStringFlag("stemcell-name", "the name of your desired stemcell"),
 		createStringSliceFlag("az", "list of AZ names to use"),
@@ -187,8 +188,8 @@ func (s *Plugin) GetFlags() (flags []cli.Flag) {
 		createStringFlag("doppler-shared-secret", "doppler shared secret"),
 
 		//Loggregator Traffic Controller
-		cli.StringSliceFlag{Name: "loggregator-traffic-controller-ip", Usage: "a list of loggregator traffic controller IPs"},
-		cli.StringFlag{Name: "loggregator-traffic-controller-vmtype", Usage: "the name of your desired vm size for the loggregator traffic controller"},
+		createStringSliceFlag("loggregator-traffic-controller-ip", "a list of loggregator traffic controller IPs"),
+		createStringFlag("loggregator-traffic-controller-vmtype", "the name of your desired vm size for the loggregator traffic controller"),
 
 		//UAA
 		createStringFlag("uaa-vm-type", "the name of your desired vm size for uaa"),
@@ -253,8 +254,8 @@ func (s *Plugin) GetFlags() (flags []cli.Flag) {
 	}
 }
 
-func createStringFlag(name, usage string, value ...string) cli.StringFlag {
-	res := cli.StringFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+func createStringFlag(name, usage string, value ...string) pcli.StringFlag {
+	res := pcli.StringFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
 
 	if len(value) > 0 {
 		res.Value = value[0]
@@ -262,25 +263,20 @@ func createStringFlag(name, usage string, value ...string) cli.StringFlag {
 	return res
 }
 
-func createBoolFlag(name, usage string) cli.BoolFlag {
-	return cli.BoolFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+func createBoolFlag(name, usage string) pcli.BoolFlag {
+	return pcli.BoolFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
 }
 
-func createIntFlag(name, usage string) cli.IntFlag {
-	return cli.IntFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+func createIntFlag(name, usage string) pcli.IntFlag {
+	return pcli.IntFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
 }
 
-func createBoolTFlag(name, usage string) cli.BoolTFlag {
-	return cli.BoolTFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+func createBoolTFlag(name, usage string) pcli.BoolTFlag {
+	return pcli.BoolTFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
 }
 
-func createStringSliceFlag(name, usage string, value ...string) cli.StringSliceFlag {
-	res := cli.StringSliceFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
-
-	if len(value) > 0 {
-		res.Value = &cli.StringSlice{}
-		res.Value.Set(strings.Join(value, ","))
-	}
+func createStringSliceFlag(name, usage string, value ...string) pcli.StringSliceFlag {
+	res := pcli.StringSliceFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name), Value: value}
 	return res
 }
 
@@ -293,7 +289,7 @@ func (s *Plugin) GetMeta() product.Meta {
 
 //GetProduct -
 func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
-	flgs := s.GetFlags()
+	flgs := pluginutil.ToCliFlagArray(s.GetFlags())
 	s.vaultDecorate(args, flgs)
 	c := pluginutil.NewContext(args, flgs)
 	dm := enaml.NewDeploymentManifest([]byte(``))
@@ -373,6 +369,6 @@ func (s *Plugin) hasValidVaultFlags(c *cli.Context) bool {
 
 //GetContext -
 func (s *Plugin) GetContext(args []string) (c *cli.Context) {
-	c = pluginutil.NewContext(args, s.GetFlags())
+	c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
 	return
 }

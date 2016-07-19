@@ -6,6 +6,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-cli/pluginlib/util"
 	. "github.com/enaml-ops/omg-product-bundle/products/vault/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -88,7 +89,7 @@ var _ = Describe("given vault Plugin", func() {
 		var flags []cli.Flag
 
 		BeforeEach(func() {
-			flags = plgn.GetFlags()
+			flags = pluginutil.ToCliFlagArray(plgn.GetFlags())
 		})
 		It("then there should be valid flags available", func() {
 			for _, flagname := range []string{

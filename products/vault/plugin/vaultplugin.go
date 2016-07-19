@@ -3,8 +3,8 @@ package vault
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-cli/pluginlib/pcli"
 	"github.com/enaml-ops/omg-cli/pluginlib/product"
 	"github.com/enaml-ops/omg-cli/pluginlib/util"
 	"github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/consul"
@@ -38,17 +38,17 @@ type Plugin struct {
 	StemcellSHA     string
 }
 
-func (s *Plugin) GetFlags() (flags []cli.Flag) {
-	return []cli.Flag{
-		cli.StringSliceFlag{Name: "ip", Usage: "multiple static ips for each redis leader vm"},
-		cli.StringSliceFlag{Name: "az", Usage: "list of AZ names to use"},
-		cli.StringFlag{Name: "network", Usage: "the name of the network to use"},
-		cli.StringFlag{Name: "vm-type", Usage: "name of your desired vm type"},
-		cli.StringFlag{Name: "disk-type", Usage: "name of your desired disk type"},
-		cli.StringFlag{Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
-		cli.StringFlag{Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
-		cli.StringFlag{Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		cli.StringFlag{Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
+func (s *Plugin) GetFlags() (flags []pcli.Flag) {
+	return []pcli.Flag{
+		pcli.StringSliceFlag{Name: "ip", Usage: "multiple static ips for each redis leader vm"},
+		pcli.StringSliceFlag{Name: "az", Usage: "list of AZ names to use"},
+		pcli.StringFlag{Name: "network", Usage: "the name of the network to use"},
+		pcli.StringFlag{Name: "vm-type", Usage: "name of your desired vm type"},
+		pcli.StringFlag{Name: "disk-type", Usage: "name of your desired disk type"},
+		pcli.StringFlag{Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
+		pcli.StringFlag{Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
+		pcli.StringFlag{Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
+		pcli.StringFlag{Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
 	}
 }
 
@@ -60,7 +60,7 @@ func (s *Plugin) GetMeta() product.Meta {
 
 func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	var err error
-	c := pluginutil.NewContext(args, s.GetFlags())
+	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
 
 	s.IPs = c.StringSlice("ip")
 	s.AZs = c.StringSlice("az")

@@ -5,6 +5,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-cli/pluginlib/pcli"
 	"github.com/enaml-ops/omg-cli/pluginlib/product"
 	"github.com/enaml-ops/omg-cli/pluginlib/util"
 	"github.com/xchapter7x/lo"
@@ -27,22 +28,22 @@ type jobBucket struct {
 }
 type Plugin struct{}
 
-func (s *Plugin) GetFlags() (flags []cli.Flag) {
-	return []cli.Flag{
-		cli.StringSliceFlag{Name: "leader-ip", Usage: "multiple static ips for each redis leader vm"},
-		cli.IntFlag{Name: "leader-instances", Value: 1, Usage: "the number of leader instances to provision"},
-		cli.StringFlag{Name: "redis-pass", Value: "red1s", Usage: "the password to use for connecting redis nodes"},
-		cli.IntFlag{Name: "pool-instances", Value: 2, Usage: "number of instances in the redis cluster"},
-		cli.StringFlag{Name: "disk-size", Value: "4096", Usage: "size of disk on VMs"},
-		cli.IntFlag{Name: "slave-instances", Value: 1, Usage: "number of slave VMs"},
-		cli.IntFlag{Name: "errand-instances", Value: 1, Usage: "number of errand VMs"},
-		cli.StringSliceFlag{Name: "slave-ip", Usage: "list of slave VM Ips"},
-		cli.StringFlag{Name: "network-name", Usage: "name of your target network"},
-		cli.StringFlag{Name: "vm-size", Usage: "name of your desired vm size"},
-		cli.StringFlag{Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
-		cli.StringFlag{Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
-		cli.StringFlag{Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		cli.StringFlag{Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
+func (s *Plugin) GetFlags() (flags []pcli.Flag) {
+	return []pcli.Flag{
+		pcli.StringSliceFlag{Name: "leader-ip", Usage: "multiple static ips for each redis leader vm"},
+		pcli.IntFlag{Name: "leader-instances", Value: 1, Usage: "the number of leader instances to provision"},
+		pcli.StringFlag{Name: "redis-pass", Value: "red1s", Usage: "the password to use for connecting redis nodes"},
+		pcli.IntFlag{Name: "pool-instances", Value: 2, Usage: "number of instances in the redis cluster"},
+		pcli.StringFlag{Name: "disk-size", Value: "4096", Usage: "size of disk on VMs"},
+		pcli.IntFlag{Name: "slave-instances", Value: 1, Usage: "number of slave VMs"},
+		pcli.IntFlag{Name: "errand-instances", Value: 1, Usage: "number of errand VMs"},
+		pcli.StringSliceFlag{Name: "slave-ip", Usage: "list of slave VM Ips"},
+		pcli.StringFlag{Name: "network-name", Usage: "name of your target network"},
+		pcli.StringFlag{Name: "vm-size", Usage: "name of your desired vm size"},
+		pcli.StringFlag{Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
+		pcli.StringFlag{Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
+		pcli.StringFlag{Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
+		pcli.StringFlag{Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
 	}
 }
 
@@ -53,7 +54,7 @@ func (s *Plugin) GetMeta() product.Meta {
 }
 
 func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
-	c := pluginutil.NewContext(args, s.GetFlags())
+	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
 
 	if err := s.flagValidation(c); err != nil {
 		lo.G.Error("invalid arguments: ", err)

@@ -1,7 +1,7 @@
 package concourseplugin
 
 import (
-	"github.com/codegangsta/cli"
+	"github.com/enaml-ops/omg-cli/pluginlib/pcli"
 	"github.com/enaml-ops/omg-cli/pluginlib/product"
 	"github.com/enaml-ops/omg-cli/pluginlib/util"
 	"github.com/xchapter7x/lo"
@@ -9,7 +9,7 @@ import (
 
 type ConcoursePlugin struct{}
 
-func (s *ConcoursePlugin) GetFlags() (flags []cli.Flag) {
+func (s *ConcoursePlugin) GetFlags() (flags []pcli.Flag) {
 	return generateFlags()
 }
 
@@ -24,7 +24,7 @@ func (s *ConcoursePlugin) GetProduct(args []string, cloudConfig []byte) (b []byt
 		lo.G.Debug("concourseplugin: empty cloud config")
 		panic("cloud config cannot be empty")
 	}
-	c := pluginutil.NewContext(args, s.GetFlags())
+	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
 	dm := NewDeploymentManifest(c, cloudConfig)
 	return dm.Bytes()
 }
