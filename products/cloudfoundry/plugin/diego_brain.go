@@ -6,7 +6,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-cli/pluginlib/util"
+	"github.com/enaml-ops/pluginlib/util"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/auctioneer"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cc_uploader"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/converger"

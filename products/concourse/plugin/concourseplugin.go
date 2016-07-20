@@ -1,9 +1,9 @@
 package concourseplugin
 
 import (
-	"github.com/enaml-ops/omg-cli/pluginlib/pcli"
-	"github.com/enaml-ops/omg-cli/pluginlib/product"
-	"github.com/enaml-ops/omg-cli/pluginlib/util"
+	"github.com/enaml-ops/pluginlib/pcli"
+	"github.com/enaml-ops/pluginlib/product"
+	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 )
 

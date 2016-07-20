@@ -3,7 +3,7 @@ package concourseplugin
 import (
 	"strings"
 
-	"github.com/enaml-ops/omg-cli/pluginlib/pcli"
+	"github.com/enaml-ops/pluginlib/pcli"
 )
 
 type flagBucket struct {

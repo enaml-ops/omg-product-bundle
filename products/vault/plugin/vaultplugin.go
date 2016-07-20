@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-cli/pluginlib/pcli"
-	"github.com/enaml-ops/omg-cli/pluginlib/product"
-	"github.com/enaml-ops/omg-cli/pluginlib/util"
+	"github.com/enaml-ops/pluginlib/pcli"
+	"github.com/enaml-ops/pluginlib/product"
+	"github.com/enaml-ops/pluginlib/util"
 	"github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/consul"
 	vaultlib "github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/vault"
 	"github.com/xchapter7x/lo"

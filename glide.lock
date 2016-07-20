@@ -1,5 +1,5 @@
-hash: de2a2ff3edcf9896875247c8cff43521ea01b0d6685d11c7e58dced1b0042117
-updated: 2016-07-19T13:19:55.201815099-06:00
+hash: f24c52e646ea2ac560bd2337b66ce91128d2109885de4e5987cf550ffa600e1c
+updated: 2016-07-20T12:03:46.372850642-04:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -19,11 +19,13 @@ imports:
   - cloudproperties/aws
   - cloudproperties/azure
 - name: github.com/enaml-ops/omg-cli
-  version: ea33f3255eccc3c763b4c4b1774090acf12e7625
+  version: cb143be53332f2fbdcc6311e0f65dee63cc5a6af
+- name: github.com/enaml-ops/pluginlib
+  version: db03bf3c249012e2b483410170d123a24092de60
   subpackages:
-  - pluginlib/product
-  - pluginlib/util
-  - pluginlib/pcli
+  - product
+  - pcli
+  - util
 - name: github.com/hashicorp/go-plugin
   version: 8cf118f7a2f0c7ef1c82f66d4f6ac77c7e27dc12
 - name: github.com/hashicorp/yamux
@@ -50,4 +52,4 @@ imports:
   version: aa2602d0e8e8647f0ce7b53109b37040941915aa
 - name: gopkg.in/yaml.v2
   version: e4d366fc3c7938e2958e662b4258c7a89e1f0e3e
-testImports: []
+devImports: []
