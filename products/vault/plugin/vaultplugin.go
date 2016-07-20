@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/consul"
+	vaultlib "github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/vault"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/util"
-	"github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/consul"
-	vaultlib "github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/vault"
 	"github.com/xchapter7x/lo"
 )
 
@@ -40,15 +40,15 @@ type Plugin struct {
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
-		pcli.StringSliceFlag{Name: "ip", Usage: "multiple static ips for each redis leader vm"},
-		pcli.StringSliceFlag{Name: "az", Usage: "list of AZ names to use"},
-		pcli.StringFlag{Name: "network", Usage: "the name of the network to use"},
-		pcli.StringFlag{Name: "vm-type", Usage: "name of your desired vm type"},
-		pcli.StringFlag{Name: "disk-type", Usage: "name of your desired disk type"},
-		pcli.StringFlag{Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
-		pcli.StringFlag{Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
-		pcli.StringFlag{Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		pcli.StringFlag{Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "ip", Usage: "multiple static ips for each redis leader vm"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "az", Usage: "list of AZ names to use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "network", Usage: "the name of the network to use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "vm-type", Usage: "name of your desired vm type"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "disk-type", Usage: "name of your desired disk type"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
 	}
 }
 

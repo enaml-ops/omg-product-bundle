@@ -134,17 +134,19 @@ func generateFlags() (flags []pcli.Flag) {
 	}
 	for _, v := range flagList {
 		if v.StringSlice {
-			flags = append(flags, pcli.StringSliceFlag{
-				Name:   getFlag(v.EnvVar),
-				Usage:  v.Desc,
-				EnvVar: v.EnvVar,
+			flags = append(flags, pcli.Flag{
+				FlagType: pcli.StringSliceFlag,
+				Name:     getFlag(v.EnvVar),
+				Usage:    v.Desc,
+				EnvVar:   v.EnvVar,
 			})
 		} else {
-			flags = append(flags, pcli.StringFlag{
-				Name:   getFlag(v.EnvVar),
-				Value:  "",
-				Usage:  v.Desc,
-				EnvVar: v.EnvVar,
+			flags = append(flags, pcli.Flag{
+				FlagType: pcli.StringFlag,
+				Name:     getFlag(v.EnvVar),
+				Value:    "",
+				Usage:    v.Desc,
+				EnvVar:   v.EnvVar,
 			})
 		}
 	}

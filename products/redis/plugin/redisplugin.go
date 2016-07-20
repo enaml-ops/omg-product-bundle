@@ -30,20 +30,20 @@ type Plugin struct{}
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
-		pcli.StringSliceFlag{Name: "leader-ip", Usage: "multiple static ips for each redis leader vm"},
-		pcli.IntFlag{Name: "leader-instances", Value: 1, Usage: "the number of leader instances to provision"},
-		pcli.StringFlag{Name: "redis-pass", Value: "red1s", Usage: "the password to use for connecting redis nodes"},
-		pcli.IntFlag{Name: "pool-instances", Value: 2, Usage: "number of instances in the redis cluster"},
-		pcli.StringFlag{Name: "disk-size", Value: "4096", Usage: "size of disk on VMs"},
-		pcli.IntFlag{Name: "slave-instances", Value: 1, Usage: "number of slave VMs"},
-		pcli.IntFlag{Name: "errand-instances", Value: 1, Usage: "number of errand VMs"},
-		pcli.StringSliceFlag{Name: "slave-ip", Usage: "list of slave VM Ips"},
-		pcli.StringFlag{Name: "network-name", Usage: "name of your target network"},
-		pcli.StringFlag{Name: "vm-size", Usage: "name of your desired vm size"},
-		pcli.StringFlag{Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
-		pcli.StringFlag{Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
-		pcli.StringFlag{Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		pcli.StringFlag{Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "leader-ip", Usage: "multiple static ips for each redis leader vm"},
+		pcli.Flag{FlagType: pcli.IntFlag, Name: "leader-instances", Value: "1", Usage: "the number of leader instances to provision"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "redis-pass", Value: "red1s", Usage: "the password to use for connecting redis nodes"},
+		pcli.Flag{FlagType: pcli.IntFlag, Name: "pool-instances", Value: "2", Usage: "number of instances in the redis cluster"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "disk-size", Value: "4096", Usage: "size of disk on VMs"},
+		pcli.Flag{FlagType: pcli.IntFlag, Name: "slave-instances", Value: "1", Usage: "number of slave VMs"},
+		pcli.Flag{FlagType: pcli.IntFlag, Name: "errand-instances", Value: "1", Usage: "number of errand VMs"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "slave-ip", Usage: "list of slave VM Ips"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "network-name", Usage: "name of your target network"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "vm-size", Usage: "name of your desired vm size"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
 	}
 }
 

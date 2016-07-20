@@ -254,8 +254,8 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	}
 }
 
-func createStringFlag(name, usage string, value ...string) pcli.StringFlag {
-	res := pcli.StringFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+func createStringFlag(name, usage string, value ...string) pcli.Flag {
+	res := pcli.Flag{FlagType: pcli.StringFlag, Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
 
 	if len(value) > 0 {
 		res.Value = value[0]
@@ -263,20 +263,20 @@ func createStringFlag(name, usage string, value ...string) pcli.StringFlag {
 	return res
 }
 
-func createBoolFlag(name, usage string) pcli.BoolFlag {
-	return pcli.BoolFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+func createBoolFlag(name, usage string) pcli.Flag {
+	return pcli.Flag{FlagType: pcli.BoolFlag, Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
 }
 
-func createIntFlag(name, usage string) pcli.IntFlag {
-	return pcli.IntFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+func createIntFlag(name, usage string) pcli.Flag {
+	return pcli.Flag{FlagType: pcli.IntFlag, Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
 }
 
-func createBoolTFlag(name, usage string) pcli.BoolTFlag {
-	return pcli.BoolTFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+func createBoolTFlag(name, usage string) pcli.Flag {
+	return pcli.Flag{FlagType: pcli.BoolTFlag, Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
 }
 
-func createStringSliceFlag(name, usage string, value ...string) pcli.StringSliceFlag {
-	res := pcli.StringSliceFlag{Name: name, Usage: usage, EnvVar: strings.ToUpper(name), Value: value}
+func createStringSliceFlag(name, usage string, value ...string) pcli.Flag {
+	res := pcli.Flag{FlagType: pcli.StringSliceFlag, Name: name, Usage: usage, EnvVar: strings.ToUpper(name), Value: strings.Join(value, ",")}
 	return res
 }
 
