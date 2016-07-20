@@ -255,7 +255,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 }
 
 func createStringFlag(name, usage string, value ...string) pcli.Flag {
-	res := pcli.Flag{FlagType: pcli.StringFlag, Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+	res := pcli.Flag{FlagType: pcli.StringFlag, Name: name, Usage: usage, EnvVar: makeEnvVarName(name)}
 
 	if len(value) > 0 {
 		res.Value = value[0]
@@ -264,20 +264,24 @@ func createStringFlag(name, usage string, value ...string) pcli.Flag {
 }
 
 func createBoolFlag(name, usage string) pcli.Flag {
-	return pcli.Flag{FlagType: pcli.BoolFlag, Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+	return pcli.Flag{FlagType: pcli.BoolFlag, Name: name, Usage: usage, EnvVar: makeEnvVarName(name)}
 }
 
 func createIntFlag(name, usage string) pcli.Flag {
-	return pcli.Flag{FlagType: pcli.IntFlag, Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+	return pcli.Flag{FlagType: pcli.IntFlag, Name: name, Usage: usage, EnvVar: makeEnvVarName(name)}
 }
 
 func createBoolTFlag(name, usage string) pcli.Flag {
-	return pcli.Flag{FlagType: pcli.BoolTFlag, Name: name, Usage: usage, EnvVar: strings.ToUpper(name)}
+	return pcli.Flag{FlagType: pcli.BoolTFlag, Name: name, Usage: usage, EnvVar: makeEnvVarName(name)}
 }
 
 func createStringSliceFlag(name, usage string, value ...string) pcli.Flag {
-	res := pcli.Flag{FlagType: pcli.StringSliceFlag, Name: name, Usage: usage, EnvVar: strings.ToUpper(name), Value: strings.Join(value, ",")}
+	res := pcli.Flag{FlagType: pcli.StringSliceFlag, Name: name, Usage: usage, EnvVar: makeEnvVarName(name), Value: strings.Join(value, ",")}
 	return res
+}
+
+func makeEnvVarName(s string) string {
+	return strings.Replace(strings.ToUpper(s), "-", "_", -1)
 }
 
 //GetMeta -
