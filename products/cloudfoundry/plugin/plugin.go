@@ -105,14 +105,14 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("mysql-vm-type", "the name of your desired vm size for mysql"),
 		createStringFlag("mysql-disk-type", "the name of your desired persistent disk type for mysql"),
 		createStringFlag("mysql-admin-password", "admin password for mysql"),
-		createStringFlag("mysql-bootstrap-username", "bootstrap username for mysql"),
+		createStringFlag("mysql-bootstrap-username", "bootstrap username for mysql", "enamlmbu"),
 		createStringFlag("mysql-bootstrap-password", "bootstrap password for mysql"),
 
 		//MySQL proxy flags
 		createStringSliceFlag("mysql-proxy-ip", "a list of -mysql proxy ips you wish to use"),
 		createStringFlag("mysql-proxy-vm-type", "the name of your desired vm size for mysql proxy"),
 		createStringFlag("mysql-proxy-external-host", "Host name of MySQL proxy"),
-		createStringFlag("mysql-proxy-api-username", "Proxy API user name"),
+		createStringFlag("mysql-proxy-api-username", "Proxy API user name", "enamlmpa"),
 		createStringFlag("mysql-proxy-api-password", "Proxy API password"),
 
 		//CC Worker Partition Flags
@@ -132,11 +132,11 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("support-address", "Support URL"),
 		createStringFlag("min-cli-version", "Min CF CLI Version supported"),
 
-		createStringFlag("db-uaa-username", "uaa db username"),
+		createStringFlag("db-uaa-username", "uaa db username", "enamluaa"),
 		createStringFlag("db-uaa-password", "uaa db password"),
-		createStringFlag("db-ccdb-username", "ccdb db username"),
+		createStringFlag("db-ccdb-username", "ccdb db username", "enamlccdb"),
 		createStringFlag("db-ccdb-password", "ccdb db password"),
-		createStringFlag("db-console-username", "console db username"),
+		createStringFlag("db-console-username", "console db username", "enamlconsole"),
 		createStringFlag("db-console-password", "console db password"),
 
 		//Diego Database
