@@ -1,5 +1,5 @@
-hash: f24c52e646ea2ac560bd2337b66ce91128d2109885de4e5987cf550ffa600e1c
-updated: 2016-07-20T12:03:46.372850642-04:00
+hash: d4a4deb47a083711e9c821c308dac7ec897a86a4fc28e3063de0af2f3d3a00f0
+updated: 2016-07-21T15:43:57.441709594-04:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -13,19 +13,23 @@ imports:
 - name: github.com/codegangsta/cli
   version: 11c134509d89c2018675f369955218a180dc7428
 - name: github.com/enaml-ops/enaml
-  version: 9cf03826c6c0a5447d814c389e41683c10698ca2
+  version: ^v0.0.9
   subpackages:
   - enamlbosh
   - cloudproperties/aws
   - cloudproperties/azure
 - name: github.com/enaml-ops/omg-cli
-  version: cb143be53332f2fbdcc6311e0f65dee63cc5a6af
+  version: ^v0.0.8
 - name: github.com/enaml-ops/pluginlib
   version: ^v0.0.1 
   subpackages:
   - product
   - pcli
   - util
+- name: github.com/golang/protobuf
+  version: 874264fbbb43f4d91e999fecb4b40143ed611400
+  subpackages:
+  - proto
 - name: github.com/hashicorp/go-plugin
   version: 8cf118f7a2f0c7ef1c82f66d4f6ac77c7e27dc12
 - name: github.com/hashicorp/yamux
