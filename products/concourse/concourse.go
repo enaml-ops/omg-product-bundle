@@ -57,6 +57,7 @@ type Deployment struct {
 	CloudConfigYml      string
 	StemcellURL         string
 	StemcellSHA         string
+	StemcellVersion     string
 }
 
 //NewDeployment -
@@ -124,7 +125,7 @@ func (d *Deployment) Initialize(cloudConfig []byte) (err error) {
 	d.manifest.SetDirectorUUID(d.DirectorUUID)
 	d.manifest.AddRemoteRelease(concourseReleaseName, concourseReleaseVer, concourseReleaseURL, concourseReleaseSHA)
 	d.manifest.AddRemoteRelease(gardenReleaseName, gardenReleaseVer, gardenReleaseURL, gardenReleaseSHA)
-	d.manifest.AddRemoteStemcell(stemcellOS, d.StemcellAlias, stemcellVer, d.StemcellURL, d.StemcellSHA)
+	d.manifest.AddRemoteStemcell(stemcellOS, d.StemcellAlias, d.StemcellVersion, d.StemcellURL, d.StemcellSHA)
 
 	update := d.CreateUpdate()
 	d.manifest.SetUpdate(update)

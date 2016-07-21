@@ -47,7 +47,7 @@ func init() {
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
 		// shared for all instance groups:
-		createStringFlag("stemcell-name", "the name of your desired stemcell"),
+		createStringFlag("stemcell-name", "the name of your desired stemcell", "ubuntu-trusty"),
 		createStringSliceFlag("az", "list of AZ names to use"),
 		createStringFlag("network", "the name of the network to use"),
 		createStringFlag("system-domain", "System Domain"),

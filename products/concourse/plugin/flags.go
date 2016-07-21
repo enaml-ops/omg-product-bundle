@@ -34,6 +34,7 @@ const (
 	concoursePostgresqlDbPwd     string = "POSTGRESQL_DB_PWD"
 	remoteStemcellURL            string = "REMOTE_STEMCELL_URL"
 	remoteStemcellSHA            string = "REMOTE_STEMCELL_SHA"
+	stemcellVer                  string = "STEMCELL_VER"
 )
 
 func getFlag(input string) (flag string) {
@@ -130,6 +131,10 @@ func generateFlags() (flags []pcli.Flag) {
 		remoteStemcellSHA: flagBucket{
 			Desc:   "sha1 of the remote stemcell.",
 			EnvVar: remoteStemcellSHA,
+		},
+		stemcellVer: flagBucket{
+			Desc:   "version of the stemcell.",
+			EnvVar: stemcellVer,
 		},
 	}
 	for _, v := range flagList {

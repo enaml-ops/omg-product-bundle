@@ -29,6 +29,7 @@ func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) enaml.DeploymentM
 	deployment.ConcourseURL = c.String(getFlag(concourseURL))
 	deployment.DirectorUUID = c.String(getFlag(boshDirectorUUID))
 	deployment.StemcellAlias = c.String(getFlag(boshStemcellAlias))
+	deployment.StemcellVersion = c.String(getFlag(stemcellVer))
 	deployment.NetworkName = c.String(getFlag(concourseNetworkName))
 
 	if c.IsSet(getFlag(concourseWebInstances)) {
