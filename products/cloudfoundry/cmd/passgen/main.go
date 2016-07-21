@@ -59,6 +59,12 @@ func main() {
 		"ssh-proxy-client-secret",
 		"apps-metrics-client-secret",
 		"apps-metrics-processing-client-secret",
+		"consul-encryption-key",
+		"cc-db-encryption-key",
+		"host-key-fingerprint",
+		"uaa-jwt-signing-key",
+		"uaa-jwt-verification-key",
+		"uaa-saml-service-provider-key",
 	}
 	var passVault map[string]string = make(map[string]string)
 
