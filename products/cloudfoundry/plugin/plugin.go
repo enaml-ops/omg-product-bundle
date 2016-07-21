@@ -293,9 +293,9 @@ func (s *Plugin) GetMeta() product.Meta {
 
 //GetProduct -
 func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
-	flgs := pluginutil.ToCliFlagArray(s.GetFlags())
-	s.vaultDecorate(args, flgs)
-	c := pluginutil.NewContext(args, flgs)
+	flgs := s.GetFlags()
+	VaultDecorate(args, flgs)
+	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
 	dm := enaml.NewDeploymentManifest([]byte(``))
 	dm.SetName(DeploymentName)
 
@@ -329,10 +329,11 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	return dm.Bytes()
 }
 
-func (s *Plugin) vaultDecorate(args []string, flgs []cli.Flag) {
-	c := pluginutil.NewContext(args, flgs)
+func VaultDecorate(args []string, flgs []pcli.Flag) {
+	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
 
-	if s.hasValidVaultFlags(c) {
+	if hasValidVaultFlags(c) {
+		lo.G.Debug("connecting to vault at: ", c.String("vault-domain"))
 		vault := pluginutil.NewVaultUnmarshal(c.String("vault-domain"), c.String("vault-token"), pluginutil.DefaultClient())
 		hashes := []string{
 			c.String("vault-hash-password"),
@@ -342,6 +343,7 @@ func (s *Plugin) vaultDecorate(args []string, flgs []cli.Flag) {
 		}
 
 		for _, hash := range hashes {
+			lo.G.Debug("checking hash: ", hash)
 
 			if hash != "" {
 				vault.UnmarshalFlags(hash, flgs)
@@ -365,7 +367,7 @@ func (s *Plugin) vaultDecorate(args []string, flgs []cli.Flag) {
 	}
 }
 
-func (s *Plugin) hasValidVaultFlags(c *cli.Context) bool {
+func hasValidVaultFlags(c *cli.Context) bool {
 	return c.BoolT("vault-active") &&
 		c.String("vault-domain") != "" &&
 		c.String("vault-token") != ""

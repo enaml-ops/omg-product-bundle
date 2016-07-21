@@ -37,3 +37,4 @@ import:
 - package: github.com/hashicorp/yamux
 - package: github.com/enaml-ops/omg-cli
 - package: github.com/enaml-ops/pluginlib
+  version: ^v0.0.1

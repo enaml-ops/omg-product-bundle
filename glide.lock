@@ -21,7 +21,7 @@ imports:
 - name: github.com/enaml-ops/omg-cli
   version: cb143be53332f2fbdcc6311e0f65dee63cc5a6af
 - name: github.com/enaml-ops/pluginlib
-  version: 419961981671ea61125c88e6ee569ec6dd9daa0a
+  version: ^v0.0.1 
   subpackages:
   - product
   - pcli
