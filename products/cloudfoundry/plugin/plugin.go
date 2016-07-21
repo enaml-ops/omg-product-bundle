@@ -1,6 +1,7 @@
 package cloudfoundry
 
 import (
+	"os"
 	"strings"
 
 	"github.com/codegangsta/cli"
@@ -322,7 +323,17 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 
 		} else {
 			b, _ := yaml.Marshal(grouper)
-			lo.G.Panic("invalid values in instance group: ", string(b))
+			lo.G.Info("invalid values in instance group: ", string(b))
+			lo.G.Info("here is a list of flags not currently set by default or vault for you: ")
+
+			for _, fl := range flgs {
+
+				if fl.Value == "" && os.Getenv(fl.EnvVar) == "" {
+					lo.G.Info(fl.Name)
+				}
+			}
+
+			lo.G.Panic("incomplete flag set. please check --help and documentation or use debug output for more details")
 		}
 	}
 
