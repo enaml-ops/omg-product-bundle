@@ -70,7 +70,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("nats-vm-type", "the name of your desired vm size for NATS"),
 		createStringFlag("nats-user", "username for your nats pool", "nats"),
 		createStringFlag("nats-pass", "password for your nats pool", "nats-password"),
-		createIntFlag("nats-port", "the port for the NATS server to listen on"),
+		createIntFlag("nats-port", "the port for the NATS server to listen on", "4222"),
 		createStringSliceFlag("nats-machine-ip", "ip of a nats node vm"),
 
 		createStringFlag("metron-zone", "zone guid for the metron agent"),
@@ -177,7 +177,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("fs-debug-addr", "address at which to serve debug info"),
 		createStringFlag("fs-log-level", "file server log level"),
 
-		createIntFlag("cc-external-port", "external port of the Cloud Controller API"),
+		createIntFlag("cc-external-port", "external port of the Cloud Controller API", "9022"),
 		createStringFlag("ssh-proxy-uaa-secret", "the OAuth client secret used to authenticate the SSH proxy"),
 		createStringFlag("traffic-controller-url", "the URL of the traffic controller"),
 		createStringFlag("clock-global-vm-type", "the name of the desired vm type for the clock global partition"),
@@ -269,8 +269,13 @@ func createBoolFlag(name, usage string) pcli.Flag {
 	return pcli.Flag{FlagType: pcli.BoolFlag, Name: name, Usage: usage, EnvVar: makeEnvVarName(name)}
 }
 
-func createIntFlag(name, usage string) pcli.Flag {
-	return pcli.Flag{FlagType: pcli.IntFlag, Name: name, Usage: usage, EnvVar: makeEnvVarName(name)}
+func createIntFlag(name, usage string, value ...string) pcli.Flag {
+	res := pcli.Flag{FlagType: pcli.IntFlag, Name: name, Usage: usage, EnvVar: makeEnvVarName(name)}
+
+	if len(value) > 0 {
+		res.Value = value[0]
+	}
+	return res
 }
 
 func createBoolTFlag(name, usage string) pcli.Flag {
