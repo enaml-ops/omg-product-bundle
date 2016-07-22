@@ -48,6 +48,7 @@ func init() {
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
 		// shared for all instance groups:
+		createBoolFlag("infer-from-cloud", "setting this flag will attempt to pull as many defaults from your targetted bosh's cloud config as it can (vmtype, network, disk, etc)."),
 		createStringFlag("stemcell-name", "the name of your desired stemcell", "ubuntu-trusty"),
 		createStringSliceFlag("az", "list of AZ names to use"),
 		createStringFlag("network", "the name of the network to use"),
@@ -295,6 +296,7 @@ func (s *Plugin) GetMeta() product.Meta {
 //GetProduct -
 func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	flgs := s.GetFlags()
+	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
 	VaultDecorate(args, flgs)
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
 	dm := enaml.NewDeploymentManifest([]byte(``))
@@ -338,6 +340,34 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	}
 
 	return dm.Bytes()
+}
+
+func InferFromCloudDecorate(inferFlagMap map[string][]string, cloudConfig []byte, args []string, flgs []pcli.Flag) {
+	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
+
+	if c.Bool("infer-from-cloud") {
+		ccinf := pluginutil.NewCloudConfigInferFromBytes(cloudConfig)
+		setAllInferredFlagDefaults(flagsToInferFromCloudConfig["disktype"], ccinf.InferDefaultDiskType(), flgs)
+		setAllInferredFlagDefaults(flagsToInferFromCloudConfig["vmtype"], ccinf.InferDefaultVMType(), flgs)
+		setAllInferredFlagDefaults(flagsToInferFromCloudConfig["az"], ccinf.InferDefaultAZ(), flgs)
+		setAllInferredFlagDefaults(flagsToInferFromCloudConfig["network"], ccinf.InferDefaultNetwork(), flgs)
+	}
+}
+
+func setAllInferredFlagDefaults(matchlist []string, defaultvalue string, flgs []pcli.Flag) {
+
+	for _, match := range matchlist {
+		setFlagDefault(match, defaultvalue, flgs)
+	}
+}
+
+func setFlagDefault(flagname, defaultvalue string, flgs []pcli.Flag) {
+	for idx, flg := range flgs {
+
+		if flg.Name == flagname {
+			flgs[idx].Value = defaultvalue
+		}
+	}
 }
 
 func VaultDecorate(args []string, flgs []pcli.Flag) {

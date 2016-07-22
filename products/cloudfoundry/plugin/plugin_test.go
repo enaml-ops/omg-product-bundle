@@ -14,6 +14,43 @@ import (
 )
 
 var _ = Describe("Cloud Foundry Plugin", func() {
+
+	Describe("given InferFromCloudDecorate", func() {
+		Context("when infer-from-cloud is set to true", func() {
+			var flgs []pcli.Flag
+
+			BeforeEach(func() {
+				b, _ := ioutil.ReadFile("fixtures/cloudconfig.yml")
+				var flagsToInferFromCloudConfig = map[string][]string{
+					"disktype": []string{"mysql-disk-type"},
+					"vmtype":   []string{"diego-brain-vm-type"},
+					"az":       []string{"az"},
+					"network":  []string{"network"},
+				}
+				flgs = []pcli.Flag{
+					pcli.Flag{FlagType: pcli.BoolFlag, Name: "infer-from-cloud"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "diego-brain-vm-type"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "mysql-disk-type"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "az"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "network"},
+				}
+				args := []string{
+					"mycoolness",
+					"--infer-from-cloud",
+				}
+				InferFromCloudDecorate(flagsToInferFromCloudConfig, b, args, flgs)
+			})
+
+			It("then it should decorate the given flag array with cloudconfig values as defaults", func() {
+				ctx := pluginutil.NewContext([]string{"mycoolapp"}, pluginutil.ToCliFlagArray(flgs))
+				Ω(ctx.String("diego-brain-vm-type")).Should(Equal("smallvm"))
+				Ω(ctx.String("mysql-disk-type")).Should(Equal("smalldisk"))
+				Ω(ctx.String("az")).Should(Equal("z1,z2"))
+				Ω(ctx.String("network")).Should(Equal("private"))
+			})
+		})
+	})
+
 	Describe("given VaultDecorate", func() {
 		Context("when called with a set of args and flags that can be overwritten from a vault", func() {
 			var server *ghttp.Server

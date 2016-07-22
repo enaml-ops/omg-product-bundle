@@ -48,3 +48,35 @@ var (
 )
 
 var factories []InstanceGrouperFactory
+
+var flagsToInferFromCloudConfig = map[string][]string{
+	"disktype": []string{
+		"mysql-disk-type",
+		"diego-db-disk-type",
+		"diego-cell-disk-type",
+		"diego-brain-disk-type",
+		"etcd-disk-type",
+		"nfs-disk-type",
+	},
+	"vmtype": []string{
+		"diego-brain-vm-type",
+		"errand-vm-type",
+		"clock-global-vm-type",
+		"doppler-vm-type",
+		"uaa-vm-type",
+		"diego-cell-vm-type",
+		"diego-db-vm-type",
+		"router-vm-type",
+		"haproxy-vm-type",
+		"nats-vm-type",
+		"consul-vm-type",
+		"etcd-vm-type",
+		"nfs-vm-type",
+		"mysql-vm-type",
+		"mysql-proxy-vm-type",
+		"cc-worker-vm-type",
+		"cc-vm-type",
+	},
+	"az":      []string{"az"},
+	"network": []string{"network"},
+}
