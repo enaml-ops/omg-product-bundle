@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	BoshReleaseURL = "https://bosh.io/d/github.com/cloudfoundry-community/redis-boshrelease"
+	BoshReleaseURL = "https://bosh.io/d/github.com/cloudfoundry-community/redis-boshrelease?v=12"
 	BoshReleaseVer = "12"
 	BoshReleaseSHA = "324910eaf68e8803ad2317d5a2f5f6a06edc0a40"
 	Master         = iota

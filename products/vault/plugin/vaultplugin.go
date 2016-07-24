@@ -13,10 +13,10 @@ import (
 )
 
 const (
-	BoshVaultReleaseURL  = "https://bosh.io/d/github.com/cloudfoundry-community/vault-boshrelease"
+	BoshVaultReleaseURL  = "https://bosh.io/d/github.com/cloudfoundry-community/vault-boshrelease?v=0.3.0"
 	BoshVaultReleaseVer  = "0.3.0"
 	BoshVaultReleaseSHA  = "bd1ae82104dcf36abf64875fc5a46e1661bf2eac"
-	BoshConsulReleaseURL = "https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease"
+	BoshConsulReleaseURL = "https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease?v=20"
 	BoshConsulReleaseVer = "20"
 	BoshConsulReleaseSHA = "9a0591c6b4d88d7d756ea933e14ddf112d05f334"
 )

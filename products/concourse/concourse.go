@@ -18,15 +18,15 @@ import (
 const (
 	concourseReleaseName string = "concourse"
 	concourseReleaseVer  string = "1.0.1"
-	concourseReleaseURL  string = "https://bosh.io/d/github.com/concourse/concourse"
+	concourseReleaseURL  string = "https://bosh.io/d/github.com/concourse/concourse?v=1.0.1"
 	concourseReleaseSHA  string = "ef60fe5182a7b09df324d167f36d26481e7f5e01"
 	gardenReleaseName    string = "garden-linux"
 	gardenReleaseVer     string = "0.337.0"
-	gardenReleaseURL     string = "https://bosh.io/d/github.com/cloudfoundry-incubator/garden-linux-release"
+	gardenReleaseURL     string = "https://bosh.io/d/github.com/cloudfoundry-incubator/garden-linux-release?v=0.337.0"
 	gardenReleaseSHA     string = "d1d81d56c3c07f6f9f04ebddc68e51b8a3cf541d"
 	stemcellOS           string = "ubuntu-trusty"
 	stemcellVer          string = "3232.4"
-	stemcellURL          string = "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent"
+	stemcellURL          string = "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=3232.4"
 	stemcellSHA          string = "ac920cae17c7159dee3bf1ebac727ce2d01564e9"
 )
 
