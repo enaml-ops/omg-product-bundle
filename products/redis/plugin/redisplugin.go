@@ -164,17 +164,10 @@ func (s *Plugin) flagValidation(c *cli.Context) (err error) {
 		err = fmt.Errorf("no `vm-size` given")
 	}
 
-	if len(c.String("stemcell-url")) <= 0 {
-		err = fmt.Errorf("no `stemcell-url` given")
-	}
-
 	if len(c.String("stemcell-ver")) <= 0 {
 		err = fmt.Errorf("no `stemcell-ver` given")
 	}
 
-	if len(c.String("stemcell-sha")) <= 0 {
-		err = fmt.Errorf("no `stemcell-sha` given")
-	}
 	return
 }
 
@@ -221,8 +214,10 @@ func NewRedisJob(name, networkName, pass, disk, vmSize string, masterIPs, slaveI
 		Update: enaml.Update{
 			Canaries: 10,
 		},
+		Properties: make(map[string]interface{}),
 	}
-	job.AddProperty(properties)
+	job.AddProperty("redis", properties["redis"])
+	job.AddProperty("network", properties["network"])
 	lo.G.Debug("job", job)
 	return
 }

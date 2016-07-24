@@ -6,8 +6,8 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/pluginlib/util"
 	. "github.com/enaml-ops/omg-product-bundle/products/redis/plugin"
+	"github.com/enaml-ops/pluginlib/util"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -79,9 +79,7 @@ var _ = Describe("given redis Plugin", func() {
 				"--vm-size", controlVM,
 				"--leader-ip", controlIP,
 				"--slave-ip", controlIP,
-				"--stemcell-url", "something",
 				"--stemcell-ver", "12.3.44",
-				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 			}, cloudConfigBytes)
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})
