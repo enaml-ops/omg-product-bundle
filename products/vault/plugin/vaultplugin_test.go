@@ -71,9 +71,7 @@ var _ = Describe("given vault Plugin", func() {
 				"--disk-type", controlDisk,
 				"--ip", controlIP,
 				"--az", "z1",
-				"--stemcell-url", "something",
 				"--stemcell-ver", "12.3.44",
-				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 			}, cloudConfigBytes)
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})

@@ -208,16 +208,8 @@ func (s *Plugin) flagValidation() (err error) {
 		err = fmt.Errorf("no `disk-type` given")
 	}
 
-	if s.StemcellURL == "" {
-		err = fmt.Errorf("no `stemcell-url` given")
-	}
-
 	if s.StemcellVersion == "" {
 		err = fmt.Errorf("no `stemcell-ver` given")
-	}
-
-	if s.StemcellSHA == "" {
-		err = fmt.Errorf("no `stemcell-sha` given")
 	}
 	return
 }
