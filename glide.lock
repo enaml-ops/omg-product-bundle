@@ -1,5 +1,5 @@
-hash: d4a4deb47a083711e9c821c308dac7ec897a86a4fc28e3063de0af2f3d3a00f0
-updated: 2016-07-21T15:43:57.441709594-04:00
+hash: 0a1b20afd8b6e4b39833b27be4244ceaaed4d51f21a949025ebb28cb61395f93
+updated: 2016-07-25T15:11:53.447086975-04:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -11,17 +11,67 @@ imports:
   - ui
   - ui/fmt
 - name: github.com/codegangsta/cli
-  version: 11c134509d89c2018675f369955218a180dc7428
+  version: 492afb91497e22b398e972924eda64bfd706b102
 - name: github.com/enaml-ops/enaml
-  version: ^v0.0.9
+  version: 55636a146c53aa484ad9cf1369c9e49c68aa8c1b
   subpackages:
   - enamlbosh
   - cloudproperties/aws
   - cloudproperties/azure
 - name: github.com/enaml-ops/omg-cli
-  version: ^v0.0.8
+  version: 4674a1b15aab429460ef19be538f83608b0a00a9
+- name: github.com/enaml-ops/omg-product-bundle
+  version: 1a90261aa3e946ee2154ec4f559373cb61c8348c
+  subpackages:
+  - products/cloudfoundry/plugin
+  - products/cf-mysql/enaml-gen/bootstrap
+  - products/cf-mysql/enaml-gen/mysql
+  - products/cf-mysql/enaml-gen/proxy
+  - products/cloudfoundry/enaml-gen/acceptance-tests
+  - products/cloudfoundry/enaml-gen/auctioneer
+  - products/cloudfoundry/enaml-gen/bbs
+  - products/cloudfoundry/enaml-gen/cc_uploader
+  - products/cloudfoundry/enaml-gen/cloud_controller_clock
+  - products/cloudfoundry/enaml-gen/cloud_controller_ng
+  - products/cloudfoundry/enaml-gen/cloud_controller_worker
+  - products/cloudfoundry/enaml-gen/consul_agent
+  - products/cloudfoundry/enaml-gen/converger
+  - products/cloudfoundry/enaml-gen/debian_nfs_server
+  - products/cloudfoundry/enaml-gen/doppler
+  - products/cloudfoundry/enaml-gen/etcd
+  - products/cloudfoundry/enaml-gen/etcd_metrics_server
+  - products/cloudfoundry/enaml-gen/file_server
+  - products/cloudfoundry/enaml-gen/garden
+  - products/cloudfoundry/enaml-gen/gorouter
+  - products/cloudfoundry/enaml-gen/haproxy
+  - products/cloudfoundry/enaml-gen/loggregator_trafficcontroller
+  - products/cloudfoundry/enaml-gen/metron_agent
+  - products/cloudfoundry/enaml-gen/nats
+  - products/cloudfoundry/enaml-gen/nfs_mounter
+  - products/cloudfoundry/enaml-gen/nsync
+  - products/cloudfoundry/enaml-gen/rep
+  - products/cloudfoundry/enaml-gen/route_emitter
+  - products/cloudfoundry/enaml-gen/route_registrar
+  - products/cloudfoundry/enaml-gen/smoke-tests
+  - products/cloudfoundry/enaml-gen/ssh_proxy
+  - products/cloudfoundry/enaml-gen/stager
+  - products/cloudfoundry/enaml-gen/syslog_drain_binder
+  - products/cloudfoundry/enaml-gen/tps
+  - products/cloudfoundry/enaml-gen/uaa
+  - products/concourse/enaml-gen/atc
+  - products/concourse/enaml-gen/baggageclaim
+  - products/concourse/enaml-gen/garden
+  - products/concourse/enaml-gen/groundcrew
+  - products/concourse/enaml-gen/postgresql
+  - products/concourse/enaml-gen/tsa
+  - products/concourse/plugin
+  - products/concourse
+  - products/redis/plugin
+  - products/vault/plugin
+  - products/vault/enaml-gen/consul
+  - products/vault/enaml-gen/vault
 - name: github.com/enaml-ops/pluginlib
-  version: ^v0.0.1 
+  version: 1ede39ba694aee6e62eefce462ad87af0087f3b9
   subpackages:
   - product
   - pcli
@@ -51,7 +101,7 @@ imports:
 - name: github.com/pkg/errors
   version: cc5fbb72d9b1b5f664ff3c11ed7896ee23ad9276
 - name: github.com/pkg/sftp
-  version: 57fcf4a640a942eb05181f929601f8f4409eda3e
+  version: a71e8f580e3b622ebff585309160b1cc549ef4d2
 - name: github.com/xchapter7x/lo
   version: aa2602d0e8e8647f0ce7b53109b37040941915aa
 - name: gopkg.in/yaml.v2
