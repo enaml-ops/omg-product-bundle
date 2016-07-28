@@ -129,12 +129,14 @@ func (d *Deployment) Initialize(cloudConfig []byte) error {
 
 	if d.StemcellURL != "" && d.StemcellSHA != "" {
 		d.manifest.AddRemoteStemcell(stemcellOS, d.StemcellAlias, d.StemcellVersion, d.StemcellURL, d.StemcellSHA)
-	} else {
+	} else if d.StemcellURL == "" && d.StemcellSHA == "" {
 		d.manifest.AddStemcell(enaml.Stemcell{
 			OS:      stemcellOS,
 			Alias:   d.StemcellAlias,
 			Version: d.StemcellVersion,
 		})
+	} else {
+		return fmt.Errorf("remote stemcell URL and SHA must either be both present or both absent")
 	}
 
 	update := d.CreateUpdate()

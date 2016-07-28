@@ -236,13 +236,69 @@ var _ = Describe("Concourse Deployment", func() {
 			})
 		})
 	})
-	Describe("Given a new deployment", func() {
-		XContext("when calling Initialize without a strong password", func() {
+	Describe("Given a new deployment and a valid cloud config", func() {
+		var cc []byte
 
+		BeforeEach(func() {
+			cc, _ = ioutil.ReadFile("fixtures/cloudconfig.yml")
+			azs := []string{"z1"}
+			deployment.WebVMType = "small"
+			deployment.WorkerVMType = "small"
+			deployment.DatabaseAZs = azs
+			deployment.DatabaseVMType = "small"
+			deployment.DatabaseStorageType = "large"
+			deployment.WebAZs = azs
+			deployment.WorkerAZs = azs
+		})
+
+		XContext("when calling Initialize without a strong password", func() {
 			deployment.ConcoursePassword = "test"
 			It("then we should error and prompt the user for a better pass", func() {
 				err := deployment.Initialize([]byte(""))
 				Ω(err).ShouldNot(BeNil())
+			})
+		})
+
+		Context("when initializing without remote stemcell flags", func() {
+			BeforeEach(func() {
+				deployment.StemcellAlias = "trusty"
+				deployment.StemcellVersion = "3262.2"
+			})
+			It("initializes without error", func() {
+				err := deployment.Initialize(cc)
+				Ω(err).ShouldNot(HaveOccurred())
+			})
+		})
+
+		Context("when initializing with all required remote stemcell flags", func() {
+			BeforeEach(func() {
+				deployment.StemcellAlias = "trusty"
+				deployment.StemcellVersion = "3262.2"
+				deployment.StemcellURL = "http://example.com/stemcell"
+				deployment.StemcellSHA = "alsdkjfalasdfkjad"
+
+				It("initializes without error", func() {
+					err := deployment.Initialize(cc)
+					Ω(err).ShouldNot(HaveOccurred())
+				})
+
+			})
+		})
+
+		Context("when initializing without all required remote stemcell flags", func() {
+			BeforeEach(func() {
+				deployment.StemcellAlias = "trusty"
+				deployment.StemcellVersion = "3262.2"
+			})
+			It("fails when the URL is present but the SHA is missing", func() {
+				deployment.StemcellURL = "http://example.com/stemcell"
+				err := deployment.Initialize(cc)
+				Ω(err).Should(HaveOccurred())
+			})
+			It("fails when the SHA is present but the URL is missing", func() {
+				deployment.StemcellURL = "http://example.com/stemcell"
+				err := deployment.Initialize(cc)
+				Ω(err).Should(HaveOccurred())
 			})
 		})
 	})
