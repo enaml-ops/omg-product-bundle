@@ -47,7 +47,6 @@ type Deployment struct {
 	DeploymentName      string
 	NetworkRange        string
 	NetworkGateway      string
-	StemcellAlias       string
 	PostgresPassword    string
 	ResourcePoolName    string
 	WebVMType           string
@@ -55,9 +54,10 @@ type Deployment struct {
 	DatabaseVMType      string
 	DatabaseStorageType string
 	CloudConfigYml      string
-	StemcellURL         string
-	StemcellSHA         string
+	StemcellAlias       string
 	StemcellVersion     string
+	StemcellURL         string // URL for remote stemcell, omit to use existing stemcell
+	StemcellSHA         string // SHA for remote stemcell, omit to use existing stemcell
 }
 
 //NewDeployment -
@@ -113,10 +113,11 @@ func (d *Deployment) doCloudConfigValidation(data []byte) (err error) {
 }
 
 //Initialize -
-func (d *Deployment) Initialize(cloudConfig []byte) (err error) {
+func (d *Deployment) Initialize(cloudConfig []byte) error {
 
-	if err = d.doCloudConfigValidation(cloudConfig); err != nil {
-		return
+	err := d.doCloudConfigValidation(cloudConfig)
+	if err != nil {
+		return err
 	}
 	var web *enaml.InstanceGroup
 	var db *enaml.InstanceGroup
@@ -125,27 +126,36 @@ func (d *Deployment) Initialize(cloudConfig []byte) (err error) {
 	d.manifest.SetDirectorUUID(d.DirectorUUID)
 	d.manifest.AddRemoteRelease(concourseReleaseName, concourseReleaseVer, concourseReleaseURL, concourseReleaseSHA)
 	d.manifest.AddRemoteRelease(gardenReleaseName, gardenReleaseVer, gardenReleaseURL, gardenReleaseSHA)
-	d.manifest.AddRemoteStemcell(stemcellOS, d.StemcellAlias, d.StemcellVersion, d.StemcellURL, d.StemcellSHA)
+
+	if d.StemcellURL != "" && d.StemcellSHA != "" {
+		d.manifest.AddRemoteStemcell(stemcellOS, d.StemcellAlias, d.StemcellVersion, d.StemcellURL, d.StemcellSHA)
+	} else {
+		d.manifest.AddStemcell(enaml.Stemcell{
+			OS:      stemcellOS,
+			Alias:   d.StemcellAlias,
+			Version: d.StemcellVersion,
+		})
+	}
 
 	update := d.CreateUpdate()
 	d.manifest.SetUpdate(update)
 
 	if web, err = d.CreateWebInstanceGroup(); err != nil {
-		return
+		return err
 	}
 	d.manifest.AddInstanceGroup(web)
 
 	if db, err = d.CreateDatabaseInstanceGroup(); err != nil {
-		return
+		return err
 	}
 	d.manifest.AddInstanceGroup(db)
 
 	if worker, err = d.CreateWorkerInstanceGroup(); err != nil {
-		return
+		return err
 	}
-	d.manifest.AddInstanceGroup(worker)
 
-	return
+	d.manifest.AddInstanceGroup(worker)
+	return nil
 }
 
 //CreateWebInstanceGroup -
