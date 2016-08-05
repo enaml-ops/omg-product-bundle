@@ -74,12 +74,12 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)
-		lo.G.Panic("exiting due to invalid args")
+		lo.G.Fatal("exiting due to invalid args")
 	}
 
 	if err = s.cloudconfigValidation(enaml.NewCloudConfigManifest(cloudConfig)); err != nil {
 		lo.G.Error("invalid settings for cloud config on target bosh: ", err)
-		lo.G.Panic("your deployment is not compatible with your cloud config, exiting")
+		lo.G.Fatal("your deployment is not compatible with your cloud config, exiting")
 	}
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)

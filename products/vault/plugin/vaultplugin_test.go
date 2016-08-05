@@ -10,6 +10,8 @@ import (
 	"github.com/enaml-ops/pluginlib/util"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/xchapter7x/lo"
+	"github.com/xchapter7x/lo/lofakes"
 )
 
 var _ = Describe("given vault Plugin", func() {
@@ -20,6 +22,8 @@ var _ = Describe("given vault Plugin", func() {
 	})
 
 	Context("when calling GetProduct while targeting an un-compatible cloud config'd bosh", func() {
+		var logHolder = lo.G
+		var logfake = new(lofakes.FakeLogger)
 		var cloudConfigBytes []byte
 		var controlNetName = "hello"
 		var controlDisk = "medium"
@@ -27,31 +31,50 @@ var _ = Describe("given vault Plugin", func() {
 		var controlIP = "1.2.3.4"
 
 		BeforeEach(func() {
+			logfake = new(lofakes.FakeLogger)
+			logHolder = lo.G
+			lo.G = logfake
 			cloudConfigBytes, _ = ioutil.ReadFile("./fixtures/sample-aws.yml")
 		})
 
+		AfterEach(func() {
+			lo.G = logHolder
+		})
+
 		It("then we should fail fast and give the user guidance on what is wrong", func() {
-			Ω(func() {
-				plgn.GetProduct([]string{
-					"appname",
-					"--disk-type", controlDisk,
-					"--network", controlNetName,
-					"--vm-type", controlVM,
-					"--ip", controlIP,
-					"--az", "z1",
-					"--stemcell-url", "something",
-					"--stemcell-ver", "12.3.44",
-					"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
-				}, cloudConfigBytes)
-			}).Should(Panic())
+			plgn.GetProduct([]string{
+				"appname",
+				"--disk-type", controlDisk,
+				"--network", controlNetName,
+				"--vm-type", controlVM,
+				"--ip", controlIP,
+				"--az", "z1",
+				"--stemcell-url", "something",
+				"--stemcell-ver", "12.3.44",
+				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
+			}, cloudConfigBytes)
+			Ω(logfake.FatalCallCount()).Should(Equal(1))
 		})
 	})
 
 	Context("when calling plugin without all required flags", func() {
+
+		var logHolder = lo.G
+		var logfake = new(lofakes.FakeLogger)
+
+		BeforeEach(func() {
+			logfake = new(lofakes.FakeLogger)
+			logHolder = lo.G
+			lo.G = logfake
+		})
+
+		AfterEach(func() {
+			lo.G = logHolder
+		})
+
 		It("then it should fail fast and give the user guidance on what is wrong", func() {
-			Ω(func() {
-				plgn.GetProduct([]string{"appname"}, []byte(``))
-			}).Should(Panic())
+			plgn.GetProduct([]string{"appname"}, []byte(``))
+			Ω(logfake.FatalCallCount()).Should(BeNumerically(">=", 1))
 		})
 	})
 

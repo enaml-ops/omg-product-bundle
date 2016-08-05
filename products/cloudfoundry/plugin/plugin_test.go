@@ -105,6 +105,7 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 			var logfake = new(lofakes.FakeLogger)
 
 			BeforeEach(func() {
+				logfake = new(lofakes.FakeLogger)
 				logHolder = lo.G
 				lo.G = logfake
 				flgs := []pcli.Flag{
