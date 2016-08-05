@@ -3,6 +3,7 @@ package cloudfoundry
 import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
+	"github.com/xchapter7x/lo"
 )
 
 //NewConsulPartition -
@@ -45,6 +46,32 @@ func (s *Consul) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 
 //HasValidValues - Check if the datastructure has valid fields
 func (s *Consul) HasValidValues() bool {
+
+	lo.G.Debugf("checking '%s' for valid flags", "consul")
+
+	if len(s.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
+	}
+
+	if s.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
+	}
+
+	if s.NetworkName == "" {
+		lo.G.Debugf("could not find a valid networkname '%v'", s.NetworkName)
+	}
+
+	if s.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
+	}
+
+	if len(s.NetworkIPs) <= 0 {
+		lo.G.Debugf("could not find the correct number of networkips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
+	}
+
+	if len(s.ConsulAgent.EncryptKeys) <= 0 {
+		lo.G.Debugf("could not find the correct number of encrypt keys configured '%v' : '%v'", len(s.ConsulAgent.EncryptKeys), s.ConsulAgent.EncryptKeys)
+	}
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&

@@ -100,6 +100,35 @@ func (s *ConsulAgent) getMode() interface{} {
 
 //HasValidValues -
 func (s *ConsulAgent) HasValidValues() bool {
+
+	if len(s.NetworkIPs) <= 0 {
+		lo.G.Debugf("could not find the correct number of networkips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
+	}
+
+	if len(s.EncryptKeys) <= 0 {
+		lo.G.Debugf("could not find the correct number of encrypt keys configured '%v' : '%v'", len(s.EncryptKeys), s.EncryptKeys)
+	}
+
+	if s.CaCert == "" {
+		lo.G.Debugf("could not find a valid cacert '%v'", s.CaCert)
+	}
+
+	if s.AgentCert == "" {
+		lo.G.Debugf("could not find a valid agentcert '%v'", s.AgentCert)
+	}
+
+	if s.AgentKey == "" {
+		lo.G.Debugf("could not find a valid AgentKey '%v'", s.AgentKey)
+	}
+
+	if s.ServerCert == "" {
+		lo.G.Debugf("could not find a valid ServerCert '%v'", s.ServerCert)
+	}
+
+	if s.ServerKey == "" {
+		lo.G.Debugf("could not find a valid ServerKey '%v'", s.ServerKey)
+	}
+
 	return len(s.NetworkIPs) > 0 &&
 		len(s.EncryptKeys) > 0 &&
 		s.CaCert != "" &&
