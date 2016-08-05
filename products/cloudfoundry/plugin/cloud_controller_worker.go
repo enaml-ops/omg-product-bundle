@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	ccworkerlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_worker"
+	"github.com/xchapter7x/lo"
 )
 
 //NewCloudControllerWorkerPartition - Creating a New Cloud Controller Partition
@@ -111,6 +112,32 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 
 //HasValidValues - Check if valid values has been populated
 func (s *CloudControllerWorkerPartition) HasValidValues() bool {
+
+	lo.G.Debugf("checking '%s' for valid flags", "cloud controller worker")
+
+	if len(s.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
+	}
+
+	if s.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
+	}
+
+	if s.NetworkName == "" {
+		lo.G.Debugf("could not find a valid networkname '%v'", s.NetworkName)
+	}
+
+	if s.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
+	}
+
+	if s.Metron.Zone == "" {
+		lo.G.Debugf("could not find a valid metron zone '%v'", s.Metron.Zone)
+	}
+
+	if s.Metron.Secret == "" {
+		lo.G.Debugf("could not find a valid metron secret '%v'", s.Metron.Secret)
+	}
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&

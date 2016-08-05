@@ -144,7 +144,7 @@ func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJo
 //HasValidValues - Check if valid values has been populated
 func (s *CloudControllerPartition) HasValidValues() bool {
 
-	lo.G.Debugf("checking '%s' for valid flags", "acceptanceTests")
+	lo.G.Debugf("checking '%s' for valid flags", "cloud controller")
 
 	if len(s.AZs) <= 0 {
 		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
