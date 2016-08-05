@@ -9,6 +9,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_clock"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_ng"
+	"github.com/xchapter7x/lo"
 )
 
 func NewClockGlobalPartition(c *cli.Context) InstanceGrouper {
@@ -164,6 +165,20 @@ func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.Cloud
 }
 
 func (c *clockGlobal) HasValidValues() bool {
+
+	lo.G.Debugf("checking '%s' for valid flags", "clock global")
+
+	if len(c.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(c.AZs), c.AZs)
+	}
+
+	if c.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", c.StemcellName)
+	}
+
+	if c.NetworkName == "" {
+		lo.G.Debugf("could not find a valid networkname '%v'", c.NetworkName)
+	}
 	return len(c.AZs) > 0 &&
 		c.StemcellName != "" &&
 		c.VMTypeName != "" &&
