@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/acceptance-tests"
+	"github.com/xchapter7x/lo"
 )
 
 func NewAcceptanceTestsPartition(c *cli.Context, internet bool) InstanceGrouper {
@@ -67,6 +68,32 @@ func (a *acceptanceTests) newAcceptanceTestsProperties(internet bool) *acceptanc
 }
 
 func (a *acceptanceTests) HasValidValues() bool {
+	lo.G.Debugf("checking '%s' for valid flags", "acceptanceTests")
+
+	if len(a.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(a.AZs), a.AZs)
+	}
+
+	if a.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", a.StemcellName)
+	}
+
+	if a.NetworkName == "" {
+		lo.G.Debugf("could not find a valid networkname '%v'", a.NetworkName)
+	}
+
+	if len(a.AppsDomain) <= 0 {
+		lo.G.Debugf("could not find the correct number of app domains configured '%v' : '%v'", len(a.AppsDomain), a.AppsDomain)
+	}
+
+	if a.SystemDomain == "" {
+		lo.G.Debugf("could not find a valid system domain '%v'", a.SystemDomain)
+	}
+
+	if a.AdminPassword == "" {
+		lo.G.Debugf("could not find a valid admin password '%v'", a.AdminPassword)
+	}
+
 	return len(a.AZs) > 0 &&
 		a.StemcellName != "" &&
 		a.NetworkName != "" &&
