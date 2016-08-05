@@ -3,9 +3,9 @@ package cloudfoundry
 import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/pluginlib/util"
 	grtrlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/gorouter"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
+	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 )
 
@@ -15,11 +15,11 @@ const natsPort = 4222
 func NewGoRouterPartition(c *cli.Context) InstanceGrouper {
 	cert, err := pluginutil.LoadResourceFromContext(c, "router-ssl-cert")
 	if err != nil {
-		lo.G.Panicf("router cert: %s\n", err.Error())
+		lo.G.Fatalf("router cert: %s\n", err.Error())
 	}
 	key, err := pluginutil.LoadResourceFromContext(c, "router-ssl-key")
 	if err != nil {
-		lo.G.Panicf("router key: %s\n", err.Error())
+		lo.G.Fatalf("router key: %s\n", err.Error())
 	}
 
 	return &gorouter{

@@ -6,7 +6,6 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/pluginlib/util"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/auctioneer"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cc_uploader"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/converger"
@@ -16,23 +15,24 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/ssh_proxy"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/stager"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/tps"
+	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 )
 
 func NewDiegoBrainPartition(c *cli.Context) InstanceGrouper {
 	caCert, err := pluginutil.LoadResourceFromContext(c, "bbs-ca-cert")
 	if err != nil {
-		lo.G.Panicf("bbs ca cert: %s\n", err.Error())
+		lo.G.Fatalf("bbs ca cert: %s\n", err.Error())
 	}
 
 	clientCert, err := pluginutil.LoadResourceFromContext(c, "bbs-client-cert")
 	if err != nil {
-		lo.G.Panicf("bbs client cert: %s\n", err.Error())
+		lo.G.Fatalf("bbs client cert: %s\n", err.Error())
 	}
 
 	clientKey, err := pluginutil.LoadResourceFromContext(c, "bbs-client-key")
 	if err != nil {
-		lo.G.Panicf("bbs client key: %s\n", err.Error())
+		lo.G.Fatalf("bbs client key: %s\n", err.Error())
 	}
 	return &diegoBrain{
 		AZs:                       c.StringSlice("az"),

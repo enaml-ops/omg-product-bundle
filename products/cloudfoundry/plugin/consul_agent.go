@@ -3,8 +3,8 @@ package cloudfoundry
 import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/pluginlib/util"
 	consullib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/consul_agent"
+	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 )
 
@@ -33,23 +33,23 @@ func NewConsulAgentServer(c *cli.Context) *ConsulAgent {
 func (ca *ConsulAgent) loadSSL(c *cli.Context) {
 	caCert, err := pluginutil.LoadResourceFromContext(c, "consul-ca-cert")
 	if err != nil {
-		lo.G.Panicf("consul ca cert: %s\n", err.Error())
+		lo.G.Fatalf("consul ca cert: %s\n", err.Error())
 	}
 	agentCert, err := pluginutil.LoadResourceFromContext(c, "consul-agent-cert")
 	if err != nil {
-		lo.G.Panicf("consul agent cert: %s\n", err.Error())
+		lo.G.Fatalf("consul agent cert: %s\n", err.Error())
 	}
 	agentKey, err := pluginutil.LoadResourceFromContext(c, "consul-agent-key")
 	if err != nil {
-		lo.G.Panicf("consul agent key: %s\n", err.Error())
+		lo.G.Fatalf("consul agent key: %s\n", err.Error())
 	}
 	serverCert, err := pluginutil.LoadResourceFromContext(c, "consul-server-cert")
 	if err != nil {
-		lo.G.Panicf("consul server cert: %s\n", err.Error())
+		lo.G.Fatalf("consul server cert: %s\n", err.Error())
 	}
 	serverKey, err := pluginutil.LoadResourceFromContext(c, "consul-server-key")
 	if err != nil {
-		lo.G.Panicf("consul server key: %s\n", err.Error())
+		lo.G.Fatalf("consul server key: %s\n", err.Error())
 	}
 
 	ca.CaCert = caCert

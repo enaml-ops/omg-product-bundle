@@ -5,9 +5,9 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/pluginlib/util"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/bbs"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd"
+	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 )
 
@@ -17,47 +17,47 @@ func NewDiegoDatabasePartition(c *cli.Context) InstanceGrouper {
 
 	caCert, err := pluginutil.LoadResourceFromContext(c, "bbs-ca-cert")
 	if err != nil {
-		lo.G.Panicf("ca cert: %s\n", err.Error())
+		lo.G.Fatalf("ca cert: %s\n", err.Error())
 	}
 
 	bbsServerCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-cert")
 	if err != nil {
-		lo.G.Panicf("bbs server cert: %s\n", err.Error())
+		lo.G.Fatalf("bbs server cert: %s\n", err.Error())
 	}
 
 	bbsServerKey, err := pluginutil.LoadResourceFromContext(c, "bbs-server-key")
 	if err != nil {
-		lo.G.Panicf("bbs server key: %s\n", err.Error())
+		lo.G.Fatalf("bbs server key: %s\n", err.Error())
 	}
 
 	etcdServerCert, err := pluginutil.LoadResourceFromContext(c, "etcd-server-cert")
 	if err != nil {
-		lo.G.Panicf("etcd server cert: %s\n", err.Error())
+		lo.G.Fatalf("etcd server cert: %s\n", err.Error())
 	}
 
 	etcdServerKey, err := pluginutil.LoadResourceFromContext(c, "etcd-server-key")
 	if err != nil {
-		lo.G.Panicf("etcd server key: %s\n", err.Error())
+		lo.G.Fatalf("etcd server key: %s\n", err.Error())
 	}
 
 	etcdClientCert, err := pluginutil.LoadResourceFromContext(c, "etcd-client-cert")
 	if err != nil {
-		lo.G.Panicf("etcd client cert: %s\n", err.Error())
+		lo.G.Fatalf("etcd client cert: %s\n", err.Error())
 	}
 
 	etcdClientKey, err := pluginutil.LoadResourceFromContext(c, "etcd-client-key")
 	if err != nil {
-		lo.G.Panicf("etcd client key: %s\n", err.Error())
+		lo.G.Fatalf("etcd client key: %s\n", err.Error())
 	}
 
 	etcdPeerCert, err := pluginutil.LoadResourceFromContext(c, "etcd-peer-cert")
 	if err != nil {
-		lo.G.Panicf("etcd peer cert: %s\n", err.Error())
+		lo.G.Fatalf("etcd peer cert: %s\n", err.Error())
 	}
 
 	etcdPeerKey, err := pluginutil.LoadResourceFromContext(c, "etcd-peer-key")
 	if err != nil {
-		lo.G.Panicf("etcd peer key: %s\n", err.Error())
+		lo.G.Fatalf("etcd peer key: %s\n", err.Error())
 	}
 
 	return &diegoDatabase{
