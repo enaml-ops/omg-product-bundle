@@ -6,6 +6,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	ccnglib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_ng"
+	"github.com/xchapter7x/lo"
 )
 
 func NewCloudControllerPartition(c *cli.Context) InstanceGrouper {
@@ -142,6 +143,41 @@ func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJo
 
 //HasValidValues - Check if valid values has been populated
 func (s *CloudControllerPartition) HasValidValues() bool {
+
+	lo.G.Debugf("checking '%s' for valid flags", "acceptanceTests")
+
+	if len(s.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
+	}
+
+	if s.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
+	}
+
+	if s.NetworkName == "" {
+		lo.G.Debugf("could not find a valid networkname '%v'", s.NetworkName)
+	}
+
+	if len(s.AppDomains) <= 0 {
+		lo.G.Debugf("could not find the correct number of app domains configured '%v' : '%v'", len(s.AppDomains), s.AppDomains)
+	}
+
+	if s.SystemDomain == "" {
+		lo.G.Debugf("could not find a valid system domain '%v'", s.SystemDomain)
+	}
+
+	if s.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
+	}
+
+	if s.Metron.Zone == "" {
+		lo.G.Debugf("could not find a valid metron zone '%v'", s.Metron.Zone)
+	}
+
+	if s.Metron.Secret == "" {
+		lo.G.Debugf("could not find a valid metron secret '%v'", s.Metron.Secret)
+	}
+
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&
