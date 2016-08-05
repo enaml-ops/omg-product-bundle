@@ -1,5 +1,5 @@
 hash: 0a1b20afd8b6e4b39833b27be4244ceaaed4d51f21a949025ebb28cb61395f93
-updated: 2016-07-25T15:11:53.447086975-04:00
+updated: 2016-08-04T19:58:06.493499223-04:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -11,7 +11,7 @@ imports:
   - ui
   - ui/fmt
 - name: github.com/codegangsta/cli
-  version: 492afb91497e22b398e972924eda64bfd706b102
+  version: 168c95418e66e019fe17b8f4f5c45aa62ff80e23
 - name: github.com/enaml-ops/enaml
   version: 55636a146c53aa484ad9cf1369c9e49c68aa8c1b
   subpackages:
@@ -19,57 +19,7 @@ imports:
   - cloudproperties/aws
   - cloudproperties/azure
 - name: github.com/enaml-ops/omg-cli
-  version: 4674a1b15aab429460ef19be538f83608b0a00a9
-- name: github.com/enaml-ops/omg-product-bundle
-  version: 1a90261aa3e946ee2154ec4f559373cb61c8348c
-  subpackages:
-  - products/cloudfoundry/plugin
-  - products/cf-mysql/enaml-gen/bootstrap
-  - products/cf-mysql/enaml-gen/mysql
-  - products/cf-mysql/enaml-gen/proxy
-  - products/cloudfoundry/enaml-gen/acceptance-tests
-  - products/cloudfoundry/enaml-gen/auctioneer
-  - products/cloudfoundry/enaml-gen/bbs
-  - products/cloudfoundry/enaml-gen/cc_uploader
-  - products/cloudfoundry/enaml-gen/cloud_controller_clock
-  - products/cloudfoundry/enaml-gen/cloud_controller_ng
-  - products/cloudfoundry/enaml-gen/cloud_controller_worker
-  - products/cloudfoundry/enaml-gen/consul_agent
-  - products/cloudfoundry/enaml-gen/converger
-  - products/cloudfoundry/enaml-gen/debian_nfs_server
-  - products/cloudfoundry/enaml-gen/doppler
-  - products/cloudfoundry/enaml-gen/etcd
-  - products/cloudfoundry/enaml-gen/etcd_metrics_server
-  - products/cloudfoundry/enaml-gen/file_server
-  - products/cloudfoundry/enaml-gen/garden
-  - products/cloudfoundry/enaml-gen/gorouter
-  - products/cloudfoundry/enaml-gen/haproxy
-  - products/cloudfoundry/enaml-gen/loggregator_trafficcontroller
-  - products/cloudfoundry/enaml-gen/metron_agent
-  - products/cloudfoundry/enaml-gen/nats
-  - products/cloudfoundry/enaml-gen/nfs_mounter
-  - products/cloudfoundry/enaml-gen/nsync
-  - products/cloudfoundry/enaml-gen/rep
-  - products/cloudfoundry/enaml-gen/route_emitter
-  - products/cloudfoundry/enaml-gen/route_registrar
-  - products/cloudfoundry/enaml-gen/smoke-tests
-  - products/cloudfoundry/enaml-gen/ssh_proxy
-  - products/cloudfoundry/enaml-gen/stager
-  - products/cloudfoundry/enaml-gen/syslog_drain_binder
-  - products/cloudfoundry/enaml-gen/tps
-  - products/cloudfoundry/enaml-gen/uaa
-  - products/concourse/enaml-gen/atc
-  - products/concourse/enaml-gen/baggageclaim
-  - products/concourse/enaml-gen/garden
-  - products/concourse/enaml-gen/groundcrew
-  - products/concourse/enaml-gen/postgresql
-  - products/concourse/enaml-gen/tsa
-  - products/concourse/plugin
-  - products/concourse
-  - products/redis/plugin
-  - products/vault/plugin
-  - products/vault/enaml-gen/consul
-  - products/vault/enaml-gen/vault
+  version: cf8fa3a920fadb8e9677aa09bb1a47c288bd2e34
 - name: github.com/enaml-ops/pluginlib
   version: 1ede39ba694aee6e62eefce462ad87af0087f3b9
   subpackages:
@@ -77,33 +27,33 @@ imports:
   - pcli
   - util
 - name: github.com/golang/protobuf
-  version: 874264fbbb43f4d91e999fecb4b40143ed611400
+  version: c3cefd437628a0b7d31b34fe44b3a7a540e98527
   subpackages:
   - proto
 - name: github.com/hashicorp/go-plugin
   version: 8cf118f7a2f0c7ef1c82f66d4f6ac77c7e27dc12
 - name: github.com/hashicorp/yamux
-  version: badf81fca035b8ebac61b5ab83330b72541056f4
+  version: d1caa6c97c9fc1cc9e83bbe34d0603f9ff0ce8bd
 - name: github.com/kr/fs
   version: 2788f0dbd16903de03cb8186e5c7d97b69ad387b
 - name: github.com/onsi/ginkgo
-  version: 7d3240191d7b2311b60090fcbc96e56bffc45ec0
+  version: 74c678d97c305753605c338c6c78c49ec104b5e7
 - name: github.com/onsi/gomega
   version: 9ed8da19f2156b87a803a8fdf6d126f627a12db1
 - name: github.com/op/go-logging
   version: 970db520ece77730c7e4724c61121037378659d9
 - name: github.com/pivotal-golang/clock
-  version: da8295109ceb031ff96dc126bb68d75dd9fddc4b
+  version: e0835a7d46f9ea781e764f0dc9325110e32a97dd
 - name: github.com/pivotalservices/gtils
   version: 2efb2d5d8a2ee2ad307f7343a04b8088f44c4e4b
   subpackages:
   - osutils
 - name: github.com/pkg/errors
-  version: cc5fbb72d9b1b5f664ff3c11ed7896ee23ad9276
+  version: 2a9be18ecd8c148be18be08a811e33809206da19
 - name: github.com/pkg/sftp
   version: a71e8f580e3b622ebff585309160b1cc549ef4d2
 - name: github.com/xchapter7x/lo
-  version: aa2602d0e8e8647f0ce7b53109b37040941915aa
+  version: e33b245fc7a8186582208abc2458c2691bff681c
 - name: gopkg.in/yaml.v2
   version: e4d366fc3c7938e2958e662b4258c7a89e1f0e3e
 devImports: []

@@ -7,6 +7,8 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/ghttp"
+	"github.com/xchapter7x/lo"
+	"github.com/xchapter7x/lo/lofakes"
 
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	"github.com/enaml-ops/pluginlib/pcli"
@@ -97,25 +99,39 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 				Ω(ctx.String("knock")).Should(Equal("knocks"))
 			})
 		})
-	})
-
-	Describe("given the GetProduct Method", func() {
-		var plugin *Plugin
-
-		BeforeEach(func() {
-			plugin = new(Plugin)
-		})
 
 		Context("when called w/ a `vault-active` flag set to TRUE and an INCOMPLETE set of vault values", func() {
-			It("then it should panic", func() {
-				Ω(func() {
-					plugin.GetProduct([]string{
-						"my-app",
-						"--vault-active",
-					},
-						[]byte(``),
-					)
-				}).Should(Panic())
+			var logHolder = lo.G
+			var logfake = new(lofakes.FakeLogger)
+
+			BeforeEach(func() {
+				logHolder = lo.G
+				lo.G = logfake
+				flgs := []pcli.Flag{
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "knock"},
+					pcli.Flag{FlagType: pcli.BoolTFlag, Name: "vault-active"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-domain"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-token"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-password"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-keycert"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-ip"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-host"},
+				}
+				args := []string{
+					"mycoolness",
+					"--vault-token", "lshdglkahsdlgkhaskldghalsdhgk",
+					"--vault-hash-ip", "secret/move-along-nothing-to-see-here",
+					"--vault-hash-host", "secret/move-along-nothing-to-see-here",
+				}
+				VaultDecorate(args, flgs)
+			})
+
+			AfterEach(func() {
+				lo.G = logHolder
+			})
+
+			It("then it exit and print an error", func() {
+				Ω(logfake.FatalCallCount()).Should(Equal(1))
 			})
 		})
 	})

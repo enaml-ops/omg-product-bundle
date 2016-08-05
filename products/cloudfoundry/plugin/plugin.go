@@ -339,11 +339,9 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 					lo.G.Info(fl.Name)
 				}
 			}
-
-			lo.G.Panic("incomplete flag set. please check --help and documentation or use debug output for more details")
+			lo.G.Fatal("incomplete flag set. please check --help and documentation or use debug output for more details")
 		}
 	}
-
 	return dm.Bytes()
 }
 
@@ -408,7 +406,7 @@ func VaultDecorate(args []string, flgs []pcli.Flag) {
 		)
 
 		if c.BoolT("vault-active") {
-			lo.G.Panic("you've activated vault, but have not provided a complete set of values... exiting program now")
+			lo.G.Fatal("you've activated vault, but have not provided a complete set of values... exiting program now")
 		}
 	}
 }
