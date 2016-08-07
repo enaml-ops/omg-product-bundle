@@ -12,6 +12,11 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/uaa"
 )
 
+//VaultRotater an interface for rotating vault hashes values
+type VaultRotater interface {
+	RotateSecrets(hash string, secrets interface{}) error
+}
+
 // InstanceGrouper creates and validates InstanceGroups.
 type InstanceGrouper interface {
 	ToInstanceGroup() (ig *enaml.InstanceGroup)

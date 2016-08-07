@@ -252,6 +252,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("vault-hash-ip", "the hashname of your secret (ie. secret/pcf-1-ips"),
 		createStringFlag("vault-hash-host", "the hashname of your secret (ie. secret/pcf-1-hosts"),
 		createStringFlag("vault-token", "the token to make connections to your vault"),
+		createBoolFlag("vault-rotate", "set this flag to true if you would like re/set the values in vault. this will rotate internal certs and passwords"),
 		createBoolTFlag("vault-active", "use the data which is stored in vault for the flag values it contains"),
 	}
 }
@@ -302,6 +303,7 @@ func (s *Plugin) GetMeta() product.Meta {
 func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	flgs := s.GetFlags()
 	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
+	VaultRotate(args, flgs)
 	VaultDecorate(args, flgs)
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
 	dm := enaml.NewDeploymentManifest([]byte(``))
