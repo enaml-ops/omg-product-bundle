@@ -107,6 +107,49 @@ func (d *diegoBrain) ToInstanceGroup() *enaml.InstanceGroup {
 }
 
 func (d *diegoBrain) HasValidValues() bool {
+
+	lo.G.Debugf("checking '%s' for valid flags", "diego brain")
+
+	if len(d.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(d.AZs), d.AZs)
+	}
+
+	if len(d.NetworkIPs) <= 0 {
+		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(d.NetworkIPs), d.NetworkIPs)
+	}
+
+	if d.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", d.StemcellName)
+	}
+
+	if d.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", d.VMTypeName)
+	}
+	if d.PersistentDiskType == "" {
+		lo.G.Debugf("could not find a valid PersistentDiskType '%v'", d.PersistentDiskType)
+	}
+	if d.NetworkName == "" {
+		lo.G.Debugf("could not find a valid networkname '%v'", d.NetworkName)
+	}
+	if d.BBSCACert == "" {
+		lo.G.Debugf("could not find a valid bbscacert '%v'", d.BBSCACert)
+	}
+	if d.BBSClientCert == "" {
+		lo.G.Debugf("could not find a valid bbsclientcert '%v'", d.BBSClientCert)
+	}
+	if d.BBSAPILocation == "" {
+		lo.G.Debugf("could not find a valid BBSAPILocation '%v'", d.BBSAPILocation)
+	}
+	if d.CCInternalAPIUser == "" {
+		lo.G.Debugf("could not find a valid CCInternalAPIUser '%v'", d.CCInternalAPIUser)
+	}
+	if d.CCInternalAPIPassword == "" {
+		lo.G.Debugf("could not find a valid CCInternalAPIPassword '%v'", d.CCInternalAPIPassword)
+	}
+	if d.SystemDomain == "" {
+		lo.G.Debugf("could not find a valid SystemDomain '%v'", d.SystemDomain)
+	}
+
 	return len(d.AZs) > 0 &&
 		d.StemcellName != "" &&
 		len(d.NetworkIPs) > 0 &&
