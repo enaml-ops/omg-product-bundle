@@ -25,14 +25,14 @@ var _ = Describe("Vault helpers", func() {
 			})
 		})
 	})
-	XDescribe("given a RotateCertHash", func() {
+	Describe("given a RotateCertHash", func() {
 		Context("when called with a vaultrotater and a valid hash", func() {
 			var fakeVault *pluginfakes.FakeVaultRotater
 			var err error
 			BeforeEach(func() {
 				fakeVault = new(pluginfakes.FakeVaultRotater)
 				fakeVault.RotateSecretsReturns(nil)
-				err = RotateCertHash(fakeVault, "secret/hash/of/stuff")
+				err = RotateCertHash(fakeVault, "secret/hash/of/stuff", "fake.domain.io")
 			})
 			It("should set a valid set of secrets to vault", func() {
 				_, givenSecrets := fakeVault.RotateSecretsArgsForCall(0)
