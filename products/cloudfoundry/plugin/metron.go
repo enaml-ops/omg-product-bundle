@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
+	"github.com/xchapter7x/lo"
 )
 
 //NewMetron -
@@ -51,5 +52,12 @@ func (s *Metron) CreateJob() enaml.InstanceJob {
 
 //HasValidValues -
 func (s *Metron) HasValidValues() bool {
+	lo.G.Debugf("checking '%s' for valid flags", "metron")
+	if s.Zone == "" {
+		lo.G.Debugf("could not find a valid Zone '%v'", s.Zone)
+	}
+	if s.Secret == "" {
+		lo.G.Debugf("could not find a valid Secret '%v'", s.Secret)
+	}
 	return (s.Zone != "" && s.Secret != "")
 }

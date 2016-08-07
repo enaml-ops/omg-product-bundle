@@ -6,6 +6,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	mysqllib "github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/mysql"
+	"github.com/xchapter7x/lo"
 )
 
 //NewMySQLPartition -
@@ -133,6 +134,36 @@ func (s *MySQL) newMySQLJob() enaml.InstanceJob {
 
 //HasValidValues -
 func (s *MySQL) HasValidValues() bool {
+	lo.G.Debugf("checking '%s' for valid flags", "mysql")
+
+	if len(s.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
+	}
+	if len(s.NetworkIPs) <= 0 {
+		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
+	}
+	if s.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
+	}
+	if s.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
+	}
+	if s.NetworkName == "" {
+		lo.G.Debugf("could not find a valid NetworkName '%v'", s.NetworkName)
+	}
+	if s.PersistentDiskType == "" {
+		lo.G.Debugf("could not find a valid PersistentDiskType '%v'", s.PersistentDiskType)
+	}
+	if s.AdminPassword == "" {
+		lo.G.Debugf("could not find a valid AdminPassword '%v'", s.AdminPassword)
+	}
+	if s.BootstrapUsername == "" {
+		lo.G.Debugf("could not find a valid BootstrapUsername '%v'", s.BootstrapUsername)
+	}
+	if s.BootstrapPassword == "" {
+		lo.G.Debugf("could not find a valid BootstrapPassword '%v'", s.BootstrapPassword)
+	}
+
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&

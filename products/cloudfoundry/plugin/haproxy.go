@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/haproxy"
+	"github.com/xchapter7x/lo"
 )
 
 //NewHaProxyPartition -
@@ -70,6 +71,27 @@ func (s *HAProxy) createHAProxyJob() enaml.InstanceJob {
 
 //HasValidValues - Check if the datastructure has valid fields
 func (s *HAProxy) HasValidValues() bool {
+
+	lo.G.Debugf("checking '%s' for valid flags", "haproxy")
+
+	if len(s.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
+	}
+	if len(s.NetworkIPs) <= 0 {
+		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
+	}
+	if len(s.RouterMachines) <= 0 {
+		lo.G.Debugf("could not find the correct number of RouterMachines configured '%v' : '%v'", len(s.RouterMachines), s.RouterMachines)
+	}
+	if s.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
+	}
+	if s.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
+	}
+	if s.NetworkName == "" {
+		lo.G.Debugf("could not find a valid NetworkName '%v'", s.NetworkName)
+	}
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&

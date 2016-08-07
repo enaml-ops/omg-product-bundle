@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/proxy"
+	"github.com/xchapter7x/lo"
 )
 
 //NewMySQLProxyPartition -
@@ -71,6 +72,36 @@ func (s *MySQLProxy) newMySQLProxyJob() enaml.InstanceJob {
 
 //HasValidValues -
 func (s *MySQLProxy) HasValidValues() bool {
+
+	lo.G.Debugf("checking '%s' for valid flags", "mysqlproxy")
+
+	if len(s.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
+	}
+	if len(s.NetworkIPs) <= 0 {
+		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
+	}
+	if len(s.ClusterIPs) <= 0 {
+		lo.G.Debugf("could not find the correct number of ClusterIPs configured '%v' : '%v'", len(s.ClusterIPs), s.ClusterIPs)
+	}
+	if s.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
+	}
+	if s.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
+	}
+	if s.NetworkName == "" {
+		lo.G.Debugf("could not find a valid NetworkName '%v'", s.NetworkName)
+	}
+	if s.ExternalHost == "" {
+		lo.G.Debugf("could not find a valid ExternalHost '%v'", s.ExternalHost)
+	}
+	if s.APIPassword == "" {
+		lo.G.Debugf("could not find a valid APIPassword '%v'", s.APIPassword)
+	}
+	if s.APIUsername == "" {
+		lo.G.Debugf("could not find a valid APIUsername '%v'", s.APIUsername)
+	}
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&

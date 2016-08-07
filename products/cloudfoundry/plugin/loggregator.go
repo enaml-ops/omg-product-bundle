@@ -5,6 +5,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	ltc "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/loggregator_trafficcontroller"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
+	"github.com/xchapter7x/lo"
 )
 
 func NewLoggregatorTrafficController(c *cli.Context) InstanceGrouper {
@@ -29,6 +30,34 @@ func NewLoggregatorTrafficController(c *cli.Context) InstanceGrouper {
 }
 
 func (l *loggregatorTrafficController) HasValidValues() bool {
+
+	lo.G.Debugf("checking '%s' for valid flags", "loggregator")
+
+	if len(l.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(l.AZs), l.AZs)
+	}
+	if len(l.NetworkIPs) <= 0 {
+		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(l.NetworkIPs), l.NetworkIPs)
+	}
+	if len(l.EtcdMachines) <= 0 {
+		lo.G.Debugf("could not find the correct number of EtcdMachines configured '%v' : '%v'", len(l.EtcdMachines), l.EtcdMachines)
+	}
+	if l.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", l.StemcellName)
+	}
+	if l.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", l.VMTypeName)
+	}
+	if l.NetworkName == "" {
+		lo.G.Debugf("could not find a valid NetworkName '%v'", l.NetworkName)
+	}
+	if l.SystemDomain == "" {
+		lo.G.Debugf("could not find a valid SystemDomain '%v'", l.SystemDomain)
+	}
+	if l.DopplerSecret == "" {
+		lo.G.Debugf("could not find a valid DopplerSecret '%v'", l.DopplerSecret)
+	}
+
 	return len(l.AZs) > 0 &&
 		l.StemcellName != "" &&
 		l.NetworkName != "" &&

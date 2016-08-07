@@ -6,6 +6,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/smoke-tests"
+	"github.com/xchapter7x/lo"
 )
 
 //NewSmokeErrand - errand definition for smoke tests
@@ -65,6 +66,32 @@ func (s *SmokeErrand) createSmokeJob() enaml.InstanceJob {
 
 //HasValidValues - Check if the datastructure has valid fields
 func (s *SmokeErrand) HasValidValues() bool {
+	lo.G.Debugf("checking '%s' for valid flags", "smoke")
+
+	if len(s.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
+	}
+	if s.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
+	}
+	if s.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
+	}
+	if s.NetworkName == "" {
+		lo.G.Debugf("could not find a valid NetworkName '%v'", s.NetworkName)
+	}
+	if s.Protocol == "" {
+		lo.G.Debugf("could not find a valid Protocol '%v'", s.Protocol)
+	}
+	if s.Password == "" {
+		lo.G.Debugf("could not find a valid Password '%v'", s.Password)
+	}
+	if s.SystemDomain == "" {
+		lo.G.Debugf("could not find a valid SystemDomain '%v'", s.SystemDomain)
+	}
+	if s.AppsDomain == "" {
+		lo.G.Debugf("could not find a valid AppsDomain '%v'", s.AppsDomain)
+	}
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&

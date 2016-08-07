@@ -7,6 +7,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/uaa"
+	"github.com/xchapter7x/lo"
 )
 
 //NewUAAPartition -
@@ -421,6 +422,127 @@ func (s *UAA) createUAADB() (uaadb *uaa.Uaadb) {
 
 //HasValidValues - Check if the datastructure has valid fields
 func (s *UAA) HasValidValues() bool {
+
+	lo.G.Debugf("checking '%s' for valid flags", "mysql")
+
+	if len(s.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
+	}
+	if len(s.Nats.Machines.([]string)) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.Nats.Machines.([]string)), s.Nats.Machines)
+	}
+	if len(s.RouterMachines) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.RouterMachines), s.RouterMachines)
+	}
+	if s.StemcellName == "" {
+		lo.G.Debugf("could not find a valid StemcellName '%v'", s.StemcellName)
+	}
+	if s.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid VMTypeName '%v'", s.VMTypeName)
+	}
+	if s.NetworkName == "" {
+		lo.G.Debugf("could not find a valid NetworkName '%v'", s.NetworkName)
+	}
+	if s.Instances > 0 {
+		lo.G.Debugf("could not find a valid Instances '%v'", s.Instances)
+	}
+	if s.SystemDomain == "" {
+		lo.G.Debugf("could not find a valid SystemDomain '%v'", s.SystemDomain)
+	}
+	if s.Nats.User == "" {
+		lo.G.Debugf("could not find a valid Nats.User '%v'", s.Nats.User)
+	}
+	if s.Nats.Password == "" {
+		lo.G.Debugf("could not find a valid Nats.Password '%v'", s.Nats.Password)
+	}
+	if s.SAMLServiceProviderKey == "" {
+		lo.G.Debugf("could not find a valid SAMLServiceProviderKey '%v'", s.SAMLServiceProviderKey)
+	}
+	if s.SAMLServiceProviderCertificate == "" {
+		lo.G.Debugf("could not find a valid SAMLServiceProviderCertificate '%v'", s.SAMLServiceProviderCertificate)
+	}
+	if s.JWTSigningKey == "" {
+		lo.G.Debugf("could not find a valid JWTSigningKey '%v'", s.JWTSigningKey)
+	}
+	if s.JWTVerificationKey == "" {
+		lo.G.Debugf("could not find a valid JWTVerificationKey '%v'", s.JWTVerificationKey)
+	}
+	if s.AdminSecret == "" {
+		lo.G.Debugf("could not find a valid AdminSecret '%v'", s.AdminSecret)
+	}
+	if s.MySQLProxyHost == "" {
+		lo.G.Debugf("could not find a valid MySQLProxyHost '%v'", s.MySQLProxyHost)
+	}
+	if s.DBUserName == "" {
+		lo.G.Debugf("could not find a valid DBUserName '%v'", s.DBUserName)
+	}
+	if s.DBPassword == "" {
+		lo.G.Debugf("could not find a valid DBPassword '%v'", s.DBPassword)
+	}
+	if s.AdminPassword == "" {
+		lo.G.Debugf("could not find a valid AdminPassword '%v'", s.AdminPassword)
+	}
+	if s.PushAppsManagerPassword == "" {
+		lo.G.Debugf("could not find a valid PushAppsManagerPassword '%v'", s.PushAppsManagerPassword)
+	}
+	if s.SmokeTestsPassword == "" {
+		lo.G.Debugf("could not find a valid SmokeTestsPassword '%v'", s.SmokeTestsPassword)
+	}
+	if s.SystemServicesPassword == "" {
+		lo.G.Debugf("could not find a valid SystemServicesPassword '%v'", s.SystemServicesPassword)
+	}
+	if s.SystemVerificationPassword == "" {
+		lo.G.Debugf("could not find a valid SystemVerificationPassword '%v'", s.SystemVerificationPassword)
+	}
+	if s.OpentsdbFirehoseNozzleClientSecret == "" {
+		lo.G.Debugf("could not find a valid OpentsdbFirehoseNozzleClientSecret '%v'", s.OpentsdbFirehoseNozzleClientSecret)
+	}
+	if s.IdentityClientSecret == "" {
+		lo.G.Debugf("could not find a valid IdentityClientSecret '%v'", s.IdentityClientSecret)
+	}
+	if s.LoginClientSecret == "" {
+		lo.G.Debugf("could not find a valid LoginClientSecret '%v'", s.LoginClientSecret)
+	}
+	if s.PortalClientSecret == "" {
+		lo.G.Debugf("could not find a valid PortalClientSecret '%v'", s.PortalClientSecret)
+	}
+	if s.AutoScalingServiceClientSecret == "" {
+		lo.G.Debugf("could not find a valid AutoScalingServiceClientSecret '%v'", s.AutoScalingServiceClientSecret)
+	}
+	if s.SystemPasswordsClientSecret == "" {
+		lo.G.Debugf("could not find a valid SystemPasswordsClientSecret '%v'", s.SystemPasswordsClientSecret)
+	}
+	if s.CCServiceDashboardsClientSecret == "" {
+		lo.G.Debugf("could not find a valid CCServiceDashboardsClientSecret '%v'", s.CCServiceDashboardsClientSecret)
+	}
+	if s.DopplerClientSecret == "" {
+		lo.G.Debugf("could not find a valid DopplerClientSecret '%v'", s.DopplerClientSecret)
+	}
+	if s.GoRouterClientSecret == "" {
+		lo.G.Debugf("could not find a valid GoRouterClientSecret '%v'", s.GoRouterClientSecret)
+	}
+	if s.NotificationsClientSecret == "" {
+		lo.G.Debugf("could not find a valid NotificationsClientSecret '%v'", s.NotificationsClientSecret)
+	}
+	if s.NotificationsUIClientSecret == "" {
+		lo.G.Debugf("could not find a valid NotificationsUIClientSecret '%v'", s.NotificationsUIClientSecret)
+	}
+	if s.CloudControllerUsernameLookupClientSecret == "" {
+		lo.G.Debugf("could not find a valid CloudControllerUsernameLookupClientSecret '%v'", s.CloudControllerUsernameLookupClientSecret)
+	}
+	if s.CCRoutingClientSecret == "" {
+		lo.G.Debugf("could not find a valid CCRoutingClientSecret '%v'", s.CCRoutingClientSecret)
+	}
+	if s.SSHProxyClientSecret == "" {
+		lo.G.Debugf("could not find a valid SSHProxyClientSecret '%v'", s.SSHProxyClientSecret)
+	}
+	if s.AppsMetricsClientSecret == "" {
+		lo.G.Debugf("could not find a valid AppsMetricsClientSecret '%v'", s.AppsMetricsClientSecret)
+	}
+	if s.AppsMetricsProcessingClientSecret == "" {
+		lo.G.Debugf("could not find a valid AppsMetricsProcessingClientSecret '%v'", s.AppsMetricsProcessingClientSecret)
+	}
+
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&

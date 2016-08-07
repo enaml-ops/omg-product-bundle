@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	natslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/nats"
+	"github.com/xchapter7x/lo"
 )
 
 //NewNatsPartition --
@@ -62,6 +63,39 @@ func (s *NatsPartition) newNatsJob() enaml.InstanceJob {
 
 //HasValidValues - Checks that fields in NatsPartition are valid
 func (s *NatsPartition) HasValidValues() bool {
+	lo.G.Debugf("checking '%s' for valid flags", "nats")
+
+	if len(s.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
+	}
+	if len(s.NetworkIPs) <= 0 {
+		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
+	}
+	if s.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
+	}
+	if s.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
+	}
+	if s.NetworkName == "" {
+		lo.G.Debugf("could not find a valid NetworkName '%v'", s.NetworkName)
+	}
+	if s.Metron.Zone == "" {
+		lo.G.Debugf("could not find a valid Metron.Zone '%v'", s.Metron.Zone)
+	}
+	if s.Metron.Secret == "" {
+		lo.G.Debugf("could not find a valid Metron.Secret '%v'", s.Metron.Secret)
+	}
+	if s.Nats.Nats.User == "" {
+		lo.G.Debugf("could not find a valid Nats.Nats.User '%v'", s.Nats.Nats.User)
+	}
+	if s.Nats.Nats.Password == "" {
+		lo.G.Debugf("could not find a valid Nats.Nats.Password '%v'", s.Nats.Nats.Password)
+	}
+	if s.Nats.Nats.Machines == "" {
+		lo.G.Debugf("could not find a valid Nats.Nats.Machines '%v'", s.Nats.Nats.Machines)
+	}
+
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&

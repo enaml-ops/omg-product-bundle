@@ -5,6 +5,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	etcdlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd"
 	etcdmetricslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd_metrics_server"
+	"github.com/xchapter7x/lo"
 )
 
 //NewEtcdPartition -
@@ -79,6 +80,27 @@ func (s *Etcd) newEtcdMetricsServerJob() enaml.InstanceJob {
 
 //HasValidValues -
 func (s *Etcd) HasValidValues() bool {
+
+	lo.G.Debugf("checking '%s' for valid flags", "etcd")
+
+	if len(s.AZs) <= 0 {
+		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
+	}
+	if len(s.NetworkIPs) <= 0 {
+		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
+	}
+	if s.StemcellName == "" {
+		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
+	}
+	if s.VMTypeName == "" {
+		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
+	}
+	if s.PersistentDiskType == "" {
+		lo.G.Debugf("could not find a valid PersistentDiskType '%v'", s.PersistentDiskType)
+	}
+	if s.NetworkName == "" {
+		lo.G.Debugf("could not find a valid networkname '%v'", s.NetworkName)
+	}
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&
