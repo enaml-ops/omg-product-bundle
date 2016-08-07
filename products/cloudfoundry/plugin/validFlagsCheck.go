@@ -9,7 +9,7 @@ func hasValidStringFlags(c *cli.Context, flaglist []string) bool {
 	for _, v := range flaglist {
 
 		if c.String(v) == "" {
-			lo.G.Error("empty flag value for required field: ", v)
+			lo.G.Errorf("empty flag value for required field: %v", v)
 			return false
 		}
 	}
@@ -21,7 +21,7 @@ func hasValidStringSliceFlags(c *cli.Context, flaglist []string) bool {
 	for _, v := range flaglist {
 
 		if len(c.StringSlice(v)) > 0 {
-			lo.G.Error("empty flag value for required field: az")
+			lo.G.Errorf("empty flag value for required field: %v", v)
 			return false
 		}
 	}
