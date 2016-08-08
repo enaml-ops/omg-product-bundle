@@ -13,6 +13,7 @@ var _ = Describe("HaProxy Partition", func() {
 			plugin := new(Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
+				"--skip-haproxy=false",
 			})
 			haproxyPartition := NewHaProxyPartition(c)
 			Ω(haproxyPartition.HasValidValues()).Should(BeFalse())
@@ -26,6 +27,7 @@ var _ = Describe("HaProxy Partition", func() {
 				"cloudfoundry",
 				"--stemcell-name", "cool-ubuntu-animal",
 				"--az", "eastprod-1",
+				"--skip-haproxy=false",
 				"--haproxy-ip", "1.0.11.1",
 				"--haproxy-ip", "1.0.11.2",
 				"--haproxy-ip", "1.0.11.3",
