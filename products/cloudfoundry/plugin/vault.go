@@ -100,6 +100,7 @@ func getPasswordObject() []byte {
 		"doppler-shared-secret",
 		"ssh-proxy-uaa-secret",
 		"metron-secret",
+		"metron-zone",
 		"uaa-admin-secret",
 		"opentsdb-firehose-nozzle-client-secret",
 		"identity-client-secret",
@@ -162,7 +163,7 @@ func getKeyCertObject(host string) []byte {
 	for _, fn := range cafieldnames {
 		ca := true
 		curve := ""
-		certVault[fn+certsuffix], _ = certgen(&host, &ca, &curve)
+		certVault[fn], _ = certgen(&host, &ca, &curve)
 	}
 	b, _ := json.Marshal(certVault)
 	return b

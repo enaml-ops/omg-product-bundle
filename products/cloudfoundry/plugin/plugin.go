@@ -303,7 +303,10 @@ func (s *Plugin) GetMeta() product.Meta {
 func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	flgs := s.GetFlags()
 	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
-	VaultRotate(args, flgs)
+
+	if err := VaultRotate(args, flgs); err != nil {
+		lo.G.Fatalf("unable to rotate vault values: %v", err.Error())
+	}
 	VaultDecorate(args, flgs)
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
 	dm := enaml.NewDeploymentManifest([]byte(``))
