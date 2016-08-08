@@ -76,6 +76,7 @@ var flagsToInferFromCloudConfig = map[string][]string{
 		"mysql-proxy-vm-type",
 		"cc-worker-vm-type",
 		"cc-vm-type",
+		"loggregator-traffic-controller-vmtype",
 	},
 	"az":      []string{"az"},
 	"network": []string{"network"},

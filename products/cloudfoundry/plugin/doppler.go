@@ -123,7 +123,7 @@ func (s *Doppler) HasValidValues() bool {
 	if s.Zone == "" {
 		lo.G.Debugf("could not find a valid zone '%v'", s.Zone)
 	}
-	if s.MessageDrainBufferSize > 0 {
+	if s.MessageDrainBufferSize <= 0 {
 		lo.G.Debugf("could not find a valid MessageDrainBufferSize '%v'", s.MessageDrainBufferSize)
 	}
 	if s.SharedSecret == "" {

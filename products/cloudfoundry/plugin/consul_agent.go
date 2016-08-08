@@ -101,6 +101,8 @@ func (s *ConsulAgent) getMode() interface{} {
 //HasValidValues -
 func (s *ConsulAgent) HasValidValues() bool {
 
+	lo.G.Debugf("checking '%s' for valid flags", "consul agent")
+
 	if len(s.NetworkIPs) <= 0 {
 		lo.G.Debugf("could not find the correct number of networkips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
 	}

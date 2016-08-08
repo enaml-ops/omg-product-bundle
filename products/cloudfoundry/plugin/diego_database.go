@@ -133,6 +133,7 @@ func (s *diegoDatabase) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 }
 
 func (s *diegoDatabase) HasValidValues() bool {
+	lo.G.Debugf("checking %v for valid flags", "diego database")
 	validStrings := hasValidStringFlags(s.context, []string{
 		"bbs-ca-cert",
 		"bbs-server-cert",
@@ -150,8 +151,7 @@ func (s *diegoDatabase) HasValidValues() bool {
 		"network",
 		"diego-db-passphrase",
 	})
-	validSlices := hasValidStringSliceFlags(s.context, []string{"az"})
-	return validStrings && validSlices
+	return validStrings
 }
 
 func (s *diegoDatabase) newBBS() (dbdiego *bbs.Diego) {

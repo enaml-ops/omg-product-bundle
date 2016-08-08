@@ -3,6 +3,7 @@ package cloudfoundry
 import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
+	"github.com/xchapter7x/lo"
 )
 
 //NewStatsdInjector -
@@ -22,5 +23,6 @@ func (s *StatsdInjector) CreateJob() enaml.InstanceJob {
 
 //HasValidValues -
 func (s *StatsdInjector) HasValidValues() bool {
+	lo.G.Debug("checking statsdinjector for valid values")
 	return true
 }

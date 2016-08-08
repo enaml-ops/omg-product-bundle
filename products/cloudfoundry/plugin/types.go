@@ -439,6 +439,7 @@ type UAAClient struct {
 
 // HAProxy -
 type HAProxy struct {
+	Skip           bool
 	AZs            []string
 	StemcellName   string
 	VMTypeName     string

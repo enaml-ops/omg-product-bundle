@@ -423,7 +423,7 @@ func (s *UAA) createUAADB() (uaadb *uaa.Uaadb) {
 //HasValidValues - Check if the datastructure has valid fields
 func (s *UAA) HasValidValues() bool {
 
-	lo.G.Debugf("checking '%s' for valid flags", "mysql")
+	lo.G.Debugf("checking '%s' for valid flags", "uaa")
 
 	if len(s.AZs) <= 0 {
 		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
@@ -443,7 +443,7 @@ func (s *UAA) HasValidValues() bool {
 	if s.NetworkName == "" {
 		lo.G.Debugf("could not find a valid NetworkName '%v'", s.NetworkName)
 	}
-	if s.Instances > 0 {
+	if s.Instances <= 0 {
 		lo.G.Debugf("could not find a valid Instances '%v'", s.Instances)
 	}
 	if s.SystemDomain == "" {
@@ -457,9 +457,6 @@ func (s *UAA) HasValidValues() bool {
 	}
 	if s.SAMLServiceProviderKey == "" {
 		lo.G.Debugf("could not find a valid SAMLServiceProviderKey '%v'", s.SAMLServiceProviderKey)
-	}
-	if s.SAMLServiceProviderCertificate == "" {
-		lo.G.Debugf("could not find a valid SAMLServiceProviderCertificate '%v'", s.SAMLServiceProviderCertificate)
 	}
 	if s.JWTSigningKey == "" {
 		lo.G.Debugf("could not find a valid JWTSigningKey '%v'", s.JWTSigningKey)
@@ -556,7 +553,6 @@ func (s *UAA) HasValidValues() bool {
 		s.Nats.Password != "" &&
 		len(s.Nats.Machines.([]string)) > 0 &&
 		s.SAMLServiceProviderKey != "" &&
-		s.SAMLServiceProviderCertificate != "" &&
 		s.JWTSigningKey != "" &&
 		s.JWTVerificationKey != "" &&
 		s.AdminSecret != "" &&

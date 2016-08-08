@@ -5,6 +5,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/garden"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/rep"
+	"github.com/xchapter7x/lo"
 )
 
 func NewDiegoCellPartition(c *cli.Context) InstanceGrouper {
@@ -87,14 +88,14 @@ func (s *diegoCell) newGarden() (gardenLinux *garden.GardenJob) {
 }
 
 func (s *diegoCell) HasValidValues() bool {
+	lo.G.Debugf("checking %v for valid flags", "diego cell")
 	validStrings := hasValidStringFlags(s.context, []string{
 		"stemcell-name",
 		"diego-cell-vm-type",
 		"diego-cell-disk-type",
 		"network",
 	})
-	validSlices := hasValidStringSliceFlags(s.context, []string{"az"})
-	return validStrings && validSlices
+	return validStrings
 }
 
 func (s *diegoCell) newRDiego() (rdiego *rep.RepJob) {

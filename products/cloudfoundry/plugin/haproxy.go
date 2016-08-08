@@ -10,6 +10,7 @@ import (
 //NewHaProxyPartition -
 func NewHaProxyPartition(c *cli.Context) InstanceGrouper {
 	return &HAProxy{
+		Skip:           c.BoolT("skip-haproxy"),
 		AZs:            c.StringSlice("az"),
 		StemcellName:   c.String("stemcell-name"),
 		NetworkIPs:     c.StringSlice("haproxy-ip"),
@@ -25,24 +26,26 @@ func NewHaProxyPartition(c *cli.Context) InstanceGrouper {
 
 //ToInstanceGroup -
 func (s *HAProxy) ToInstanceGroup() (ig *enaml.InstanceGroup) {
-	ig = &enaml.InstanceGroup{
-		Name:      "ha_proxy-partition",
-		Instances: len(s.NetworkIPs),
-		VMType:    s.VMTypeName,
-		AZs:       s.AZs,
-		Stemcell:  s.StemcellName,
-		Jobs: []enaml.InstanceJob{
-			s.createHAProxyJob(),
-			s.ConsulAgent.CreateJob(),
-			s.Metron.CreateJob(),
-			s.StatsdInjector.CreateJob(),
-		},
-		Networks: []enaml.Network{
-			enaml.Network{Name: s.NetworkName, StaticIPs: s.NetworkIPs},
-		},
-		Update: enaml.Update{
-			MaxInFlight: 1,
-		},
+	if !s.Skip {
+		ig = &enaml.InstanceGroup{
+			Name:      "ha_proxy-partition",
+			Instances: len(s.NetworkIPs),
+			VMType:    s.VMTypeName,
+			AZs:       s.AZs,
+			Stemcell:  s.StemcellName,
+			Jobs: []enaml.InstanceJob{
+				s.createHAProxyJob(),
+				s.ConsulAgent.CreateJob(),
+				s.Metron.CreateJob(),
+				s.StatsdInjector.CreateJob(),
+			},
+			Networks: []enaml.Network{
+				enaml.Network{Name: s.NetworkName, StaticIPs: s.NetworkIPs},
+			},
+			Update: enaml.Update{
+				MaxInFlight: 1,
+			},
+		}
 	}
 	return
 }
@@ -71,6 +74,11 @@ func (s *HAProxy) createHAProxyJob() enaml.InstanceJob {
 
 //HasValidValues - Check if the datastructure has valid fields
 func (s *HAProxy) HasValidValues() bool {
+
+	if s.Skip {
+		lo.G.Debug("we are not using haproxy")
+		return true
+	}
 
 	lo.G.Debugf("checking '%s' for valid flags", "haproxy")
 

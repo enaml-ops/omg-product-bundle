@@ -64,6 +64,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("router-pass", "the password of the go-routers"),
 		createBoolFlag("router-enable-ssl", "enable or disable ssl on your routers"),
 
+		createBoolTFlag("skip-haproxy", "this flag is on by default and it will skip installing haproxy"),
 		createStringSliceFlag("haproxy-ip", "a list of the haproxy ips you wish to use"),
 		createStringFlag("haproxy-vm-type", "the name of your desired vm size"),
 
@@ -195,7 +196,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 
 		//UAA
 		createStringFlag("uaa-vm-type", "the name of your desired vm size for uaa"),
-		createIntFlag("uaa-instances", "the number of your desired vms for uaa"),
+		createIntFlag("uaa-instances", "the number of your desired vms for uaa", "1"),
 
 		createStringFlag("uaa-company-name", "name of company for UAA branding"),
 		createStringFlag("uaa-product-logo", "product logo for UAA branding"),
@@ -203,7 +204,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("uaa-footer-legal-txt", "legal text for UAA branding"),
 		createBoolTFlag("uaa-enable-selfservice-links", "enable self service links"),
 		createBoolTFlag("uaa-signups-enabled", "enable signups"),
-		createStringFlag("uaa-login-protocol", "uaa login protocol, default https"),
+		createStringFlag("uaa-login-protocol", "uaa login protocol, default https", "https"),
 		createStringFlag("uaa-saml-service-provider-key", "saml service provider key for uaa"),
 		createStringFlag("uaa-saml-service-provider-certificate", "saml service provider certificate for uaa"),
 		createStringFlag("uaa-jwt-signing-key", "signing key for jwt used by UAA"),

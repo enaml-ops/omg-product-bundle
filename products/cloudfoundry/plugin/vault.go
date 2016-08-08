@@ -78,6 +78,9 @@ const passLength = 20
 
 func getPasswordObject() []byte {
 	fieldnames := []string{
+		"cc-staging-upload-user",
+		"cc-bulk-api-user",
+		"cc-internal-api-user",
 		"router-pass",
 		"nats-pass",
 		"mysql-admin-password",
@@ -100,6 +103,7 @@ func getPasswordObject() []byte {
 		"doppler-shared-secret",
 		"ssh-proxy-uaa-secret",
 		"metron-secret",
+		"doppler-zone",
 		"metron-zone",
 		"uaa-admin-secret",
 		"opentsdb-firehose-nozzle-client-secret",
