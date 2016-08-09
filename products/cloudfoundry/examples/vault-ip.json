@@ -13,6 +13,6 @@
   "diego-cell-ip": "10.0.0.1,10.0.0.2,10.0.0.3",
   "diego-db-ip": "10.0.1.1",
   "mysql-proxy-external-host": "10.0.0.1",
-  "nfs-server-addres":"10.0.0.40",
+  "nfs-server-address":"10.0.0.40",
   "bbs-api":"10.0.0.41"
 }
