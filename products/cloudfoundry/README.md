@@ -37,7 +37,7 @@ $> cat vault-ip.json
   "diego-cell-ip": "10.0.0.1,10.0.0.2,10.0.0.3",
   "diego-db-ip": "10.0.1.1",
   "mysql-proxy-external-host": "10.0.0.1",
-  "nfs-server-addres":"10.0.0.40",
+  "nfs-server-address":"10.0.0.40",
   "bbs-api":"10.0.0.41"
 }
 $> ./vault write ${VAULT_HASH} @vault-ip.json
@@ -64,9 +64,7 @@ cloudfoundry-plugin-osx \
 --vault-hash-ip "secret/pcf-np-1-ips" \
 --vault-token "xxxx-xxxx-xxxx-xxxx-xxxxxxxx" \
 --vault-rotate \
---az us-east-1c \
 --stemcell-name ubuntu-trusty \
---network private \
 --infer-from-cloud \
 --nfs-share-path /var/vcap/store \
 --doppler-drain-buffer-size 256 \
