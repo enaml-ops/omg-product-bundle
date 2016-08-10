@@ -17,47 +17,37 @@ import (
 
 const (
 	concourseReleaseName string = "concourse"
-	concourseReleaseVer  string = "1.0.1"
-	concourseReleaseURL  string = "https://bosh.io/d/github.com/concourse/concourse?v=1.0.1"
-	concourseReleaseSHA  string = "ef60fe5182a7b09df324d167f36d26481e7f5e01"
-	gardenReleaseName    string = "garden-linux"
-	gardenReleaseVer     string = "0.337.0"
-	gardenReleaseURL     string = "https://bosh.io/d/github.com/cloudfoundry-incubator/garden-linux-release?v=0.337.0"
-	gardenReleaseSHA     string = "d1d81d56c3c07f6f9f04ebddc68e51b8a3cf541d"
-	stemcellOS           string = "ubuntu-trusty"
-	stemcellVer          string = "3232.4"
-	stemcellURL          string = "https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=3232.4"
-	stemcellSHA          string = "ac920cae17c7159dee3bf1ebac727ce2d01564e9"
+	gardenReleaseName    string = "garden-runc"
 )
 
 //Deployment -
 type Deployment struct {
-	enaml.Deployment
+	//enaml.Deployment
 	manifest            *enaml.DeploymentManifest
 	ConcourseURL        string
 	ConcourseUserName   string
 	ConcoursePassword   string
-	DirectorUUID        string
 	NetworkName         string
 	WebIPs              []string
-	WebInstances        int
-	WebAZs              []string
-	DatabaseAZs         []string
-	WorkerAZs           []string
+	AZs                 []string
+	WorkerInstances     int
 	DeploymentName      string
-	NetworkRange        string
-	NetworkGateway      string
 	PostgresPassword    string
-	ResourcePoolName    string
 	WebVMType           string
 	WorkerVMType        string
 	DatabaseVMType      string
 	DatabaseStorageType string
-	CloudConfigYml      string
-	StemcellAlias       string
+	ConcourseReleaseVer string
+	ConcourseReleaseURL string
+	ConcourseReleaseSHA string
 	StemcellVersion     string
-	StemcellURL         string // URL for remote stemcell, omit to use existing stemcell
-	StemcellSHA         string // SHA for remote stemcell, omit to use existing stemcell
+	StemcellAlias       string
+	StemcellOS          string
+	GardenReleaseVer    string
+	GardenReleaseURL    string
+	GardenReleaseSHA    string
+	TLSCert             string
+	TLSKey              string
 }
 
 //NewDeployment -
@@ -74,21 +64,9 @@ func (d *Deployment) doCloudConfigValidation(data []byte) (err error) {
 		return err
 	}
 
-	for _, azName := range d.WebAZs {
+	for _, azName := range d.AZs {
 		if !c.ContainsAZName(azName) {
-			err = fmt.Errorf("WebAZ [%s] is not defined as a AZ in cloud config", azName)
-			return
-		}
-	}
-	for _, azName := range d.WorkerAZs {
-		if !c.ContainsAZName(azName) {
-			err = fmt.Errorf("WorkerAZ[%s] is not defined as a AZ in cloud config", azName)
-			return
-		}
-	}
-	for _, azName := range d.DatabaseAZs {
-		if !c.ContainsAZName(azName) {
-			err = fmt.Errorf("DatabaseAZ[%s] is not defined as a AZ in cloud config", azName)
+			err = fmt.Errorf("AZ [%s] is not defined as a AZ in cloud config", azName)
 			return
 		}
 	}
@@ -123,21 +101,23 @@ func (d *Deployment) Initialize(cloudConfig []byte) error {
 	var db *enaml.InstanceGroup
 	var worker *enaml.InstanceGroup
 	d.manifest.SetName(d.DeploymentName)
-	d.manifest.SetDirectorUUID(d.DirectorUUID)
-	d.manifest.AddRemoteRelease(concourseReleaseName, concourseReleaseVer, concourseReleaseURL, concourseReleaseSHA)
-	d.manifest.AddRemoteRelease(gardenReleaseName, gardenReleaseVer, gardenReleaseURL, gardenReleaseSHA)
-
-	if d.StemcellURL != "" && d.StemcellSHA != "" {
-		d.manifest.AddRemoteStemcell(stemcellOS, d.StemcellAlias, d.StemcellVersion, d.StemcellURL, d.StemcellSHA)
-	} else if d.StemcellURL == "" && d.StemcellSHA == "" {
-		d.manifest.AddStemcell(enaml.Stemcell{
-			OS:      stemcellOS,
-			Alias:   d.StemcellAlias,
-			Version: d.StemcellVersion,
-		})
-	} else {
-		return fmt.Errorf("remote stemcell URL and SHA must either be both present or both absent")
-	}
+	d.manifest.AddRelease(enaml.Release{
+		Name:    concourseReleaseName,
+		URL:     d.ConcourseReleaseURL,
+		SHA1:    d.ConcourseReleaseSHA,
+		Version: d.ConcourseReleaseVer,
+	})
+	d.manifest.AddRelease(enaml.Release{
+		Name:    gardenReleaseName,
+		URL:     d.GardenReleaseURL,
+		SHA1:    d.GardenReleaseSHA,
+		Version: d.GardenReleaseVer,
+	})
+	d.manifest.AddStemcell(enaml.Stemcell{
+		Alias:   d.StemcellAlias,
+		OS:      d.StemcellOS,
+		Version: d.StemcellVersion,
+	})
 
 	update := d.CreateUpdate()
 	d.manifest.SetUpdate(update)
@@ -162,74 +142,57 @@ func (d *Deployment) Initialize(cloudConfig []byte) error {
 
 //CreateWebInstanceGroup -
 func (d *Deployment) CreateWebInstanceGroup() (web *enaml.InstanceGroup, err error) {
-	if err = validateInstanceGroup(d.ResourcePoolName, d.StemcellAlias, "WebAZs", d.WebAZs); err == nil {
-		web = &enaml.InstanceGroup{
-			Name:         "web",
-			Instances:    d.WebInstances,
-			ResourcePool: d.ResourcePoolName,
-			VMType:       d.WebVMType,
-			AZs:          d.WebAZs,
-			Stemcell:     d.StemcellAlias,
-		}
-		web.AddNetwork(enaml.Network{
-			Name:      d.NetworkName,
-			StaticIPs: d.WebIPs,
-		})
-		web.AddJob(d.CreateAtcJob())
-		web.AddJob(d.CreateTsaJob())
+
+	web = &enaml.InstanceGroup{
+		Name:      "web",
+		Instances: len(d.WebIPs),
+		VMType:    d.WebVMType,
+		AZs:       d.AZs,
+		Stemcell:  d.StemcellAlias,
 	}
+	web.AddNetwork(enaml.Network{
+		Name:      d.NetworkName,
+		StaticIPs: d.WebIPs,
+	})
+	web.AddJob(d.CreateAtcJob())
+	web.AddJob(d.CreateTsaJob())
+
 	return
 }
 
 //CreateAtcJob -
 func (d *Deployment) CreateAtcJob() (job *enaml.InstanceJob) {
-	job = enaml.NewInstanceJob("atc", concourseReleaseName, atc.Atc{
+	job = enaml.NewInstanceJob("atc", concourseReleaseName, atc.AtcJob{
 		ExternalUrl:        d.ConcourseURL,
 		BasicAuthUsername:  d.ConcourseUserName,
 		BasicAuthPassword:  d.ConcoursePassword,
 		PostgresqlDatabase: "atc",
+		TlsCert:            d.TLSCert,
+		TlsKey:             d.TLSKey,
 	})
 	return
 }
 
 //CreateTsaJob -
 func (d *Deployment) CreateTsaJob() (job *enaml.InstanceJob) {
-	job = enaml.NewInstanceJob("tsa", concourseReleaseName, tsa.Tsa{})
+	job = enaml.NewInstanceJob("tsa", concourseReleaseName, tsa.TsaJob{})
 	return
 }
 
 //CreateDatabaseInstanceGroup -
 func (d *Deployment) CreateDatabaseInstanceGroup() (db *enaml.InstanceGroup, err error) {
-	persistenceDisk := 10240
-	if d.DatabaseStorageType != "" {
-		persistenceDisk = 0
-	}
-	if err = validateInstanceGroup(d.ResourcePoolName, d.StemcellAlias, "DatabaseAzs", d.DatabaseAZs); err == nil {
-		db = &enaml.InstanceGroup{
-			Name:               "db",
-			Instances:          1,
-			ResourcePool:       d.ResourcePoolName,
-			PersistentDisk:     persistenceDisk,
-			PersistentDiskType: d.DatabaseStorageType,
-			VMType:             d.DatabaseVMType,
-			AZs:                d.DatabaseAZs,
-			Stemcell:           d.StemcellAlias,
-		}
-		db.AddNetwork(d.CreateNetwork())
-		db.AddJob(d.CreatePostgresqlJob())
-	}
 
-	return
-}
-
-func validateInstanceGroup(resourcePoolName, stemcellAlias, propertyName string, azs []string) (err error) {
-	if resourcePoolName == "" {
-		if (len(azs) == 0) || (stemcellAlias == "") {
-			err = fmt.Errorf("No resource pool name so must provide %s and StemcellAlias property", propertyName)
-		}
-	} else if (len(azs) > 0) || (stemcellAlias != "") {
-		err = fmt.Errorf("ResourcePoolName defined so cannot also define %s (%s) and StemcellAlias (%s) properties", propertyName, azs, stemcellAlias)
+	db = &enaml.InstanceGroup{
+		Name:               "db",
+		Instances:          1,
+		PersistentDiskType: d.DatabaseStorageType,
+		VMType:             d.DatabaseVMType,
+		AZs:                d.AZs,
+		Stemcell:           d.StemcellAlias,
 	}
+	db.AddNetwork(d.CreateNetwork())
+	db.AddJob(d.CreatePostgresqlJob())
+
 	return
 }
 
@@ -241,7 +204,7 @@ func (d *Deployment) CreatePostgresqlJob() (job *enaml.InstanceJob) {
 		Role:     "atc",
 		Password: d.PostgresPassword,
 	}
-	job = enaml.NewInstanceJob("postgresql", concourseReleaseName, postgresql.Postgresql{
+	job = enaml.NewInstanceJob("postgresql", concourseReleaseName, postgresql.PostgresqlJob{
 		Databases: dbs,
 	})
 	return
@@ -249,21 +212,19 @@ func (d *Deployment) CreatePostgresqlJob() (job *enaml.InstanceJob) {
 
 //CreateWorkerInstanceGroup -
 func (d *Deployment) CreateWorkerInstanceGroup() (worker *enaml.InstanceGroup, err error) {
-	if err = validateInstanceGroup(d.ResourcePoolName, d.StemcellAlias, "WorkerAZs", d.WorkerAZs); err == nil {
-		worker = &enaml.InstanceGroup{
-			Name:         "worker",
-			Instances:    1,
-			ResourcePool: d.ResourcePoolName,
-			VMType:       d.WorkerVMType,
-			AZs:          d.WorkerAZs,
-			Stemcell:     d.StemcellAlias,
-		}
-
-		worker.AddNetwork(d.CreateNetwork())
-		worker.AddJob(d.CreateGroundCrewJob())
-		worker.AddJob(d.CreateBaggageClaimJob())
-		worker.AddJob(d.CreateGardenJob())
+	worker = &enaml.InstanceGroup{
+		Name:      "worker",
+		Instances: d.WorkerInstances,
+		VMType:    d.WorkerVMType,
+		AZs:       d.AZs,
+		Stemcell:  d.StemcellAlias,
 	}
+
+	worker.AddNetwork(d.CreateNetwork())
+	worker.AddJob(d.CreateGroundCrewJob())
+	worker.AddJob(d.CreateBaggageClaimJob())
+	worker.AddJob(d.CreateGardenJob())
+
 	return
 }
 
@@ -281,13 +242,13 @@ func (d *Deployment) CreateGardenJob() (job *enaml.InstanceJob) {
 
 //CreateBaggageClaimJob -
 func (d *Deployment) CreateBaggageClaimJob() (job *enaml.InstanceJob) {
-	job = enaml.NewInstanceJob("baggageclaim", concourseReleaseName, baggageclaim.Baggageclaim{})
+	job = enaml.NewInstanceJob("baggageclaim", concourseReleaseName, baggageclaim.BaggageclaimJob{})
 	return
 }
 
 //CreateGroundCrewJob -
 func (d *Deployment) CreateGroundCrewJob() (job *enaml.InstanceJob) {
-	job = enaml.NewInstanceJob("groundcrew", concourseReleaseName, groundcrew.Groundcrew{})
+	job = enaml.NewInstanceJob("groundcrew", concourseReleaseName, groundcrew.GroundcrewJob{})
 	return
 }
 
@@ -299,24 +260,6 @@ func (d *Deployment) CreateNetwork() (network enaml.Network) {
 	return
 }
 
-//CreateManualDeploymentNetwork -
-func (d *Deployment) CreateManualDeploymentNetwork(networkName, networkRange, networkGateway string, webIPs []string) (network *enaml.ManualNetwork) {
-	network = &enaml.ManualNetwork{
-		Name: networkName,
-		Type: "manual",
-	}
-	subnets := make([]enaml.Subnet, 1)
-	subnet := enaml.Subnet{
-		Range:   networkRange,
-		Gateway: networkGateway,
-		Static:  webIPs,
-	}
-	subnets[0] = subnet
-	network.Subnets = subnets
-
-	return
-}
-
 //CreateUpdate -
 func (d *Deployment) CreateUpdate() (update enaml.Update) {
 	update = enaml.Update{
@@ -325,31 +268,6 @@ func (d *Deployment) CreateUpdate() (update enaml.Update) {
 		Serial:          false,
 		CanaryWatchTime: "1000-60000",
 		UpdateWatchTime: "1000-60000",
-	}
-
-	return
-}
-
-//CreateResourcePool -
-func (d *Deployment) CreateResourcePool(networkName string) (resourcePool enaml.ResourcePool) {
-	const resourcePoolName = "concourse"
-	resourcePool = enaml.ResourcePool{
-		Name:    resourcePoolName,
-		Network: networkName,
-		Stemcell: enaml.Stemcell{
-			Name:    "bosh-warden-boshlite-ubuntu-trusty-go_agent",
-			Version: "latest",
-		},
-	}
-
-	return
-}
-
-//CreateCompilation -
-func (d *Deployment) CreateCompilation(networkName string) (compilation enaml.Compilation) {
-	compilation = enaml.Compilation{
-		Network: networkName,
-		Workers: 3,
 	}
 
 	return

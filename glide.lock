@@ -1,5 +1,5 @@
-hash: 589f34db875b199c5ad7e1a2a155b264dfaf0638d75a3df4c087c46a9c49aa92
-updated: 2016-08-07T20:01:08.660029921-04:00
+hash: 044c9fbc7a3fc24afd4f58549c2ef979d88d724055710a24107a5ca781075200
+updated: 2016-08-09T14:42:57.754674233-07:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -13,19 +13,24 @@ imports:
 - name: github.com/codegangsta/cli
   version: 168c95418e66e019fe17b8f4f5c45aa62ff80e23
 - name: github.com/enaml-ops/enaml
-  version: 55636a146c53aa484ad9cf1369c9e49c68aa8c1b
+  version: b3d35ea89f0d1274cf7ed101f3a1a80e0394d24d
   subpackages:
   - enamlbosh
   - cloudproperties/aws
   - cloudproperties/azure
 - name: github.com/enaml-ops/omg-cli
-  version: 84aa905e6c26cd09e6c3f3fb8b8f519149bd3821
+  version: ba666eb056ff4e2cdba83c30e9b9b24c087b05b7
+  subpackages:
+  - utils
+  - bosh
 - name: github.com/enaml-ops/pluginlib
-  version: d9dda3209da4c15ebfc301090869a29b04416375
+  version: 5cdbbd7e521f2224ae9b03cef9d2623d26ba888f
   subpackages:
   - product
   - pcli
   - util
+  - registry
+  - cloudconfig
 - name: github.com/golang/protobuf
   version: c3cefd437628a0b7d31b34fe44b3a7a540e98527
   subpackages:
@@ -45,15 +50,37 @@ imports:
 - name: github.com/pivotal-golang/clock
   version: e0835a7d46f9ea781e764f0dc9325110e32a97dd
 - name: github.com/pivotalservices/gtils
-  version: 2efb2d5d8a2ee2ad307f7343a04b8088f44c4e4b
+  version: 2605eda5a33230d9613738bba5271d1c040e4a15
   subpackages:
   - osutils
 - name: github.com/pkg/errors
-  version: 2a9be18ecd8c148be18be08a811e33809206da19
+  version: a22138067af1c4942683050411a841ade67fe1eb
 - name: github.com/pkg/sftp
   version: a71e8f580e3b622ebff585309160b1cc549ef4d2
+- name: github.com/square/certstrap
+  version: b6aef507a0840bf78bac99e7ffa6e6eb5c2c3c9f
+  subpackages:
+  - pkix
 - name: github.com/xchapter7x/lo
   version: e33b245fc7a8186582208abc2458c2691bff681c
+- name: golang.org/x/net
+  version: f6d211983832e1efcd77e80779fd5f1142741356
+  subpackages:
+  - context
+- name: golang.org/x/oauth2
+  version: 0aec23fa6269cbce14cd407234f04213227a7917
+  subpackages:
+  - internal
+- name: google.golang.org/appengine
+  version: b4728023490a62e70ba739ff62aa65ffcca84210
+  subpackages:
+  - urlfetch
+  - internal
+  - internal/urlfetch
+  - internal/base
+  - internal/datastore
+  - internal/log
+  - internal/remote_api
 - name: gopkg.in/yaml.v2
   version: e4d366fc3c7938e2958e662b4258c7a89e1f0e3e
 devImports: []

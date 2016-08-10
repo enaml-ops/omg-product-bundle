@@ -5,10 +5,10 @@ package atc
 */
 type Postgresql struct {
 
-	/*Role - Descr: Password to use when connecting.
- Default: <nil>
+	/*Role - Descr: Name of role to connect with.
+ Default: atc
 */
-	Role Role `yaml:"role,omitempty"`
+	Role *Role `yaml:"role,omitempty"`
 
 	/*Database - Descr: Name of the database to use.
  Default: atc

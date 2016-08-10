@@ -20,21 +20,11 @@ var _ = Describe("given ConcoursePlugin Plugin", func() {
 				Ω(func() {
 					myplugin.GetProduct([]string{
 						"test",
-						"--bosh-director-uuid", "49525dcc-ecbb-47c2-ad4a-bfddbea27cc7",
 						"--network-name", "private",
-						"--url", "http://concourse.caleb-washburn.com",
-						"--username", "concourse",
-						"--password", "concourse",
-						"--web-instances", "2",
-						"--web-azs", "z1",
-						"--worker-azs", "z1",
-						"--database-azs", "z1",
-						"--bosh-stemcell-alias", "trusty",
-						"--postgresql-db-pwd", "secret",
-						"--web-vm-type", "small",
-						"--worker-vm-type", "medium",
-						"--database-vm-type", "medium",
-						"--database-storage-type", "large",
+						"--concourse-url", "http://concourse.caleb-washburn.com",
+						"--concourse-username", "concourse",
+						"--concourse-password", "concourse",
+						"--az", "z1",
 					}, nil)
 				}).Should(Panic())
 			})
@@ -46,17 +36,11 @@ var _ = Describe("given ConcoursePlugin Plugin", func() {
 				cloudBytes, _ := ioutil.ReadFile("../fixtures/cloudconfig.yml")
 				myconcourse = myplugin.GetProduct([]string{
 					"test",
-					"--bosh-director-uuid", "49525dcc-ecbb-47c2-ad4a-bfddbea27cc7",
 					"--network-name", "private",
-					"--url", "http://concourse.caleb-washburn.com",
-					"--username", "concourse",
-					"--password", "concourse",
-					"--web-instances", "2",
-					"--web-azs", "z1",
-					"--worker-azs", "z1",
-					"--database-azs", "z1",
-					"--bosh-stemcell-alias", "trusty",
-					"--postgresql-db-pwd", "secret",
+					"--concourse-ip", "concourse.caleb-washburn.com",
+					"--concourse-username", "concourse",
+					"--concourse-password", "concourse",
+					"--az", "z1",
 					"--web-vm-type", "small",
 					"--worker-vm-type", "medium",
 					"--database-vm-type", "medium",
