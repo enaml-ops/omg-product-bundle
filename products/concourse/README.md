@@ -22,31 +22,27 @@ Verify installation with:
 
 ## Deploy Concourse
 
-    omg deploy-product \
-        --bosh-url <BOSH_URL> \
-        --bosh-port <BOSH_PORT> \
-        --bosh-user <BOSH_USER> \
-        --bosh-pass <BOSH_PASS> \
-        --ssl-ignore \
-        concourse-plugin \
-            --web-vm-type small \
-            --worker-vm-type small \
-            --database-vm-type small \
-            --network-name private \
-            --url <CONCOURSE_URL> \
-            --username <CONCOURSE_USER> \
-            --password <CONCOURSE_PASS> \
-            --web-instances 1 \
-            --web-azs z1 \
-            --worker-azs z1 \
-            --database-azs z1 \
-            --postresql-db-pwd <PASSWORD> \
-            --database-storage-type medium \
-            --bosh-stemcell-alias trusty \
-            --remote-stemcell-url https://d26ekeud912fhb.cloudfront.net/bosh-stemcell/aws/light-bosh-stemcell-3262.2-aws-xen-hvm-ubuntu-trusty-go_agent.tgz \
-            --stemcell-ver 3262.2 \
-            --remote-stemcell-sha 64234353e233be1630f6f033c85f0a9fea21b25e
-
+```
+./omg-osx deploy-product \
+--bosh-url <bosh-url> \
+--bosh-port 25555 \
+--bosh-user <bosh-user> \
+--bosh-pass <bosh-pwd> \
+--ssl-ignore \
+--print-manifest \
+concourse-plugin-osx \
+--web-ip 192.168.10.31 \
+--web-ip 192.168.10.32 \
+--web-vm-type medium \
+--worker-vm-type large.cpu \
+--database-vm-type large.cpu \
+--network-name concourse \
+--concourse-ip 10.0.100.1 \
+--concourse-username concourse \
+--az z1 \
+--database-storage-type medium \
+--worker-instance-count 2
+```
 ## Tips and tricks
 
 - Set `LOG_LEVEL=debug` for verbose output
