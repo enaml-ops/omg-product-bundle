@@ -1,0 +1,48 @@
+name: docker-registry
+director_uuid: 6a23abf6-fdd8-46f2-8d9c-0f808ad1d0e6
+
+releases:
+- name: docker-registry
+  version: latest
+
+stemcells:
+- alias: trusty
+  os: ubuntu-trusty
+  version: latest
+
+instance_groups:
+- name: registry
+  instances: 1
+  vm_type: medium
+  stemcell: trusty
+  persistent_disk_type: medium
+  azs: [z1]
+  networks:
+  - name: concourse
+    static_ips:
+      - 192.168.10.33
+  jobs:
+  - name: registry
+    release: docker-registry
+    properties: {}
+
+  - name: proxy
+    release: docker-registry
+    properties:
+      docker:
+        proxy:
+          backend:
+            hosts:
+            - 192.168.10.33
+          ssl:
+            cert: |
+
+            key: |
+              
+
+update:
+  canaries: 1
+  max_in_flight: 1
+  serial: false
+  canary_watch_time: 1000-60000
+  update_watch_time: 1000-60000

@@ -1,0 +1,19 @@
+name: nfs-server
+azs:
+- z1
+instances: 1
+persistent_disk_type: large
+stemcell: trusty
+vm_type: large
+jobs:
+- name: nfs-server
+  properties:
+    nfs_server:
+      allow_from_entries:
+      - 10.0.0.8
+      - 10.0.0.9
+  release: docker-registry
+networks:
+- name: private
+  static_ips:
+  - 10.0.0.10

@@ -1,0 +1,14 @@
+name: registry
+instances: 2
+vm_type: medium
+stemcell: trusty
+azs: [z1]
+networks:
+- name: private
+  static_ips:
+    - 10.0.0.8
+    - 10.0.0.9
+jobs:
+- name: registry
+  release: docker-registry
+  properties: {}
