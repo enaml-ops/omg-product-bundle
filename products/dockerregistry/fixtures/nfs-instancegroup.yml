@@ -6,7 +6,7 @@ persistent_disk_type: large
 stemcell: trusty
 vm_type: large
 jobs:
-- name: nfs-server
+- name: debian_nfs_server
   properties:
     nfs_server:
       allow_from_entries:

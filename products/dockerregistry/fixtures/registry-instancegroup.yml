@@ -11,4 +11,14 @@ networks:
 jobs:
 - name: registry
   release: docker-registry
-  properties: {}
+  properties:
+    docker:
+      registry:
+        root: /var/vcap/nfs/shared
+        cookie: ""
+- name: nfs_mounter
+  release: docker-registry
+  properties:
+    nfs_server:
+      address: 10.0.0.10
+      share_path: /var/vcap/nfs

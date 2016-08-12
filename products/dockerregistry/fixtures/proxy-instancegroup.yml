@@ -1,0 +1,23 @@
+name: proxy
+stemcell: trusty
+instances: 1
+vm_type: medium
+azs:
+- z1
+jobs:
+- name: proxy
+  release: docker-registry
+  properties:
+    docker:
+      proxy:
+        backend:
+          hosts:
+          - 10.0.0.8
+          - 10.0.0.9
+        ssl:
+          cert: "the cert"
+          key: "the key"
+networks:
+- name: private
+  static_ips:
+    - 10.0.0.7

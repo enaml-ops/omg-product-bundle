@@ -21,17 +21,25 @@ var _ = Describe("docker-registry Deployment", func() {
 
 	controlRegistryServerType := "medium"
 	controlRegistryIPs := []string{"10.0.0.8", "10.0.0.9"}
+	controlProxyIPs := []string{"10.0.0.7"}
+	controlProxyServerType := "medium"
+	controlProxyCert := "the cert"
+	controlProxyCertKey := "the key"
 	var deployment DockerRegistry
 	BeforeEach(func() {
 		deployment = DockerRegistry{
-			AZs:            controlAzs,
-			NetworkName:    controlNetworkName,
-			NFSServerType:  controlNFSServerType,
-			NFSDiskType:    controlNFSDiskType,
-			NFSIP:          controlNFSIP,
-			StemcellAlias:  controlStemcellAlias,
-			RegistryIPs:    controlRegistryIPs,
-			RegistryVMType: controlRegistryServerType,
+			AZs:             controlAzs,
+			NetworkName:     controlNetworkName,
+			NFSServerVMType: controlNFSServerType,
+			NFSDiskType:     controlNFSDiskType,
+			NFSIP:           controlNFSIP,
+			StemcellAlias:   controlStemcellAlias,
+			RegistryIPs:     controlRegistryIPs,
+			RegistryVMType:  controlRegistryServerType,
+			ProxyIPs:        controlProxyIPs,
+			ProxyVMType:     controlProxyServerType,
+			ProxyCert:       controlProxyCert,
+			ProxyCertKey:    controlProxyCertKey,
 		}
 	})
 	Describe("Given a CreateNFSServerInstanceGroup", func() {
@@ -48,7 +56,7 @@ var _ = Describe("docker-registry Deployment", func() {
 				Ω(ig.Stemcell).Should(Equal(controlStemcellAlias))
 				Ω(len(ig.Jobs)).Should(Equal(1))
 				job := ig.Jobs[0]
-				Ω(job.Name).Should(Equal("nfs-server"))
+				Ω(job.Name).Should(Equal("debian_nfs_server"))
 				Ω(job.Release).Should(Equal(controlRelease))
 				jobProperties := job.Properties.(*debian_nfs_server.DebianNfsServerJob)
 				Ω(jobProperties.NfsServer).ShouldNot(BeNil())
@@ -87,6 +95,14 @@ var _ = Describe("docker-registry Deployment", func() {
 					ig := deployment.CreateProxyInstanceGroup()
 					Ω(ig).ShouldNot(BeNil())
 				})
+			})
+			It("then should return valid YML", func() {
+				ig := deployment.CreateProxyInstanceGroup()
+				bytes, err := ioutil.ReadFile("fixtures/proxy-instancegroup.yml")
+				Ω(err).ShouldNot(HaveOccurred())
+				igYml, err := yaml.Marshal(ig)
+				Ω(err).ShouldNot(HaveOccurred())
+				Ω(igYml).Should(MatchYAML(bytes))
 			})
 		})
 
