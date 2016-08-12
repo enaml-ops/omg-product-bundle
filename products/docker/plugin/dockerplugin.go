@@ -26,6 +26,7 @@ type jobBucket struct {
 	Instances int
 }
 type Plugin struct {
+	DeploymentName  string
 	Containers      interface{}
 	NetworkName     string
 	IPs             []string
@@ -40,6 +41,7 @@ type Plugin struct {
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "deployment-name", Value: "docker", Usage: "the name bosh will use for this deployment"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "ip", Usage: "multiple static ips for each redis leader vm"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "az", Usage: "list of AZ names to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "network", Usage: "the name of the network to use"},
@@ -76,6 +78,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.Containers = s.setContainerDefinitionFromFile(c.String("container-definition"))
 	s.IPs = c.StringSlice("ip")
 	s.AZs = c.StringSlice("az")
+	s.DeploymentName = c.String("deployment-name")
 	s.NetworkName = c.String("network")
 	s.StemcellName = c.String("stemcell-name")
 	s.StemcellVersion = c.String("stemcell-ver")
@@ -112,7 +115,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 
 func (s *Plugin) NewDockerInstanceGroup() (ig *enaml.InstanceGroup) {
 	ig = &enaml.InstanceGroup{
-		Name:               "docker",
+		Name:               s.DeploymentName,
 		Instances:          len(s.IPs),
 		VMType:             s.VMTypeName,
 		AZs:                s.AZs,
