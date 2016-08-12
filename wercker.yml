@@ -40,6 +40,8 @@ build:
           GOOS=linux go build -o cloudfoundry-plugin-linux ./products/cloudfoundry/cmd/cloudfoundry/main.go
           GOOS=darwin go build -o docker-registry-plugin-osx ./products/dockerregistry/cmd/dockerregistry/main.go
           GOOS=linux go build -o docker-registry-plugin-linux ./products/dockerregistry/cmd/dockerregistry/main.go
+          GOOS=darwin go build -o docker-plugin-osx ./products/docker/cmd/docker/main.go
+          GOOS=linux go build -o docker-plugin-linux ./products/docker/cmd/docker/main.go
 
     - script:
         name: add repo to artifact
@@ -143,6 +145,18 @@ deploy-pre-release:
     - github-upload-asset:
         token: $GITHUB_TOKEN
         file: docker-registry-plugin-osx
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: docker-plugin-linux
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: docker-plugin-osx
         release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
         content-type: application/x-gzip
 
