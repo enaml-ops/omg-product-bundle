@@ -356,10 +356,10 @@ func InferFromCloudDecorate(inferFlagMap map[string][]string, cloudConfig []byte
 
 	if c.Bool("infer-from-cloud") {
 		ccinf := pluginutil.NewCloudConfigInferFromBytes(cloudConfig)
-		setAllInferredFlagDefaults(flagsToInferFromCloudConfig["disktype"], ccinf.InferDefaultDiskType(), flgs)
-		setAllInferredFlagDefaults(flagsToInferFromCloudConfig["vmtype"], ccinf.InferDefaultVMType(), flgs)
-		setAllInferredFlagDefaults(flagsToInferFromCloudConfig["az"], ccinf.InferDefaultAZ(), flgs)
-		setAllInferredFlagDefaults(flagsToInferFromCloudConfig["network"], ccinf.InferDefaultNetwork(), flgs)
+		setAllInferredFlagDefaults(inferFlagMap["disktype"], ccinf.InferDefaultDiskType(), flgs)
+		setAllInferredFlagDefaults(inferFlagMap["vmtype"], ccinf.InferDefaultVMType(), flgs)
+		setAllInferredFlagDefaults(inferFlagMap["az"], ccinf.InferDefaultAZ(), flgs)
+		setAllInferredFlagDefaults(inferFlagMap["network"], ccinf.InferDefaultNetwork(), flgs)
 	}
 }
 

@@ -42,6 +42,7 @@ type Plugin struct {
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "deployment-name", Value: "docker", Usage: "the name bosh will use for this deployment"},
+		pcli.Flag{FlagType: pcli.BoolFlag, Name: "infer-from-cloud", Usage: "setting this flag will attempt to pull as many defaults from your targetted bosh's cloud config as it can (vmtype, network, disk, etc)."},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "ip", Usage: "multiple static ips for each redis leader vm"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "az", Usage: "list of AZ names to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "network", Usage: "the name of the network to use"},
@@ -75,6 +76,8 @@ func (s *Plugin) setContainerDefinitionFromFile(filename string) interface{} {
 func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	var err error
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
+	flgs := s.GetFlags()
+	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
 	s.Containers = s.setContainerDefinitionFromFile(c.String("container-definition"))
 	s.IPs = c.StringSlice("ip")
 	s.AZs = c.StringSlice("az")
@@ -215,4 +218,43 @@ func (s *Plugin) flagValidation() (err error) {
 		err = fmt.Errorf("no `stemcell-ver` given")
 	}
 	return
+}
+
+func InferFromCloudDecorate(inferFlagMap map[string][]string, cloudConfig []byte, args []string, flgs []pcli.Flag) {
+	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
+
+	if c.Bool("infer-from-cloud") {
+		ccinf := pluginutil.NewCloudConfigInferFromBytes(cloudConfig)
+		setAllInferredFlagDefaults(inferFlagMap["disktype"], ccinf.InferDefaultDiskType(), flgs)
+		setAllInferredFlagDefaults(inferFlagMap["vmtype"], ccinf.InferDefaultVMType(), flgs)
+		setAllInferredFlagDefaults(inferFlagMap["az"], ccinf.InferDefaultAZ(), flgs)
+		setAllInferredFlagDefaults(inferFlagMap["network"], ccinf.InferDefaultNetwork(), flgs)
+	}
+}
+
+func setAllInferredFlagDefaults(matchlist []string, defaultvalue string, flgs []pcli.Flag) {
+
+	for _, match := range matchlist {
+		setFlagDefault(match, defaultvalue, flgs)
+	}
+}
+
+func setFlagDefault(flagname, defaultvalue string, flgs []pcli.Flag) {
+	for idx, flg := range flgs {
+
+		if flg.Name == flagname {
+			flgs[idx].Value = defaultvalue
+		}
+	}
+}
+
+var flagsToInferFromCloudConfig = map[string][]string{
+	"disktype": []string{
+		"disk-type",
+	},
+	"vmtype": []string{
+		"vm-type",
+	},
+	"az":      []string{"az"},
+	"network": []string{"network"},
 }
