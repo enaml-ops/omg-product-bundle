@@ -27,6 +27,7 @@ type jobBucket struct {
 	Instances int
 }
 type Plugin struct {
+	PluginVersion   string
 	NetworkName     string
 	IPs             []string
 	VMTypeName      string
@@ -55,6 +56,9 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "vault",
+		Properties: map[string]interface{}{
+			"version": s.PluginVersion,
+		},
 	}
 }
 

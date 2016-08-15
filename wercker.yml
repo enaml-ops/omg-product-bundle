@@ -30,18 +30,18 @@ build:
     - script:
         name: compile built in product plugins
         code: |
-          GOOS=darwin go build -o concourse-plugin-osx ./products/concourse/cmd/concourse-plugin/main.go
-          GOOS=linux go build -o concourse-plugin-linux ./products/concourse/cmd/concourse-plugin/main.go
-          GOOS=darwin go build -o vault-plugin-osx ./products/vault/cmd/vault/main.go
-          GOOS=linux go build -o vault-plugin-linux ./products/vault/cmd/vault/main.go
-          GOOS=darwin go build -o redis-plugin-osx ./products/redis/cmd/redis/main.go
-          GOOS=linux go build -o redis-plugin-linux ./products/redis/cmd/redis/main.go
-          GOOS=darwin go build -o cloudfoundry-plugin-osx ./products/cloudfoundry/cmd/cloudfoundry/main.go
-          GOOS=linux go build -o cloudfoundry-plugin-linux ./products/cloudfoundry/cmd/cloudfoundry/main.go
-          GOOS=darwin go build -o docker-registry-plugin-osx ./products/dockerregistry/cmd/dockerregistry/main.go
-          GOOS=linux go build -o docker-registry-plugin-linux ./products/dockerregistry/cmd/dockerregistry/main.go
-          GOOS=darwin go build -o docker-plugin-osx ./products/docker/cmd/docker/main.go
-          GOOS=linux go build -o docker-plugin-linux ./products/docker/cmd/docker/main.go
+          GOOS=darwin go build -o concourse-plugin-osx -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/concourse/cmd/concourse-plugin/main.go
+          GOOS=linux go build -o concourse-plugin-linux -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/concourse/cmd/concourse-plugin/main.go
+          GOOS=darwin go build -o vault-plugin-osx -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/vault/cmd/vault/main.go
+          GOOS=linux go build -o vault-plugin-linux -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/vault/cmd/vault/main.go
+          GOOS=darwin go build -o redis-plugin-osx -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/redis/cmd/redis/main.go
+          GOOS=linux go build -o redis-plugin-linux -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/redis/cmd/redis/main.go
+          GOOS=darwin go build -o cloudfoundry-plugin-osx -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/cloudfoundry/cmd/cloudfoundry/main.go
+          GOOS=linux go build -o cloudfoundry-plugin-linux -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/cloudfoundry/cmd/cloudfoundry/main.go
+          GOOS=darwin go build -o docker-registry-plugin-osx -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/dockerregistry/cmd/dockerregistry/main.go
+          GOOS=linux go build -o docker-registry-plugin-linux -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/dockerregistry/cmd/dockerregistry/main.go
+          GOOS=darwin go build -o docker-plugin-osx -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/docker/cmd/docker/main.go
+          GOOS=linux go build -o docker-plugin-linux -ldflags "-X main.Version=${WERCKER_GITHUB_CREATE_RELEASE_ID}-`git rev-parse HEAD | cut -c1-6`" ./products/docker/cmd/docker/main.go
 
     - script:
         name: add repo to artifact

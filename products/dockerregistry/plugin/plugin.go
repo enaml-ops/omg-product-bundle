@@ -36,6 +36,7 @@ const (
 )
 
 type Plugin struct {
+	PluginVersion string
 }
 
 func (p *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -66,6 +67,9 @@ func (p *Plugin) GetFlags() (flags []pcli.Flag) {
 func (p *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "docker-registry",
+		Properties: map[string]interface{}{
+			"version": p.PluginVersion,
+		},
 	}
 }
 

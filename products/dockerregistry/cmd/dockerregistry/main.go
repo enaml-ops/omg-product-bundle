@@ -5,6 +5,10 @@ import (
 	"github.com/enaml-ops/pluginlib/product"
 )
 
+var Version string = "v0.0.0"
+
 func main() {
-	product.Run(new(plugin.Plugin))
+	product.Run(&plugin.Plugin{
+		PluginVersion: Version,
+	})
 }

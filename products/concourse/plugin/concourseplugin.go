@@ -13,7 +13,9 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
-type ConcoursePlugin struct{}
+type ConcoursePlugin struct {
+	PluginVersion string
+}
 
 const (
 	defaultConcourseReleaseURL string = "https://bosh.io/d/github.com/concourse/concourse?v=1.6.0"
@@ -86,6 +88,9 @@ func (s *ConcoursePlugin) GetFlags() (flags []pcli.Flag) {
 func (s *ConcoursePlugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "concourse",
+		Properties: map[string]interface{}{
+			"version": s.PluginVersion,
+		},
 	}
 }
 

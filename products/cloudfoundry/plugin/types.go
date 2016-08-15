@@ -465,4 +465,6 @@ type SmokeErrand struct {
 }
 
 //Plugin -
-type Plugin struct{}
+type Plugin struct {
+	PluginVersion string
+}

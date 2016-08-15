@@ -26,6 +26,7 @@ type jobBucket struct {
 	Instances int
 }
 type Plugin struct {
+	PluginVersion   string
 	DeploymentName  string
 	Containers      interface{}
 	NetworkName     string
@@ -59,6 +60,9 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "docker",
+		Properties: map[string]interface{}{
+			"version": s.PluginVersion,
+		},
 	}
 }
 

@@ -26,7 +26,9 @@ type jobBucket struct {
 	JobType   int
 	Instances int
 }
-type Plugin struct{}
+type Plugin struct {
+	PluginVersion string
+}
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
@@ -50,6 +52,9 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "redis",
+		Properties: map[string]interface{}{
+			"version": s.PluginVersion,
+		},
 	}
 }
 

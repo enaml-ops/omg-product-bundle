@@ -1,10 +1,14 @@
 package main
 
 import (
-	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/pluginlib/product"
 )
 
+var Version string = "v0.0.0"
+
 func main() {
-	product.Run(new(cloudfoundry.Plugin))
+	product.Run(&cloudfoundry.Plugin{
+		PluginVersion: Version,
+	})
 }

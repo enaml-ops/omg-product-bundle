@@ -297,6 +297,9 @@ func makeEnvVarName(s string) string {
 func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "cloudfoundry",
+		Properties: map[string]interface{}{
+			"version": s.PluginVersion,
+		},
 	}
 }
 
