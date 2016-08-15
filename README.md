@@ -2,7 +2,7 @@
 
 [![wercker status](https://app.wercker.com/status/a316c7e40120a2e54422d7a0f3366d69/s/master "wercker status")](https://app.wercker.com/project/bykey/a316c7e40120a2e54422d7a0f3366d69)
 
-[![release info](https://img.shields.io/github/downloads/enaml-ops/omg-cli/total.svg?maxAge=2592000 "release info")](http://www.somsubhra.com/github-release-stats/?username=enaml-ops&repository=omg-cli)
+[![release info](https://img.shields.io/github/downloads/enaml-ops/omg-product-bundle/total.svg?maxAge=2592000 "release info")](http://www.somsubhra.com/github-release-stats/?username=enaml-ops&repository=omg-product-bundle)
 
 ### What are products?
 - they are plugins to the omg-cli
