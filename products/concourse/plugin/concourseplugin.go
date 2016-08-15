@@ -2,6 +2,7 @@ package concourseplugin
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
@@ -89,7 +90,9 @@ func (s *ConcoursePlugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "concourse",
 		Properties: map[string]interface{}{
-			"version": s.PluginVersion,
+			"version":           s.PluginVersion,
+			"concourse-release": strings.Join([]string{defaultConcourseReleaseURL, defaultConcourseReleaseVer, defaultConcourseReleaseSHA}, " / "),
+			"garden-release":    strings.Join([]string{defaultGardenReleaseURL, defaultGardenReleaseVer, defaultGardenReleaseSHA}, " / "),
 		},
 	}
 }

@@ -2,6 +2,7 @@ package vault
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/consul"
@@ -57,7 +58,9 @@ func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "vault",
 		Properties: map[string]interface{}{
-			"version": s.PluginVersion,
+			"version":        s.PluginVersion,
+			"vault-release":  strings.Join([]string{BoshVaultReleaseURL, BoshVaultReleaseVer, BoshVaultReleaseSHA}, " / "),
+			"consul-release": strings.Join([]string{BoshConsulReleaseURL, BoshConsulReleaseVer, BoshConsulReleaseSHA}, " / "),
 		},
 	}
 }

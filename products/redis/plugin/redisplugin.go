@@ -2,6 +2,7 @@ package redis
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
@@ -53,7 +54,8 @@ func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "redis",
 		Properties: map[string]interface{}{
-			"version": s.PluginVersion,
+			"version":       s.PluginVersion,
+			"redis-release": strings.Join([]string{BoshReleaseURL, BoshReleaseVer, BoshReleaseSHA}, " / "),
 		},
 	}
 }

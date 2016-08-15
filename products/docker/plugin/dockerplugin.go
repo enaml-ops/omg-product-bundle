@@ -3,6 +3,7 @@ package docker
 import (
 	"fmt"
 	"io/ioutil"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 
@@ -61,7 +62,8 @@ func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "docker",
 		Properties: map[string]interface{}{
-			"version": s.PluginVersion,
+			"version":        s.PluginVersion,
+			"docker-release": strings.Join([]string{BoshDockerReleaseURL, BoshDockerReleaseVer, BoshDockerReleaseSHA}, " / "),
 		},
 	}
 }

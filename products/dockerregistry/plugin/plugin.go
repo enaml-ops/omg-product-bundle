@@ -1,6 +1,8 @@
 package plugin
 
 import (
+	"strings"
+
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-cli/utils"
@@ -68,7 +70,8 @@ func (p *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "docker-registry",
 		Properties: map[string]interface{}{
-			"version": p.PluginVersion,
+			"version":                 p.PluginVersion,
+			"docker-registry-release": strings.Join([]string{defaultRegistryReleaseURL, defaultRegistryReleaseVer, defaultRegistryReleaseSHA}, " / "),
 		},
 	}
 }
