@@ -2,6 +2,8 @@
 
 [![wercker status](https://app.wercker.com/status/a316c7e40120a2e54422d7a0f3366d69/s/master "wercker status")](https://app.wercker.com/project/bykey/a316c7e40120a2e54422d7a0f3366d69)
 
+[![release info](https://img.shields.io/github/downloads/enaml-ops/omg-cli/total.svg?maxAge=2592000 "release info")](http://www.somsubhra.com/github-release-stats/?username=enaml-ops&repository=omg-cli)
+
 ### What are products?
 - they are plugins to the omg-cli
 - as plugins they allow you to deploy products via bosh using the omg-cli
