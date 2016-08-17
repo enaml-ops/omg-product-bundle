@@ -96,6 +96,11 @@ var _ = Describe("given a clock_global partition", func() {
 			Ω(group.AZs[0]).Should(Equal("eastprod-1"))
 		})
 
+		It("then it should have update max in flight 1", func() {
+			group := deploymentManifest.GetInstanceGroupByName("clock_global-partition")
+			Ω(group.Update.MaxInFlight).Should(Equal(1))
+		})
+
 		It("then it should allow the user to configure the used stemcell", func() {
 			group := deploymentManifest.GetInstanceGroupByName("clock_global-partition")
 			Ω(group.Stemcell).Should(Equal("cool-ubuntu-animal"))

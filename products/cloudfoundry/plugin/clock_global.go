@@ -62,6 +62,9 @@ func (c *clockGlobal) ToInstanceGroup() *enaml.InstanceGroup {
 		Networks: []enaml.Network{
 			{Name: c.NetworkName},
 		},
+		Update: enaml.Update{
+			MaxInFlight: 1,
+		},
 	}
 
 	metronJob := c.Metron.CreateJob()
