@@ -21,6 +21,10 @@ func NewAcceptanceTestsPartition(c *cli.Context, internet bool) InstanceGrouper 
 }
 
 func (a *acceptanceTests) ToInstanceGroup() *enaml.InstanceGroup {
+	jobName := "acceptance-tests"
+	if !a.IncludeInternetDependent {
+		jobName += "-internetless"
+	}
 	return &enaml.InstanceGroup{
 		Name:      "acceptance-tests",
 		Instances: 1,
@@ -36,7 +40,7 @@ func (a *acceptanceTests) ToInstanceGroup() *enaml.InstanceGroup {
 		},
 		Jobs: []enaml.InstanceJob{
 			{
-				Name:       "acceptance-tests",
+				Name:       jobName,
 				Release:    CFReleaseName,
 				Properties: a.newAcceptanceTestsProperties(a.IncludeInternetDependent),
 			},

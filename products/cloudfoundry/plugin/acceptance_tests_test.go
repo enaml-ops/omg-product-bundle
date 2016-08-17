@@ -31,7 +31,27 @@ var _ = Describe("given the acceptance-tests partition", func() {
 		})
 	})
 
+	Context("when initialized with valid flags", func() {
+		It("generates different job names for internet-less tests", func() {
+			p := new(Plugin)
+			c := p.GetContext([]string{
+				"cloudfoundry",
+				"--system-domain", "sys.yourdomain.com",
+				"--app-domain", "apps.yourdomain.com",
+				"--az", "z1",
+				"--stemcell-name", "cool-ubuntu-animal",
+				"--network", "foundry-net",
+				"--admin-password", "adminpass",
+			})
+
+			withInternet := NewAcceptanceTestsPartition(c, true).ToInstanceGroup()
+			withoutInternet := NewAcceptanceTestsPartition(c, false).ToInstanceGroup()
+			Ω(withInternet.Jobs[0].Name).ShouldNot(Equal(withoutInternet.Jobs[0].Name))
+		})
+	})
+
 	Context("when initialized with a complete set of arguments", func() {
+		const includeInternetDependent = true
 		var ig InstanceGrouper
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
@@ -45,7 +65,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 				"--network", "foundry-net",
 				"--admin-password", "adminpass",
 			})
-			ig = NewAcceptanceTestsPartition(c, true)
+			ig = NewAcceptanceTestsPartition(c, includeInternetDependent)
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())
 		})
@@ -110,6 +130,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 	})
 
 	Context("when initialized with a complete set of arguments in internetless mode", func() {
+		const includeInternetDependent = false
 		var ig InstanceGrouper
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
@@ -123,14 +144,14 @@ var _ = Describe("given the acceptance-tests partition", func() {
 				"--network", "foundry-net",
 				"--admin-password", "adminpass",
 			})
-			ig = NewAcceptanceTestsPartition(c, false)
+			ig = NewAcceptanceTestsPartition(c, includeInternetDependent)
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())
 		})
 
 		It("should not be configured to include internet-dependent tests", func() {
 			group := ig.ToInstanceGroup()
-			job := group.GetJobByName("acceptance-tests")
+			job := group.GetJobByName("acceptance-tests-internetless")
 			Ω(job.Release).Should(Equal(CFReleaseName))
 			props := job.Properties.(*acceptance_tests.AcceptanceTestsJob)
 			Ω(props.AcceptanceTests.Api).Should(Equal("https://api.sys.yourdomain.com"))
