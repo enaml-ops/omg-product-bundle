@@ -343,10 +343,10 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 		grouper := factory(c)
 
 		if grouper.HasValidValues() {
-			ig := grouper.ToInstanceGroup()
-			lo.G.Debug("instance-group: ", ig)
-			dm.AddInstanceGroup(ig)
-
+			if ig := grouper.ToInstanceGroup(); ig != nil {
+				lo.G.Debug("instance-group: ", ig)
+				dm.AddInstanceGroup(ig)
+			}
 		} else {
 			b, _ := yaml.Marshal(grouper)
 			lo.G.Info("invalid values in instance group: ", string(b))
