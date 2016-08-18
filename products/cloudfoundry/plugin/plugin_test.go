@@ -43,6 +43,7 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 
 	Context("when using groupers that generate nil instance groups", func() {
 		var oldFactories []InstanceGrouperFactory
+		var dm *enaml.DeploymentManifest
 
 		BeforeEach(func() {
 			oldFactories = factories
@@ -52,6 +53,10 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 			// one that always returns a nil instance group, and one that returns non-nil
 			RegisterInstanceGrouperFactory(nilFactory)
 			RegisterInstanceGrouperFactory(dummyFactory)
+
+			p := new(Plugin)
+			manifestBytes := p.GetProduct([]string{"cloudfoundry", "--vault-active=false"}, []byte(``))
+			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
 
 		AfterEach(func() {
@@ -60,14 +65,18 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 		})
 
 		It("should not include the nil instance groups in the manifest", func() {
-			p := new(Plugin)
-			manifestBytes := p.GetProduct([]string{"cloudfoundry", "--vault-active=false"}, []byte(``))
-			dm := enaml.NewDeploymentManifest(manifestBytes)
-
 			Ω(dm.InstanceGroups).ShouldNot(BeNil())
 			for _, ig := range dm.InstanceGroups {
 				Ω(ig).ShouldNot(BeNil())
 			}
+		})
+
+		It("should set the update property of the manifest", func() {
+			Ω(dm.Update.MaxInFlight).Should(Equal(1))
+			Ω(dm.Update.Canaries).Should(Equal(1))
+			Ω(dm.Update.Serial).Should(BeFalse())
+			Ω(dm.Update.CanaryWatchTime).Should(Equal("30000-300000"))
+			Ω(dm.Update.UpdateWatchTime).Should(Equal("30000-300000"))
 		})
 	})
 

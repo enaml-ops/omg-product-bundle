@@ -339,6 +339,12 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 
 	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: StemcellVersion, Alias: StemcellAlias})
 
+	dm.Update.MaxInFlight = 1
+	dm.Update.Canaries = 1
+	dm.Update.Serial = false
+	dm.Update.CanaryWatchTime = "30000-300000"
+	dm.Update.UpdateWatchTime = "30000-300000"
+
 	for _, factory := range factories {
 		grouper := factory(c)
 
