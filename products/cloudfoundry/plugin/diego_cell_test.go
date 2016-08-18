@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	yaml "gopkg.in/yaml.v2"
+
 	"github.com/enaml-ops/enaml"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	. "github.com/onsi/ginkgo"
@@ -105,11 +107,21 @@ var _ = Describe("given a Diego Cell Partition", func() {
 			Describe("given a cflinuxfs2-rootfs-setup job", func() {
 				Context("when defined", func() {
 					var job *enaml.InstanceJob
+
 					BeforeEach(func() {
 						job = instanceGroup.GetJobByName("cflinuxfs2-rootfs-setup")
 					})
+
 					It("then it should use the correct release", func() {
 						Ω(job.Release).Should(Equal(CFLinuxFSReleaseName))
+					})
+
+					It("then it should not generate null properties", func() {
+						Ω(job.Properties).ShouldNot(BeNil())
+
+						bytes, err := yaml.Marshal(job.Properties)
+						Ω(err).ShouldNot(HaveOccurred())
+						Ω(bytes).Should(MatchYAML("{}"))
 					})
 				})
 			})

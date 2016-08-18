@@ -53,8 +53,9 @@ func (s *diegoCell) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 		Properties: s.ConsulAgent.CreateJob().Properties,
 	})
 	ig.AddJob(&enaml.InstanceJob{
-		Name:    "cflinuxfs2-rootfs-setup",
-		Release: CFLinuxFSReleaseName,
+		Name:       "cflinuxfs2-rootfs-setup",
+		Release:    CFLinuxFSReleaseName,
+		Properties: struct{}{},
 	})
 	ig.AddJob(&enaml.InstanceJob{
 		Name:       "garden",
