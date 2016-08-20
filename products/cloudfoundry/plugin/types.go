@@ -81,6 +81,7 @@ type gorouter struct {
 	SSLCert      string
 	SSLKey       string
 	EnableSSL    bool
+	ClientSecret string
 	Nats         grtrlib.Nats
 	Loggregator  metron_agent.Loggregator
 	RouterUser   string

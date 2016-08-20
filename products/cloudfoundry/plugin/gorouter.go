@@ -32,6 +32,7 @@ func NewGoRouterPartition(c *cli.Context) InstanceGrouper {
 		VMTypeName:   c.String("router-vm-type"),
 		SSLCert:      cert,
 		SSLKey:       key,
+		ClientSecret: c.String("gorouter-client-secret"),
 		RouterUser:   c.String("router-user"),
 		RouterPass:   c.String("router-pass"),
 		MetronZone:   c.String("metron-zone"),
@@ -105,6 +106,16 @@ func (s *gorouter) newRouterJob() enaml.InstanceJob {
 			RequestTimeoutInSeconds: 180,
 			Nats:   s.newNats(),
 			Router: s.newRouter(),
+			Uaa: &grtrlib.Uaa{
+				Ssl: &grtrlib.Ssl{
+					Port: -1,
+				},
+				Clients: &grtrlib.Clients{
+					Gorouter: &grtrlib.Gorouter{
+						Secret: s.ClientSecret,
+					},
+				},
+			},
 		},
 	}
 }

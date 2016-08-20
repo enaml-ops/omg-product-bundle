@@ -28,6 +28,7 @@ var _ = Describe("Go-Router Partition", func() {
 	})
 	Context("when the plugin is called by a operator with a complete set of arguments", func() {
 		var deploymentManifest *enaml.DeploymentManifest
+		const controlSecret = "goroutersecret"
 		BeforeEach(func() {
 			cf := new(Plugin)
 			c := cf.GetContext([]string{
@@ -37,6 +38,7 @@ var _ = Describe("Go-Router Partition", func() {
 				"--router-ip", "1.0.0.1",
 				"--router-ip", "1.0.0.2",
 				"--network", "foundry-net",
+				"--gorouter-client-secret", controlSecret,
 				"--router-vm-type", "blah",
 				"--router-ssl-cert", "@fixtures/sample.cert",
 				"--router-ssl-key", "@fixtures/sample.key",
@@ -142,6 +144,15 @@ var _ = Describe("Go-Router Partition", func() {
 			properties := job.Properties.(*grtrlib.GorouterJob)
 			Ω(properties.Router.SslCert).Should(Equal(string(certBytes)))
 			Ω(properties.Router.SslKey).Should(Equal(string(keyBytes)))
+		})
+
+		It("then it should configure UAA", func() {
+			ig := deploymentManifest.GetInstanceGroupByName("router-partition")
+			job := ig.GetJobByName("gorouter")
+			properties := job.Properties.(*grtrlib.GorouterJob)
+			Ω(properties.Uaa).ShouldNot(BeNil())
+			Ω(properties.Uaa.Ssl.Port).Should(Equal(-1))
+			Ω(properties.Uaa.Clients.Gorouter.Secret).Should(Equal(controlSecret))
 		})
 
 		Context("when the plugin is called by a operator with arguments for ssl cert/key strings", func() {
