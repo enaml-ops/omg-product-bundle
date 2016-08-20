@@ -90,11 +90,12 @@ func (s *MySQL) GetSeededDBByName(name string) *MySQLSeededDatabase {
 //ToInstanceGroup -
 func (s *MySQL) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 	ig = &enaml.InstanceGroup{
-		Name:      "mysql-partition",
-		Instances: len(s.NetworkIPs),
-		VMType:    s.VMTypeName,
-		AZs:       s.AZs,
-		Stemcell:  s.StemcellName,
+		Name:               "mysql-partition",
+		Instances:          len(s.NetworkIPs),
+		VMType:             s.VMTypeName,
+		AZs:                s.AZs,
+		Stemcell:           s.StemcellName,
+		PersistentDiskType: s.PersistentDiskType,
 		Jobs: []enaml.InstanceJob{
 			s.newMySQLJob(),
 		},
