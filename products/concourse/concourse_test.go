@@ -29,7 +29,7 @@ var _ = Describe("Concourse Deployment", func() {
 	})
 
 	Describe("given CreateAtcJob", func() {
-		FContext("when called without TLS cert/key flags", func() {
+		Context("when called without TLS cert/key flags", func() {
 			It("should not emit YAML for TLS settings", func() {
 				job := deployment.CreateAtcJob()
 				Ω(job).ShouldNot(BeNil())
