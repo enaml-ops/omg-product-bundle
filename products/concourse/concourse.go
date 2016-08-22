@@ -162,14 +162,19 @@ func (d *Deployment) CreateWebInstanceGroup() (web *enaml.InstanceGroup, err err
 
 //CreateAtcJob -
 func (d *Deployment) CreateAtcJob() (job *enaml.InstanceJob) {
-	job = enaml.NewInstanceJob("atc", concourseReleaseName, atc.AtcJob{
+	props := atc.AtcJob{
 		ExternalUrl:        d.ConcourseURL,
 		BasicAuthUsername:  d.ConcourseUserName,
 		BasicAuthPassword:  d.ConcoursePassword,
 		PostgresqlDatabase: "atc",
-		TlsCert:            d.TLSCert,
-		TlsKey:             d.TLSKey,
-	})
+	}
+	if d.TLSCert != "" {
+		props.TlsCert = d.TLSCert
+	}
+	if d.TLSKey != "" {
+		props.TlsKey = d.TLSKey
+	}
+	job = enaml.NewInstanceJob("atc", concourseReleaseName, props)
 	return
 }
 

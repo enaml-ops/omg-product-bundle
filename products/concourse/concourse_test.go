@@ -3,6 +3,8 @@ package concourse_test
 import (
 	"io/ioutil"
 
+	yaml "gopkg.in/yaml.v2"
+
 	. "github.com/enaml-ops/omg-product-bundle/products/concourse"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -22,6 +24,21 @@ var _ = Describe("Concourse Deployment", func() {
 				Ω(update.Serial).Should(Equal(false))
 				Ω(update.UpdateWatchTime).Should(Equal("1000-60000"))
 				Ω(update.CanaryWatchTime).Should(Equal("1000-60000"))
+			})
+		})
+	})
+
+	Describe("given CreateAtcJob", func() {
+		FContext("when called without TLS cert/key flags", func() {
+			It("should not emit YAML for TLS settings", func() {
+				job := deployment.CreateAtcJob()
+				Ω(job).ShouldNot(BeNil())
+				b, _ := yaml.Marshal(job.Properties)
+
+				var m map[string]interface{}
+				yaml.Unmarshal(b, &m)
+				Ω(m).ShouldNot(HaveKey("tls_key"))
+				Ω(m).ShouldNot(HaveKey("tls_cert"))
 			})
 		})
 	})
