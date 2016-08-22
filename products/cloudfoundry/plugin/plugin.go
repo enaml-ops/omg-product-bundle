@@ -375,23 +375,24 @@ func InferFromCloudDecorate(inferFlagMap map[string][]string, cloudConfig []byte
 
 	if c.Bool("infer-from-cloud") {
 		ccinf := pluginutil.NewCloudConfigInferFromBytes(cloudConfig)
-		setAllInferredFlagDefaults(inferFlagMap["disktype"], ccinf.InferDefaultDiskType(), flgs)
-		setAllInferredFlagDefaults(inferFlagMap["vmtype"], ccinf.InferDefaultVMType(), flgs)
-		setAllInferredFlagDefaults(inferFlagMap["az"], ccinf.InferDefaultAZ(), flgs)
-		setAllInferredFlagDefaults(inferFlagMap["network"], ccinf.InferDefaultNetwork(), flgs)
+		setAllInferredFlagDefaults(inferFlagMap["disktype"], ccinf.InferDefaultDiskType(), flgs, c)
+		setAllInferredFlagDefaults(inferFlagMap["vmtype"], ccinf.InferDefaultVMType(), flgs, c)
+		setAllInferredFlagDefaults(inferFlagMap["az"], ccinf.InferDefaultAZ(), flgs, c)
+		setAllInferredFlagDefaults(inferFlagMap["network"], ccinf.InferDefaultNetwork(), flgs, c)
 	}
 }
 
-func setAllInferredFlagDefaults(matchlist []string, defaultvalue string, flgs []pcli.Flag) {
-
+func setAllInferredFlagDefaults(matchlist []string, defaultvalue string, flgs []pcli.Flag, c *cli.Context) {
 	for _, match := range matchlist {
-		setFlagDefault(match, defaultvalue, flgs)
+		// only infer flags that weren't manually set
+		if !c.IsSet(match) {
+			setFlagDefault(match, defaultvalue, flgs)
+		}
 	}
 }
 
 func setFlagDefault(flagname, defaultvalue string, flgs []pcli.Flag) {
 	for idx, flg := range flgs {
-
 		if flg.Name == flagname {
 			flgs[idx].Value = defaultvalue
 		}

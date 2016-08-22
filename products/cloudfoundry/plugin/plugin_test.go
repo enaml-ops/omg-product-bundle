@@ -83,11 +83,12 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 	Describe("given InferFromCloudDecorate", func() {
 		Context("when infer-from-cloud is set to true", func() {
 			var flgs []pcli.Flag
+			var args []string
 
 			BeforeEach(func() {
 				b, _ := ioutil.ReadFile("fixtures/cloudconfig.yml")
 				var flagsToInferFromCloudConfig = map[string][]string{
-					"disktype": []string{"mysql-disk-type"},
+					"disktype": []string{"mysql-disk-type", "nfs-disk-type"},
 					"vmtype":   []string{"diego-brain-vm-type"},
 					"az":       []string{"az"},
 					"network":  []string{"network"},
@@ -96,12 +97,14 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 					pcli.Flag{FlagType: pcli.BoolFlag, Name: "infer-from-cloud"},
 					pcli.Flag{FlagType: pcli.StringFlag, Name: "diego-brain-vm-type"},
 					pcli.Flag{FlagType: pcli.StringFlag, Name: "mysql-disk-type"},
+					pcli.Flag{FlagType: pcli.StringFlag, Name: "nfs-disk-type"},
 					pcli.Flag{FlagType: pcli.StringFlag, Name: "az"},
 					pcli.Flag{FlagType: pcli.StringFlag, Name: "network"},
 				}
-				args := []string{
+				args = []string{
 					"mycoolness",
 					"--infer-from-cloud",
+					"--nfs-disk-type", "large",
 				}
 				InferFromCloudDecorate(flagsToInferFromCloudConfig, b, args, flgs)
 			})
@@ -112,6 +115,11 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 				Ω(ctx.String("mysql-disk-type")).Should(Equal("smalldisk"))
 				Ω(ctx.String("az")).Should(Equal("z1,z2"))
 				Ω(ctx.String("network")).Should(Equal("private"))
+			})
+
+			It("then it should not override flags that were manually provided", func() {
+				ctx := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
+				Ω(ctx.String("nfs-disk-type")).Should(Equal("large"))
 			})
 		})
 	})
