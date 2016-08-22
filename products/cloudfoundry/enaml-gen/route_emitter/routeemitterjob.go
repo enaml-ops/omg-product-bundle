@@ -5,7 +5,7 @@ package route_emitter
 */
 type RouteEmitterJob struct {
 
-	/*Diego - Descr: enable ssl for all communication with the bbs Default: true
+	/*Diego - Descr: Username for server authentication. Default: <nil>
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

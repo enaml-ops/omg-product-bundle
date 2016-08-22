@@ -9,9 +9,9 @@ type PackagesWebdavConfig struct {
 */
 	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
-	/*Password - Descr: The basic auth password that CC uses to connect to the admin endpoint on webdav Default: 
+	/*PublicEndpoint - Descr: The location of the webdav server eg: https://blobstore.com Default: 
 */
-	Password interface{} `yaml:"password,omitempty"`
+	PublicEndpoint interface{} `yaml:"public_endpoint,omitempty"`
 
 	/*PrivateEndpoint - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
 */
@@ -21,8 +21,8 @@ type PackagesWebdavConfig struct {
 */
 	Username interface{} `yaml:"username,omitempty"`
 
-	/*PublicEndpoint - Descr: The location of the webdav server eg: https://blobstore.com Default: 
+	/*Password - Descr: The basic auth password that CC uses to connect to the admin endpoint on webdav Default: 
 */
-	PublicEndpoint interface{} `yaml:"public_endpoint,omitempty"`
+	Password interface{} `yaml:"password,omitempty"`
 
 }

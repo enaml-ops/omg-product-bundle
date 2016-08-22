@@ -5,7 +5,7 @@ package nats_stream_forwarder
 */
 type NatsStreamForwarderJob struct {
 
-	/*Nats - Descr: Password for server authentication. Default: <nil>
+	/*Nats - Descr: NATS addresses Default: <nil>
 */
 	Nats *Nats `yaml:"nats,omitempty"`
 

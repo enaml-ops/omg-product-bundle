@@ -5,13 +5,13 @@ package gorouter
 */
 type Logrotate struct {
 
-	/*Rotate - Descr: The number of files that logrotate will keep around on the VM Default: 7
-*/
-	Rotate interface{} `yaml:"rotate,omitempty"`
-
 	/*Size - Descr: The size at which logrotate will decide to rotate the log file Default: 2M
 */
 	Size interface{} `yaml:"size,omitempty"`
+
+	/*Rotate - Descr: The number of files that logrotate will keep around on the VM Default: 7
+*/
+	Rotate interface{} `yaml:"rotate,omitempty"`
 
 	/*FreqMin - Descr: The frequency in minutes which logrotate will rotate VM logs Default: 5
 */

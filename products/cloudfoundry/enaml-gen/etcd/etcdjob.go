@@ -5,7 +5,7 @@ package etcd
 */
 type EtcdJob struct {
 
-	/*Etcd - Descr: Information about etcd cluster Default: <nil>
+	/*Etcd - Descr: PEM-encoded CA certificate Default: <nil>
 */
 	Etcd *Etcd `yaml:"etcd,omitempty"`
 

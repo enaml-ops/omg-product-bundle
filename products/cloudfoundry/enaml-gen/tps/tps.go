@@ -5,9 +5,17 @@ package tps
 */
 type Tps struct {
 
-	/*Listener - Descr: address at which to serve debug info Default: 0.0.0.0:17014
+	/*Watcher - Descr: address at which to serve debug info Default: 0.0.0.0:17015
 */
-	Listener *Listener `yaml:"listener,omitempty"`
+	Watcher *Watcher `yaml:"watcher,omitempty"`
+
+	/*MaxInFlightRequests - Descr: Maximum number of requests to handle at once. Default: 200
+*/
+	MaxInFlightRequests interface{} `yaml:"max_in_flight_requests,omitempty"`
+
+	/*DropsondePort - Descr: local metron agent's port Default: 3457
+*/
+	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
 
 	/*LogLevel - Descr: Log level Default: info
 */
@@ -17,24 +25,16 @@ type Tps struct {
 */
 	TrafficControllerUrl interface{} `yaml:"traffic_controller_url,omitempty"`
 
-	/*Bbs - Descr: enable ssl for all communication with the bbs Default: true
+	/*Bbs - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
 */
 	Bbs *Bbs `yaml:"bbs,omitempty"`
-
-	/*DropsondePort - Descr: local metron agent's port Default: 3457
-*/
-	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
-
-	/*MaxInFlightRequests - Descr: Maximum number of requests to handle at once. Default: 200
-*/
-	MaxInFlightRequests interface{} `yaml:"max_in_flight_requests,omitempty"`
 
 	/*Cc - Descr: Basic auth username for CC internal API Default: internal_user
 */
 	Cc *Cc `yaml:"cc,omitempty"`
 
-	/*Watcher - Descr: address at which to serve debug info Default: 0.0.0.0:17015
+	/*Listener - Descr: address at which to serve API requests Default: 0.0.0.0:1518
 */
-	Watcher *Watcher `yaml:"watcher,omitempty"`
+	Listener *Listener `yaml:"listener,omitempty"`
 
 }

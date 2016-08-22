@@ -9,7 +9,7 @@ type Uaa struct {
 */
 	Jwt *Jwt `yaml:"jwt,omitempty"`
 
-	/*Clients - Descr: Used for generating SSO clients for service brokers. Default: <nil>
+	/*Clients - Descr: (DEPRECATED) - Used to grant scope for SSO clients for service brokers Default: openid,cloud_controller_service_permissions.read
 */
 	Clients *Clients `yaml:"clients,omitempty"`
 

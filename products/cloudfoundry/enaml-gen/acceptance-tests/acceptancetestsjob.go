@@ -5,7 +5,7 @@ package acceptance_tests
 */
 type AcceptanceTestsJob struct {
 
-	/*AcceptanceTests - Descr: Flag to include the route services tests. Diego must be deployed for these tests to pass. Default: false
+	/*AcceptanceTests - Descr: Flag to include the diego ssh suite Default: false
 */
 	AcceptanceTests *AcceptanceTests `yaml:"acceptance_tests,omitempty"`
 

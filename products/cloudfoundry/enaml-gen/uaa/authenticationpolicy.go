@@ -5,13 +5,9 @@ package uaa
 */
 type AuthenticationPolicy struct {
 
-	/*Global - Descr: Number of seconds to lock out an account when lockoutAfterFailures failures is exceeded Default: 300
+	/*Global - Descr: Number of seconds in which lockoutAfterFailures failures must occur in order for account to be locked Default: 3600
 */
 	Global *Global `yaml:"global,omitempty"`
-
-	/*CountFailuresWithinSeconds - Descr: Number of seconds in which lockoutAfterFailures failures must occur in order for account to be locked Default: 3600
-*/
-	CountFailuresWithinSeconds interface{} `yaml:"countFailuresWithinSeconds,omitempty"`
 
 	/*LockoutPeriodSeconds - Descr: Number of seconds to lock out an account when lockoutAfterFailures failures is exceeded Default: 300
 */
@@ -20,5 +16,9 @@ type AuthenticationPolicy struct {
 	/*LockoutAfterFailures - Descr: Number of allowed failures before account is locked Default: 5
 */
 	LockoutAfterFailures interface{} `yaml:"lockoutAfterFailures,omitempty"`
+
+	/*CountFailuresWithinSeconds - Descr: Number of seconds in which lockoutAfterFailures failures must occur in order for account to be locked Default: 3600
+*/
+	CountFailuresWithinSeconds interface{} `yaml:"countFailuresWithinSeconds,omitempty"`
 
 }

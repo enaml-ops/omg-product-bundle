@@ -5,168 +5,168 @@ package acceptance_tests
 */
 type AcceptanceTests struct {
 
-	/*IncludeV3 - Descr: Flag to include the v3 API test suite. Default: false
+	/*Nodes - Descr: The number of parallel test executors to spawn. The larger the number the higher the stress on the system. Default: 2
 */
-	IncludeV3 interface{} `yaml:"include_v3,omitempty"`
+	Nodes interface{} `yaml:"nodes,omitempty"`
 
 	/*DefaultTimeout - Descr: Default Timeout Default: <nil>
 */
 	DefaultTimeout interface{} `yaml:"default_timeout,omitempty"`
 
-	/*IncludeOperator - Descr: Flag to include the operator tests which may modify the global state of an Elastic Runtime deployment. Default: false
+	/*Backend - Descr: App tests push their apps using the backend specified. Route service tests require this flag to be set to diego in order to run. Default: 
 */
-	IncludeOperator interface{} `yaml:"include_operator,omitempty"`
-
-	/*IncludeLogging - Descr: Flag to include the logging test suite. Default: false
-*/
-	IncludeLogging interface{} `yaml:"include_logging,omitempty"`
-
-	/*IncludeTasks - Descr: Flag to include the v3 task tests dependent on the CC task_creation feature flag. Default: false
-*/
-	IncludeTasks interface{} `yaml:"include_tasks,omitempty"`
-
-	/*EnableColor - Descr: Enable colorized output on ginkgo. Default: true
-*/
-	EnableColor interface{} `yaml:"enable_color,omitempty"`
-
-	/*RubyBuildpackName - Descr: The name of the ruby buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
-*/
-	RubyBuildpackName interface{} `yaml:"ruby_buildpack_name,omitempty"`
-
-	/*SkipSslValidation - Descr: Toggles cli verification of the Elastic Runtime API SSL certificate Default: false
-*/
-	SkipSslValidation interface{} `yaml:"skip_ssl_validation,omitempty"`
-
-	/*SkipRegex - Descr: Regex for tests that should be skipped Default: <nil>
-*/
-	SkipRegex interface{} `yaml:"skip_regex,omitempty"`
-
-	/*BrokerStartTimeout - Descr: Timeout for broker starts Default: <nil>
-*/
-	BrokerStartTimeout interface{} `yaml:"broker_start_timeout,omitempty"`
-
-	/*PythonBuildpackName - Descr: The name of the python buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
-*/
-	PythonBuildpackName interface{} `yaml:"python_buildpack_name,omitempty"`
-
-	/*NodejsBuildpackName - Descr: The name of the nodejs buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
-*/
-	NodejsBuildpackName interface{} `yaml:"nodejs_buildpack_name,omitempty"`
-
-	/*PersistentAppQuotaName - Descr: The default name for the persistent app quota name. Default: <nil>
-*/
-	PersistentAppQuotaName interface{} `yaml:"persistent_app_quota_name,omitempty"`
+	Backend interface{} `yaml:"backend,omitempty"`
 
 	/*PersistentAppOrg - Descr: The default name for the persistent app org. Default: <nil>
 */
 	PersistentAppOrg interface{} `yaml:"persistent_app_org,omitempty"`
 
-	/*Nodes - Descr: The number of parallel test executors to spawn. The larger the number the higher the stress on the system. Default: 2
+	/*GoBuildpackName - Descr: The name of the go buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
 */
-	Nodes interface{} `yaml:"nodes,omitempty"`
+	GoBuildpackName interface{} `yaml:"go_buildpack_name,omitempty"`
 
-	/*ExistingUser - Descr: The username of an existing user. If set, the acceptance-tests will push apps and perform other actions as this user, otherwise its default behaviour is to create a temporary user for such actions. Default: <nil>
+	/*RubyBuildpackName - Descr: The name of the ruby buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
 */
-	ExistingUser interface{} `yaml:"existing_user,omitempty"`
+	RubyBuildpackName interface{} `yaml:"ruby_buildpack_name,omitempty"`
 
-	/*Backend - Descr: App tests push their apps using the backend specified. Route service tests require this flag to be set to diego in order to run. Default: 
+	/*BrokerStartTimeout - Descr: Timeout for broker starts Default: <nil>
 */
-	Backend interface{} `yaml:"backend,omitempty"`
+	BrokerStartTimeout interface{} `yaml:"broker_start_timeout,omitempty"`
 
-	/*Api - Descr: The Elastic Runtime API endpoint URL Default: <nil>
+	/*SkipSslValidation - Descr: Toggles cli verification of the Elastic Runtime API SSL certificate Default: false
 */
-	Api interface{} `yaml:"api,omitempty"`
-
-	/*AppsDomain - Descr: The Elastic Runtime Application Domain Default: <nil>
-*/
-	AppsDomain interface{} `yaml:"apps_domain,omitempty"`
-
-	/*CfPushTimeout - Descr: Timeout for cf push Default: <nil>
-*/
-	CfPushTimeout interface{} `yaml:"cf_push_timeout,omitempty"`
-
-	/*UseHttp - Descr: Flag for using HTTP when making api and application requests rather than the default HTTPS Default: false
-*/
-	UseHttp interface{} `yaml:"use_http,omitempty"`
-
-	/*Verbose - Descr: Whether to pass the -v flag to cf-acceptance-tests Default: false
-*/
-	Verbose interface{} `yaml:"verbose,omitempty"`
-
-	/*IncludeInternetDependent - Descr: Flag to include the internet dependent test suite. Default: false
-*/
-	IncludeInternetDependent interface{} `yaml:"include_internet_dependent,omitempty"`
-
-	/*PhpBuildpackName - Descr: The name of the php buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
-*/
-	PhpBuildpackName interface{} `yaml:"php_buildpack_name,omitempty"`
-
-	/*StaticfileBuildpackName - Descr: The name of the staticfile buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
-*/
-	StaticfileBuildpackName interface{} `yaml:"staticfile_buildpack_name,omitempty"`
-
-	/*JavaBuildpackName - Descr: The name of the java buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
-*/
-	JavaBuildpackName interface{} `yaml:"java_buildpack_name,omitempty"`
-
-	/*LongCurlTimeout - Descr: Timeout for long curls Default: <nil>
-*/
-	LongCurlTimeout interface{} `yaml:"long_curl_timeout,omitempty"`
+	SkipSslValidation interface{} `yaml:"skip_ssl_validation,omitempty"`
 
 	/*IncludeServices - Descr: Flag to include the services API test suite. Default: false
 */
 	IncludeServices interface{} `yaml:"include_services,omitempty"`
 
-	/*BinaryBuildpackName - Descr: The name of the binary buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
+	/*UseHttp - Descr: Flag for using HTTP when making api and application requests rather than the default HTTPS Default: false
 */
-	BinaryBuildpackName interface{} `yaml:"binary_buildpack_name,omitempty"`
+	UseHttp interface{} `yaml:"use_http,omitempty"`
 
-	/*PersistentAppSpace - Descr: The default name for the persistent app space. Default: <nil>
+	/*PythonBuildpackName - Descr: The name of the python buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
 */
-	PersistentAppSpace interface{} `yaml:"persistent_app_space,omitempty"`
-
-	/*GoBuildpackName - Descr: The name of the go buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
-*/
-	GoBuildpackName interface{} `yaml:"go_buildpack_name,omitempty"`
-
-	/*PersistentAppHost - Descr: The default name for the persistent app host. Default: <nil>
-*/
-	PersistentAppHost interface{} `yaml:"persistent_app_host,omitempty"`
-
-	/*IncludeDiegoSsh - Descr: Flag to include the diego ssh suite Default: false
-*/
-	IncludeDiegoSsh interface{} `yaml:"include_diego_ssh,omitempty"`
-
-	/*AdminPassword - Descr: The Elastic Runtime API admin user's password Default: <nil>
-*/
-	AdminPassword interface{} `yaml:"admin_password,omitempty"`
-
-	/*IncludeBackendCompatibility - Descr: Flag to inlude whether we check DEA/Diego interoperability Default: false
-*/
-	IncludeBackendCompatibility interface{} `yaml:"include_backend_compatibility,omitempty"`
-
-	/*IncludeSso - Descr: Flag to include the services tests that integrate with SSO. Default: false
-*/
-	IncludeSso interface{} `yaml:"include_sso,omitempty"`
-
-	/*IncludeRouteServices - Descr: Flag to include the route services tests. Diego must be deployed for these tests to pass. Default: false
-*/
-	IncludeRouteServices interface{} `yaml:"include_route_services,omitempty"`
-
-	/*ExistingUserPassword - Descr: The password of the existing user. Only required if the existing user property is also being set. Default: <nil>
-*/
-	ExistingUserPassword interface{} `yaml:"existing_user_password,omitempty"`
-
-	/*IncludeSecurityGroups - Descr: Flag to include the security groups test suite. Default: false
-*/
-	IncludeSecurityGroups interface{} `yaml:"include_security_groups,omitempty"`
+	PythonBuildpackName interface{} `yaml:"python_buildpack_name,omitempty"`
 
 	/*AdminUser - Descr: The Elastic Runtime API admin user Default: <nil>
 */
 	AdminUser interface{} `yaml:"admin_user,omitempty"`
 
+	/*NodejsBuildpackName - Descr: The name of the nodejs buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
+*/
+	NodejsBuildpackName interface{} `yaml:"nodejs_buildpack_name,omitempty"`
+
+	/*EnableColor - Descr: Enable colorized output on ginkgo. Default: true
+*/
+	EnableColor interface{} `yaml:"enable_color,omitempty"`
+
+	/*ExistingUser - Descr: The username of an existing user. If set, the acceptance-tests will push apps and perform other actions as this user, otherwise its default behaviour is to create a temporary user for such actions. Default: <nil>
+*/
+	ExistingUser interface{} `yaml:"existing_user,omitempty"`
+
+	/*Api - Descr: The Elastic Runtime API endpoint URL Default: <nil>
+*/
+	Api interface{} `yaml:"api,omitempty"`
+
+	/*IncludeOperator - Descr: Flag to include the operator tests which may modify the global state of an Elastic Runtime deployment. Default: false
+*/
+	IncludeOperator interface{} `yaml:"include_operator,omitempty"`
+
+	/*CfPushTimeout - Descr: Timeout for cf push Default: <nil>
+*/
+	CfPushTimeout interface{} `yaml:"cf_push_timeout,omitempty"`
+
+	/*LongCurlTimeout - Descr: Timeout for long curls Default: <nil>
+*/
+	LongCurlTimeout interface{} `yaml:"long_curl_timeout,omitempty"`
+
+	/*PersistentAppHost - Descr: The default name for the persistent app host. Default: <nil>
+*/
+	PersistentAppHost interface{} `yaml:"persistent_app_host,omitempty"`
+
+	/*AdminPassword - Descr: The Elastic Runtime API admin user's password Default: <nil>
+*/
+	AdminPassword interface{} `yaml:"admin_password,omitempty"`
+
+	/*IncludeV3 - Descr: Flag to include the v3 API test suite. Default: false
+*/
+	IncludeV3 interface{} `yaml:"include_v3,omitempty"`
+
+	/*IncludeLogging - Descr: Flag to include the logging test suite. Default: false
+*/
+	IncludeLogging interface{} `yaml:"include_logging,omitempty"`
+
 	/*IncludeDiegoDocker - Descr: Flag to include tests related to running Docker apps on Diego. Diego must be deployed and the CC API docker_diego feature flag must be enabled for these tests to pass. Default: false
 */
 	IncludeDiegoDocker interface{} `yaml:"include_diego_docker,omitempty"`
+
+	/*AppsDomain - Descr: The Elastic Runtime Application Domain Default: <nil>
+*/
+	AppsDomain interface{} `yaml:"apps_domain,omitempty"`
+
+	/*IncludeDiegoSsh - Descr: Flag to include the diego ssh suite Default: false
+*/
+	IncludeDiegoSsh interface{} `yaml:"include_diego_ssh,omitempty"`
+
+	/*IncludeSso - Descr: Flag to include the services tests that integrate with SSO. Default: false
+*/
+	IncludeSso interface{} `yaml:"include_sso,omitempty"`
+
+	/*SkipRegex - Descr: Regex for tests that should be skipped Default: <nil>
+*/
+	SkipRegex interface{} `yaml:"skip_regex,omitempty"`
+
+	/*BinaryBuildpackName - Descr: The name of the binary buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
+*/
+	BinaryBuildpackName interface{} `yaml:"binary_buildpack_name,omitempty"`
+
+	/*ExistingUserPassword - Descr: The password of the existing user. Only required if the existing user property is also being set. Default: <nil>
+*/
+	ExistingUserPassword interface{} `yaml:"existing_user_password,omitempty"`
+
+	/*PersistentAppSpace - Descr: The default name for the persistent app space. Default: <nil>
+*/
+	PersistentAppSpace interface{} `yaml:"persistent_app_space,omitempty"`
+
+	/*IncludeInternetDependent - Descr: Flag to include the internet dependent test suite. Default: false
+*/
+	IncludeInternetDependent interface{} `yaml:"include_internet_dependent,omitempty"`
+
+	/*IncludeTasks - Descr: Flag to include the v3 task tests dependent on the CC task_creation feature flag. Default: false
+*/
+	IncludeTasks interface{} `yaml:"include_tasks,omitempty"`
+
+	/*IncludeBackendCompatibility - Descr: Flag to inlude whether we check DEA/Diego interoperability Default: false
+*/
+	IncludeBackendCompatibility interface{} `yaml:"include_backend_compatibility,omitempty"`
+
+	/*PhpBuildpackName - Descr: The name of the php buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
+*/
+	PhpBuildpackName interface{} `yaml:"php_buildpack_name,omitempty"`
+
+	/*PersistentAppQuotaName - Descr: The default name for the persistent app quota name. Default: <nil>
+*/
+	PersistentAppQuotaName interface{} `yaml:"persistent_app_quota_name,omitempty"`
+
+	/*JavaBuildpackName - Descr: The name of the java buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
+*/
+	JavaBuildpackName interface{} `yaml:"java_buildpack_name,omitempty"`
+
+	/*IncludeSecurityGroups - Descr: Flag to include the security groups test suite. Default: false
+*/
+	IncludeSecurityGroups interface{} `yaml:"include_security_groups,omitempty"`
+
+	/*Verbose - Descr: Whether to pass the -v flag to cf-acceptance-tests Default: false
+*/
+	Verbose interface{} `yaml:"verbose,omitempty"`
+
+	/*IncludeRouteServices - Descr: Flag to include the route services tests. Diego must be deployed for these tests to pass. Default: false
+*/
+	IncludeRouteServices interface{} `yaml:"include_route_services,omitempty"`
+
+	/*StaticfileBuildpackName - Descr: The name of the staticfile buildpack to use in acceptance tests that specify a buildpack. Default: <nil>
+*/
+	StaticfileBuildpackName interface{} `yaml:"staticfile_buildpack_name,omitempty"`
 
 }

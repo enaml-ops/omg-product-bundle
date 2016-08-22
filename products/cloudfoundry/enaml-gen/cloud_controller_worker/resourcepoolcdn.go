@@ -5,10 +5,6 @@ package cloud_controller_worker
 */
 type ResourcePoolCdn struct {
 
-	/*KeyPairId - Descr: Key pair name for signed download URIs Default: 
-*/
-	KeyPairId interface{} `yaml:"key_pair_id,omitempty"`
-
 	/*Uri - Descr: URI for a CDN to used for resource pool downloads Default: 
 */
 	Uri interface{} `yaml:"uri,omitempty"`
@@ -16,5 +12,9 @@ type ResourcePoolCdn struct {
 	/*PrivateKey - Descr: Private key for signing download URIs Default: 
 */
 	PrivateKey interface{} `yaml:"private_key,omitempty"`
+
+	/*KeyPairId - Descr: Key pair name for signed download URIs Default: 
+*/
+	KeyPairId interface{} `yaml:"key_pair_id,omitempty"`
 
 }

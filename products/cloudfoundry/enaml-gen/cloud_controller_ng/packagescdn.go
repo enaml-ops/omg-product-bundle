@@ -5,16 +5,16 @@ package cloud_controller_ng
 */
 type PackagesCdn struct {
 
-	/*KeyPairId - Descr: Key pair name for signed download URIs Default: 
+	/*PrivateKey - Descr: Private key for signing download URIs Default: 
 */
-	KeyPairId interface{} `yaml:"key_pair_id,omitempty"`
+	PrivateKey interface{} `yaml:"private_key,omitempty"`
 
 	/*Uri - Descr: URI for a CDN to used for app package downloads Default: 
 */
 	Uri interface{} `yaml:"uri,omitempty"`
 
-	/*PrivateKey - Descr: Private key for signing download URIs Default: 
+	/*KeyPairId - Descr: Key pair name for signed download URIs Default: 
 */
-	PrivateKey interface{} `yaml:"private_key,omitempty"`
+	KeyPairId interface{} `yaml:"key_pair_id,omitempty"`
 
 }

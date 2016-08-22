@@ -5,13 +5,13 @@ package rep
 */
 type Diego struct {
 
-	/*Executor - Descr: Environment variables to use when running the garden health check Default: <nil>
-*/
-	Executor *Executor `yaml:"executor,omitempty"`
-
 	/*Rep - Descr: The zone associated with the rep Default: <nil>
 */
 	Rep *Rep `yaml:"rep,omitempty"`
+
+	/*Executor - Descr: the inode limit enforced on each garden container. Default: 200000
+*/
+	Executor *Executor `yaml:"executor,omitempty"`
 
 	/*Ssl - Descr: when connecting over https, ignore bad ssl certificates Default: false
 */

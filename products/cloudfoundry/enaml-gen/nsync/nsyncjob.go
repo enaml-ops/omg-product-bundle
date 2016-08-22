@@ -5,7 +5,7 @@ package nsync
 */
 type NsyncJob struct {
 
-	/*Diego - Descr: URL of file server Default: http://file-server.service.cf.internal:8080
+	/*Diego - Descr: address at which to serve debug info Default: 0.0.0.0:17007
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

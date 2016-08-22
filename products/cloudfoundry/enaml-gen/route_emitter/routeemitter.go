@@ -13,20 +13,20 @@ type RouteEmitter struct {
 */
 	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
 
-	/*Nats - Descr: The port for the NATS server to listen on. Default: 4222
-*/
-	Nats *Nats `yaml:"nats,omitempty"`
-
-	/*DebugAddr - Descr: address at which to serve debug info Default: 0.0.0.0:17009
-*/
-	DebugAddr interface{} `yaml:"debug_addr,omitempty"`
-
-	/*Bbs - Descr: enable ssl for all communication with the bbs Default: true
+	/*Bbs - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
 */
 	Bbs *Bbs `yaml:"bbs,omitempty"`
 
 	/*SyncIntervalInSeconds - Descr: Interval to sync routes to the router in seconds. Default: 60
 */
 	SyncIntervalInSeconds interface{} `yaml:"sync_interval_in_seconds,omitempty"`
+
+	/*Nats - Descr: Username for server authentication. Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
+
+	/*DebugAddr - Descr: address at which to serve debug info Default: 0.0.0.0:17009
+*/
+	DebugAddr interface{} `yaml:"debug_addr,omitempty"`
 
 }

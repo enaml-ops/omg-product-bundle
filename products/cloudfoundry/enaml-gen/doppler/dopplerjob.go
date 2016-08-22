@@ -9,16 +9,16 @@ type DopplerJob struct {
 */
 	Doppler *Doppler `yaml:"doppler,omitempty"`
 
+	/*DopplerEndpoint - Descr: Shared secret used to verify cryptographically signed dropsonde messages Default: <nil>
+*/
+	DopplerEndpoint *DopplerEndpoint `yaml:"doppler_endpoint,omitempty"`
+
 	/*MetronEndpoint - Descr: The host used to emit messages to the Metron agent Default: 127.0.0.1
 */
 	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
 
-	/*Loggregator - Descr: IPs pointing to the ETCD cluster Default: <nil>
+	/*Loggregator - Descr: CA root required for key/cert verification Default: 
 */
 	Loggregator *Loggregator `yaml:"loggregator,omitempty"`
-
-	/*DopplerEndpoint - Descr: Shared secret used to verify cryptographically signed dropsonde messages Default: <nil>
-*/
-	DopplerEndpoint *DopplerEndpoint `yaml:"doppler_endpoint,omitempty"`
 
 }

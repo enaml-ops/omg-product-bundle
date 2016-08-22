@@ -5,7 +5,7 @@ package ssh_proxy
 */
 type Diego struct {
 
-	/*SshProxy - Descr: PEM-encoded client key Default: <nil>
+	/*SshProxy - Descr: address at which to serve debug info Default: 0.0.0.0:17016
 */
 	SshProxy *SshProxy `yaml:"ssh_proxy,omitempty"`
 

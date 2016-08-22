@@ -5,17 +5,13 @@ package syslog_drain_binder
 */
 type SyslogDrainBinderJob struct {
 
-	/*SyslogDrainBinder - Descr: boolean value to turn on verbose logging for syslog_drain_binder Default: false
+	/*SyslogDrainBinder - Descr: Interval on which to poll cloud controller in seconds Default: 15
 */
 	SyslogDrainBinder *SyslogDrainBinder `yaml:"syslog_drain_binder,omitempty"`
 
 	/*Cc - Descr: API URI of cloud controller Default: <nil>
 */
 	Cc *Cc `yaml:"cc,omitempty"`
-
-	/*Ssl - Descr: when connecting over https, ignore bad ssl certificates Default: false
-*/
-	Ssl *Ssl `yaml:"ssl,omitempty"`
 
 	/*MetronEndpoint - Descr: The port used to emit dropsonde messages to the Metron agent Default: 3457
 */
@@ -24,6 +20,10 @@ type SyslogDrainBinderJob struct {
 	/*Loggregator - Descr: Number of concurrent requests to ETCD Default: 10
 */
 	Loggregator *Loggregator `yaml:"loggregator,omitempty"`
+
+	/*Ssl - Descr: when connecting over https, ignore bad ssl certificates Default: false
+*/
+	Ssl *Ssl `yaml:"ssl,omitempty"`
 
 	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
 */

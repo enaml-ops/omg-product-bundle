@@ -5,11 +5,7 @@ package cloud_controller_ng
 */
 type Buildpacks struct {
 
-	/*BuildpackDirectoryKey - Descr: Directory (bucket) used store buildpacks.  It does not have be pre-created. Default: cc-buildpacks
-*/
-	BuildpackDirectoryKey interface{} `yaml:"buildpack_directory_key,omitempty"`
-
-	/*Cdn - Descr: URI for a CDN to used for buildpack downloads Default: 
+	/*Cdn - Descr: Key pair name for signed download URIs Default: 
 */
 	Cdn *BuildpacksCdn `yaml:"cdn,omitempty"`
 
@@ -24,5 +20,9 @@ type Buildpacks struct {
 	/*FogConnection - Descr: Fog connection hash Default: <nil>
 */
 	FogConnection interface{} `yaml:"fog_connection,omitempty"`
+
+	/*BuildpackDirectoryKey - Descr: Directory (bucket) used store buildpacks.  It does not have be pre-created. Default: cc-buildpacks
+*/
+	BuildpackDirectoryKey interface{} `yaml:"buildpack_directory_key,omitempty"`
 
 }

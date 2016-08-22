@@ -5,10 +5,6 @@ package cloud_controller_ng
 */
 type ResourcePoolWebdavConfig struct {
 
-	/*PrivateEndpoint - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
-*/
-	PrivateEndpoint interface{} `yaml:"private_endpoint,omitempty"`
-
 	/*PublicEndpoint - Descr: The location of the webdav server eg: https://blobstore.com Default: 
 */
 	PublicEndpoint interface{} `yaml:"public_endpoint,omitempty"`
@@ -16,6 +12,10 @@ type ResourcePoolWebdavConfig struct {
 	/*Username - Descr: The basic auth user that CC uses to connect to the admin endpoint on webdav Default: 
 */
 	Username interface{} `yaml:"username,omitempty"`
+
+	/*PrivateEndpoint - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
+*/
+	PrivateEndpoint interface{} `yaml:"private_endpoint,omitempty"`
 
 	/*Password - Descr: The basic auth password that CC uses to connect to the admin endpoint on webdav Default: 
 */

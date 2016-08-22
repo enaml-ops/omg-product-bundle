@@ -5,7 +5,7 @@ package stager
 */
 type StagerJob struct {
 
-	/*Diego - Descr: Log level Default: info
+	/*Diego - Descr: External port to access the Cloud Controller Default: 9022
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

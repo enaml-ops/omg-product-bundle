@@ -5,7 +5,7 @@ package cc_uploader
 */
 type CcUploaderJob struct {
 
-	/*Diego - Descr: the interval between job polling requests Default: <nil>
+	/*Diego - Descr: Log level Default: info
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

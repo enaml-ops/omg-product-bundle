@@ -5,7 +5,7 @@ package postgres
 */
 type PostgresJob struct {
 
-	/*Databases - Descr: A map of additional key/value pairs to include as extra configuration properties Default: <nil>
+	/*Databases - Descr: The postgres `printf` style string that is output at the beginning of each log line Default: %m: 
 */
 	Databases *Databases `yaml:"databases,omitempty"`
 

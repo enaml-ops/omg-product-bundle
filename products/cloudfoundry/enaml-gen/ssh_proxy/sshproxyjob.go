@@ -5,7 +5,7 @@ package ssh_proxy
 */
 type SshProxyJob struct {
 
-	/*Diego - Descr: PEM-encoded client key Default: <nil>
+	/*Diego - Descr: address at which to serve debug info Default: 0.0.0.0:17016
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

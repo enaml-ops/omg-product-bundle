@@ -5,6 +5,14 @@ package nfs_mounter
 */
 type NfsServer struct {
 
+	/*Share - Descr: Path to share from the remote NFS server (not used in an AWS deploy, use s3 instead) Default: <nil>
+*/
+	Share interface{} `yaml:"share,omitempty"`
+
+	/*Nfsv4 - Descr: bool to use NFS4 (not used in an AWS deploy, use s3 instead) Default: <nil>
+*/
+	Nfsv4 interface{} `yaml:"nfsv4,omitempty"`
+
 	/*IdmapdDomain - Descr: Domain name for NFS idmapd Default: localdomain
 */
 	IdmapdDomain interface{} `yaml:"idmapd_domain,omitempty"`
@@ -20,13 +28,5 @@ type NfsServer struct {
 	/*Address - Descr: NFS server for droplets and apps (not used in an AWS deploy, use s3 instead) Default: <nil>
 */
 	Address interface{} `yaml:"address,omitempty"`
-
-	/*Share - Descr: Path to share from the remote NFS server (not used in an AWS deploy, use s3 instead) Default: <nil>
-*/
-	Share interface{} `yaml:"share,omitempty"`
-
-	/*Nfsv4 - Descr: bool to use NFS4 (not used in an AWS deploy, use s3 instead) Default: <nil>
-*/
-	Nfsv4 interface{} `yaml:"nfsv4,omitempty"`
 
 }

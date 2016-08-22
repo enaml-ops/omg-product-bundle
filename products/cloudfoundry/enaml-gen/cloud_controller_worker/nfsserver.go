@@ -5,12 +5,12 @@ package cloud_controller_worker
 */
 type NfsServer struct {
 
-	/*SharePath - Descr: The location at which to mount the nfs share Default: /var/vcap/nfs
-*/
-	SharePath interface{} `yaml:"share_path,omitempty"`
-
 	/*Address - Descr: NFS server for droplets and apps (not used in an AWS deploy, use s3 instead) Default: <nil>
 */
 	Address interface{} `yaml:"address,omitempty"`
+
+	/*SharePath - Descr: The location at which to mount the nfs share Default: /var/vcap/nfs
+*/
+	SharePath interface{} `yaml:"share_path,omitempty"`
 
 }

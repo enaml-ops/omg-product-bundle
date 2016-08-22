@@ -5,36 +5,36 @@ package dea_next
 */
 type DeaNextJob struct {
 
-	/*DiskQuotaEnabled - Descr: disk quota must be disabled to use warden-inside-warden with the warden cpi Default: true
-*/
-	DiskQuotaEnabled interface{} `yaml:"disk_quota_enabled,omitempty"`
-
-	/*Hm9000 - Descr: PEM-encoded client key Default: <nil>
-*/
-	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
-
 	/*Router - Descr: Interval at which the router requests routes to be registered. Default: 20
 */
 	Router *Router `yaml:"router,omitempty"`
+
+	/*Cc - Descr: Password to access internal endpoints Default: <nil>
+*/
+	Cc *Cc `yaml:"cc,omitempty"`
+
+	/*Nats - Descr: user name for NATS login Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
+
+	/*Hm9000 - Descr: PEM-encoded client certificate Default: <nil>
+*/
+	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
+
+	/*MetronEndpoint - Descr: The port used to emit messages to the Metron agent Default: 3457
+*/
+	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
 
 	/*Domain - Descr: DNS domain name for this Cloud Foundry deployment Default: <nil>
 */
 	Domain interface{} `yaml:"domain,omitempty"`
 
-	/*DeaNext - Descr:  Default: 1
+	/*DeaNext - Descr: frequency of heartbeats in seconds. Default: 10
 */
 	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
 
-	/*MetronEndpoint - Descr: The host used to emit messages to the Metron agent Default: 127.0.0.1
+	/*DiskQuotaEnabled - Descr: disk quota must be disabled to use warden-inside-warden with the warden cpi Default: true
 */
-	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
-
-	/*Cc - Descr: External Cloud Controller port Default: 9022
-*/
-	Cc *Cc `yaml:"cc,omitempty"`
-
-	/*Nats - Descr: IP of each NATS cluster member. Default: <nil>
-*/
-	Nats *Nats `yaml:"nats,omitempty"`
+	DiskQuotaEnabled interface{} `yaml:"disk_quota_enabled,omitempty"`
 
 }

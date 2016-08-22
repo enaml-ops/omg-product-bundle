@@ -5,9 +5,9 @@ package consul_agent
 */
 type Agent struct {
 
-	/*Datacenter - Descr: Name of the agent's datacenter. Default: dc1
+	/*Services - Descr: Map of consul service definitions. Default: map[]
 */
-	Datacenter interface{} `yaml:"datacenter,omitempty"`
+	Services interface{} `yaml:"services,omitempty"`
 
 	/*ProtocolVersion - Descr: The Consul protocol to use. Default: 2
 */
@@ -17,20 +17,20 @@ type Agent struct {
 */
 	Domain interface{} `yaml:"domain,omitempty"`
 
+	/*Mode - Descr: Mode to run the agent in. (client or server) Default: client
+*/
+	Mode interface{} `yaml:"mode,omitempty"`
+
 	/*Servers - Descr: LAN server addresses to join on start. Default: []
 */
 	Servers *Servers `yaml:"servers,omitempty"`
 
-	/*Services - Descr: Map of consul service definitions. Default: map[]
+	/*Datacenter - Descr: Name of the agent's datacenter. Default: dc1
 */
-	Services interface{} `yaml:"services,omitempty"`
+	Datacenter interface{} `yaml:"datacenter,omitempty"`
 
 	/*LogLevel - Descr: Agent log level. Default: info
 */
 	LogLevel interface{} `yaml:"log_level,omitempty"`
-
-	/*Mode - Descr: Mode to run the agent in. (client or server) Default: client
-*/
-	Mode interface{} `yaml:"mode,omitempty"`
 
 }

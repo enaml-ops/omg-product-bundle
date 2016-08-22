@@ -5,12 +5,12 @@ package uaa
 */
 type Links struct {
 
-	/*Signup - Descr: URL for requesting to signup/register for an account Default: /create_account
-*/
-	Signup interface{} `yaml:"signup,omitempty"`
-
 	/*Passwd - Descr: URL for requesting password reset Default: /forgot_password
 */
 	Passwd interface{} `yaml:"passwd,omitempty"`
+
+	/*Signup - Descr: URL for requesting to signup/register for an account Default: /create_account
+*/
+	Signup interface{} `yaml:"signup,omitempty"`
 
 }

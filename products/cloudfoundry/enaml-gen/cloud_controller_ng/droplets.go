@@ -5,15 +5,15 @@ package cloud_controller_ng
 */
 type Droplets struct {
 
-	/*Cdn - Descr: URI for a CDN to used for droplet downloads Default: 
-*/
-	Cdn *DropletsCdn `yaml:"cdn,omitempty"`
-
 	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
 */
 	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
 
-	/*WebdavConfig - Descr: The ca cert to use when communicating with webdav Default: 
+	/*DropletDirectoryKey - Descr: Directory (bucket) used store droplets.  It does not have be pre-created. Default: cc-droplets
+*/
+	DropletDirectoryKey interface{} `yaml:"droplet_directory_key,omitempty"`
+
+	/*WebdavConfig - Descr: The basic auth user that CC uses to connect to the admin endpoint on webdav Default: 
 */
 	WebdavConfig *DropletsWebdavConfig `yaml:"webdav_config,omitempty"`
 
@@ -21,12 +21,12 @@ type Droplets struct {
 */
 	MaxStagedDropletsStored interface{} `yaml:"max_staged_droplets_stored,omitempty"`
 
-	/*DropletDirectoryKey - Descr: Directory (bucket) used store droplets.  It does not have be pre-created. Default: cc-droplets
-*/
-	DropletDirectoryKey interface{} `yaml:"droplet_directory_key,omitempty"`
-
 	/*FogConnection - Descr: Fog connection hash Default: <nil>
 */
 	FogConnection interface{} `yaml:"fog_connection,omitempty"`
+
+	/*Cdn - Descr: Key pair name for signed download URIs Default: 
+*/
+	Cdn *DropletsCdn `yaml:"cdn,omitempty"`
 
 }

@@ -5,13 +5,13 @@ package postgres
 */
 type Databases struct {
 
-	/*Roles - Descr: A list of database roles and associated properties to create Default: <nil>
-*/
-	Roles interface{} `yaml:"roles,omitempty"`
-
 	/*AdditionalConfig - Descr: A map of additional key/value pairs to include as extra configuration properties Default: <nil>
 */
 	AdditionalConfig interface{} `yaml:"additional_config,omitempty"`
+
+	/*Address - Descr: The database address Default: <nil>
+*/
+	Address interface{} `yaml:"address,omitempty"`
 
 	/*MaxConnections - Descr: Maximum number of database connections Default: <nil>
 */
@@ -21,24 +21,24 @@ type Databases struct {
 */
 	LogLinePrefix interface{} `yaml:"log_line_prefix,omitempty"`
 
-	/*CollectStatementStatistics - Descr: Enable the `pg_stat_statements` extension and collect statement execution statistics Default: false
+	/*Port - Descr: The database port Default: <nil>
 */
-	CollectStatementStatistics interface{} `yaml:"collect_statement_statistics,omitempty"`
+	Port interface{} `yaml:"port,omitempty"`
 
 	/*Databases - Descr: A list of databases and associated properties to create Default: <nil>
 */
 	Databases interface{} `yaml:"databases,omitempty"`
 
+	/*CollectStatementStatistics - Descr: Enable the `pg_stat_statements` extension and collect statement execution statistics Default: false
+*/
+	CollectStatementStatistics interface{} `yaml:"collect_statement_statistics,omitempty"`
+
 	/*DbScheme - Descr: The database scheme Default: <nil>
 */
 	DbScheme interface{} `yaml:"db_scheme,omitempty"`
 
-	/*Port - Descr: The database port Default: <nil>
+	/*Roles - Descr: A list of database roles and associated properties to create Default: <nil>
 */
-	Port interface{} `yaml:"port,omitempty"`
-
-	/*Address - Descr: The database address Default: <nil>
-*/
-	Address interface{} `yaml:"address,omitempty"`
+	Roles interface{} `yaml:"roles,omitempty"`
 
 }

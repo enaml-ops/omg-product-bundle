@@ -5,9 +5,9 @@ package cloud_controller_ng
 */
 type Ccdb struct {
 
-	/*MaxConnections - Descr: Maximum connections for Sequel Default: 25
+	/*DbScheme - Descr: The type of database being used. mysql or postgres Default: postgres
 */
-	MaxConnections interface{} `yaml:"max_connections,omitempty"`
+	DbScheme interface{} `yaml:"db_scheme,omitempty"`
 
 	/*Databases - Descr: Contains the name of the database on the database server Default: <nil>
 */
@@ -21,9 +21,9 @@ type Ccdb struct {
 */
 	Address interface{} `yaml:"address,omitempty"`
 
-	/*DbScheme - Descr: The type of database being used. mysql or postgres Default: postgres
+	/*MaxConnections - Descr: Maximum connections for Sequel Default: 25
 */
-	DbScheme interface{} `yaml:"db_scheme,omitempty"`
+	MaxConnections interface{} `yaml:"max_connections,omitempty"`
 
 	/*Roles - Descr: Users to create on the database when seeding Default: <nil>
 */

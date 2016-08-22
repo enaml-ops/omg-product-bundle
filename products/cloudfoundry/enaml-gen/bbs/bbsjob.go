@@ -5,7 +5,7 @@ package bbs
 */
 type BbsJob struct {
 
-	/*Diego - Descr: PEM-encoded client key Default: <nil>
+	/*Diego - Descr: Log level Default: info
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

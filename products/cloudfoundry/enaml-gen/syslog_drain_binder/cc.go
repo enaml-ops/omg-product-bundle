@@ -5,12 +5,12 @@ package syslog_drain_binder
 */
 type Cc struct {
 
-	/*BulkApiPassword - Descr: password for the bulk api Default: <nil>
-*/
-	BulkApiPassword interface{} `yaml:"bulk_api_password,omitempty"`
-
 	/*SrvApiUri - Descr: API URI of cloud controller Default: <nil>
 */
 	SrvApiUri interface{} `yaml:"srv_api_uri,omitempty"`
+
+	/*BulkApiPassword - Descr: password for the bulk api Default: <nil>
+*/
+	BulkApiPassword interface{} `yaml:"bulk_api_password,omitempty"`
 
 }

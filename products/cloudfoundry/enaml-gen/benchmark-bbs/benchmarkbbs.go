@@ -5,69 +5,17 @@ package benchmark_bbs
 */
 type BenchmarkBbs struct {
 
-	/*ActiveKeyLabel - Descr: the active key for encryption Default: <nil>
-*/
-	ActiveKeyLabel interface{} `yaml:"active_key_label,omitempty"`
-
-	/*DatadogApiKey - Descr: the api key for emmitting datadog metrics Default: 
-*/
-	DatadogApiKey interface{} `yaml:"datadog_api_key,omitempty"`
-
-	/*NumPopulateWorkers - Descr: the number of workers generating desired LRPs during setup Default: <nil>
-*/
-	NumPopulateWorkers interface{} `yaml:"num_populate_workers,omitempty"`
-
-	/*DesiredLrps - Descr: the number of single instance desired lrps to generate and fetch Default: <nil>
-*/
-	DesiredLrps interface{} `yaml:"desired_lrps,omitempty"`
-
-	/*PercentWrites - Descr: percentage of actual LRPs to write on each rep bulk loop Default: 5
-*/
-	PercentWrites interface{} `yaml:"percent_writes,omitempty"`
-
-	/*LogFile - Descr: file name for benchmark log output in the BOSH log dir Default: <nil>
-*/
-	LogFile interface{} `yaml:"log_file,omitempty"`
-
-	/*Bbs - Descr: maximum number of etcd client idle http connections Default: <nil>
-*/
-	Bbs *Bbs `yaml:"bbs,omitempty"`
-
 	/*EncryptionKeys - Descr: the key(s) to use for encryption at rest Default: []
 */
 	EncryptionKeys interface{} `yaml:"encryption_keys,omitempty"`
-
-	/*AwsSecretAccessKey - Descr: the aws secret key for uploading metrics to s3 Default: 
-*/
-	AwsSecretAccessKey interface{} `yaml:"aws_secret_access_key,omitempty"`
-
-	/*Sql - Descr: EXPERIMENTAL: connection string to use for SQL backend [username:password@tcp(1.1.1.1:1234)/database] Default: <nil>
-*/
-	Sql *Sql `yaml:"sql,omitempty"`
-
-	/*ClientTimeout - Descr: the http timeout for bbs client requests Default: <nil>
-*/
-	ClientTimeout interface{} `yaml:"client_timeout,omitempty"`
-
-	/*DatadogAppKey - Descr: the application key for datadog metrics Default: 
-*/
-	DatadogAppKey interface{} `yaml:"datadog_app_key,omitempty"`
-
-	/*NumTrials - Descr: the number of trials of each benchmark to average across Default: <nil>
-*/
-	NumTrials interface{} `yaml:"num_trials,omitempty"`
 
 	/*DatadogMetricPrefix - Descr: the datadog metric prefix Default: 
 */
 	DatadogMetricPrefix interface{} `yaml:"datadog_metric_prefix,omitempty"`
 
-	/*LogLevel - Descr: log level: debug, info, error or fatal Default: <nil>
+	/*NumPopulateWorkers - Descr: the number of workers generating desired LRPs during setup Default: <nil>
 */
-	LogLevel interface{} `yaml:"log_level,omitempty"`
-
-	/*Etcd - Descr: PEM-encoded client certificate Default: <nil>
-*/
-	Etcd *BenchmarkBbsEtcd `yaml:"etcd,omitempty"`
+	NumPopulateWorkers interface{} `yaml:"num_populate_workers,omitempty"`
 
 	/*AwsBucketName - Descr: the S3 bucket to upload metrics to Default: 
 */
@@ -77,12 +25,64 @@ type BenchmarkBbs struct {
 */
 	AwsRegion interface{} `yaml:"aws_region,omitempty"`
 
-	/*NumReps - Descr: the number of rep processes to simulate in test Default: <nil>
+	/*AwsSecretAccessKey - Descr: the aws secret key for uploading metrics to s3 Default: 
 */
-	NumReps interface{} `yaml:"num_reps,omitempty"`
+	AwsSecretAccessKey interface{} `yaml:"aws_secret_access_key,omitempty"`
+
+	/*PercentWrites - Descr: percentage of actual LRPs to write on each rep bulk loop Default: 5
+*/
+	PercentWrites interface{} `yaml:"percent_writes,omitempty"`
+
+	/*LogFile - Descr: file name for benchmark log output in the BOSH log dir Default: <nil>
+*/
+	LogFile interface{} `yaml:"log_file,omitempty"`
+
+	/*ClientTimeout - Descr: the http timeout for bbs client requests Default: <nil>
+*/
+	ClientTimeout interface{} `yaml:"client_timeout,omitempty"`
+
+	/*Sql - Descr: EXPERIMENTAL: connection string to use for SQL backend [username:password@tcp(1.1.1.1:1234)/database] Default: <nil>
+*/
+	Sql *Sql `yaml:"sql,omitempty"`
+
+	/*ActiveKeyLabel - Descr: the active key for encryption Default: <nil>
+*/
+	ActiveKeyLabel interface{} `yaml:"active_key_label,omitempty"`
 
 	/*AwsAccessKeyId - Descr: the aws access key for uploading metrics to s3 Default: 
 */
 	AwsAccessKeyId interface{} `yaml:"aws_access_key_id,omitempty"`
+
+	/*NumReps - Descr: the number of rep processes to simulate in test Default: <nil>
+*/
+	NumReps interface{} `yaml:"num_reps,omitempty"`
+
+	/*Etcd - Descr: Addresses pointing to the ETCD cluster Default: <nil>
+*/
+	Etcd *BenchmarkBbsEtcd `yaml:"etcd,omitempty"`
+
+	/*Bbs - Descr: PEM-encoded client certificate Default: <nil>
+*/
+	Bbs *Bbs `yaml:"bbs,omitempty"`
+
+	/*DatadogApiKey - Descr: the api key for emmitting datadog metrics Default: 
+*/
+	DatadogApiKey interface{} `yaml:"datadog_api_key,omitempty"`
+
+	/*DatadogAppKey - Descr: the application key for datadog metrics Default: 
+*/
+	DatadogAppKey interface{} `yaml:"datadog_app_key,omitempty"`
+
+	/*DesiredLrps - Descr: the number of single instance desired lrps to generate and fetch Default: <nil>
+*/
+	DesiredLrps interface{} `yaml:"desired_lrps,omitempty"`
+
+	/*NumTrials - Descr: the number of trials of each benchmark to average across Default: <nil>
+*/
+	NumTrials interface{} `yaml:"num_trials,omitempty"`
+
+	/*LogLevel - Descr: log level: debug, info, error or fatal Default: <nil>
+*/
+	LogLevel interface{} `yaml:"log_level,omitempty"`
 
 }

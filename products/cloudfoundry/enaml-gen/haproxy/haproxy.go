@@ -9,28 +9,28 @@ type HaProxy struct {
 */
 	SslPem interface{} `yaml:"ssl_pem,omitempty"`
 
-	/*DisableHttp - Descr: Disable port 80 traffic Default: false
-*/
-	DisableHttp interface{} `yaml:"disable_http,omitempty"`
-
 	/*SslCiphers - Descr: List of SSL Ciphers that are passed to HAProxy Default: ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-CBC-SHA256:ECDHE-RSA-AES256-CBC-SHA384:ECDHE-RSA-AES128-CBC-SHA:ECDHE-RSA-AES256-CBC-SHA:AES128-SHA256:AES128-SHA
 */
 	SslCiphers interface{} `yaml:"ssl_ciphers,omitempty"`
+
+	/*EnableStatsSocket - Descr: Whether to enable a socket that can be used to query errors and status Default: false
+*/
+	EnableStatsSocket interface{} `yaml:"enable_stats_socket,omitempty"`
+
+	/*DisableHttp - Descr: Disable port 80 traffic Default: false
+*/
+	DisableHttp interface{} `yaml:"disable_http,omitempty"`
 
 	/*LogToFile - Descr: Whether to send logs to a file instead of the default syslog Default: false
 */
 	LogToFile interface{} `yaml:"log_to_file,omitempty"`
 
-	/*BufferSizeBytes - Descr: Buffer size to use for requests, any requests larger than this (large cookies or query strings) will result in a gateway error Default: 16384
-*/
-	BufferSizeBytes interface{} `yaml:"buffer_size_bytes,omitempty"`
-
 	/*Dontlognull - Descr: Whether to disable logging of requests with no traffic (usually load-balancer TCP checks) Default: false
 */
 	Dontlognull interface{} `yaml:"dontlognull,omitempty"`
 
-	/*EnableStatsSocket - Descr: Whether to enable a socket that can be used to query errors and status Default: false
+	/*BufferSizeBytes - Descr: Buffer size to use for requests, any requests larger than this (large cookies or query strings) will result in a gateway error Default: 16384
 */
-	EnableStatsSocket interface{} `yaml:"enable_stats_socket,omitempty"`
+	BufferSizeBytes interface{} `yaml:"buffer_size_bytes,omitempty"`
 
 }

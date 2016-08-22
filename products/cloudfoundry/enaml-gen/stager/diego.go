@@ -5,7 +5,7 @@ package stager
 */
 type Diego struct {
 
-	/*Stager - Descr: Log level Default: info
+	/*Stager - Descr: External port to access the Cloud Controller Default: 9022
 */
 	Stager *Stager `yaml:"stager,omitempty"`
 

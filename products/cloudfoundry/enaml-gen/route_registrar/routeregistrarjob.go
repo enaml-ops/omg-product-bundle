@@ -5,7 +5,7 @@ package route_registrar
 */
 type RouteRegistrarJob struct {
 
-	/*Nats - Descr: TCP port of NATS servers Default: <nil>
+	/*Nats - Descr: IPs of each NATS cluster member Default: <nil>
 */
 	Nats *Nats `yaml:"nats,omitempty"`
 

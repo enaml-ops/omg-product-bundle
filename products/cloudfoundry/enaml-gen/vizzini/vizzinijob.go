@@ -5,7 +5,7 @@ package vizzini
 */
 type VizziniJob struct {
 
-	/*Vizzini - Descr: enable ssl for all communication with the bbs Default: true
+	/*Vizzini - Descr: PEM-encoded client key Default: <nil>
 */
 	Vizzini *Vizzini `yaml:"vizzini,omitempty"`
 

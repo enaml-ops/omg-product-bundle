@@ -5,7 +5,7 @@ package garden
 */
 type GardenJob struct {
 
-	/*Garden - Descr: URL pointing to the Docker registry to use to fetch Docker images. If unset, this will default to the Docker default. Default: <nil>
+	/*Garden - Descr: Maximum number of containers that garden will have running at the same time. It is not recommended to set this larger than 250. Default: 250
 */
 	Garden *Garden `yaml:"garden,omitempty"`
 

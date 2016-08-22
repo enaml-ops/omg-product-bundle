@@ -5,15 +5,19 @@ package metron_agent
 */
 type MetronAgent struct {
 
-	/*PreferredProtocol - Descr: Preferred protocol to droppler (udp|tls) Default: udp
+	/*Debug - Descr: boolean value to turn on verbose mode Default: false
 */
-	PreferredProtocol interface{} `yaml:"preferred_protocol,omitempty"`
+	Debug interface{} `yaml:"debug,omitempty"`
 
-	/*Deployment - Descr: Name of deployment (added as tag on all outgoing metrics) Default: <nil>
+	/*EnableBuffer - Descr: DEPRECATED Default: false
 */
-	Deployment interface{} `yaml:"deployment,omitempty"`
+	EnableBuffer interface{} `yaml:"enable_buffer,omitempty"`
 
-	/*Tcp - Descr: The maximum time that a message can stay in the batching buffer before being flushed Default: 100
+	/*Tls - Descr: TLS client certificate Default: 
+*/
+	Tls *MetronAgentTls `yaml:"tls,omitempty"`
+
+	/*Tcp - Descr: The number of bytes which can be buffered prior to TCP writes (applies to TLS over TCP) Default: 10240
 */
 	Tcp *Tcp `yaml:"tcp,omitempty"`
 
@@ -21,28 +25,24 @@ type MetronAgent struct {
 */
 	DropsondeIncomingPort interface{} `yaml:"dropsonde_incoming_port,omitempty"`
 
-	/*Zone - Descr: Availability zone where this agent is running Default: <nil>
+	/*Deployment - Descr: Name of deployment (added as tag on all outgoing metrics) Default: <nil>
 */
-	Zone interface{} `yaml:"zone,omitempty"`
-
-	/*Debug - Descr: boolean value to turn on verbose mode Default: false
-*/
-	Debug interface{} `yaml:"debug,omitempty"`
-
-	/*Tls - Descr: TLS client key Default: 
-*/
-	Tls *MetronAgentTls `yaml:"tls,omitempty"`
+	Deployment interface{} `yaml:"deployment,omitempty"`
 
 	/*BufferSize - Descr: DEPRECATED Default: 10000
 */
 	BufferSize interface{} `yaml:"buffer_size,omitempty"`
 
-	/*Logrotate - Descr: The number of files that logrotate will keep around on the VM Default: 7
+	/*Zone - Descr: Availability zone where this agent is running Default: <nil>
+*/
+	Zone interface{} `yaml:"zone,omitempty"`
+
+	/*Logrotate - Descr: The frequency in minutes which logrotate will rotate VM logs Default: 5
 */
 	Logrotate *Logrotate `yaml:"logrotate,omitempty"`
 
-	/*EnableBuffer - Descr: DEPRECATED Default: false
+	/*PreferredProtocol - Descr: Preferred protocol to droppler (udp|tls) Default: udp
 */
-	EnableBuffer interface{} `yaml:"enable_buffer,omitempty"`
+	PreferredProtocol interface{} `yaml:"preferred_protocol,omitempty"`
 
 }

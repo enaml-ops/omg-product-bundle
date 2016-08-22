@@ -5,24 +5,24 @@ package cloud_controller_worker
 */
 type Droplets struct {
 
-	/*WebdavConfig - Descr: The location of the webdav server eg: https://blobstore.com Default: 
+	/*WebdavConfig - Descr: The ca cert to use when communicating with webdav Default: 
 */
 	WebdavConfig *DropletsWebdavConfig `yaml:"webdav_config,omitempty"`
 
-	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
-*/
-	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
-
-	/*Cdn - Descr: Key pair name for signed download URIs Default: 
+	/*Cdn - Descr: Private key for signing download URIs Default: 
 */
 	Cdn *DropletsCdn `yaml:"cdn,omitempty"`
+
+	/*FogConnection - Descr: Fog connection hash Default: <nil>
+*/
+	FogConnection interface{} `yaml:"fog_connection,omitempty"`
 
 	/*DropletDirectoryKey - Descr: Directory (bucket) used store droplets.  It does not have be pre-created. Default: cc-droplets
 */
 	DropletDirectoryKey interface{} `yaml:"droplet_directory_key,omitempty"`
 
-	/*FogConnection - Descr: Fog connection hash Default: <nil>
+	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
 */
-	FogConnection interface{} `yaml:"fog_connection,omitempty"`
+	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
 
 }

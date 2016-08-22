@@ -5,21 +5,17 @@ package benchmark_bbs
 */
 type BenchmarkBbsEtcd struct {
 
-	/*Machines - Descr: Addresses pointing to the ETCD cluster Default: <nil>
+	/*ClientSessionCacheSize - Descr: capacity of the etcd client tls client cache Default: <nil>
 */
-	Machines interface{} `yaml:"machines,omitempty"`
+	ClientSessionCacheSize interface{} `yaml:"client_session_cache_size,omitempty"`
 
 	/*ClientCert - Descr: PEM-encoded client certificate Default: <nil>
 */
 	ClientCert interface{} `yaml:"client_cert,omitempty"`
 
-	/*CaCert - Descr: PEM-encoded root CA certificate Default: <nil>
+	/*Machines - Descr: Addresses pointing to the ETCD cluster Default: <nil>
 */
-	CaCert interface{} `yaml:"ca_cert,omitempty"`
-
-	/*ClientSessionCacheSize - Descr: capacity of the etcd client tls client cache Default: <nil>
-*/
-	ClientSessionCacheSize interface{} `yaml:"client_session_cache_size,omitempty"`
+	Machines interface{} `yaml:"machines,omitempty"`
 
 	/*RequireSsl - Descr: boolean to configure ssl connections with the etcd cluster Default: true
 */
@@ -28,5 +24,9 @@ type BenchmarkBbsEtcd struct {
 	/*ClientKey - Descr: PEM-encoded client key Default: <nil>
 */
 	ClientKey interface{} `yaml:"client_key,omitempty"`
+
+	/*CaCert - Descr: PEM-encoded root CA certificate Default: <nil>
+*/
+	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
 }

@@ -5,9 +5,13 @@ package haproxy
 */
 type HaproxyJob struct {
 
-	/*HaProxy - Descr: Whether to enable a socket that can be used to query errors and status Default: false
+	/*HaProxy - Descr: Disable port 80 traffic Default: false
 */
 	HaProxy *HaProxy `yaml:"ha_proxy,omitempty"`
+
+	/*Cc - Descr: Allow users to change the value of the app-level allow_ssh attribute Default: true
+*/
+	Cc *Cc `yaml:"cc,omitempty"`
 
 	/*AppSsh - Descr: External port for SSH access to application instances Default: 2222
 */
@@ -17,12 +21,8 @@ type HaproxyJob struct {
 */
 	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
 
-	/*Router - Descr: Listening port for Router Default: 80
+	/*Router - Descr: Array of the router IPs acting as the first group of HTTP/TCP backends Default: []
 */
 	Router *Router `yaml:"router,omitempty"`
-
-	/*Cc - Descr: Allow users to change the value of the app-level allow_ssh attribute Default: true
-*/
-	Cc *Cc `yaml:"cc,omitempty"`
 
 }

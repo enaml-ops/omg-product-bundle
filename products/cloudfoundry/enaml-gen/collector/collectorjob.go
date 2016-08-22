@@ -5,11 +5,11 @@ package collector
 */
 type CollectorJob struct {
 
-	/*Collector - Descr: enable Datadog plugin Default: false
+	/*Collector - Descr: the interval in seconds that varz is checked Default: 30
 */
 	Collector *Collector `yaml:"collector,omitempty"`
 
-	/*Nats - Descr: NATS TCP port Default: <nil>
+	/*Nats - Descr: IP of each NATS cluster member. Default: <nil>
 */
 	Nats *Nats `yaml:"nats,omitempty"`
 

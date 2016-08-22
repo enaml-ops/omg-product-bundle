@@ -5,7 +5,7 @@ package converger
 */
 type Diego struct {
 
-	/*Converger - Descr: capacity of the tls client cache Default: <nil>
+	/*Converger - Descr: the interval, in seconds, between kicks to tasks in seconds Default: 30
 */
 	Converger *Converger `yaml:"converger,omitempty"`
 

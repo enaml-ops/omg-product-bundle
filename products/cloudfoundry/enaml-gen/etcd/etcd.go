@@ -5,41 +5,61 @@ package etcd
 */
 type Etcd struct {
 
-	/*ElectionTimeoutInMilliseconds - Descr: Time without receiving a heartbeat before peer should attempt to become leader in milliseconds. See https://coreos.com/docs/cluster-management/debugging/etcd-tuning Default: 1000
+	/*ClientKey - Descr: PEM-encoded client key Default: <nil>
 */
-	ElectionTimeoutInMilliseconds interface{} `yaml:"election_timeout_in_milliseconds,omitempty"`
-
-	/*ServerKey - Descr: PEM-encoded server key Default: <nil>
-*/
-	ServerKey interface{} `yaml:"server_key,omitempty"`
-
-	/*PeerKey - Descr: PEM-encoded peer key Default: <nil>
-*/
-	PeerKey interface{} `yaml:"peer_key,omitempty"`
+	ClientKey interface{} `yaml:"client_key,omitempty"`
 
 	/*AdvertiseUrlsDnsSuffix - Descr: DNS suffix for all nodes in the etcd cluster Default: <nil>
 */
 	AdvertiseUrlsDnsSuffix interface{} `yaml:"advertise_urls_dns_suffix,omitempty"`
 
-	/*PeerCaCert - Descr: PEM-encoded peer CA certificate Default: <nil>
+	/*ClientCert - Descr: PEM-encoded client certificate Default: <nil>
 */
-	PeerCaCert interface{} `yaml:"peer_ca_cert,omitempty"`
+	ClientCert interface{} `yaml:"client_cert,omitempty"`
+
+	/*HeartbeatIntervalInMilliseconds - Descr: Interval between heartbeats in milliseconds. See https://coreos.com/docs/cluster-management/debugging/etcd-tuning Default: 50
+*/
+	HeartbeatIntervalInMilliseconds interface{} `yaml:"heartbeat_interval_in_milliseconds,omitempty"`
+
+	/*Cluster - Descr: Information about etcd cluster Default: <nil>
+*/
+	Cluster interface{} `yaml:"cluster,omitempty"`
+
+	/*PeerRequireSsl - Descr: enable ssl between etcd peers Default: true
+*/
+	PeerRequireSsl interface{} `yaml:"peer_require_ssl,omitempty"`
+
+	/*PeerKey - Descr: PEM-encoded peer key Default: <nil>
+*/
+	PeerKey interface{} `yaml:"peer_key,omitempty"`
 
 	/*ServerCert - Descr: PEM-encoded server certificate Default: <nil>
 */
 	ServerCert interface{} `yaml:"server_cert,omitempty"`
 
+	/*PeerCaCert - Descr: PEM-encoded peer CA certificate Default: <nil>
+*/
+	PeerCaCert interface{} `yaml:"peer_ca_cert,omitempty"`
+
+	/*ElectionTimeoutInMilliseconds - Descr: Time without receiving a heartbeat before peer should attempt to become leader in milliseconds. See https://coreos.com/docs/cluster-management/debugging/etcd-tuning Default: 1000
+*/
+	ElectionTimeoutInMilliseconds interface{} `yaml:"election_timeout_in_milliseconds,omitempty"`
+
+	/*DnsHealthCheckHost - Descr: Host to ping for confirmation of DNS resolution Default: consul.service.cf.internal
+*/
+	DnsHealthCheckHost interface{} `yaml:"dns_health_check_host,omitempty"`
+
 	/*PeerCert - Descr: PEM-encoded peer certificate Default: <nil>
 */
 	PeerCert interface{} `yaml:"peer_cert,omitempty"`
 
-	/*ClientKey - Descr: PEM-encoded client key Default: <nil>
+	/*Machines - Descr: Addresses of etcd machines Default: <nil>
 */
-	ClientKey interface{} `yaml:"client_key,omitempty"`
+	Machines interface{} `yaml:"machines,omitempty"`
 
-	/*Cluster - Descr: Information about etcd cluster Default: <nil>
+	/*ServerKey - Descr: PEM-encoded server key Default: <nil>
 */
-	Cluster interface{} `yaml:"cluster,omitempty"`
+	ServerKey interface{} `yaml:"server_key,omitempty"`
 
 	/*CaCert - Descr: PEM-encoded CA certificate Default: <nil>
 */
@@ -48,25 +68,5 @@ type Etcd struct {
 	/*RequireSsl - Descr: enable ssl for all communication with etcd Default: true
 */
 	RequireSsl interface{} `yaml:"require_ssl,omitempty"`
-
-	/*ClientCert - Descr: PEM-encoded client certificate Default: <nil>
-*/
-	ClientCert interface{} `yaml:"client_cert,omitempty"`
-
-	/*Machines - Descr: Addresses of etcd machines Default: <nil>
-*/
-	Machines interface{} `yaml:"machines,omitempty"`
-
-	/*PeerRequireSsl - Descr: enable ssl between etcd peers Default: true
-*/
-	PeerRequireSsl interface{} `yaml:"peer_require_ssl,omitempty"`
-
-	/*DnsHealthCheckHost - Descr: Host to ping for confirmation of DNS resolution Default: consul.service.cf.internal
-*/
-	DnsHealthCheckHost interface{} `yaml:"dns_health_check_host,omitempty"`
-
-	/*HeartbeatIntervalInMilliseconds - Descr: Interval between heartbeats in milliseconds. See https://coreos.com/docs/cluster-management/debugging/etcd-tuning Default: 50
-*/
-	HeartbeatIntervalInMilliseconds interface{} `yaml:"heartbeat_interval_in_milliseconds,omitempty"`
 
 }

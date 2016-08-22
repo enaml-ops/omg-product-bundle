@@ -5,7 +5,7 @@ package route_emitter
 */
 type Diego struct {
 
-	/*RouteEmitter - Descr: enable ssl for all communication with the bbs Default: true
+	/*RouteEmitter - Descr: Username for server authentication. Default: <nil>
 */
 	RouteEmitter *RouteEmitter `yaml:"route_emitter,omitempty"`
 

@@ -9,11 +9,11 @@ type EtcdMetricsServer struct {
 */
 	Etcd *Etcd `yaml:"etcd,omitempty"`
 
-	/*Nats - Descr: NATS server port Default: 4222
+	/*Nats - Descr: NATS server password Default: <nil>
 */
 	Nats *Nats `yaml:"nats,omitempty"`
 
-	/*Status - Descr: basic auth username for metrics server (leave empty for generated) Default: 
+	/*Status - Descr: listening port for metrics server Default: 5678
 */
 	Status *Status `yaml:"status,omitempty"`
 

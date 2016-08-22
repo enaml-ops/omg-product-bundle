@@ -5,7 +5,7 @@ package nfs_mounter
 */
 type NfsMounterJob struct {
 
-	/*NfsServer - Descr: Domain name for NFS idmapd Default: localdomain
+	/*NfsServer - Descr: Path to share from the remote NFS server (not used in an AWS deploy, use s3 instead) Default: <nil>
 */
 	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
 

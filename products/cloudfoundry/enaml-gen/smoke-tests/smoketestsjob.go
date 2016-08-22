@@ -5,7 +5,7 @@ package smoke_tests
 */
 type SmokeTestsJob struct {
 
-	/*SmokeTests - Descr: A token used by the tests when creating Apps / Spaces Default: CF_SMOKE_TESTS
+	/*SmokeTests - Descr: The Elastic Runtime API user's password Default: <nil>
 */
 	SmokeTests *SmokeTests `yaml:"smoke_tests,omitempty"`
 

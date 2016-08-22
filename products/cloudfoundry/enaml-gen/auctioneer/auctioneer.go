@@ -9,23 +9,23 @@ type Auctioneer struct {
 */
 	ListenAddr interface{} `yaml:"listen_addr,omitempty"`
 
+	/*StartingContainerWeight - Descr: Factor to bias against cells with starting containers (0.0 - 1.0) Default: 0.25
+*/
+	StartingContainerWeight interface{} `yaml:"starting_container_weight,omitempty"`
+
 	/*LogLevel - Descr: Log level Default: info
 */
 	LogLevel interface{} `yaml:"log_level,omitempty"`
-
-	/*DropsondePort - Descr: local metron agent's port Default: 3457
-*/
-	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
 
 	/*CellStateTimeout - Descr: Timeout applied to HTTP requests to the Cell State endpoint. Default: 1s
 */
 	CellStateTimeout interface{} `yaml:"cell_state_timeout,omitempty"`
 
-	/*StartingContainerWeight - Descr: Factor to bias against cells with starting containers (0.0 - 1.0) Default: 0.25
+	/*DropsondePort - Descr: local metron agent's port Default: 3457
 */
-	StartingContainerWeight interface{} `yaml:"starting_container_weight,omitempty"`
+	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
 
-	/*Bbs - Descr: maximum number of idle http connections Default: <nil>
+	/*Bbs - Descr: PEM-encoded client certificate Default: <nil>
 */
 	Bbs *Bbs `yaml:"bbs,omitempty"`
 

@@ -9,24 +9,24 @@ type Packages struct {
 */
 	FogConnection interface{} `yaml:"fog_connection,omitempty"`
 
-	/*Cdn - Descr: Key pair name for signed download URIs Default: 
-*/
-	Cdn *PackagesCdn `yaml:"cdn,omitempty"`
-
-	/*WebdavConfig - Descr: The basic auth user that CC uses to connect to the admin endpoint on webdav Default: 
+	/*WebdavConfig - Descr: The ca cert to use when communicating with webdav Default: 
 */
 	WebdavConfig *PackagesWebdavConfig `yaml:"webdav_config,omitempty"`
 
-	/*MaxPackageSize - Descr: Maximum size of application package Default: 1073741824
+	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
 */
-	MaxPackageSize interface{} `yaml:"max_package_size,omitempty"`
+	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
 
 	/*AppPackageDirectoryKey - Descr: Directory (bucket) used store app packages.  It does not have be pre-created. Default: cc-packages
 */
 	AppPackageDirectoryKey interface{} `yaml:"app_package_directory_key,omitempty"`
 
-	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
+	/*MaxPackageSize - Descr: Maximum size of application package Default: 1073741824
 */
-	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
+	MaxPackageSize interface{} `yaml:"max_package_size,omitempty"`
+
+	/*Cdn - Descr: Key pair name for signed download URIs Default: 
+*/
+	Cdn *PackagesCdn `yaml:"cdn,omitempty"`
 
 }

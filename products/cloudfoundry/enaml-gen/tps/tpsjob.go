@@ -5,7 +5,7 @@ package tps
 */
 type TpsJob struct {
 
-	/*Diego - Descr: URL of Traffic controller Default: ws://loggregator-trafficcontroller.service.cf.internal:8081
+	/*Diego - Descr: when connecting over https, ignore bad ssl certificates Default: false
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

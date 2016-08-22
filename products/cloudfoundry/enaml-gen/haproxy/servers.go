@@ -5,12 +5,12 @@ package haproxy
 */
 type Servers struct {
 
-	/*Z2 - Descr: Array of the router IPs acting as the second group of HTTP/TCP backends Default: []
-*/
-	Z2 interface{} `yaml:"z2,omitempty"`
-
 	/*Z1 - Descr: Array of the router IPs acting as the first group of HTTP/TCP backends Default: []
 */
 	Z1 interface{} `yaml:"z1,omitempty"`
+
+	/*Z2 - Descr: Array of the router IPs acting as the second group of HTTP/TCP backends Default: []
+*/
+	Z2 interface{} `yaml:"z2,omitempty"`
 
 }

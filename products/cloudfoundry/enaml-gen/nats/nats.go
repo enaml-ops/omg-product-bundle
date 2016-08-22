@@ -5,13 +5,21 @@ package nats
 */
 type Nats struct {
 
-	/*MonitorPort - Descr: Port for varz and connz monitoring. 0 means disabled. Default: 0
+	/*ProfPort - Descr: Port for pprof. 0 means disabled. Default: 0
 */
-	MonitorPort interface{} `yaml:"monitor_port,omitempty"`
+	ProfPort interface{} `yaml:"prof_port,omitempty"`
+
+	/*User - Descr: Username for server authentication. Default: <nil>
+*/
+	User interface{} `yaml:"user,omitempty"`
 
 	/*AuthorizationTimeout - Descr: After accepting a connection, wait up to this many seconds for credentials. Default: 15
 */
 	AuthorizationTimeout interface{} `yaml:"authorization_timeout,omitempty"`
+
+	/*Debug - Descr: Enable debug logging output. Default: false
+*/
+	Debug interface{} `yaml:"debug,omitempty"`
 
 	/*Trace - Descr: Enable trace logging output. Default: false
 */
@@ -25,20 +33,12 @@ type Nats struct {
 */
 	Machines interface{} `yaml:"machines,omitempty"`
 
-	/*Debug - Descr: Enable debug logging output. Default: false
+	/*MonitorPort - Descr: Port for varz and connz monitoring. 0 means disabled. Default: 0
 */
-	Debug interface{} `yaml:"debug,omitempty"`
-
-	/*User - Descr: Username for server authentication. Default: <nil>
-*/
-	User interface{} `yaml:"user,omitempty"`
+	MonitorPort interface{} `yaml:"monitor_port,omitempty"`
 
 	/*Password - Descr: Password for server authentication. Default: <nil>
 */
 	Password interface{} `yaml:"password,omitempty"`
-
-	/*ProfPort - Descr: Port for pprof. 0 means disabled. Default: 0
-*/
-	ProfPort interface{} `yaml:"prof_port,omitempty"`
 
 }

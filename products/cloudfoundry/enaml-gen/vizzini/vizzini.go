@@ -5,18 +5,6 @@ package vizzini
 */
 type Vizzini struct {
 
-	/*RoutableDomainSuffix - Descr: The deployment's routable domain name Default: <nil>
-*/
-	RoutableDomainSuffix interface{} `yaml:"routable_domain_suffix,omitempty"`
-
-	/*Verbose - Descr: Run tests in verbose mode Default: false
-*/
-	Verbose interface{} `yaml:"verbose,omitempty"`
-
-	/*Bbs - Descr: enable ssl for all communication with the bbs Default: true
-*/
-	Bbs *Bbs `yaml:"bbs,omitempty"`
-
 	/*Ssh - Descr: Shared secret for the SSH proxy's Diego authenticator Default: <nil>
 */
 	Ssh *Ssh `yaml:"ssh,omitempty"`
@@ -25,8 +13,20 @@ type Vizzini struct {
 */
 	EventuallyTimeout interface{} `yaml:"eventually_timeout,omitempty"`
 
+	/*RoutableDomainSuffix - Descr: The deployment's routable domain name Default: <nil>
+*/
+	RoutableDomainSuffix interface{} `yaml:"routable_domain_suffix,omitempty"`
+
 	/*Nodes - Descr: The number of nodes to run the tests with Default: 4
 */
 	Nodes interface{} `yaml:"nodes,omitempty"`
+
+	/*Verbose - Descr: Run tests in verbose mode Default: false
+*/
+	Verbose interface{} `yaml:"verbose,omitempty"`
+
+	/*Bbs - Descr: PEM-encoded client key Default: <nil>
+*/
+	Bbs *Bbs `yaml:"bbs,omitempty"`
 
 }

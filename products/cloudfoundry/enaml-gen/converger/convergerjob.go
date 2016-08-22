@@ -5,7 +5,7 @@ package converger
 */
 type ConvergerJob struct {
 
-	/*Diego - Descr: capacity of the tls client cache Default: <nil>
+	/*Diego - Descr: the interval, in seconds, between kicks to tasks in seconds Default: 30
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

@@ -5,7 +5,15 @@ package blobstore
 */
 type Blobstore struct {
 
-	/*Tls - Descr: The PEM-encoded private key for signing TLS/SSL traffic Default: <nil>
+	/*MaxUploadSize - Descr: Max allowed file size for upload Default: 5000m
+*/
+	MaxUploadSize interface{} `yaml:"max_upload_size,omitempty"`
+
+	/*Port - Descr: TCP port on which the blobstore server (nginx) listens Default: 80
+*/
+	Port interface{} `yaml:"port,omitempty"`
+
+	/*Tls - Descr: The TCP port on which the internal blobstore server listens Default: 443
 */
 	Tls *Tls `yaml:"tls,omitempty"`
 
@@ -23,13 +31,5 @@ Example:
 	/*SecureLink - Descr: The secret used for signing URLs Default: <nil>
 */
 	SecureLink *SecureLink `yaml:"secure_link,omitempty"`
-
-	/*MaxUploadSize - Descr: Max allowed file size for upload Default: 5000m
-*/
-	MaxUploadSize interface{} `yaml:"max_upload_size,omitempty"`
-
-	/*Port - Descr: TCP port on which the blobstore server (nginx) listens Default: 80
-*/
-	Port interface{} `yaml:"port,omitempty"`
 
 }

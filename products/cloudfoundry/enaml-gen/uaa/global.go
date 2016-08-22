@@ -5,52 +5,52 @@ package uaa
 */
 type Global struct {
 
-	/*RequireSpecialCharacter - Descr: Minimum number of special characters required for password to be considered valid Default: 0
+	/*LockoutPeriodSeconds - Descr: Number of seconds to lock out an account when lockoutAfterFailures failures is exceeded Default: 300
 */
-	RequireSpecialCharacter interface{} `yaml:"requireSpecialCharacter,omitempty"`
-
-	/*RequireDigit - Descr: Minimum number of digits required for password to be considered valid Default: 0
-*/
-	RequireDigit interface{} `yaml:"requireDigit,omitempty"`
-
-	/*CountFailuresWithinSeconds - Descr: Number of seconds in which lockoutAfterFailures failures must occur in order for account to be locked Default: 3600
-*/
-	CountFailuresWithinSeconds interface{} `yaml:"countFailuresWithinSeconds,omitempty"`
-
-	/*RequireUpperCaseCharacter - Descr: Minimum number of uppercase characters required for password to be considered valid Default: 0
-*/
-	RequireUpperCaseCharacter interface{} `yaml:"requireUpperCaseCharacter,omitempty"`
-
-	/*LockoutAfterFailures - Descr: Number of allowed failures before account is locked Default: 5
-*/
-	LockoutAfterFailures interface{} `yaml:"lockoutAfterFailures,omitempty"`
-
-	/*RequireLowerCaseCharacter - Descr: Minimum number of lowercase characters required for password to be considered valid Default: 0
-*/
-	RequireLowerCaseCharacter interface{} `yaml:"requireLowerCaseCharacter,omitempty"`
-
-	/*RefreshTokenValiditySeconds - Descr: The global refresh token validity for all zones if nothing is configured on the client Default: 2592000
-*/
-	RefreshTokenValiditySeconds interface{} `yaml:"refreshTokenValiditySeconds,omitempty"`
+	LockoutPeriodSeconds interface{} `yaml:"lockoutPeriodSeconds,omitempty"`
 
 	/*MaxLength - Descr: Maximum number of characters required for password to be considered valid Default: 255
 */
 	MaxLength interface{} `yaml:"maxLength,omitempty"`
 
-	/*MinLength - Descr: Minimum number of characters required for password to be considered valid Default: 0
+	/*RequireDigit - Descr: Minimum number of digits required for password to be considered valid Default: 0
 */
-	MinLength interface{} `yaml:"minLength,omitempty"`
+	RequireDigit interface{} `yaml:"requireDigit,omitempty"`
+
+	/*LockoutAfterFailures - Descr: Number of allowed failures before account is locked Default: 5
+*/
+	LockoutAfterFailures interface{} `yaml:"lockoutAfterFailures,omitempty"`
 
 	/*ExpirePasswordInMonths - Descr: Number of months after which current password expires Default: 0
 */
 	ExpirePasswordInMonths interface{} `yaml:"expirePasswordInMonths,omitempty"`
 
-	/*LockoutPeriodSeconds - Descr: Number of seconds to lock out an account when lockoutAfterFailures failures is exceeded Default: 300
+	/*MinLength - Descr: Minimum number of characters required for password to be considered valid Default: 0
 */
-	LockoutPeriodSeconds interface{} `yaml:"lockoutPeriodSeconds,omitempty"`
+	MinLength interface{} `yaml:"minLength,omitempty"`
+
+	/*CountFailuresWithinSeconds - Descr: Number of seconds in which lockoutAfterFailures failures must occur in order for account to be locked Default: 3600
+*/
+	CountFailuresWithinSeconds interface{} `yaml:"countFailuresWithinSeconds,omitempty"`
+
+	/*RefreshTokenValiditySeconds - Descr: The global refresh token validity for all zones if nothing is configured on the client Default: 2592000
+*/
+	RefreshTokenValiditySeconds interface{} `yaml:"refreshTokenValiditySeconds,omitempty"`
 
 	/*AccessTokenValiditySeconds - Descr: The global access token validity for all zones if nothing is configured on the client Default: 43200
 */
 	AccessTokenValiditySeconds interface{} `yaml:"accessTokenValiditySeconds,omitempty"`
+
+	/*RequireUpperCaseCharacter - Descr: Minimum number of uppercase characters required for password to be considered valid Default: 0
+*/
+	RequireUpperCaseCharacter interface{} `yaml:"requireUpperCaseCharacter,omitempty"`
+
+	/*RequireLowerCaseCharacter - Descr: Minimum number of lowercase characters required for password to be considered valid Default: 0
+*/
+	RequireLowerCaseCharacter interface{} `yaml:"requireLowerCaseCharacter,omitempty"`
+
+	/*RequireSpecialCharacter - Descr: Minimum number of special characters required for password to be considered valid Default: 0
+*/
+	RequireSpecialCharacter interface{} `yaml:"requireSpecialCharacter,omitempty"`
 
 }

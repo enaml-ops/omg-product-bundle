@@ -5,9 +5,9 @@ package uaa
 */
 type Smtp struct {
 
-	/*Password - Descr: SMTP server password Default: <nil>
+	/*User - Descr: SMTP server username Default: <nil>
 */
-	Password interface{} `yaml:"password,omitempty"`
+	User interface{} `yaml:"user,omitempty"`
 
 	/*Port - Descr: SMTP server port Default: 2525
 */
@@ -17,8 +17,8 @@ type Smtp struct {
 */
 	Host interface{} `yaml:"host,omitempty"`
 
-	/*User - Descr: SMTP server username Default: <nil>
+	/*Password - Descr: SMTP server password Default: <nil>
 */
-	User interface{} `yaml:"user,omitempty"`
+	Password interface{} `yaml:"password,omitempty"`
 
 }

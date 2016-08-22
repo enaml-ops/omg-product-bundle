@@ -5,7 +5,7 @@ package blobstore
 */
 type BlobstoreJob struct {
 
-	/*Blobstore - Descr: TCP port on which the blobstore server (nginx) listens Default: 80
+	/*Blobstore - Descr: Max allowed file size for upload Default: 5000m
 */
 	Blobstore *Blobstore `yaml:"blobstore,omitempty"`
 

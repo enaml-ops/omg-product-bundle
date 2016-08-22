@@ -5,7 +5,7 @@ package bbs
 */
 type Diego struct {
 
-	/*Bbs - Descr: PEM-encoded client key Default: <nil>
+	/*Bbs - Descr: Log level Default: info
 */
 	Bbs *Bbs `yaml:"bbs,omitempty"`
 
