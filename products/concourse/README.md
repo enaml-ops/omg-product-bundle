@@ -31,13 +31,13 @@ Verify installation with:
 --ssl-ignore \
 --print-manifest \
 concourse-plugin-osx \
+--web-vm-type medium \
 --web-ip 192.168.10.31 \
 --web-ip 192.168.10.32 \
---web-vm-type medium \
+--external-url http://10.0.100.1:8080 \
 --worker-vm-type large.cpu \
 --database-vm-type large.cpu \
 --network-name concourse \
---concourse-ip 10.0.100.1 \
 --concourse-username concourse \
 --az z1 \
 --database-storage-type medium \

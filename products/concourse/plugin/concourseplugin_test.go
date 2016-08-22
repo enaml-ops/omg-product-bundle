@@ -37,7 +37,7 @@ var _ = Describe("given ConcoursePlugin Plugin", func() {
 				myconcourse = myplugin.GetProduct([]string{
 					"test",
 					"--network-name", "private",
-					"--concourse-ip", "concourse.caleb-washburn.com",
+					"--external-url", "http://concourse.caleb-washburn.com",
 					"--concourse-username", "concourse",
 					"--concourse-password", "concourse",
 					"--az", "z1",

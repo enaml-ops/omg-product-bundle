@@ -6,6 +6,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 
 	. "github.com/enaml-ops/omg-product-bundle/products/concourse"
+	"github.com/enaml-ops/omg-product-bundle/products/concourse/enaml-gen/atc"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -39,6 +40,15 @@ var _ = Describe("Concourse Deployment", func() {
 				yaml.Unmarshal(b, &m)
 				Ω(m).ShouldNot(HaveKey("tls_key"))
 				Ω(m).ShouldNot(HaveKey("tls_cert"))
+			})
+		})
+		Context("when called with an external URL", func() {
+			const controlURL = "https://myconcourse.com"
+			It("sets the URL correctly", func() {
+				deployment.ConcourseURL = controlURL
+				job := deployment.CreateAtcJob()
+				props := job.Properties.(atc.AtcJob)
+				Ω(props.ExternalUrl).Should(Equal(controlURL))
 			})
 		})
 	})

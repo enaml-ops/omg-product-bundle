@@ -1,7 +1,6 @@
 package concourseplugin
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/codegangsta/cli"
@@ -28,7 +27,7 @@ const (
 
 	concoursePassword   string = "concourse-password"
 	concourseUsername   string = "concourse-username"
-	concourseIP         string = "concourse-ip"
+	externalURL         string = "external-url"
 	webIPs              string = "web-ip"
 	networkName         string = "network-name"
 	az                  string = "az"
@@ -57,7 +56,7 @@ func (s *ConcoursePlugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: deploymentName, Value: "concourse", Usage: "deployment name"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: concourseUsername, Usage: "concourse user id"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: concoursePassword, Usage: "concourse password"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: concourseIP, Usage: "ip to access concourse"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: externalURL, Usage: "URL to access concourse"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: az, Usage: "list of AZ names to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: networkName, Usage: "the name of the network to use"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: webIPs, Usage: "ips for web jobs"},
@@ -122,7 +121,7 @@ func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) enaml.DeploymentM
 		deployment.ConcoursePassword = utils.NewPassword(20)
 	}
 	deployment.ConcourseUserName = c.String(concourseUsername)
-	deployment.ConcourseURL = fmt.Sprintf("https://%s/", c.String(concourseIP))
+	deployment.ConcourseURL = c.String(externalURL)
 	deployment.NetworkName = c.String(networkName)
 	deployment.WebIPs = c.StringSlice(webIPs)
 	deployment.WebVMType = c.String(webVMType)
