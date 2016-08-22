@@ -5,20 +5,20 @@ package acceptance_tests
 */
 type Standalone struct {
 
+	/*Port - Descr: Port used to communicate with MySQL nodes Default: 3306
+*/
+	Port interface{} `yaml:"port,omitempty"`
+
 	/*Host - Descr: Hostname of proxy or load balancer used to communicate with MySQL nodes in a standalone deployment Default: <nil>
 */
 	Host interface{} `yaml:"host,omitempty"`
-
-	/*Username - Descr: MySQL admin username Default: root
-*/
-	Username interface{} `yaml:"username,omitempty"`
 
 	/*Password - Descr: MySQL admin password Default: <nil>
 */
 	Password interface{} `yaml:"password,omitempty"`
 
-	/*Port - Descr: Port used to communicate with MySQL nodes Default: 3306
+	/*Username - Descr: MySQL admin username Default: root
 */
-	Port interface{} `yaml:"port,omitempty"`
+	Username interface{} `yaml:"username,omitempty"`
 
 }

@@ -59,9 +59,11 @@ func (s *MySQLProxy) newMySQLProxyJob() enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "proxy",
 		Release: "cf-mysql",
-		Properties: &proxy.Proxy{
-			ApiUsername:      s.APIUsername,
-			ApiPassword:      s.APIPassword,
+		Properties: &proxy.ProxyJob{
+			Proxy: &proxy.Proxy{
+				ApiUsername: s.APIUsername,
+				ApiPassword: s.APIPassword,
+			},
 			ExternalHost:     s.ExternalHost,
 			ClusterIps:       s.ClusterIPs,
 			SyslogAggregator: s.SyslogAggregator,

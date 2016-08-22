@@ -5,12 +5,12 @@ package mysql
 */
 type BootstrapEndpoint struct {
 
-	/*Username - Descr: Username used by the bootstrap endpoints for Basic Auth Default: <nil>
-*/
-	Username interface{} `yaml:"username,omitempty"`
-
 	/*Password - Descr: Password used by the bootstrap endpoints for Basic Auth Default: <nil>
 */
 	Password interface{} `yaml:"password,omitempty"`
+
+	/*Username - Descr: Username used by the bootstrap endpoints for Basic Auth Default: <nil>
+*/
+	Username interface{} `yaml:"username,omitempty"`
 
 }

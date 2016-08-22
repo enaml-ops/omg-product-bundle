@@ -13,13 +13,13 @@ type Cf struct {
 */
 	ApiUrl interface{} `yaml:"api_url,omitempty"`
 
-	/*AdminUsername - Descr: Username of the admin user Default: <nil>
-*/
-	AdminUsername interface{} `yaml:"admin_username,omitempty"`
-
 	/*AdminPassword - Descr: Password of the admin user Default: <nil>
 */
 	AdminPassword interface{} `yaml:"admin_password,omitempty"`
+
+	/*AdminUsername - Descr: Username of the admin user Default: <nil>
+*/
+	AdminUsername interface{} `yaml:"admin_username,omitempty"`
 
 	/*AppsDomain - Descr: Shared domain for pushed apps Default: <nil>
 */

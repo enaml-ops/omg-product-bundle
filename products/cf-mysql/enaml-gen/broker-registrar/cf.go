@@ -9,13 +9,13 @@ type Cf struct {
 */
 	ApiUrl interface{} `yaml:"api_url,omitempty"`
 
-	/*AdminUsername - Descr: Username of the admin user Default: <nil>
-*/
-	AdminUsername interface{} `yaml:"admin_username,omitempty"`
-
 	/*SkipSslValidation - Descr: Skip SSL validation when connecting to Cloud Foundry API Default: false
 */
 	SkipSslValidation interface{} `yaml:"skip_ssl_validation,omitempty"`
+
+	/*AdminUsername - Descr: Username of the admin user Default: <nil>
+*/
+	AdminUsername interface{} `yaml:"admin_username,omitempty"`
 
 	/*AdminPassword - Descr: Password of the admin user Default: <nil>
 */

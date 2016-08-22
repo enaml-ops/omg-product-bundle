@@ -36,7 +36,7 @@ func (b *bootstrap) ToInstanceGroup() *enaml.InstanceGroup {
 			{
 				Name:    "bootstrap",
 				Release: CFMysqlReleaseName,
-				Properties: &bstraplib.Bootstrap{
+				Properties: &bstraplib.BootstrapJob{
 					ClusterIps:             b.MySQLIPs,
 					DatabaseStartupTimeout: 1200,
 					BootstrapEndpoint: &bstraplib.BootstrapEndpoint{

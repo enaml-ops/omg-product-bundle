@@ -113,7 +113,7 @@ func (s *MySQL) newMySQLJob() enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "mysql",
 		Release: "cf-mysql",
-		Properties: &mysqllib.Mysql{
+		Properties: &mysqllib.MysqlJob{
 			AdminPassword:          s.AdminPassword,
 			ClusterIps:             s.NetworkIPs,
 			DatabaseStartupTimeout: s.DatabaseStartupTimeout,

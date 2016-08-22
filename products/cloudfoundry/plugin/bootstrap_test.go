@@ -95,7 +95,7 @@ var _ = Describe("given a bootstrap partition", func() {
 			job := group.GetJobByName("bootstrap")
 			Ω(job.Release).Should(Equal(CFMysqlReleaseName))
 
-			props := job.Properties.(*bootstrap.Bootstrap)
+			props := job.Properties.(*bootstrap.BootstrapJob)
 			Ω(props.ClusterIps).Should(ConsistOf("10.0.0.26", "10.0.0.27", "10.0.0.28"))
 			Ω(props.DatabaseStartupTimeout).Should(Equal(1200))
 			Ω(props.BootstrapEndpoint.Username).Should(Equal("user"))

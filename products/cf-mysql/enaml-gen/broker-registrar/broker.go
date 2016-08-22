@@ -5,29 +5,29 @@ package broker_registrar
 */
 type Broker struct {
 
-	/*Services - Descr: Basic plans object for registering Default: <nil>
+	/*Password - Descr: Basic Auth password for the service broker Default: <nil>
 */
-	Services interface{} `yaml:"services,omitempty"`
-
-	/*Name - Descr: Name of the service broker Default: <nil>
-*/
-	Name interface{} `yaml:"name,omitempty"`
+	Password interface{} `yaml:"password,omitempty"`
 
 	/*Protocol - Descr: Protocol (http/https) provided to the Cloud Controller when registering/deregistering the broker Default: https
 */
 	Protocol interface{} `yaml:"protocol,omitempty"`
 
-	/*Password - Descr: Basic Auth password for the service broker Default: <nil>
+	/*Port - Descr: Port for the service broker Default: 443
 */
-	Password interface{} `yaml:"password,omitempty"`
+	Port interface{} `yaml:"port,omitempty"`
+
+	/*Name - Descr: Name of the service broker Default: <nil>
+*/
+	Name interface{} `yaml:"name,omitempty"`
 
 	/*Host - Descr: Host address of the service broker Default: <nil>
 */
 	Host interface{} `yaml:"host,omitempty"`
 
-	/*Port - Descr: Port for the service broker Default: 443
+	/*Services - Descr: Basic plans object for registering Default: <nil>
 */
-	Port interface{} `yaml:"port,omitempty"`
+	Services interface{} `yaml:"services,omitempty"`
 
 	/*Username - Descr: Basic Auth username for the service broker Default: <nil>
 */

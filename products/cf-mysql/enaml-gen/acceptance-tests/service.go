@@ -5,13 +5,13 @@ package acceptance_tests
 */
 type Service struct {
 
-	/*Plans - Descr: Array of MySQL plans Default: <nil>
-*/
-	Plans interface{} `yaml:"plans,omitempty"`
-
 	/*Name - Descr: Name of the MySQL service Default: <nil>
 */
 	Name interface{} `yaml:"name,omitempty"`
+
+	/*Plans - Descr: Array of MySQL plans Default: <nil>
+*/
+	Plans interface{} `yaml:"plans,omitempty"`
 
 	/*MaxUserConnectionsDefault - Descr: number of user connections to allow in a plan if not specified Default: 40
 */
