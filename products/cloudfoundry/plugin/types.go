@@ -328,6 +328,8 @@ type CloudControllerWorkerPartition struct {
 	CCDBUsername          string
 	CCDBPassword          string
 	MySQLProxyIP          string
+	NATSPassword          string
+	NATSMachines          []string
 }
 
 //CloudControllerPartition - Cloud Controller Partition

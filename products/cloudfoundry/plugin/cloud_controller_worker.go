@@ -37,6 +37,8 @@ func NewCloudControllerWorkerPartition(c *cli.Context) InstanceGrouper {
 		CCDBUsername:          c.String("db-ccdb-username"),
 		CCDBPassword:          c.String("db-ccdb-password"),
 		MySQLProxyIP:          proxyIP,
+		NATSPassword:          c.String("nats-pass"),
+		NATSMachines:          c.StringSlice("nats-machine-ip"),
 	}
 }
 
@@ -162,13 +164,18 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 					},
 				},
 			},
+			Nats: &ccworkerlib.Nats{
+				User:     "nats",
+				Port:     4222,
+				Password: c.NATSPassword,
+				Machines: c.NATSMachines,
+			},
 		},
 	}
 }
 
 //HasValidValues - Check if valid values has been populated
 func (s *CloudControllerWorkerPartition) HasValidValues() bool {
-
 	lo.G.Debugf("checking '%s' for valid flags", "cloud controller worker")
 
 	if len(s.AZs) <= 0 {
@@ -194,6 +201,12 @@ func (s *CloudControllerWorkerPartition) HasValidValues() bool {
 	if s.Metron.Secret == "" {
 		lo.G.Debugf("could not find a valid metron secret '%v'", s.Metron.Secret)
 	}
+	if len(s.NATSMachines) == 0 {
+		lo.G.Debug("missing NATS IPs")
+	}
+	if s.NATSPassword == "" {
+		lo.G.Debug("missing NATS password")
+	}
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&
@@ -201,6 +214,7 @@ func (s *CloudControllerWorkerPartition) HasValidValues() bool {
 		s.Metron.Secret != "" &&
 		s.NetworkName != "" &&
 		s.NFSMounter.hasValidValues() &&
-		s.ConsulAgent.HasValidValues())
-
+		s.ConsulAgent.HasValidValues()) &&
+		len(s.NATSMachines) > 0 &&
+		s.NATSPassword != ""
 }
