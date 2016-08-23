@@ -194,12 +194,6 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			fs := job.Properties.(*file_server.FileServerJob)
 
 			Ω(fs.Diego.Ssl.SkipCertVerify).Should(BeFalse())
-
-			Ω(fs.Diego.FileServer.ListenAddr).Should(Equal("0.0.0.0:12345"))
-			Ω(fs.Diego.FileServer.StaticDirectory).Should(Equal("/foo/bar/baz"))
-			Ω(fs.Diego.FileServer.DebugAddr).Should(Equal("10.0.1.2:22222"))
-			Ω(fs.Diego.FileServer.LogLevel).Should(Equal("debug"))
-			Ω(fs.Diego.FileServer.DropsondePort).Should(Equal(3458))
 		})
 
 		It("then it should allow the user to configure nsync", func() {

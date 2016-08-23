@@ -216,13 +216,6 @@ func (d *diegoBrain) newFileServer() *enaml.InstanceJob {
 		Properties: &file_server.FileServerJob{
 			Diego: &file_server.Diego{
 				Ssl: &file_server.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
-				FileServer: &file_server.FileServer{
-					ListenAddr:      d.FSListenAddr,
-					DebugAddr:       d.FSDebugAddr,
-					LogLevel:        d.FSLogLevel,
-					StaticDirectory: d.FSStaticDirectory,
-					DropsondePort:   d.MetronPort,
-				},
 			},
 		},
 	}
