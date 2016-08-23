@@ -5,7 +5,7 @@ package nsync
 */
 type Diego struct {
 
-	/*Nsync - Descr: address at which to serve debug info Default: 0.0.0.0:17007
+	/*Nsync - Descr: PEM-encoded client certificate Default: <nil>
 */
 	Nsync *Nsync `yaml:"nsync,omitempty"`
 

@@ -5,12 +5,12 @@ package dea_next
 */
 type InstanceBandwidthLimit struct {
 
-	/*Burst - Descr: Network bandwidth burst limit for running instances in bytes Default: <nil>
-*/
-	Burst interface{} `yaml:"burst,omitempty"`
-
 	/*Rate - Descr: Network bandwidth limit for running instances in bytes per second Default: <nil>
 */
 	Rate interface{} `yaml:"rate,omitempty"`
+
+	/*Burst - Descr: Network bandwidth burst limit for running instances in bytes Default: <nil>
+*/
+	Burst interface{} `yaml:"burst,omitempty"`
 
 }

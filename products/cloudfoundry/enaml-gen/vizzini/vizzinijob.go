@@ -5,7 +5,7 @@ package vizzini
 */
 type VizziniJob struct {
 
-	/*Vizzini - Descr: PEM-encoded client key Default: <nil>
+	/*Vizzini - Descr: The number of nodes to run the tests with Default: 4
 */
 	Vizzini *Vizzini `yaml:"vizzini,omitempty"`
 

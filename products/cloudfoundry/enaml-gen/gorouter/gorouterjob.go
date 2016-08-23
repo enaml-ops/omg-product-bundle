@@ -5,23 +5,15 @@ package gorouter
 */
 type GorouterJob struct {
 
-	/*Nats - Descr:  Default: <nil>
-*/
-	Nats *Nats `yaml:"nats,omitempty"`
-
-	/*MetronEndpoint - Descr: The port used to emit legacy messages to the Metron agent. Default: 3456
-*/
-	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
-
 	/*RequestTimeoutInSeconds - Descr: Timeout in seconds for Router -> Endpoint roundtrip. Default: 900
 */
 	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
 
-	/*RoutingApi - Descr: Port on which routing-api is running. Default: 3000
+	/*Nats - Descr:  Default: <nil>
 */
-	RoutingApi *RoutingApi `yaml:"-"`
+	Nats *Nats `yaml:"nats,omitempty"`
 
-	/*Uaa - Descr: Port on which UAA is running. Default: 8080
+	/*Uaa - Descr: Password for UAA client for the gorouter. Default: <nil>
 */
 	Uaa *Uaa `yaml:"uaa,omitempty"`
 
@@ -29,8 +21,16 @@ type GorouterJob struct {
 */
 	Dropsonde *Dropsonde `yaml:"dropsonde,omitempty"`
 
-	/*Router - Descr: The number of files that logrotate will keep around on the VM Default: 7
+	/*Router - Descr: Host to ping for confirmation of DNS resolution, only used when Routing API is enabled Default: consul.service.cf.internal
 */
 	Router *Router `yaml:"router,omitempty"`
+
+	/*RoutingApi - Descr: Port on which routing-api is running. Default: 3000
+*/
+	RoutingApi *RoutingApi `yaml:"-"`
+
+	/*MetronEndpoint - Descr: The port used to emit legacy messages to the Metron agent. Default: 3456
+*/
+	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
 
 }

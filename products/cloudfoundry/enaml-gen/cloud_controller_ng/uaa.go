@@ -5,20 +5,20 @@ package cloud_controller_ng
 */
 type Uaa struct {
 
-	/*Clients - Descr: Used for fetching usernames from UAA. Default: <nil>
+	/*Clients - Descr: Used for fetching routing information from the Routing API Default: <nil>
 */
 	Clients *Clients `yaml:"clients,omitempty"`
 
-	/*Url - Descr: URL of the UAA server Default: <nil>
+	/*Jwt - Descr: ssl cert defined in the manifest by the UAA, required by the cc to communicate with UAA Default: 
 */
-	Url interface{} `yaml:"url,omitempty"`
+	Jwt *Jwt `yaml:"jwt,omitempty"`
 
 	/*Cc - Descr: Symmetric secret used to decode uaa tokens. Used for testing. Default: <nil>
 */
 	Cc *UaaCc `yaml:"cc,omitempty"`
 
-	/*Jwt - Descr: ssl cert defined in the manifest by the UAA, required by the cc to communicate with UAA Default: 
+	/*Url - Descr: URL of the UAA server Default: <nil>
 */
-	Jwt *Jwt `yaml:"jwt,omitempty"`
+	Url interface{} `yaml:"url,omitempty"`
 
 }

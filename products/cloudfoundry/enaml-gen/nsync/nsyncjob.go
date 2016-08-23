@@ -5,7 +5,7 @@ package nsync
 */
 type NsyncJob struct {
 
-	/*Diego - Descr: address at which to serve debug info Default: 0.0.0.0:17007
+	/*Diego - Descr: PEM-encoded client certificate Default: <nil>
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

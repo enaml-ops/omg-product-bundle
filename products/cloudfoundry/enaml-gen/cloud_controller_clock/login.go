@@ -5,16 +5,16 @@ package cloud_controller_clock
 */
 type Login struct {
 
-	/*Protocol - Descr: http or https Default: https
+	/*Url - Descr: URL of the login server Default: <nil>
 */
-	Protocol interface{} `yaml:"protocol,omitempty"`
+	Url interface{} `yaml:"url,omitempty"`
 
 	/*Enabled - Descr: whether use login as the authorization endpoint or not Default: true
 */
 	Enabled interface{} `yaml:"enabled,omitempty"`
 
-	/*Url - Descr: URL of the login server Default: <nil>
+	/*Protocol - Descr: http or https Default: https
 */
-	Url interface{} `yaml:"url,omitempty"`
+	Protocol interface{} `yaml:"protocol,omitempty"`
 
 }

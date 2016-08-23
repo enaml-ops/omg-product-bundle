@@ -5,7 +5,7 @@ package cc_uploader
 */
 type CcUploaderJob struct {
 
-	/*Diego - Descr: Log level Default: info
+	/*Diego - Descr: Address of interface on which to serve files Default: 0.0.0.0:9090
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

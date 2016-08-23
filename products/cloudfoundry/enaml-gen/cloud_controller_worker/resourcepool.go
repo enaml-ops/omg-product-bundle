@@ -5,13 +5,17 @@ package cloud_controller_worker
 */
 type ResourcePool struct {
 
-	/*WebdavConfig - Descr: The location of the webdav server eg: https://blobstore.com Default: 
+	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
 */
-	WebdavConfig *ResourcePoolWebdavConfig `yaml:"webdav_config,omitempty"`
+	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
 
-	/*Cdn - Descr: Key pair name for signed download URIs Default: 
+	/*ResourceDirectoryKey - Descr: Directory (bucket) used store app resources.  It does not have be pre-created. Default: cc-resources
 */
-	Cdn *ResourcePoolCdn `yaml:"cdn,omitempty"`
+	ResourceDirectoryKey interface{} `yaml:"resource_directory_key,omitempty"`
+
+	/*MinimumSize - Descr: Minimum size of a resource to add to the pool Default: 65536
+*/
+	MinimumSize interface{} `yaml:"minimum_size,omitempty"`
 
 	/*FogConnection - Descr: Fog connection hash Default: <nil>
 */
@@ -21,16 +25,12 @@ type ResourcePool struct {
 */
 	MaximumSize interface{} `yaml:"maximum_size,omitempty"`
 
-	/*MinimumSize - Descr: Minimum size of a resource to add to the pool Default: 65536
+	/*Cdn - Descr: Private key for signing download URIs Default: 
 */
-	MinimumSize interface{} `yaml:"minimum_size,omitempty"`
+	Cdn *ResourcePoolCdn `yaml:"cdn,omitempty"`
 
-	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
+	/*WebdavConfig - Descr: The ca cert to use when communicating with webdav Default: 
 */
-	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
-
-	/*ResourceDirectoryKey - Descr: Directory (bucket) used store app resources.  It does not have be pre-created. Default: cc-resources
-*/
-	ResourceDirectoryKey interface{} `yaml:"resource_directory_key,omitempty"`
+	WebdavConfig *ResourcePoolWebdavConfig `yaml:"webdav_config,omitempty"`
 
 }

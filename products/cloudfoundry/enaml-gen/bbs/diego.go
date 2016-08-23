@@ -5,7 +5,7 @@ package bbs
 */
 type Diego struct {
 
-	/*Bbs - Descr: Log level Default: info
+	/*Bbs - Descr: capacity of the tls client cache Default: <nil>
 */
 	Bbs *Bbs `yaml:"bbs,omitempty"`
 

@@ -5,7 +5,7 @@ package route_emitter
 */
 type RouteEmitterJob struct {
 
-	/*Diego - Descr: Username for server authentication. Default: <nil>
+	/*Diego - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

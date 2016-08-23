@@ -5,21 +5,17 @@ package consul_agent
 */
 type Consul struct {
 
-	/*ServerKey - Descr: PEM-encoded server key Default: <nil>
-*/
-	ServerKey interface{} `yaml:"server_key,omitempty"`
-
 	/*AgentCert - Descr: PEM-encoded agent certificate Default: <nil>
 */
 	AgentCert interface{} `yaml:"agent_cert,omitempty"`
 
-	/*EncryptKeys - Descr: A list of passphrases that will be converted into encryption keys, the first key in the list is the active one Default: <nil>
+	/*CaCert - Descr: PEM-encoded CA certificate Default: <nil>
 */
-	EncryptKeys interface{} `yaml:"encrypt_keys,omitempty"`
+	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
-	/*Agent - Descr: Mode to run the agent in. (client or server) Default: client
+	/*ServerKey - Descr: PEM-encoded server key Default: <nil>
 */
-	Agent *Agent `yaml:"agent,omitempty"`
+	ServerKey interface{} `yaml:"server_key,omitempty"`
 
 	/*AgentKey - Descr: PEM-encoded client key Default: <nil>
 */
@@ -29,8 +25,12 @@ type Consul struct {
 */
 	ServerCert interface{} `yaml:"server_cert,omitempty"`
 
-	/*CaCert - Descr: PEM-encoded CA certificate Default: <nil>
+	/*EncryptKeys - Descr: A list of passphrases that will be converted into encryption keys, the first key in the list is the active one Default: <nil>
 */
-	CaCert interface{} `yaml:"ca_cert,omitempty"`
+	EncryptKeys interface{} `yaml:"encrypt_keys,omitempty"`
+
+	/*Agent - Descr: Map of consul service definitions. Default: map[]
+*/
+	Agent *Agent `yaml:"agent,omitempty"`
 
 }

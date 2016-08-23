@@ -5,7 +5,7 @@ package bbs
 */
 type BbsJob struct {
 
-	/*Diego - Descr: Log level Default: info
+	/*Diego - Descr: capacity of the tls client cache Default: <nil>
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

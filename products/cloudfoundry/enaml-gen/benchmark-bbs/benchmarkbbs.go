@@ -5,45 +5,21 @@ package benchmark_bbs
 */
 type BenchmarkBbs struct {
 
-	/*EncryptionKeys - Descr: the key(s) to use for encryption at rest Default: []
+	/*Sql - Descr: EXPERIMENTAL: connection string to use for SQL backend [username:password@tcp(1.1.1.1:1234)/database] Default: <nil>
 */
-	EncryptionKeys interface{} `yaml:"encryption_keys,omitempty"`
-
-	/*DatadogMetricPrefix - Descr: the datadog metric prefix Default: 
-*/
-	DatadogMetricPrefix interface{} `yaml:"datadog_metric_prefix,omitempty"`
-
-	/*NumPopulateWorkers - Descr: the number of workers generating desired LRPs during setup Default: <nil>
-*/
-	NumPopulateWorkers interface{} `yaml:"num_populate_workers,omitempty"`
-
-	/*AwsBucketName - Descr: the S3 bucket to upload metrics to Default: 
-*/
-	AwsBucketName interface{} `yaml:"aws_bucket_name,omitempty"`
+	Sql *Sql `yaml:"sql,omitempty"`
 
 	/*AwsRegion - Descr: the aws region where the S3 bucket lives Default: 
 */
 	AwsRegion interface{} `yaml:"aws_region,omitempty"`
 
-	/*AwsSecretAccessKey - Descr: the aws secret key for uploading metrics to s3 Default: 
+	/*DatadogMetricPrefix - Descr: the datadog metric prefix Default: 
 */
-	AwsSecretAccessKey interface{} `yaml:"aws_secret_access_key,omitempty"`
+	DatadogMetricPrefix interface{} `yaml:"datadog_metric_prefix,omitempty"`
 
-	/*PercentWrites - Descr: percentage of actual LRPs to write on each rep bulk loop Default: 5
+	/*NumReps - Descr: the number of rep processes to simulate in test Default: <nil>
 */
-	PercentWrites interface{} `yaml:"percent_writes,omitempty"`
-
-	/*LogFile - Descr: file name for benchmark log output in the BOSH log dir Default: <nil>
-*/
-	LogFile interface{} `yaml:"log_file,omitempty"`
-
-	/*ClientTimeout - Descr: the http timeout for bbs client requests Default: <nil>
-*/
-	ClientTimeout interface{} `yaml:"client_timeout,omitempty"`
-
-	/*Sql - Descr: EXPERIMENTAL: connection string to use for SQL backend [username:password@tcp(1.1.1.1:1234)/database] Default: <nil>
-*/
-	Sql *Sql `yaml:"sql,omitempty"`
+	NumReps interface{} `yaml:"num_reps,omitempty"`
 
 	/*ActiveKeyLabel - Descr: the active key for encryption Default: <nil>
 */
@@ -53,17 +29,13 @@ type BenchmarkBbs struct {
 */
 	AwsAccessKeyId interface{} `yaml:"aws_access_key_id,omitempty"`
 
-	/*NumReps - Descr: the number of rep processes to simulate in test Default: <nil>
+	/*ClientTimeout - Descr: the http timeout for bbs client requests Default: <nil>
 */
-	NumReps interface{} `yaml:"num_reps,omitempty"`
+	ClientTimeout interface{} `yaml:"client_timeout,omitempty"`
 
-	/*Etcd - Descr: Addresses pointing to the ETCD cluster Default: <nil>
+	/*Etcd - Descr: boolean to configure ssl connections with the etcd cluster Default: true
 */
 	Etcd *BenchmarkBbsEtcd `yaml:"etcd,omitempty"`
-
-	/*Bbs - Descr: PEM-encoded client certificate Default: <nil>
-*/
-	Bbs *Bbs `yaml:"bbs,omitempty"`
 
 	/*DatadogApiKey - Descr: the api key for emmitting datadog metrics Default: 
 */
@@ -73,16 +45,44 @@ type BenchmarkBbs struct {
 */
 	DatadogAppKey interface{} `yaml:"datadog_app_key,omitempty"`
 
+	/*PercentWrites - Descr: percentage of actual LRPs to write on each rep bulk loop Default: 5
+*/
+	PercentWrites interface{} `yaml:"percent_writes,omitempty"`
+
 	/*DesiredLrps - Descr: the number of single instance desired lrps to generate and fetch Default: <nil>
 */
 	DesiredLrps interface{} `yaml:"desired_lrps,omitempty"`
+
+	/*LogFile - Descr: file name for benchmark log output in the BOSH log dir Default: <nil>
+*/
+	LogFile interface{} `yaml:"log_file,omitempty"`
+
+	/*NumPopulateWorkers - Descr: the number of workers generating desired LRPs during setup Default: <nil>
+*/
+	NumPopulateWorkers interface{} `yaml:"num_populate_workers,omitempty"`
+
+	/*EncryptionKeys - Descr: the key(s) to use for encryption at rest Default: []
+*/
+	EncryptionKeys interface{} `yaml:"encryption_keys,omitempty"`
 
 	/*NumTrials - Descr: the number of trials of each benchmark to average across Default: <nil>
 */
 	NumTrials interface{} `yaml:"num_trials,omitempty"`
 
+	/*AwsSecretAccessKey - Descr: the aws secret key for uploading metrics to s3 Default: 
+*/
+	AwsSecretAccessKey interface{} `yaml:"aws_secret_access_key,omitempty"`
+
+	/*Bbs - Descr: PEM-encoded client certificate Default: <nil>
+*/
+	Bbs *Bbs `yaml:"bbs,omitempty"`
+
 	/*LogLevel - Descr: log level: debug, info, error or fatal Default: <nil>
 */
 	LogLevel interface{} `yaml:"log_level,omitempty"`
+
+	/*AwsBucketName - Descr: the S3 bucket to upload metrics to Default: 
+*/
+	AwsBucketName interface{} `yaml:"aws_bucket_name,omitempty"`
 
 }

@@ -5,11 +5,11 @@ package collector
 */
 type CollectorJob struct {
 
-	/*Collector - Descr: the interval in seconds that varz is checked Default: 30
+	/*Collector - Descr: name for this bosh deployment. All metrics will be tagged with deployment:XXX when sending them to CloudWatch, Datadog and Graphite Default: <nil>
 */
 	Collector *Collector `yaml:"collector,omitempty"`
 
-	/*Nats - Descr: IP of each NATS cluster member. Default: <nil>
+	/*Nats - Descr: NATS password Default: <nil>
 */
 	Nats *Nats `yaml:"nats,omitempty"`
 

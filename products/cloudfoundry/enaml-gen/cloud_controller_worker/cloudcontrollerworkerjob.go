@@ -5,88 +5,88 @@ package cloud_controller_worker
 */
 type CloudControllerWorkerJob struct {
 
-	/*Description - Descr: 'description' attribute in the /v2/info endpoint Default: 
+	/*AppDomains - Descr: Array of domains for user apps (example: 'user.app.space.foo', a user app called 'neat' will listen at 'http://neat.user.app.space.foo') Default: <nil>
 */
-	Description interface{} `yaml:"description,omitempty"`
-
-	/*NfsServer - Descr: NFS server for droplets and apps (not used in an AWS deploy, use s3 instead) Default: <nil>
-*/
-	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
-
-	/*Ssl - Descr: specifies that the job is allowed to skip ssl cert verification Default: false
-*/
-	Ssl *Ssl `yaml:"ssl,omitempty"`
-
-	/*RequestTimeoutInSeconds - Descr: Timeout for requests in seconds. Default: 900
-*/
-	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
+	AppDomains interface{} `yaml:"app_domains,omitempty"`
 
 	/*Build - Descr: 'build' attribute in the /v2/info endpoint Default: 
 */
 	Build interface{} `yaml:"build,omitempty"`
 
-	/*Hm9000 - Descr: URL of the hm9000 server Default: <nil>
+	/*Login - Descr: http or https Default: https
 */
-	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
-
-	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
-*/
-	Domain interface{} `yaml:"domain,omitempty"`
-
-	/*Ccdb - Descr: The type of database being used. mysql or postgres Default: postgres
-*/
-	Ccdb *Ccdb `yaml:"ccdb,omitempty"`
-
-	/*Nats - Descr: Password for cc client to connect to NATS Default: <nil>
-*/
-	Nats *Nats `yaml:"nats,omitempty"`
-
-	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
-*/
-	SystemDomain interface{} `yaml:"system_domain,omitempty"`
+	Login *Login `yaml:"login,omitempty"`
 
 	/*LoggerEndpoint - Descr: Port for logger endpoint listed at /v2/info Default: 443
 */
 	LoggerEndpoint *LoggerEndpoint `yaml:"logger_endpoint,omitempty"`
 
-	/*Cc - Descr: Allow users to change the value of the app-level allow_ssh attribute Default: true
+	/*Version - Descr: 'version' attribute in the /v2/info endpoint Default: 0
 */
-	Cc *Cc `yaml:"cc,omitempty"`
+	Version interface{} `yaml:"version,omitempty"`
 
-	/*Login - Descr: whether use login as the authorization endpoint or not Default: true
+	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
 */
-	Login *Login `yaml:"login,omitempty"`
+	Domain interface{} `yaml:"domain,omitempty"`
+
+	/*Description - Descr: 'description' attribute in the /v2/info endpoint Default: 
+*/
+	Description interface{} `yaml:"description,omitempty"`
+
+	/*Uaa - Descr: Used for generating SSO clients for service brokers. Default: <nil>
+*/
+	Uaa *Uaa `yaml:"uaa,omitempty"`
 
 	/*DeaNext - Descr: Disk limit in mb for staging tasks Default: 6144
 */
 	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
 
-	/*Name - Descr: 'name' attribute in the /v2/info endpoint Default: 
+	/*SystemDomainOrganization - Descr: The User Org that owns the system_domain, required if system_domain is defined Default: 
 */
-	Name interface{} `yaml:"name,omitempty"`
-
-	/*Version - Descr: 'version' attribute in the /v2/info endpoint Default: 0
-*/
-	Version interface{} `yaml:"version,omitempty"`
-
-	/*Uaa - Descr: ssl cert defined in the manifest by the UAA, required by the cc to communicate with UAA Default: 
-*/
-	Uaa *Uaa `yaml:"uaa,omitempty"`
+	SystemDomainOrganization interface{} `yaml:"system_domain_organization,omitempty"`
 
 	/*SupportAddress - Descr: 'support' attribute in the /v2/info endpoint Default: 
 */
 	SupportAddress interface{} `yaml:"support_address,omitempty"`
 
-	/*SystemDomainOrganization - Descr: The User Org that owns the system_domain, required if system_domain is defined Default: 
+	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
 */
-	SystemDomainOrganization interface{} `yaml:"system_domain_organization,omitempty"`
+	SystemDomain interface{} `yaml:"system_domain,omitempty"`
+
+	/*Cc - Descr: Private key for signing download URIs Default: 
+*/
+	Cc *Cc `yaml:"cc,omitempty"`
+
+	/*Hm9000 - Descr: URL of the hm9000 server Default: <nil>
+*/
+	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
+
+	/*Ccdb - Descr: Contains the name of the database on the database server Default: <nil>
+*/
+	Ccdb *Ccdb `yaml:"ccdb,omitempty"`
 
 	/*MetronEndpoint - Descr: The port used to emit messages to the Metron agent Default: 3457
 */
 	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
 
-	/*AppDomains - Descr: Array of domains for user apps (example: 'user.app.space.foo', a user app called 'neat' will listen at 'http://neat.user.app.space.foo') Default: <nil>
+	/*Name - Descr: 'name' attribute in the /v2/info endpoint Default: 
 */
-	AppDomains interface{} `yaml:"app_domains,omitempty"`
+	Name interface{} `yaml:"name,omitempty"`
+
+	/*Ssl - Descr: specifies that the job is allowed to skip ssl cert verification Default: false
+*/
+	Ssl *Ssl `yaml:"ssl,omitempty"`
+
+	/*Nats - Descr: Password for cc client to connect to NATS Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
+
+	/*RequestTimeoutInSeconds - Descr: Timeout for requests in seconds. Default: 900
+*/
+	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
+
+	/*NfsServer - Descr: NFS server for droplets and apps (not used in an AWS deploy, use s3 instead) Default: <nil>
+*/
+	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
 
 }

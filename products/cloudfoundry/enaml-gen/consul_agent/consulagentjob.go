@@ -5,7 +5,7 @@ package consul_agent
 */
 type ConsulAgentJob struct {
 
-	/*Consul - Descr: PEM-encoded CA certificate Default: <nil>
+	/*Consul - Descr: Map of consul service definitions. Default: map[]
 */
 	Consul *Consul `yaml:"consul,omitempty"`
 

@@ -9,12 +9,12 @@ type Env struct {
 */
 	HttpProxy interface{} `yaml:"http_proxy,omitempty"`
 
-	/*NoProxy - Descr: Set No_Proxy across the VMs Default: <nil>
-*/
-	NoProxy interface{} `yaml:"no_proxy,omitempty"`
-
 	/*HttpsProxy - Descr: The https_proxy across the VMs Default: <nil>
 */
 	HttpsProxy interface{} `yaml:"https_proxy,omitempty"`
+
+	/*NoProxy - Descr: Set No_Proxy across the VMs Default: <nil>
+*/
+	NoProxy interface{} `yaml:"no_proxy,omitempty"`
 
 }

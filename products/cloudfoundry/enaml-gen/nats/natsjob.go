@@ -5,7 +5,7 @@ package nats
 */
 type NatsJob struct {
 
-	/*Nats - Descr: Port for pprof. 0 means disabled. Default: 0
+	/*Nats - Descr: Enable debug logging output. Default: false
 */
 	Nats *Nats `yaml:"nats,omitempty"`
 

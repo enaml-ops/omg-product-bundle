@@ -5,12 +5,12 @@ package uaa
 */
 type Socket struct {
 
-	/*SoTimeout - Descr: Read timeout in milliseconds for SAML metadata HTTP requests Default: 10000
-*/
-	SoTimeout interface{} `yaml:"soTimeout,omitempty"`
-
 	/*ConnectionManagerTimeout - Descr: Timeout in milliseconds for connection pooling for SAML metadata HTTP requests Default: 10000
 */
 	ConnectionManagerTimeout interface{} `yaml:"connectionManagerTimeout,omitempty"`
+
+	/*SoTimeout - Descr: Read timeout in milliseconds for SAML metadata HTTP requests Default: 10000
+*/
+	SoTimeout interface{} `yaml:"soTimeout,omitempty"`
 
 }

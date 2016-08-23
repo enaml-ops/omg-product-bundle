@@ -5,6 +5,10 @@ package cloud_controller_clock
 */
 type ResourcePoolCdn struct {
 
+	/*Uri - Descr: URI for a CDN to used for resource pool downloads Default: 
+*/
+	Uri interface{} `yaml:"uri,omitempty"`
+
 	/*KeyPairId - Descr: Key pair name for signed download URIs Default: 
 */
 	KeyPairId interface{} `yaml:"key_pair_id,omitempty"`
@@ -12,9 +16,5 @@ type ResourcePoolCdn struct {
 	/*PrivateKey - Descr: Private key for signing download URIs Default: 
 */
 	PrivateKey interface{} `yaml:"private_key,omitempty"`
-
-	/*Uri - Descr: URI for a CDN to used for resource pool downloads Default: 
-*/
-	Uri interface{} `yaml:"uri,omitempty"`
 
 }

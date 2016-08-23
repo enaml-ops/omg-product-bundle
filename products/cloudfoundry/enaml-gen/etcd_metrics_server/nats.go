@@ -5,13 +5,13 @@ package etcd_metrics_server
 */
 type Nats struct {
 
-	/*Password - Descr: NATS server password Default: <nil>
-*/
-	Password interface{} `yaml:"password,omitempty"`
-
 	/*Machines - Descr: array of NATS addresses Default: <nil>
 */
 	Machines interface{} `yaml:"machines,omitempty"`
+
+	/*Password - Descr: NATS server password Default: <nil>
+*/
+	Password interface{} `yaml:"password,omitempty"`
 
 	/*Port - Descr: NATS server port Default: 4222
 */

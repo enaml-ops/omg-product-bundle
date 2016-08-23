@@ -5,15 +5,11 @@ package syslog_drain_binder
 */
 type SyslogDrainBinderJob struct {
 
-	/*SyslogDrainBinder - Descr: Interval on which to poll cloud controller in seconds Default: 15
+	/*Ssl - Descr: when connecting over https, ignore bad ssl certificates Default: false
 */
-	SyslogDrainBinder *SyslogDrainBinder `yaml:"syslog_drain_binder,omitempty"`
+	Ssl *Ssl `yaml:"ssl,omitempty"`
 
-	/*Cc - Descr: API URI of cloud controller Default: <nil>
-*/
-	Cc *Cc `yaml:"cc,omitempty"`
-
-	/*MetronEndpoint - Descr: The port used to emit dropsonde messages to the Metron agent Default: 3457
+	/*MetronEndpoint - Descr: The host used to emit messages to the Metron agent Default: 127.0.0.1
 */
 	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
 
@@ -21,12 +17,16 @@ type SyslogDrainBinderJob struct {
 */
 	Loggregator *Loggregator `yaml:"loggregator,omitempty"`
 
-	/*Ssl - Descr: when connecting over https, ignore bad ssl certificates Default: false
-*/
-	Ssl *Ssl `yaml:"ssl,omitempty"`
-
 	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
 */
 	SystemDomain interface{} `yaml:"system_domain,omitempty"`
+
+	/*SyslogDrainBinder - Descr: Interval on which to poll cloud controller in seconds Default: 15
+*/
+	SyslogDrainBinder *SyslogDrainBinder `yaml:"syslog_drain_binder,omitempty"`
+
+	/*Cc - Descr: API URI of cloud controller Default: <nil>
+*/
+	Cc *Cc `yaml:"cc,omitempty"`
 
 }

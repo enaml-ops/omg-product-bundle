@@ -5,7 +5,7 @@ package stager
 */
 type StagerJob struct {
 
-	/*Diego - Descr: External port to access the Cloud Controller Default: 9022
+	/*Diego - Descr: URL for staging task callbacks Default: http://stager.service.cf.internal:8888
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

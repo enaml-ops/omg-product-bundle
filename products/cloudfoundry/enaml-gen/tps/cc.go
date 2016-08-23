@@ -13,12 +13,12 @@ type Cc struct {
 */
 	InternalServiceHostname interface{} `yaml:"internal_service_hostname,omitempty"`
 
-	/*BasicAuthPassword - Descr: Basic auth password for CC internal API Default: <nil>
-*/
-	BasicAuthPassword interface{} `yaml:"basic_auth_password,omitempty"`
-
 	/*ExternalPort - Descr: External port to access the Cloud Controller Default: 9022
 */
 	ExternalPort interface{} `yaml:"external_port,omitempty"`
+
+	/*BasicAuthPassword - Descr: Basic auth password for CC internal API Default: <nil>
+*/
+	BasicAuthPassword interface{} `yaml:"basic_auth_password,omitempty"`
 
 }

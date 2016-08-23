@@ -9,17 +9,13 @@ type MetronAgent struct {
 */
 	Debug interface{} `yaml:"debug,omitempty"`
 
-	/*EnableBuffer - Descr: DEPRECATED Default: false
-*/
-	EnableBuffer interface{} `yaml:"enable_buffer,omitempty"`
-
-	/*Tls - Descr: TLS client certificate Default: 
-*/
-	Tls *MetronAgentTls `yaml:"tls,omitempty"`
-
 	/*Tcp - Descr: The number of bytes which can be buffered prior to TCP writes (applies to TLS over TCP) Default: 10240
 */
 	Tcp *Tcp `yaml:"tcp,omitempty"`
+
+	/*PreferredProtocol - Descr: Preferred protocol to droppler (udp|tls) Default: udp
+*/
+	PreferredProtocol interface{} `yaml:"preferred_protocol,omitempty"`
 
 	/*DropsondeIncomingPort - Descr: Incoming port for dropsonde log messages Default: 3457
 */
@@ -33,16 +29,20 @@ type MetronAgent struct {
 */
 	BufferSize interface{} `yaml:"buffer_size,omitempty"`
 
-	/*Zone - Descr: Availability zone where this agent is running Default: <nil>
+	/*Tls - Descr: TLS client certificate Default: 
 */
-	Zone interface{} `yaml:"zone,omitempty"`
+	Tls *MetronAgentTls `yaml:"tls,omitempty"`
 
 	/*Logrotate - Descr: The frequency in minutes which logrotate will rotate VM logs Default: 5
 */
 	Logrotate *Logrotate `yaml:"logrotate,omitempty"`
 
-	/*PreferredProtocol - Descr: Preferred protocol to droppler (udp|tls) Default: udp
+	/*Zone - Descr: Availability zone where this agent is running Default: <nil>
 */
-	PreferredProtocol interface{} `yaml:"preferred_protocol,omitempty"`
+	Zone interface{} `yaml:"zone,omitempty"`
+
+	/*EnableBuffer - Descr: DEPRECATED Default: false
+*/
+	EnableBuffer interface{} `yaml:"enable_buffer,omitempty"`
 
 }

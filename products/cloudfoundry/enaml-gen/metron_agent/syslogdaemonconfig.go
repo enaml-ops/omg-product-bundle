@@ -5,21 +5,13 @@ package metron_agent
 */
 type SyslogDaemonConfig struct {
 
-	/*Address - Descr: IP address for syslog aggregator Default: <nil>
-*/
-	Address interface{} `yaml:"address,omitempty"`
-
-	/*Transport - Descr: Transport to be used when forwarding logs (tcp|udp|relp). Default: tcp
-*/
-	Transport interface{} `yaml:"transport,omitempty"`
-
 	/*Port - Descr: TCP port of syslog aggregator Default: <nil>
 */
 	Port interface{} `yaml:"port,omitempty"`
 
-	/*MaxMessageSize - Descr: maximum message size to be sent Default: 4k
+	/*Transport - Descr: Transport to be used when forwarding logs (tcp|udp|relp). Default: tcp
 */
-	MaxMessageSize interface{} `yaml:"max_message_size,omitempty"`
+	Transport interface{} `yaml:"transport,omitempty"`
 
 	/*CustomRule - Descr: Custom rule for syslog forward daemon Default: 
 */
@@ -28,5 +20,13 @@ type SyslogDaemonConfig struct {
 	/*FallbackAddresses - Descr: Addresses of fallback servers to be used if the primary syslog server is down. Only tcp or relp are supported. Each list entry should consist of "address", "transport" and "port" keys.  Default: []
 */
 	FallbackAddresses interface{} `yaml:"fallback_addresses,omitempty"`
+
+	/*MaxMessageSize - Descr: maximum message size to be sent Default: 4k
+*/
+	MaxMessageSize interface{} `yaml:"max_message_size,omitempty"`
+
+	/*Address - Descr: IP address for syslog aggregator Default: <nil>
+*/
+	Address interface{} `yaml:"address,omitempty"`
 
 }

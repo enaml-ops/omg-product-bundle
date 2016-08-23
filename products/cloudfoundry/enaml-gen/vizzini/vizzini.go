@@ -5,18 +5,6 @@ package vizzini
 */
 type Vizzini struct {
 
-	/*Ssh - Descr: Shared secret for the SSH proxy's Diego authenticator Default: <nil>
-*/
-	Ssh *Ssh `yaml:"ssh,omitempty"`
-
-	/*EventuallyTimeout - Descr: default timeout for ginkgo assertions Default: <nil>
-*/
-	EventuallyTimeout interface{} `yaml:"eventually_timeout,omitempty"`
-
-	/*RoutableDomainSuffix - Descr: The deployment's routable domain name Default: <nil>
-*/
-	RoutableDomainSuffix interface{} `yaml:"routable_domain_suffix,omitempty"`
-
 	/*Nodes - Descr: The number of nodes to run the tests with Default: 4
 */
 	Nodes interface{} `yaml:"nodes,omitempty"`
@@ -25,8 +13,20 @@ type Vizzini struct {
 */
 	Verbose interface{} `yaml:"verbose,omitempty"`
 
-	/*Bbs - Descr: PEM-encoded client key Default: <nil>
+	/*Bbs - Descr: PEM-encoded client certificate Default: <nil>
 */
 	Bbs *Bbs `yaml:"bbs,omitempty"`
+
+	/*EventuallyTimeout - Descr: default timeout for ginkgo assertions Default: <nil>
+*/
+	EventuallyTimeout interface{} `yaml:"eventually_timeout,omitempty"`
+
+	/*Ssh - Descr: Shared secret for the SSH proxy's Diego authenticator Default: <nil>
+*/
+	Ssh *Ssh `yaml:"ssh,omitempty"`
+
+	/*RoutableDomainSuffix - Descr: The deployment's routable domain name Default: <nil>
+*/
+	RoutableDomainSuffix interface{} `yaml:"routable_domain_suffix,omitempty"`
 
 }

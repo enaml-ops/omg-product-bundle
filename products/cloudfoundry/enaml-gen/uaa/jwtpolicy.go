@@ -5,10 +5,6 @@ package uaa
 */
 type JwtPolicy struct {
 
-	/*Global - Descr: The global refresh token validity for all zones if nothing is configured on the client Default: 2592000
-*/
-	Global *Global `yaml:"global,omitempty"`
-
 	/*AccessTokenValiditySeconds - Descr: The access token validity for the default zone if nothing is configured on the client. Will override global validity policies for the default zone only. Default: 43200
 */
 	AccessTokenValiditySeconds interface{} `yaml:"accessTokenValiditySeconds,omitempty"`
@@ -20,5 +16,9 @@ type JwtPolicy struct {
 	/*Keys - Descr: Map of key ids to key pairs (signing and verification keys) Default: <nil>
 */
 	Keys interface{} `yaml:"keys,omitempty"`
+
+	/*Global - Descr: The global access token validity for all zones if nothing is configured on the client Default: 43200
+*/
+	Global *Global `yaml:"global,omitempty"`
 
 }

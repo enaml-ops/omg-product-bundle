@@ -5,20 +5,20 @@ package metron_agent
 */
 type MetronAgentJob struct {
 
+	/*Loggregator - Descr: Port where loggregator listens for dropsonde log messages Default: 3457
+*/
+	Loggregator *Loggregator `yaml:"loggregator,omitempty"`
+
 	/*MetronAgent - Descr: TLS client certificate Default: 
 */
 	MetronAgent *MetronAgent `yaml:"metron_agent,omitempty"`
 
-	/*SyslogDaemonConfig - Descr: maximum message size to be sent Default: 4k
+	/*SyslogDaemonConfig - Descr: TCP port of syslog aggregator Default: <nil>
 */
 	SyslogDaemonConfig *SyslogDaemonConfig `yaml:"syslog_daemon_config,omitempty"`
 
 	/*MetronEndpoint - Descr: Shared secret used to verify cryptographically signed dropsonde messages Default: <nil>
 */
 	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
-
-	/*Loggregator - Descr: Port where loggregator listens for dropsonde log messages Default: 3457
-*/
-	Loggregator *Loggregator `yaml:"loggregator,omitempty"`
 
 }

@@ -5,12 +5,12 @@ package cloud_controller_clock
 */
 type PendingPackages struct {
 
-	/*ExpirationInSeconds - Descr: How long packages can remain in pending state before being cleaned up Default: 1200
-*/
-	ExpirationInSeconds interface{} `yaml:"expiration_in_seconds,omitempty"`
-
 	/*FrequencyInSeconds - Descr: How often the package pending cleanup job runs Default: 300
 */
 	FrequencyInSeconds interface{} `yaml:"frequency_in_seconds,omitempty"`
+
+	/*ExpirationInSeconds - Descr: How long packages can remain in pending state before being cleaned up Default: 1200
+*/
+	ExpirationInSeconds interface{} `yaml:"expiration_in_seconds,omitempty"`
 
 }

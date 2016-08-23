@@ -5,13 +5,13 @@ package cloud_controller_clock
 */
 type ResourcePoolWebdavConfig struct {
 
-	/*CaCert - Descr: The ca cert to use when communicating with webdav Default: 
-*/
-	CaCert interface{} `yaml:"ca_cert,omitempty"`
-
 	/*PrivateEndpoint - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
 */
 	PrivateEndpoint interface{} `yaml:"private_endpoint,omitempty"`
+
+	/*CaCert - Descr: The ca cert to use when communicating with webdav Default: 
+*/
+	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
 	/*PublicEndpoint - Descr: The location of the webdav server eg: https://blobstore.com Default: 
 */

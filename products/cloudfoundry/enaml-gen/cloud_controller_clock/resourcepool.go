@@ -5,32 +5,32 @@ package cloud_controller_clock
 */
 type ResourcePool struct {
 
-	/*Cdn - Descr: Key pair name for signed download URIs Default: 
+	/*Cdn - Descr: URI for a CDN to used for resource pool downloads Default: 
 */
 	Cdn *ResourcePoolCdn `yaml:"cdn,omitempty"`
-
-	/*FogConnection - Descr: Fog connection hash Default: <nil>
-*/
-	FogConnection interface{} `yaml:"fog_connection,omitempty"`
-
-	/*MaximumSize - Descr: Maximum size of a resource to add to the pool Default: 536870912
-*/
-	MaximumSize interface{} `yaml:"maximum_size,omitempty"`
 
 	/*MinimumSize - Descr: Minimum size of a resource to add to the pool Default: 65536
 */
 	MinimumSize interface{} `yaml:"minimum_size,omitempty"`
 
-	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
-*/
-	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
-
 	/*ResourceDirectoryKey - Descr: Directory (bucket) used store app resources.  It does not have be pre-created. Default: cc-resources
 */
 	ResourceDirectoryKey interface{} `yaml:"resource_directory_key,omitempty"`
 
+	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
+*/
+	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
+
 	/*WebdavConfig - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
 */
 	WebdavConfig *ResourcePoolWebdavConfig `yaml:"webdav_config,omitempty"`
+
+	/*MaximumSize - Descr: Maximum size of a resource to add to the pool Default: 536870912
+*/
+	MaximumSize interface{} `yaml:"maximum_size,omitempty"`
+
+	/*FogConnection - Descr: Fog connection hash Default: <nil>
+*/
+	FogConnection interface{} `yaml:"fog_connection,omitempty"`
 
 }

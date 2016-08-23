@@ -5,16 +5,16 @@ package gorouter
 */
 type Uaa struct {
 
-	/*Port - Descr: Port on which UAA is running. Default: 8080
+	/*Clients - Descr: Password for UAA client for the gorouter. Default: <nil>
 */
-	Port interface{} `yaml:"port,omitempty"`
+	Clients *Clients `yaml:"clients,omitempty"`
 
 	/*Ssl - Descr: Secure Port on which UAA is running. Default: <nil>
 */
 	Ssl *Ssl `yaml:"ssl,omitempty"`
 
-	/*Clients - Descr: Password for UAA client for the gorouter. Default: <nil>
+	/*Port - Descr: Port on which UAA is running. Default: 8080
 */
-	Clients *Clients `yaml:"clients,omitempty"`
+	Port interface{} `yaml:"port,omitempty"`
 
 }

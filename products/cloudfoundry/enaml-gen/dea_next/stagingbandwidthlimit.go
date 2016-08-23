@@ -5,12 +5,12 @@ package dea_next
 */
 type StagingBandwidthLimit struct {
 
-	/*Burst - Descr: Network bandwidth burst limit for staging tasks in bytes Default: <nil>
-*/
-	Burst interface{} `yaml:"burst,omitempty"`
-
 	/*Rate - Descr: Network bandwidth limit for staging tasks in bytes per second Default: <nil>
 */
 	Rate interface{} `yaml:"rate,omitempty"`
+
+	/*Burst - Descr: Network bandwidth burst limit for staging tasks in bytes Default: <nil>
+*/
+	Burst interface{} `yaml:"burst,omitempty"`
 
 }

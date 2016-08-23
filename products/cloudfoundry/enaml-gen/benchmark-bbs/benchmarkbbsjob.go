@@ -5,7 +5,7 @@ package benchmark_bbs
 */
 type BenchmarkBbsJob struct {
 
-	/*BenchmarkBbs - Descr: the number of single instance desired lrps to generate and fetch Default: <nil>
+	/*BenchmarkBbs - Descr: PEM-encoded client certificate Default: <nil>
 */
 	BenchmarkBbs *BenchmarkBbs `yaml:"benchmark-bbs,omitempty"`
 

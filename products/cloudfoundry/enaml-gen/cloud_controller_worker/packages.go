@@ -5,11 +5,7 @@ package cloud_controller_worker
 */
 type Packages struct {
 
-	/*WebdavConfig - Descr: The ca cert to use when communicating with webdav Default: 
-*/
-	WebdavConfig *PackagesWebdavConfig `yaml:"webdav_config,omitempty"`
-
-	/*Cdn - Descr: Key pair name for signed download URIs Default: 
+	/*Cdn - Descr: Private key for signing download URIs Default: 
 */
 	Cdn *PackagesCdn `yaml:"cdn,omitempty"`
 
@@ -17,16 +13,20 @@ type Packages struct {
 */
 	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
 
-	/*MaxPackageSize - Descr: Maximum size of application package Default: 1073741824
-*/
-	MaxPackageSize interface{} `yaml:"max_package_size,omitempty"`
-
 	/*FogConnection - Descr: Fog connection hash Default: <nil>
 */
 	FogConnection interface{} `yaml:"fog_connection,omitempty"`
 
+	/*MaxPackageSize - Descr: Maximum size of application package Default: 1073741824
+*/
+	MaxPackageSize interface{} `yaml:"max_package_size,omitempty"`
+
 	/*AppPackageDirectoryKey - Descr: Directory (bucket) used store app packages.  It does not have be pre-created. Default: cc-packages
 */
 	AppPackageDirectoryKey interface{} `yaml:"app_package_directory_key,omitempty"`
+
+	/*WebdavConfig - Descr: The basic auth user that CC uses to connect to the admin endpoint on webdav Default: 
+*/
+	WebdavConfig *PackagesWebdavConfig `yaml:"webdav_config,omitempty"`
 
 }

@@ -5,20 +5,20 @@ package cloud_controller_clock
 */
 type Nats struct {
 
-	/*User - Descr: Username for cc client to connect to NATS Default: <nil>
+	/*Port - Descr: IP port of Cloud Foundry NATS server Default: <nil>
 */
-	User interface{} `yaml:"user,omitempty"`
-
-	/*Password - Descr: Password for cc client to connect to NATS Default: <nil>
-*/
-	Password interface{} `yaml:"password,omitempty"`
+	Port interface{} `yaml:"port,omitempty"`
 
 	/*Machines - Descr: IP of each NATS cluster member. Default: <nil>
 */
 	Machines interface{} `yaml:"machines,omitempty"`
 
-	/*Port - Descr: IP port of Cloud Foundry NATS server Default: <nil>
+	/*Password - Descr: Password for cc client to connect to NATS Default: <nil>
 */
-	Port interface{} `yaml:"port,omitempty"`
+	Password interface{} `yaml:"password,omitempty"`
+
+	/*User - Descr: Username for cc client to connect to NATS Default: <nil>
+*/
+	User interface{} `yaml:"user,omitempty"`
 
 }

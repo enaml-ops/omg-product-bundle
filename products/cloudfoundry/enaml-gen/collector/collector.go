@@ -5,13 +5,29 @@ package collector
 */
 type Collector struct {
 
-	/*MemoryThreshold - Descr: Memory threshold for collector restart (Mb) Default: 800
+	/*Graphite - Descr: IP address of Graphite Default: <nil>
 */
-	MemoryThreshold interface{} `yaml:"memory_threshold,omitempty"`
+	Graphite *Graphite `yaml:"graphite,omitempty"`
 
-	/*Datadog - Descr: Datadog application key Default: <nil>
+	/*DeploymentName - Descr: name for this bosh deployment. All metrics will be tagged with deployment:XXX when sending them to CloudWatch, Datadog and Graphite Default: <nil>
+*/
+	DeploymentName interface{} `yaml:"deployment_name,omitempty"`
+
+	/*Intervals - Descr: the interval in seconds that healthz is checked Default: 30
+*/
+	Intervals *Intervals `yaml:"intervals,omitempty"`
+
+	/*Aws - Descr: AWS secret for CloudWatch access Default: <nil>
+*/
+	Aws *Aws `yaml:"aws,omitempty"`
+
+	/*Datadog - Descr: Datadog API key Default: <nil>
 */
 	Datadog *Datadog `yaml:"datadog,omitempty"`
+
+	/*UseDatadog - Descr: enable Datadog plugin Default: false
+*/
+	UseDatadog interface{} `yaml:"use_datadog,omitempty"`
 
 	/*LoggingLevel - Descr: the logging level for the collector Default: info
 */
@@ -21,36 +37,20 @@ type Collector struct {
 */
 	UseAwsCloudwatch interface{} `yaml:"use_aws_cloudwatch,omitempty"`
 
-	/*Intervals - Descr: the interval in seconds that varz is checked Default: 30
+	/*MemoryThreshold - Descr: Memory threshold for collector restart (Mb) Default: 800
 */
-	Intervals *Intervals `yaml:"intervals,omitempty"`
+	MemoryThreshold interface{} `yaml:"memory_threshold,omitempty"`
 
 	/*UseTsdb - Descr: enable OpenTsdb plugin Default: false
 */
 	UseTsdb interface{} `yaml:"use_tsdb,omitempty"`
 
-	/*DeploymentName - Descr: name for this bosh deployment. All metrics will be tagged with deployment:XXX when sending them to CloudWatch, Datadog and Graphite Default: <nil>
+	/*Opentsdb - Descr: IP address of OpenTsdb Default: <nil>
 */
-	DeploymentName interface{} `yaml:"deployment_name,omitempty"`
-
-	/*Aws - Descr: AWS secret for CloudWatch access Default: <nil>
-*/
-	Aws *Aws `yaml:"aws,omitempty"`
-
-	/*Graphite - Descr: IP address of Graphite Default: <nil>
-*/
-	Graphite *Graphite `yaml:"graphite,omitempty"`
+	Opentsdb *Opentsdb `yaml:"opentsdb,omitempty"`
 
 	/*UseGraphite - Descr: enable Graphite plugin Default: false
 */
 	UseGraphite interface{} `yaml:"use_graphite,omitempty"`
-
-	/*UseDatadog - Descr: enable Datadog plugin Default: false
-*/
-	UseDatadog interface{} `yaml:"use_datadog,omitempty"`
-
-	/*Opentsdb - Descr: IP address of OpenTsdb Default: <nil>
-*/
-	Opentsdb *Opentsdb `yaml:"opentsdb,omitempty"`
 
 }

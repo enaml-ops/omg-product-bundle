@@ -9,12 +9,12 @@ type ResourcePoolCdn struct {
 */
 	Uri interface{} `yaml:"uri,omitempty"`
 
-	/*PrivateKey - Descr: Private key for signing download URIs Default: 
-*/
-	PrivateKey interface{} `yaml:"private_key,omitempty"`
-
 	/*KeyPairId - Descr: Key pair name for signed download URIs Default: 
 */
 	KeyPairId interface{} `yaml:"key_pair_id,omitempty"`
+
+	/*PrivateKey - Descr: Private key for signing download URIs Default: 
+*/
+	PrivateKey interface{} `yaml:"private_key,omitempty"`
 
 }

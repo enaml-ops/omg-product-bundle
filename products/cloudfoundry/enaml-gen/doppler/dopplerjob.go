@@ -5,13 +5,9 @@ package doppler
 */
 type DopplerJob struct {
 
-	/*Doppler - Descr: TTL (in seconds) for container usage metrics Default: 120
+	/*Doppler - Descr: Number of parallel unmarshallers to run within Doppler Default: 5
 */
 	Doppler *Doppler `yaml:"doppler,omitempty"`
-
-	/*DopplerEndpoint - Descr: Shared secret used to verify cryptographically signed dropsonde messages Default: <nil>
-*/
-	DopplerEndpoint *DopplerEndpoint `yaml:"doppler_endpoint,omitempty"`
 
 	/*MetronEndpoint - Descr: The host used to emit messages to the Metron agent Default: 127.0.0.1
 */
@@ -20,5 +16,9 @@ type DopplerJob struct {
 	/*Loggregator - Descr: CA root required for key/cert verification Default: 
 */
 	Loggregator *Loggregator `yaml:"loggregator,omitempty"`
+
+	/*DopplerEndpoint - Descr: Shared secret used to verify cryptographically signed dropsonde messages Default: <nil>
+*/
+	DopplerEndpoint *DopplerEndpoint `yaml:"doppler_endpoint,omitempty"`
 
 }

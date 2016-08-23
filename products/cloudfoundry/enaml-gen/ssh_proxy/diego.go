@@ -5,7 +5,7 @@ package ssh_proxy
 */
 type Diego struct {
 
-	/*SshProxy - Descr: address at which to serve debug info Default: 0.0.0.0:17016
+	/*SshProxy - Descr: maximum number of idle http connections Default: <nil>
 */
 	SshProxy *SshProxy `yaml:"ssh_proxy,omitempty"`
 

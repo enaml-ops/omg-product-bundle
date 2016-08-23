@@ -5,17 +5,17 @@ package uaa
 */
 type Jwt struct {
 
-	/*Policy - Descr: The global refresh token validity for all zones if nothing is configured on the client Default: 2592000
+	/*SigningKey - Descr: The key used to sign the JWT-based OAuth2 tokens Default: <nil>
+*/
+	SigningKey interface{} `yaml:"signing_key,omitempty"`
+
+	/*Policy - Descr: Map of key ids to key pairs (signing and verification keys) Default: <nil>
 */
 	Policy *JwtPolicy `yaml:"policy,omitempty"`
 
 	/*Claims - Descr: List of claims to exclude from the JWT-based OAuth2 tokens Default: <nil>
 */
 	Claims *Claims `yaml:"claims,omitempty"`
-
-	/*SigningKey - Descr: The key used to sign the JWT-based OAuth2 tokens Default: <nil>
-*/
-	SigningKey interface{} `yaml:"signing_key,omitempty"`
 
 	/*VerificationKey - Descr: The key used to verify JWT-based OAuth2 tokens Default: <nil>
 */

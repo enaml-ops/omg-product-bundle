@@ -5,21 +5,21 @@ package cloud_controller_ng
 */
 type ResourcePool struct {
 
-	/*Cdn - Descr: Private key for signing download URIs Default: 
-*/
-	Cdn *ResourcePoolCdn `yaml:"cdn,omitempty"`
-
-	/*FogConnection - Descr: Fog connection hash Default: <nil>
-*/
-	FogConnection interface{} `yaml:"fog_connection,omitempty"`
-
 	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
 */
 	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
 
-	/*WebdavConfig - Descr: The ca cert to use when communicating with webdav Default: 
+	/*ResourceDirectoryKey - Descr: Directory (bucket) used store app resources.  It does not have be pre-created. Default: cc-resources
+*/
+	ResourceDirectoryKey interface{} `yaml:"resource_directory_key,omitempty"`
+
+	/*WebdavConfig - Descr: The basic auth user that CC uses to connect to the admin endpoint on webdav Default: 
 */
 	WebdavConfig *ResourcePoolWebdavConfig `yaml:"webdav_config,omitempty"`
+
+	/*FogConnection - Descr: Fog connection hash Default: <nil>
+*/
+	FogConnection interface{} `yaml:"fog_connection,omitempty"`
 
 	/*MaximumSize - Descr: Maximum size of a resource to add to the pool Default: 536870912
 */
@@ -29,8 +29,8 @@ type ResourcePool struct {
 */
 	MinimumSize interface{} `yaml:"minimum_size,omitempty"`
 
-	/*ResourceDirectoryKey - Descr: Directory (bucket) used store app resources.  It does not have be pre-created. Default: cc-resources
+	/*Cdn - Descr: Private key for signing download URIs Default: 
 */
-	ResourceDirectoryKey interface{} `yaml:"resource_directory_key,omitempty"`
+	Cdn *ResourcePoolCdn `yaml:"cdn,omitempty"`
 
 }

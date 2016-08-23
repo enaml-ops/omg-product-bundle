@@ -5,9 +5,9 @@ package cloud_controller_ng
 */
 type CloudControllerNgJob struct {
 
-	/*Cc - Descr: The default disk space an app gets Default: 1024
+	/*SystemDomainOrganization - Descr: The User Org that owns the system_domain, required if system_domain is defined Default: 
 */
-	Cc *Cc `yaml:"cc,omitempty"`
+	SystemDomainOrganization interface{} `yaml:"system_domain_organization,omitempty"`
 
 	/*SupportAddress - Descr: 'support' attribute in the /v2/info endpoint Default: 
 */
@@ -17,17 +17,49 @@ type CloudControllerNgJob struct {
 */
 	Description interface{} `yaml:"description,omitempty"`
 
-	/*AppSsh - Descr: The oauth client ID of the SSH proxy Default: ssh-proxy
+	/*Ccdb - Descr: Users to create on the database when seeding Default: <nil>
 */
-	AppSsh *AppSsh `yaml:"app_ssh,omitempty"`
+	Ccdb *Ccdb `yaml:"ccdb,omitempty"`
 
-	/*Nats - Descr: Password for cc client to connect to NATS Default: <nil>
+	/*LoggerEndpoint - Descr: Whether to use ssl for logger endpoint listed at /v2/info Default: true
 */
-	Nats *Nats `yaml:"nats,omitempty"`
+	LoggerEndpoint *LoggerEndpoint `yaml:"logger_endpoint,omitempty"`
 
-	/*NfsServer - Descr: NFS server for droplets and apps (not used in an AWS deploy, use s3 instead) Default: <nil>
+	/*RoutingApi - Descr: Whether to expose the routing_endpoint listed at /v2/info. Enable this after deploying the Routing API Default: false
 */
-	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
+	RoutingApi *RoutingApi `yaml:"routing_api,omitempty"`
+
+	/*Doppler - Descr: Whether to use ssl for the doppler_logging_endpoint listed at /v2/info Default: true
+*/
+	Doppler *Doppler `yaml:"doppler,omitempty"`
+
+	/*Ssl - Descr: specifies that the job is allowed to skip ssl cert verification Default: false
+*/
+	Ssl *Ssl `yaml:"ssl,omitempty"`
+
+	/*Hm9000 - Descr: URL of the hm9000 server Default: <nil>
+*/
+	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
+
+	/*Version - Descr: 'version' attribute in the /v2/info endpoint Default: 0
+*/
+	Version interface{} `yaml:"version,omitempty"`
+
+	/*Router - Descr: Support for route services is disabled when no value is configured. Default: 
+*/
+	Router *Router `yaml:"router,omitempty"`
+
+	/*DeaNext - Descr: Disk limit in mb for staging tasks Default: 6144
+*/
+	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
+
+	/*Uaa - Descr: Used for fetching routing information from the Routing API Default: <nil>
+*/
+	Uaa *Uaa `yaml:"uaa,omitempty"`
+
+	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
+*/
+	SystemDomain interface{} `yaml:"system_domain,omitempty"`
 
 	/*MetronEndpoint - Descr: The host used to emit messages to the Metron agent Default: 127.0.0.1
 */
@@ -37,72 +69,40 @@ type CloudControllerNgJob struct {
 */
 	Name interface{} `yaml:"name,omitempty"`
 
-	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
-*/
-	Domain interface{} `yaml:"domain,omitempty"`
-
-	/*SystemDomainOrganization - Descr: The User Org that owns the system_domain, required if system_domain is defined Default: 
-*/
-	SystemDomainOrganization interface{} `yaml:"system_domain_organization,omitempty"`
-
-	/*Uaa - Descr: Used for fetching usernames from UAA. Default: <nil>
-*/
-	Uaa *Uaa `yaml:"uaa,omitempty"`
-
-	/*Ssl - Descr: specifies that the job is allowed to skip ssl cert verification Default: false
-*/
-	Ssl *Ssl `yaml:"ssl,omitempty"`
-
-	/*Ccdb - Descr: The address of the database server Default: <nil>
-*/
-	Ccdb *Ccdb `yaml:"ccdb,omitempty"`
-
 	/*RequestTimeoutInSeconds - Descr: Timeout for requests in seconds. Default: 900
 */
 	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
-
-	/*AppDomains - Descr: Array of domains for user apps (example: 'user.app.space.foo', a user app called 'neat' will listen at 'http://neat.user.app.space.foo') Default: <nil>
-*/
-	AppDomains interface{} `yaml:"app_domains,omitempty"`
-
-	/*Router - Descr: Support for route services is disabled when no value is configured. Default: 
-*/
-	Router *Router `yaml:"router,omitempty"`
 
 	/*Build - Descr: 'build' attribute in the /v2/info endpoint Default: 
 */
 	Build interface{} `yaml:"build,omitempty"`
 
-	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
+	/*AppDomains - Descr: Array of domains for user apps (example: 'user.app.space.foo', a user app called 'neat' will listen at 'http://neat.user.app.space.foo') Default: <nil>
 */
-	SystemDomain interface{} `yaml:"system_domain,omitempty"`
+	AppDomains interface{} `yaml:"app_domains,omitempty"`
 
-	/*Login - Descr: whether use login as the authorization endpoint or not Default: true
+	/*NfsServer - Descr: The location at which to mount the nfs share Default: /var/vcap/nfs
+*/
+	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
+
+	/*AppSsh - Descr: Fingerprint of the host key of the SSH proxy that brokers connections to application instances Default: <nil>
+*/
+	AppSsh *AppSsh `yaml:"app_ssh,omitempty"`
+
+	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
+*/
+	Domain interface{} `yaml:"domain,omitempty"`
+
+	/*Cc - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
+*/
+	Cc *Cc `yaml:"cc,omitempty"`
+
+	/*Nats - Descr: IP port of Cloud Foundry NATS server Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
+
+	/*Login - Descr: http or https Default: https
 */
 	Login *Login `yaml:"login,omitempty"`
-
-	/*DeaNext - Descr: PEM-encoded CA certificate Default: <nil>
-*/
-	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
-
-	/*RoutingApi - Descr: Whether to expose the routing_endpoint listed at /v2/info. Enable this after deploying the Routing API Default: false
-*/
-	RoutingApi *RoutingApi `yaml:"routing_api,omitempty"`
-
-	/*Doppler - Descr: Whether to expose the doppler_logging_endpoint listed at /v2/info Default: true
-*/
-	Doppler *Doppler `yaml:"doppler,omitempty"`
-
-	/*Version - Descr: 'version' attribute in the /v2/info endpoint Default: 0
-*/
-	Version interface{} `yaml:"version,omitempty"`
-
-	/*LoggerEndpoint - Descr: Port for logger endpoint listed at /v2/info Default: 443
-*/
-	LoggerEndpoint *LoggerEndpoint `yaml:"logger_endpoint,omitempty"`
-
-	/*Hm9000 - Descr: URL of the hm9000 server Default: <nil>
-*/
-	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
 
 }

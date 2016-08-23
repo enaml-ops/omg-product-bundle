@@ -5,14 +5,6 @@ package route_registrar
 */
 type Nats struct {
 
-	/*Machines - Descr: IPs of each NATS cluster member Default: <nil>
-*/
-	Machines interface{} `yaml:"machines,omitempty"`
-
-	/*Port - Descr: TCP port of NATS servers Default: <nil>
-*/
-	Port interface{} `yaml:"port,omitempty"`
-
 	/*User - Descr: User name for NATS authentication Default: <nil>
 */
 	User interface{} `yaml:"user,omitempty"`
@@ -20,5 +12,13 @@ type Nats struct {
 	/*Password - Descr: Password for NATS authentication Default: <nil>
 */
 	Password interface{} `yaml:"password,omitempty"`
+
+	/*Machines - Descr: IPs of each NATS cluster member Default: <nil>
+*/
+	Machines interface{} `yaml:"machines,omitempty"`
+
+	/*Port - Descr: TCP port of NATS servers Default: <nil>
+*/
+	Port interface{} `yaml:"port,omitempty"`
 
 }

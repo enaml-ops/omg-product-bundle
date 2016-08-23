@@ -9,12 +9,12 @@ type Hm9000 struct {
 */
 	ClientKey interface{} `yaml:"client_key,omitempty"`
 
-	/*CaCert - Descr: PEM-encoded CA certificate Default: <nil>
-*/
-	CaCert interface{} `yaml:"ca_cert,omitempty"`
-
 	/*ClientCert - Descr: PEM-encoded client certificate Default: <nil>
 */
 	ClientCert interface{} `yaml:"client_cert,omitempty"`
+
+	/*CaCert - Descr: PEM-encoded CA certificate Default: <nil>
+*/
+	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
 }

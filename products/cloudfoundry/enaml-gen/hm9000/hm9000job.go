@@ -9,9 +9,25 @@ type Hm9000Job struct {
 */
 	Etcd *Etcd `yaml:"etcd,omitempty"`
 
+	/*Hm9000 - Descr: The batch size when fetching desired state information from the CC. Default: 5000
+*/
+	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
+
 	/*DeaNext - Descr: Heartbeat interval for DEAs Default: <nil>
 */
 	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
+
+	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
+*/
+	Domain interface{} `yaml:"domain,omitempty"`
+
+	/*Nats - Descr:  Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
+
+	/*Cc - Descr:  Default: <nil>
+*/
+	Cc *Cc `yaml:"cc,omitempty"`
 
 	/*Ssl - Descr: when connecting over https, ignore bad ssl certificates Default: false
 */
@@ -20,21 +36,5 @@ type Hm9000Job struct {
 	/*MetronAgent - Descr: Incoming port for dropsonde log messages Default: 3457
 */
 	MetronAgent *MetronAgent `yaml:"metron_agent,omitempty"`
-
-	/*Nats - Descr:  Default: <nil>
-*/
-	Nats *Nats `yaml:"nats,omitempty"`
-
-	/*Cc - Descr: Username for hm9000 API Default: internal_user
-*/
-	Cc *Cc `yaml:"cc,omitempty"`
-
-	/*Hm9000 - Descr: The maximum number of messages the sender should send per invocation. Default: 60
-*/
-	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
-
-	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
-*/
-	Domain interface{} `yaml:"domain,omitempty"`
 
 }

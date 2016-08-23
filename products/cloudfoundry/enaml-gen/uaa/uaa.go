@@ -5,135 +5,37 @@ package uaa
 */
 type Uaa struct {
 
+	/*Database - Descr: Timeout in seconds for the longest running queries. Take into DB migrations for this timeout as they may run during a long period of time. Default: 300
+*/
+	Database *Database `yaml:"database,omitempty"`
+
 	/*Login - Descr: Default login client secret, if no login client is defined Default: <nil>
 */
 	Login *UaaLogin `yaml:"login,omitempty"`
 
-	/*CatalinaOpts - Descr: The options used to configure Tomcat Default: -Xmx768m -XX:MaxPermSize=256m
+	/*Jwt - Descr: The key used to sign the JWT-based OAuth2 tokens Default: <nil>
 */
-	CatalinaOpts interface{} `yaml:"catalina_opts,omitempty"`
-
-	/*Ssl - Descr: If this property Tomcat will listen to this port and expect https traffic. If null, tomcat will not listen to this port Default: 8443
-*/
-	Ssl *Ssl `yaml:"ssl,omitempty"`
-
-	/*Url - Descr: The base url of the UAA Default: <nil>
-*/
-	Url interface{} `yaml:"url,omitempty"`
-
-	/*SpringProfiles - Descr: Deprecated. Use 'uaa.ldap.enabled' instead. Sets the Spring profiles on the UAA web application. This gets combined with the 'uaadb.db_scheme' property if and only if the value is exactly 'ldap' in order to setup the database, for example 'ldap,mysql'. If spring_profiles contains more than just 'ldap' it will be used to overwrite spring_profiles and db_scheme ignored. See uaa.yml.erb. Default: <nil>
-*/
-	SpringProfiles interface{} `yaml:"spring_profiles,omitempty"`
-
-	/*Admin - Descr: Secret of the admin client - a client named admin with uaa.admin as an authority Default: <nil>
-*/
-	Admin *Admin `yaml:"admin,omitempty"`
-
-	/*ProxyIpsRegex - Descr: A pipe delimited set of regular expressions of IP addresses that are considered reverse proxies.
-When a request from these IP addresses come in, the x-forwarded-for and x-forwarded-proto headers will be respected.
-If the uaa.restricted_ips_regex is set, it will be appended to this list for backwards compatibility purposes
-If spiff has been used and includes templates/cf-jobs.yml to generate the manifest. This list will automatically
-contain the Router IP addresses
- Default: 10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|169\.254\.\d{1,3}\.\d{1,3}|127\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.1[6-9]{1}\.\d{1,3}\.\d{1,3}|172\.2[0-9]{1}\.\d{1,3}\.\d{1,3}|172\.3[0-1]{1}\.\d{1,3}\.\d{1,3}
-*/
-	ProxyIpsRegex interface{} `yaml:"proxy_ips_regex,omitempty"`
-
-	/*Authentication - Descr: Number of seconds in which lockoutAfterFailures failures must occur in order for account to be locked Default: 3600
-*/
-	Authentication *Authentication `yaml:"authentication,omitempty"`
-
-	/*RestrictedIpsRegex - Descr: A pipe delimited set of regular expressions of IP addresses that can reach the listening HTTP port of the server. Default: 10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|169\.254\.\d{1,3}\.\d{1,3}|127\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.1[6-9]{1}\.\d{1,3}\.\d{1,3}|172\.2[0-9]{1}\.\d{1,3}\.\d{1,3}|172\.3[0-1]{1}\.\d{1,3}\.\d{1,3}
-*/
-	RestrictedIpsRegex interface{} `yaml:"restricted_ips_regex,omitempty"`
-
-	/*LoggingUseRfc3339 - Descr: Sets the time format for log messages to be yyyy-MM-dd'T'HH:mm:ss.SSSXXX instead of yyyy-MM-dd HH:mm:ss.SSS Default: false
-*/
-	LoggingUseRfc3339 interface{} `yaml:"logging_use_rfc3339,omitempty"`
-
-	/*Clients - Descr: List of OAuth2 clients that the UAA will be bootstrapped with Default: <nil>
-*/
-	Clients interface{} `yaml:"clients,omitempty"`
-
-	/*DisableInternalUserManagement - Descr: Disables UI and API for internal user management Default: false
-*/
-	DisableInternalUserManagement interface{} `yaml:"disableInternalUserManagement,omitempty"`
-
-	/*Database - Descr: Set to true if you don't want to be using LOWER() SQL functions in search queries/filters, because you know that your DB is case insensitive. If this property is null, then it will be set to true if the UAA DB is MySQL and false otherwise, but even on MySQL you can override it by setting it explicitly to false Default: <nil>
-*/
-	Database *Database `yaml:"database,omitempty"`
-
-	/*Password - Descr: Minimum number of characters required for password to be considered valid Default: 0
-*/
-	Password *UaaPassword `yaml:"password,omitempty"`
-
-	/*SslPrivateKey - Descr: The server's ssl private key. Only passphrase-less keys are supported Default: <nil>
-*/
-	SslPrivateKey interface{} `yaml:"sslPrivateKey,omitempty"`
-
-	/*Proxy - Descr: Array of the router IPs acting as the first group of HTTP/TCP backends. These will be added to the proxy_ips_regex as exact matches. When using spiff, these will be router_z1 and router_z2 static IPs from cf-jobs.yml Default: []
-*/
-	Proxy *Proxy `yaml:"proxy,omitempty"`
-
-	/*Scim - Descr: Contains a hash of group names and their descriptions. These groups will be added to the UAA database for the default zone but not associated with any user.
-Example:
-  uaa:
-    scim:
-      groups:
-        my-test-group: 'My test group description'
-        another-group: 'Another group description'
-Deprecated format(still supported, but may be removed in the future): 
-Comma separated list of groups that should be added to the UAA db, but not assigned to a user by default.
- Default: <nil>
-*/
-	Scim *Scim `yaml:"scim,omitempty"`
+	Jwt *Jwt `yaml:"jwt,omitempty"`
 
 	/*SslCertificate - Descr: The server's ssl certificate. The default is a self-signed certificate and should always be replaced for production deployments Default: <nil>
 */
 	SslCertificate interface{} `yaml:"sslCertificate,omitempty"`
 
-	/*Issuer - Descr: The url to use as the issuer URI Default: <nil>
+	/*LoggingUseRfc3339 - Descr: Sets the time format for log messages to be yyyy-MM-dd'T'HH:mm:ss.SSSXXX instead of yyyy-MM-dd HH:mm:ss.SSS Default: false
 */
-	Issuer interface{} `yaml:"issuer,omitempty"`
+	LoggingUseRfc3339 interface{} `yaml:"logging_use_rfc3339,omitempty"`
 
-	/*Zones - Descr: A list of hostnames that are routed to the UAA, specifically the default zone in the UAA. The UAA will reject any Host headers that it doesn't recognize.
-By default the UAA recognizes:
-  The hostname from the property uaa.url
-  The hostname from the property login.url
-  localhost (in order to accept health checks)
-Any hostnames added as a list are additive to the default hostnames allowed.
- Default: <nil>
+	/*Proxy - Descr: Array of the router IPs acting as the first group of HTTP/TCP backends. These will be added to the proxy_ips_regex as exact matches. When using spiff, these will be router_z1 and router_z2 static IPs from cf-jobs.yml Default: []
 */
-	Zones *Zones `yaml:"zones,omitempty"`
+	Proxy *Proxy `yaml:"proxy,omitempty"`
 
-	/*DumpRequests - Descr: When set to true dumps UAA requests to uaa.log Default: false
+	/*CatalinaOpts - Descr: The options used to configure Tomcat Default: -Xmx768m -XX:MaxPermSize=256m
 */
-	DumpRequests interface{} `yaml:"dump_requests,omitempty"`
+	CatalinaOpts interface{} `yaml:"catalina_opts,omitempty"`
 
-	/*User - Descr: Contains a list of the default authorities/scopes assigned to a user Default: [openid scim.me cloud_controller.read cloud_controller.write cloud_controller_service_permissions.read password.write uaa.user approvals.me oauth.approvals notification_preferences.read notification_preferences.write profile roles user_attributes]
+	/*Clients - Descr: List of OAuth2 clients that the UAA will be bootstrapped with Default: <nil>
 */
-	User *UaaUser `yaml:"user,omitempty"`
-
-	/*Jwt - Descr: The global refresh token validity for all zones if nothing is configured on the client Default: 2592000
-*/
-	Jwt *Jwt `yaml:"jwt,omitempty"`
-
-	/*RequireHttps - Descr: Request came in on a secure connection. Expect the load balancer/proxy to set the proper headers (x-forwarded-for, x-forwarded-proto) Default: true
-*/
-	RequireHttps interface{} `yaml:"require_https,omitempty"`
-
-	/*Port - Descr: Port that uaa will accept connections on Default: 8080
-*/
-	Port interface{} `yaml:"port,omitempty"`
-
-	/*Newrelic - Descr: To enable newrelic monitoring, the sub element of this property will be placed in
-a configuration file called newrelic.yml in the jobs config directory.
-The syntax that must adhere to documentation in https://docs.newrelic.com/docs/agents/java-agent/configuration/java-agent-configuration-config-file
-The JVM option -javaagent:/path/to/newrelic.jar will be added to Apache Tomcat's startup script
-The enablement of the NewRelic agent in the UAA is triggered by the property uaa.newrelic.common.license_key
-The property uaa.newrelic.common.license_key must be set!
- Default: <nil>
-*/
-	Newrelic interface{} `yaml:"newrelic,omitempty"`
+	Clients interface{} `yaml:"clients,omitempty"`
 
 	/*Servlet - Descr: Optional configuration of the UAA session cookie.
 Defaults are the following key value pairs:
@@ -148,20 +50,109 @@ Defaults are the following key value pairs:
 */
 	Servlet *Servlet `yaml:"servlet,omitempty"`
 
-	/*Ldap - Descr: Set to true when profile_type=groups_as_scopes to auto create scopes for a user. Ignored for other profiles. Default: true
+	/*Newrelic - Descr: To enable newrelic monitoring, the sub element of this property will be placed in
+a configuration file called newrelic.yml in the jobs config directory.
+The syntax that must adhere to documentation in https://docs.newrelic.com/docs/agents/java-agent/configuration/java-agent-configuration-config-file
+The JVM option -javaagent:/path/to/newrelic.jar will be added to Apache Tomcat's startup script
+The enablement of the NewRelic agent in the UAA is triggered by the property uaa.newrelic.common.license_key
+The property uaa.newrelic.common.license_key must be set!
+ Default: <nil>
+*/
+	Newrelic interface{} `yaml:"newrelic,omitempty"`
+
+	/*Port - Descr: Port that uaa will accept connections on Default: 8080
+*/
+	Port interface{} `yaml:"port,omitempty"`
+
+	/*User - Descr: Contains a list of the default authorities/scopes assigned to a user Default: [openid scim.me cloud_controller.read cloud_controller.write cloud_controller_service_permissions.read password.write uaa.user approvals.me oauth.approvals notification_preferences.read notification_preferences.write profile roles user_attributes]
+*/
+	User *UaaUser `yaml:"user,omitempty"`
+
+	/*Ldap - Descr: Used with search-and-bind and search-and-compare. A valid LDAP ID that has read permissions to perform a search of the LDAP tree for user information.  Default: <nil>
 */
 	Ldap *UaaLdap `yaml:"ldap,omitempty"`
 
-	/*DisableInternalAuth - Descr: Disables internal user authentication Default: false
+	/*ProxyIpsRegex - Descr: A pipe delimited set of regular expressions of IP addresses that are considered reverse proxies.
+When a request from these IP addresses come in, the x-forwarded-for and x-forwarded-proto headers will be respected.
+If the uaa.restricted_ips_regex is set, it will be appended to this list for backwards compatibility purposes
+If spiff has been used and includes templates/cf-jobs.yml to generate the manifest. This list will automatically
+contain the Router IP addresses
+ Default: 10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|169\.254\.\d{1,3}\.\d{1,3}|127\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.1[6-9]{1}\.\d{1,3}\.\d{1,3}|172\.2[0-9]{1}\.\d{1,3}\.\d{1,3}|172\.3[0-1]{1}\.\d{1,3}\.\d{1,3}
 */
-	DisableInternalAuth interface{} `yaml:"disableInternalAuth,omitempty"`
+	ProxyIpsRegex interface{} `yaml:"proxy_ips_regex,omitempty"`
+
+	/*SslPrivateKey - Descr: The server's ssl private key. Only passphrase-less keys are supported Default: <nil>
+*/
+	SslPrivateKey interface{} `yaml:"sslPrivateKey,omitempty"`
+
+	/*Zones - Descr: A list of hostnames that are routed to the UAA, specifically the default zone in the UAA. The UAA will reject any Host headers that it doesn't recognize.
+By default the UAA recognizes:
+  The hostname from the property uaa.url
+  The hostname from the property login.url
+  localhost (in order to accept health checks)
+Any hostnames added as a list are additive to the default hostnames allowed.
+ Default: <nil>
+*/
+	Zones *Zones `yaml:"zones,omitempty"`
 
 	/*Client - Descr: Deprecated Default: [login support-signon]
 */
 	Client *Client `yaml:"client,omitempty"`
 
+	/*DisableInternalUserManagement - Descr: Disables UI and API for internal user management Default: false
+*/
+	DisableInternalUserManagement interface{} `yaml:"disableInternalUserManagement,omitempty"`
+
+	/*Url - Descr: The base url of the UAA Default: <nil>
+*/
+	Url interface{} `yaml:"url,omitempty"`
+
+	/*RequireHttps - Descr: Request came in on a secure connection. Expect the load balancer/proxy to set the proper headers (x-forwarded-for, x-forwarded-proto) Default: true
+*/
+	RequireHttps interface{} `yaml:"require_https,omitempty"`
+
+	/*Admin - Descr: Secret of the admin client - a client named admin with uaa.admin as an authority Default: <nil>
+*/
+	Admin *Admin `yaml:"admin,omitempty"`
+
+	/*SpringProfiles - Descr: Deprecated. Use 'uaa.ldap.enabled' instead. Sets the Spring profiles on the UAA web application. This gets combined with the 'uaadb.db_scheme' property if and only if the value is exactly 'ldap' in order to setup the database, for example 'ldap,mysql'. If spring_profiles contains more than just 'ldap' it will be used to overwrite spring_profiles and db_scheme ignored. See uaa.yml.erb. Default: <nil>
+*/
+	SpringProfiles interface{} `yaml:"spring_profiles,omitempty"`
+
 	/*LoggingLevel - Descr: Set UAA logging level.  (e.g. TRACE, DEBUG, INFO) Default: DEBUG
 */
 	LoggingLevel interface{} `yaml:"logging_level,omitempty"`
+
+	/*Scim - Descr: If true override users defined in uaa.scim.users found in the database. Default: true
+*/
+	Scim *Scim `yaml:"scim,omitempty"`
+
+	/*Authentication - Descr: Number of seconds in which lockoutAfterFailures failures must occur in order for account to be locked Default: 3600
+*/
+	Authentication *Authentication `yaml:"authentication,omitempty"`
+
+	/*DumpRequests - Descr: When set to true dumps UAA requests to uaa.log Default: false
+*/
+	DumpRequests interface{} `yaml:"dump_requests,omitempty"`
+
+	/*DisableInternalAuth - Descr: Disables internal user authentication Default: false
+*/
+	DisableInternalAuth interface{} `yaml:"disableInternalAuth,omitempty"`
+
+	/*RestrictedIpsRegex - Descr: A pipe delimited set of regular expressions of IP addresses that can reach the listening HTTP port of the server. Default: 10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|169\.254\.\d{1,3}\.\d{1,3}|127\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.1[6-9]{1}\.\d{1,3}\.\d{1,3}|172\.2[0-9]{1}\.\d{1,3}\.\d{1,3}|172\.3[0-1]{1}\.\d{1,3}\.\d{1,3}
+*/
+	RestrictedIpsRegex interface{} `yaml:"restricted_ips_regex,omitempty"`
+
+	/*Password - Descr: Maximum number of characters required for password to be considered valid Default: 255
+*/
+	Password *UaaPassword `yaml:"password,omitempty"`
+
+	/*Issuer - Descr: The url to use as the issuer URI Default: <nil>
+*/
+	Issuer interface{} `yaml:"issuer,omitempty"`
+
+	/*Ssl - Descr: If this property Tomcat will listen to this port and expect https traffic. If null, tomcat will not listen to this port Default: 8443
+*/
+	Ssl *Ssl `yaml:"ssl,omitempty"`
 
 }

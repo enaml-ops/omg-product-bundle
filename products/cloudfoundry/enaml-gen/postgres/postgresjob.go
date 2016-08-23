@@ -5,7 +5,7 @@ package postgres
 */
 type PostgresJob struct {
 
-	/*Databases - Descr: The postgres `printf` style string that is output at the beginning of each log line Default: %m: 
+	/*Databases - Descr: A list of database roles and associated properties to create Default: <nil>
 */
 	Databases *Databases `yaml:"databases,omitempty"`
 

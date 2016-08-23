@@ -5,24 +5,24 @@ package uaa
 */
 type UaaJob struct {
 
-	/*Domain - Descr: Deprecated. Use uaa.url for setting the location of UAA Default: <nil>
+	/*Login - Descr: Deprecated. Use login.saml.providers list objects Default: 1
 */
-	Domain interface{} `yaml:"domain,omitempty"`
+	Login *Login `yaml:"login,omitempty"`
+
+	/*Uaa - Descr: Used with search-and-bind and search-and-compare. A valid LDAP ID that has read permissions to perform a search of the LDAP tree for user information.  Default: <nil>
+*/
+	Uaa *Uaa `yaml:"uaa,omitempty"`
 
 	/*Uaadb - Descr: The UAA database IP address Default: <nil>
 */
 	Uaadb *Uaadb `yaml:"uaadb,omitempty"`
 
-	/*Uaa - Descr: The url to use as the issuer URI Default: <nil>
-*/
-	Uaa *Uaa `yaml:"uaa,omitempty"`
-
-	/*Login - Descr: Deprecated. Use uaa.ldap.localPasswordCompare - login.ldap prefix is used for backwards compatibility to enable ldap from login config Default: true
-*/
-	Login *Login `yaml:"login,omitempty"`
-
-	/*Env - Descr: Set No_Proxy across the VMs Default: <nil>
+	/*Env - Descr: The http_proxy across the VMs Default: <nil>
 */
 	Env *Env `yaml:"env,omitempty"`
+
+	/*Domain - Descr: Deprecated. Use uaa.url for setting the location of UAA Default: <nil>
+*/
+	Domain interface{} `yaml:"domain,omitempty"`
 
 }

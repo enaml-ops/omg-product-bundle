@@ -5,21 +5,17 @@ package nsync
 */
 type Bbs struct {
 
-	/*ClientSessionCacheSize - Descr: capacity of the tls client cache Default: <nil>
+	/*RequireSsl - Descr: enable ssl for all communication with the bbs Default: true
 */
-	ClientSessionCacheSize interface{} `yaml:"client_session_cache_size,omitempty"`
-
-	/*ApiLocation - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
-*/
-	ApiLocation interface{} `yaml:"api_location,omitempty"`
+	RequireSsl interface{} `yaml:"require_ssl,omitempty"`
 
 	/*MaxIdleConnsPerHost - Descr: maximum number of idle http connections Default: <nil>
 */
 	MaxIdleConnsPerHost interface{} `yaml:"max_idle_conns_per_host,omitempty"`
 
-	/*CaCert - Descr: PEM-encoded CA certificate Default: <nil>
+	/*ClientSessionCacheSize - Descr: capacity of the tls client cache Default: <nil>
 */
-	CaCert interface{} `yaml:"ca_cert,omitempty"`
+	ClientSessionCacheSize interface{} `yaml:"client_session_cache_size,omitempty"`
 
 	/*ClientCert - Descr: PEM-encoded client certificate Default: <nil>
 */
@@ -29,8 +25,12 @@ type Bbs struct {
 */
 	ClientKey interface{} `yaml:"client_key,omitempty"`
 
-	/*RequireSsl - Descr: enable ssl for all communication with the bbs Default: true
+	/*ApiLocation - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
 */
-	RequireSsl interface{} `yaml:"require_ssl,omitempty"`
+	ApiLocation interface{} `yaml:"api_location,omitempty"`
+
+	/*CaCert - Descr: PEM-encoded CA certificate Default: <nil>
+*/
+	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
 }

@@ -5,7 +5,7 @@ package garden
 */
 type GardenJob struct {
 
-	/*Garden - Descr: Maximum number of containers that garden will have running at the same time. It is not recommended to set this larger than 250. Default: 250
+	/*Garden - Descr: List of CIDR blocks to which containers will be allowed access (applied after deny). Default: []
 */
 	Garden *Garden `yaml:"garden,omitempty"`
 

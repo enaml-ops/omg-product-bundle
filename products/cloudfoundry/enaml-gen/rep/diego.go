@@ -5,11 +5,11 @@ package rep
 */
 type Diego struct {
 
-	/*Rep - Descr: The zone associated with the rep Default: <nil>
+	/*Rep - Descr: PEM-encoded CA certificate Default: <nil>
 */
 	Rep *Rep `yaml:"rep,omitempty"`
 
-	/*Executor - Descr: the inode limit enforced on each garden container. Default: 200000
+	/*Executor - Descr: Maximum number of concurrent health check operations. Default: 64
 */
 	Executor *Executor `yaml:"executor,omitempty"`
 

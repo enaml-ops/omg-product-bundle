@@ -5,7 +5,7 @@ package nfs_mounter
 */
 type NfsMounterJob struct {
 
-	/*NfsServer - Descr: Path to share from the remote NFS server (not used in an AWS deploy, use s3 instead) Default: <nil>
+	/*NfsServer - Descr: NFS server for droplets and apps (not used in an AWS deploy, use s3 instead) Default: <nil>
 */
 	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
 

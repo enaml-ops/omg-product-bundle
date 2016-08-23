@@ -9,10 +9,6 @@ type Nats struct {
 */
 	Machines interface{} `yaml:"machines,omitempty"`
 
-	/*User - Descr: user name for NATS login Default: <nil>
-*/
-	User interface{} `yaml:"user,omitempty"`
-
 	/*Password - Descr: password for NATS login Default: <nil>
 */
 	Password interface{} `yaml:"password,omitempty"`
@@ -20,5 +16,9 @@ type Nats struct {
 	/*Port - Descr: TCP port of NATS server Default: <nil>
 */
 	Port interface{} `yaml:"port,omitempty"`
+
+	/*User - Descr: user name for NATS login Default: <nil>
+*/
+	User interface{} `yaml:"user,omitempty"`
 
 }

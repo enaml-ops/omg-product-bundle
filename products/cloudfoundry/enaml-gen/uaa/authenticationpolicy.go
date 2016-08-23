@@ -9,13 +9,13 @@ type AuthenticationPolicy struct {
 */
 	Global *Global `yaml:"global,omitempty"`
 
-	/*LockoutPeriodSeconds - Descr: Number of seconds to lock out an account when lockoutAfterFailures failures is exceeded Default: 300
-*/
-	LockoutPeriodSeconds interface{} `yaml:"lockoutPeriodSeconds,omitempty"`
-
 	/*LockoutAfterFailures - Descr: Number of allowed failures before account is locked Default: 5
 */
 	LockoutAfterFailures interface{} `yaml:"lockoutAfterFailures,omitempty"`
+
+	/*LockoutPeriodSeconds - Descr: Number of seconds to lock out an account when lockoutAfterFailures failures is exceeded Default: 300
+*/
+	LockoutPeriodSeconds interface{} `yaml:"lockoutPeriodSeconds,omitempty"`
 
 	/*CountFailuresWithinSeconds - Descr: Number of seconds in which lockoutAfterFailures failures must occur in order for account to be locked Default: 3600
 */

@@ -5,7 +5,7 @@ package cc_uploader
 */
 type Diego struct {
 
-	/*CcUploader - Descr: Log level Default: info
+	/*CcUploader - Descr: Address of interface on which to serve files Default: 0.0.0.0:9090
 */
 	CcUploader *CcUploader `yaml:"cc_uploader,omitempty"`
 

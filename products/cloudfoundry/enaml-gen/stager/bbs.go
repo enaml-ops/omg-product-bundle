@@ -5,10 +5,6 @@ package stager
 */
 type Bbs struct {
 
-	/*ApiLocation - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
-*/
-	ApiLocation interface{} `yaml:"api_location,omitempty"`
-
 	/*ClientCert - Descr: PEM-encoded client certificate Default: <nil>
 */
 	ClientCert interface{} `yaml:"client_cert,omitempty"`
@@ -21,6 +17,10 @@ type Bbs struct {
 */
 	RequireSsl interface{} `yaml:"require_ssl,omitempty"`
 
+	/*ClientSessionCacheSize - Descr: capacity of the tls client cache Default: <nil>
+*/
+	ClientSessionCacheSize interface{} `yaml:"client_session_cache_size,omitempty"`
+
 	/*MaxIdleConnsPerHost - Descr: maximum number of idle http connections Default: <nil>
 */
 	MaxIdleConnsPerHost interface{} `yaml:"max_idle_conns_per_host,omitempty"`
@@ -29,8 +29,8 @@ type Bbs struct {
 */
 	ClientKey interface{} `yaml:"client_key,omitempty"`
 
-	/*ClientSessionCacheSize - Descr: capacity of the tls client cache Default: <nil>
+	/*ApiLocation - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
 */
-	ClientSessionCacheSize interface{} `yaml:"client_session_cache_size,omitempty"`
+	ApiLocation interface{} `yaml:"api_location,omitempty"`
 
 }

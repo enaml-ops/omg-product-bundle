@@ -5,7 +5,7 @@ package auctioneer
 */
 type Diego struct {
 
-	/*Auctioneer - Descr: local metron agent's port Default: 3457
+	/*Auctioneer - Descr: Log level Default: info
 */
 	Auctioneer *Auctioneer `yaml:"auctioneer,omitempty"`
 

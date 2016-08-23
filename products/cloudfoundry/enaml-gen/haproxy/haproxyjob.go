@@ -5,10 +5,6 @@ package haproxy
 */
 type HaproxyJob struct {
 
-	/*HaProxy - Descr: Disable port 80 traffic Default: false
-*/
-	HaProxy *HaProxy `yaml:"ha_proxy,omitempty"`
-
 	/*Cc - Descr: Allow users to change the value of the app-level allow_ssh attribute Default: true
 */
 	Cc *Cc `yaml:"cc,omitempty"`
@@ -16,6 +12,10 @@ type HaproxyJob struct {
 	/*AppSsh - Descr: External port for SSH access to application instances Default: 2222
 */
 	AppSsh *AppSsh `yaml:"app_ssh,omitempty"`
+
+	/*HaProxy - Descr: Disable port 80 traffic Default: false
+*/
+	HaProxy *HaProxy `yaml:"ha_proxy,omitempty"`
 
 	/*RequestTimeoutInSeconds - Descr: Server and client timeouts in seconds Default: 900
 */

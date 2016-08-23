@@ -5,7 +5,7 @@ package auctioneer
 */
 type AuctioneerJob struct {
 
-	/*Diego - Descr: local metron agent's port Default: 3457
+	/*Diego - Descr: Log level Default: info
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

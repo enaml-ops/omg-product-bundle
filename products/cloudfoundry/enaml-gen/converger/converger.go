@@ -13,28 +13,28 @@ type Converger struct {
 */
 	RepeatIntervalInSeconds interface{} `yaml:"repeat_interval_in_seconds,omitempty"`
 
-	/*KickTaskDurationInSeconds - Descr: the interval, in seconds, between kicks to tasks in seconds Default: 30
+	/*ExpireCompletedTaskDurationInSeconds - Descr: completed, unresolved tasks are deleted after this duration in seconds Default: 120
 */
-	KickTaskDurationInSeconds interface{} `yaml:"kick_task_duration_in_seconds,omitempty"`
-
-	/*LogLevel - Descr: Log level Default: info
-*/
-	LogLevel interface{} `yaml:"log_level,omitempty"`
-
-	/*Bbs - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
-*/
-	Bbs *Bbs `yaml:"bbs,omitempty"`
+	ExpireCompletedTaskDurationInSeconds interface{} `yaml:"expire_completed_task_duration_in_seconds,omitempty"`
 
 	/*ExpirePendingTaskDurationInSeconds - Descr: unclaimed tasks are marked as failed, after this duration in seconds Default: 1800
 */
 	ExpirePendingTaskDurationInSeconds interface{} `yaml:"expire_pending_task_duration_in_seconds,omitempty"`
 
+	/*LogLevel - Descr: Log level Default: info
+*/
+	LogLevel interface{} `yaml:"log_level,omitempty"`
+
+	/*KickTaskDurationInSeconds - Descr: the interval, in seconds, between kicks to tasks in seconds Default: 30
+*/
+	KickTaskDurationInSeconds interface{} `yaml:"kick_task_duration_in_seconds,omitempty"`
+
 	/*DropsondePort - Descr: local metron agent's port Default: 3457
 */
 	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
 
-	/*ExpireCompletedTaskDurationInSeconds - Descr: completed, unresolved tasks are deleted after this duration in seconds Default: 120
+	/*Bbs - Descr: PEM-encoded client certificate Default: <nil>
 */
-	ExpireCompletedTaskDurationInSeconds interface{} `yaml:"expire_completed_task_duration_in_seconds,omitempty"`
+	Bbs *Bbs `yaml:"bbs,omitempty"`
 
 }

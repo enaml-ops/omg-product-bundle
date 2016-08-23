@@ -5,47 +5,51 @@ package cloud_controller_clock
 */
 type CloudControllerClockJob struct {
 
-	/*DeaNext - Descr: Memory limit in mb for staging tasks Default: 1024
+	/*Ssl - Descr: specifies that the job is allowed to skip ssl cert verification Default: false
 */
-	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
-
-	/*RequestTimeoutInSeconds - Descr: Timeout for requests in seconds. Default: 900
-*/
-	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
-
-	/*Cc - Descr: The api key for NewRelic Default: <nil>
-*/
-	Cc *Cc `yaml:"cc,omitempty"`
+	Ssl *Ssl `yaml:"ssl,omitempty"`
 
 	/*Login - Descr: URL of the login server Default: <nil>
 */
 	Login *Login `yaml:"login,omitempty"`
 
-	/*Nats - Descr: Username for cc client to connect to NATS Default: <nil>
+	/*DeaNext - Descr: Memory limit in mb for staging tasks Default: 1024
 */
-	Nats *Nats `yaml:"nats,omitempty"`
-
-	/*Build - Descr: 'build' attribute in the /v2/info endpoint Default: 
-*/
-	Build interface{} `yaml:"build,omitempty"`
+	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
 
 	/*Description - Descr: 'description' attribute in the /v2/info endpoint Default: 
 */
 	Description interface{} `yaml:"description,omitempty"`
 
-	/*Version - Descr: 'version' attribute in the /v2/info endpoint Default: 0
+	/*Build - Descr: 'build' attribute in the /v2/info endpoint Default: 
 */
-	Version interface{} `yaml:"version,omitempty"`
+	Build interface{} `yaml:"build,omitempty"`
 
-	/*SupportAddress - Descr: 'support' attribute in the /v2/info endpoint Default: 
+	/*Name - Descr: 'name' attribute in the /v2/info endpoint Default: 
 */
-	SupportAddress interface{} `yaml:"support_address,omitempty"`
+	Name interface{} `yaml:"name,omitempty"`
+
+	/*Nats - Descr: Username for cc client to connect to NATS Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
 
 	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
 */
 	Domain interface{} `yaml:"domain,omitempty"`
 
-	/*Ccdb - Descr: The port of the database server Default: <nil>
+	/*Version - Descr: 'version' attribute in the /v2/info endpoint Default: 0
+*/
+	Version interface{} `yaml:"version,omitempty"`
+
+	/*RequestTimeoutInSeconds - Descr: Timeout for requests in seconds. Default: 900
+*/
+	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
+
+	/*Cc - Descr: How old a failed job should stay in cloud controller database before being cleaned up Default: 31
+*/
+	Cc *Cc `yaml:"cc,omitempty"`
+
+	/*Ccdb - Descr: The address of the database server Default: <nil>
 */
 	Ccdb *Ccdb `yaml:"ccdb,omitempty"`
 
@@ -53,36 +57,32 @@ type CloudControllerClockJob struct {
 */
 	SystemDomain interface{} `yaml:"system_domain,omitempty"`
 
-	/*Name - Descr: 'name' attribute in the /v2/info endpoint Default: 
+	/*SupportAddress - Descr: 'support' attribute in the /v2/info endpoint Default: 
 */
-	Name interface{} `yaml:"name,omitempty"`
+	SupportAddress interface{} `yaml:"support_address,omitempty"`
+
+	/*Uaa - Descr: Used for generating SSO clients for service brokers. Default: <nil>
+*/
+	Uaa *Uaa `yaml:"uaa,omitempty"`
 
 	/*AppDomains - Descr: Array of domains for user apps (example: 'user.app.space.foo', a user app called 'neat' will listen at 'http://neat.user.app.space.foo') Default: <nil>
 */
 	AppDomains interface{} `yaml:"app_domains,omitempty"`
 
-	/*LoggerEndpoint - Descr: Whether to use ssl for logger endpoint listed at /v2/info Default: true
+	/*MetronEndpoint - Descr: The host used to emit messages to the Metron agent Default: 127.0.0.1
 */
-	LoggerEndpoint *LoggerEndpoint `yaml:"logger_endpoint,omitempty"`
-
-	/*SystemDomainOrganization - Descr: The User Org that owns the system_domain, required if system_domain is defined Default: 
-*/
-	SystemDomainOrganization interface{} `yaml:"system_domain_organization,omitempty"`
-
-	/*Uaa - Descr: (DEPRECATED) - Used to grant scope for SSO clients for service brokers Default: openid,cloud_controller_service_permissions.read
-*/
-	Uaa *Uaa `yaml:"uaa,omitempty"`
-
-	/*Ssl - Descr: specifies that the job is allowed to skip ssl cert verification Default: false
-*/
-	Ssl *Ssl `yaml:"ssl,omitempty"`
+	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
 
 	/*Hm9000 - Descr: URL of the hm9000 server Default: <nil>
 */
 	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
 
-	/*MetronEndpoint - Descr: The host used to emit messages to the Metron agent Default: 127.0.0.1
+	/*SystemDomainOrganization - Descr: The User Org that owns the system_domain, required if system_domain is defined Default: 
 */
-	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
+	SystemDomainOrganization interface{} `yaml:"system_domain_organization,omitempty"`
+
+	/*LoggerEndpoint - Descr: Port for logger endpoint listed at /v2/info Default: 443
+*/
+	LoggerEndpoint *LoggerEndpoint `yaml:"logger_endpoint,omitempty"`
 
 }

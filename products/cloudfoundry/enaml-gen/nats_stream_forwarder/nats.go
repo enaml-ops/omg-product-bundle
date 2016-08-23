@@ -5,10 +5,6 @@ package nats_stream_forwarder
 */
 type Nats struct {
 
-	/*Machines - Descr: NATS addresses Default: <nil>
-*/
-	Machines interface{} `yaml:"machines,omitempty"`
-
 	/*Port - Descr: The port for the NATS server to listen on. Default: <nil>
 */
 	Port interface{} `yaml:"port,omitempty"`
@@ -20,5 +16,9 @@ type Nats struct {
 	/*Password - Descr: Password for server authentication. Default: <nil>
 */
 	Password interface{} `yaml:"password,omitempty"`
+
+	/*Machines - Descr: NATS addresses Default: <nil>
+*/
+	Machines interface{} `yaml:"machines,omitempty"`
 
 }

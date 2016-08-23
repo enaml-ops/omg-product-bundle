@@ -5,12 +5,12 @@ package canary
 */
 type Diego struct {
 
-	/*Canary - Descr: The Elastic Runtime API endpoint URL Default: <nil>
-*/
-	Canary *Canary `yaml:"canary,omitempty"`
-
 	/*Ssl - Descr: Toggles cli verification of the Elastic Runtime API SSL certificate Default: false
 */
 	Ssl *Ssl `yaml:"ssl,omitempty"`
+
+	/*Canary - Descr: Stack for the canary app Default: cflinuxfs2
+*/
+	Canary *Canary `yaml:"canary,omitempty"`
 
 }

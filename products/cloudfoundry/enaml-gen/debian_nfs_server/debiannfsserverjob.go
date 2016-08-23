@@ -5,7 +5,7 @@ package debian_nfs_server
 */
 type DebianNfsServerJob struct {
 
-	/*NfsServer - Descr: An array of Hosts, Domains, Wildcard Domains, CIDR Networks and/or IPs from which /var/vcap/store is accessible Default: <nil>
+	/*NfsServer - Descr: Domain name for NFS idmapd Default: localdomain
 */
 	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
 

@@ -5,17 +5,13 @@ package uaa
 */
 type Uaadb struct {
 
-	/*Address - Descr: The UAA database IP address Default: <nil>
-*/
-	Address interface{} `yaml:"address,omitempty"`
-
-	/*DbScheme - Descr: Database scheme for UAA DB Default: <nil>
-*/
-	DbScheme interface{} `yaml:"db_scheme,omitempty"`
-
 	/*Roles - Descr: The list of database Roles used in UAA database including tag/name/password Default: <nil>
 */
 	Roles interface{} `yaml:"roles,omitempty"`
+
+	/*Address - Descr: The UAA database IP address Default: <nil>
+*/
+	Address interface{} `yaml:"address,omitempty"`
 
 	/*Databases - Descr: The list of databases used in UAA database including tag/name Default: <nil>
 */
@@ -24,5 +20,9 @@ type Uaadb struct {
 	/*Port - Descr: The UAA database Port Default: <nil>
 */
 	Port interface{} `yaml:"port,omitempty"`
+
+	/*DbScheme - Descr: Database scheme for UAA DB Default: <nil>
+*/
+	DbScheme interface{} `yaml:"db_scheme,omitempty"`
 
 }

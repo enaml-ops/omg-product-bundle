@@ -5,16 +5,16 @@ package cloud_controller_worker
 */
 type Diego struct {
 
-	/*TpsUrl - Descr: URL of the Diego tps service Default: http://tps.service.cf.internal:1518
+	/*StagerUrl - Descr: URL of the Diego stager service Default: http://stager.service.cf.internal:8888
 */
-	TpsUrl interface{} `yaml:"tps_url,omitempty"`
+	StagerUrl interface{} `yaml:"stager_url,omitempty"`
 
 	/*NsyncUrl - Descr: URL of the Diego nsync service Default: http://nsync.service.cf.internal:8787
 */
 	NsyncUrl interface{} `yaml:"nsync_url,omitempty"`
 
-	/*StagerUrl - Descr: URL of the Diego stager service Default: http://stager.service.cf.internal:8888
+	/*TpsUrl - Descr: URL of the Diego tps service Default: http://tps.service.cf.internal:1518
 */
-	StagerUrl interface{} `yaml:"stager_url,omitempty"`
+	TpsUrl interface{} `yaml:"tps_url,omitempty"`
 
 }

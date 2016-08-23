@@ -5,7 +5,7 @@ package acceptance_tests
 */
 type AcceptanceTestsJob struct {
 
-	/*AcceptanceTests - Descr: Flag to include the diego ssh suite Default: false
+	/*AcceptanceTests - Descr: Flag to include the security groups test suite. Default: false
 */
 	AcceptanceTests *AcceptanceTests `yaml:"acceptance_tests,omitempty"`
 

@@ -5,12 +5,12 @@ package doppler
 */
 type Loggregator struct {
 
-	/*Etcd - Descr: IPs pointing to the ETCD cluster Default: <nil>
-*/
-	Etcd *Etcd `yaml:"etcd,omitempty"`
-
 	/*Tls - Descr: CA root required for key/cert verification Default: 
 */
 	Tls *LoggregatorTls `yaml:"tls,omitempty"`
+
+	/*Etcd - Descr: IPs pointing to the ETCD cluster Default: <nil>
+*/
+	Etcd *Etcd `yaml:"etcd,omitempty"`
 
 }

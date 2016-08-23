@@ -5,7 +5,7 @@ package rep
 */
 type RepJob struct {
 
-	/*Diego - Descr: The zone associated with the rep Default: <nil>
+	/*Diego - Descr: PEM-encoded CA certificate Default: <nil>
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

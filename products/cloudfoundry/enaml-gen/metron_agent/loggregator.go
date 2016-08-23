@@ -9,7 +9,7 @@ type Loggregator struct {
 */
 	DropsondeIncomingPort interface{} `yaml:"dropsonde_incoming_port,omitempty"`
 
-	/*Etcd - Descr: Number of concurrent requests to ETCD Default: 10
+	/*Etcd - Descr: IPs pointing to the ETCD cluster Default: <nil>
 */
 	Etcd *Etcd `yaml:"etcd,omitempty"`
 

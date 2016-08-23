@@ -5,36 +5,36 @@ package tps
 */
 type Tps struct {
 
-	/*Watcher - Descr: address at which to serve debug info Default: 0.0.0.0:17015
+	/*Cc - Descr: Basic auth username for CC internal API Default: internal_user
 */
-	Watcher *Watcher `yaml:"watcher,omitempty"`
-
-	/*MaxInFlightRequests - Descr: Maximum number of requests to handle at once. Default: 200
-*/
-	MaxInFlightRequests interface{} `yaml:"max_in_flight_requests,omitempty"`
-
-	/*DropsondePort - Descr: local metron agent's port Default: 3457
-*/
-	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
+	Cc *Cc `yaml:"cc,omitempty"`
 
 	/*LogLevel - Descr: Log level Default: info
 */
 	LogLevel interface{} `yaml:"log_level,omitempty"`
 
-	/*TrafficControllerUrl - Descr: URL of Traffic controller Default: ws://loggregator-trafficcontroller.service.cf.internal:8081
+	/*Watcher - Descr: address at which to serve debug info Default: 0.0.0.0:17015
 */
-	TrafficControllerUrl interface{} `yaml:"traffic_controller_url,omitempty"`
+	Watcher *Watcher `yaml:"watcher,omitempty"`
 
-	/*Bbs - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
+	/*DropsondePort - Descr: local metron agent's port Default: 3457
+*/
+	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
+
+	/*Bbs - Descr: maximum number of idle http connections Default: <nil>
 */
 	Bbs *Bbs `yaml:"bbs,omitempty"`
 
-	/*Cc - Descr: Basic auth username for CC internal API Default: internal_user
-*/
-	Cc *Cc `yaml:"cc,omitempty"`
-
-	/*Listener - Descr: address at which to serve API requests Default: 0.0.0.0:1518
+	/*Listener - Descr: address at which to serve debug info Default: 0.0.0.0:17014
 */
 	Listener *Listener `yaml:"listener,omitempty"`
+
+	/*MaxInFlightRequests - Descr: Maximum number of requests to handle at once. Default: 200
+*/
+	MaxInFlightRequests interface{} `yaml:"max_in_flight_requests,omitempty"`
+
+	/*TrafficControllerUrl - Descr: URL of Traffic controller Default: ws://loggregator-trafficcontroller.service.cf.internal:8081
+*/
+	TrafficControllerUrl interface{} `yaml:"traffic_controller_url,omitempty"`
 
 }

@@ -5,56 +5,56 @@ package stager
 */
 type Stager struct {
 
-	/*LogLevel - Descr: Log level Default: info
+	/*LifecycleBundles - Descr: List of lifecycle bundles arguments for different stacks in form 'lifecycle-name:path/to/bundle' Default: [buildpack/cflinuxfs2:buildpack_app_lifecycle/buildpack_app_lifecycle.tgz buildpack/windows2012R2:windows_app_lifecycle/windows_app_lifecycle.tgz docker:docker_app_lifecycle/docker_app_lifecycle.tgz]
 */
-	LogLevel interface{} `yaml:"log_level,omitempty"`
+	LifecycleBundles interface{} `yaml:"lifecycle_bundles,omitempty"`
 
-	/*ListenAddr - Descr: Address from which the Stager serves requests Default: 0.0.0.0:8888
+	/*Cc - Descr: Basic auth username for CC internal API Default: internal_user
 */
-	ListenAddr interface{} `yaml:"listen_addr,omitempty"`
-
-	/*DebugAddr - Descr: address at which to serve debug info Default: 0.0.0.0:17011
-*/
-	DebugAddr interface{} `yaml:"debug_addr,omitempty"`
+	Cc *Cc `yaml:"cc,omitempty"`
 
 	/*CcUploaderUrl - Descr: URL of cc uploader Default: http://cc-uploader.service.cf.internal:9090
 */
 	CcUploaderUrl interface{} `yaml:"cc_uploader_url,omitempty"`
 
-	/*FileServerUrl - Descr: URL of file server Default: http://file-server.service.cf.internal:8080
+	/*DockerRegistryAddress - Descr: Address of the Docker Registry used for image caching Default: docker-registry.service.cf.internal:8080
 */
-	FileServerUrl interface{} `yaml:"file_server_url,omitempty"`
+	DockerRegistryAddress interface{} `yaml:"docker_registry_address,omitempty"`
 
 	/*DropsondePort - Descr: local metron agent's port Default: 3457
 */
 	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
 
+	/*DebugAddr - Descr: address at which to serve debug info Default: 0.0.0.0:17011
+*/
+	DebugAddr interface{} `yaml:"debug_addr,omitempty"`
+
+	/*ListenAddr - Descr: Address from which the Stager serves requests Default: 0.0.0.0:8888
+*/
+	ListenAddr interface{} `yaml:"listen_addr,omitempty"`
+
 	/*StagingTaskCallbackUrl - Descr: URL for staging task callbacks Default: http://stager.service.cf.internal:8888
 */
 	StagingTaskCallbackUrl interface{} `yaml:"staging_task_callback_url,omitempty"`
-
-	/*LifecycleBundles - Descr: List of lifecycle bundles arguments for different stacks in form 'lifecycle-name:path/to/bundle' Default: [buildpack/cflinuxfs2:buildpack_app_lifecycle/buildpack_app_lifecycle.tgz buildpack/windows2012R2:windows_app_lifecycle/windows_app_lifecycle.tgz docker:docker_app_lifecycle/docker_app_lifecycle.tgz]
-*/
-	LifecycleBundles interface{} `yaml:"lifecycle_bundles,omitempty"`
-
-	/*InsecureDockerRegistryList - Descr: An array of insecure Docker registries in the form of <HOSTNAME|IP>:PORT Default: []
-*/
-	InsecureDockerRegistryList interface{} `yaml:"insecure_docker_registry_list,omitempty"`
-
-	/*DockerRegistryAddress - Descr: Address of the Docker Registry used for image caching Default: docker-registry.service.cf.internal:8080
-*/
-	DockerRegistryAddress interface{} `yaml:"docker_registry_address,omitempty"`
 
 	/*DockerStagingStack - Descr: stack to use for staging Docker applications Default: cflinuxfs2
 */
 	DockerStagingStack interface{} `yaml:"docker_staging_stack,omitempty"`
 
-	/*Cc - Descr: External port to access the Cloud Controller Default: 9022
+	/*InsecureDockerRegistryList - Descr: An array of insecure Docker registries in the form of <HOSTNAME|IP>:PORT Default: []
 */
-	Cc *Cc `yaml:"cc,omitempty"`
+	InsecureDockerRegistryList interface{} `yaml:"insecure_docker_registry_list,omitempty"`
 
-	/*Bbs - Descr: PEM-encoded CA certificate Default: <nil>
+	/*Bbs - Descr: enable ssl for all communication with the bbs Default: true
 */
 	Bbs *Bbs `yaml:"bbs,omitempty"`
+
+	/*FileServerUrl - Descr: URL of file server Default: http://file-server.service.cf.internal:8080
+*/
+	FileServerUrl interface{} `yaml:"file_server_url,omitempty"`
+
+	/*LogLevel - Descr: Log level Default: info
+*/
+	LogLevel interface{} `yaml:"log_level,omitempty"`
 
 }

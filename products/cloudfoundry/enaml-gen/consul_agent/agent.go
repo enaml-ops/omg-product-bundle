@@ -5,6 +5,14 @@ package consul_agent
 */
 type Agent struct {
 
+	/*LogLevel - Descr: Agent log level. Default: info
+*/
+	LogLevel interface{} `yaml:"log_level,omitempty"`
+
+	/*Datacenter - Descr: Name of the agent's datacenter. Default: dc1
+*/
+	Datacenter interface{} `yaml:"datacenter,omitempty"`
+
 	/*Services - Descr: Map of consul service definitions. Default: map[]
 */
 	Services interface{} `yaml:"services,omitempty"`
@@ -24,13 +32,5 @@ type Agent struct {
 	/*Servers - Descr: LAN server addresses to join on start. Default: []
 */
 	Servers *Servers `yaml:"servers,omitempty"`
-
-	/*Datacenter - Descr: Name of the agent's datacenter. Default: dc1
-*/
-	Datacenter interface{} `yaml:"datacenter,omitempty"`
-
-	/*LogLevel - Descr: Agent log level. Default: info
-*/
-	LogLevel interface{} `yaml:"log_level,omitempty"`
 
 }

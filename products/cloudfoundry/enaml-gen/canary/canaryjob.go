@@ -5,7 +5,7 @@ package canary
 */
 type CanaryJob struct {
 
-	/*Diego - Descr: The Elastic Runtime API endpoint URL Default: <nil>
+	/*Diego - Descr: Stack for the canary app Default: cflinuxfs2
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 
