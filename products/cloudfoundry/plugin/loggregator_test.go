@@ -57,6 +57,10 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 				"--syslog-address", "syslog-server",
 				"--syslog-port", "10601",
 				"--syslog-transport", "tcp",
+				"--nats-user", "natsuser",
+				"--nats-pass", "natspass",
+				"--nats-port", "4333",
+				"--nats-machine-ip", "10.0.0.4",
 			})
 			grouper = NewLoggregatorTrafficController(c)
 			dm = new(enaml.DeploymentManifest)
@@ -147,6 +151,12 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 			Ω(routes[1]).Should(HaveKeyWithValue("registration_interval", "20s"))
 			Ω(routes[1]).Should(HaveKey("uris"))
 			Ω(routes[1]["uris"]).Should(ConsistOf("loggregator.sys.yourdomain.com"))
+
+			Ω(props.Nats).ShouldNot(BeNil())
+			Ω(props.Nats.User).Should(Equal("natsuser"))
+			Ω(props.Nats.Password).Should(Equal("natspass"))
+			Ω(props.Nats.Port).Should(Equal(4333))
+			Ω(props.Nats.Machines).Should(ConsistOf("10.0.0.4"))
 		})
 
 		It("then it should have the statsd-injector job", func() {

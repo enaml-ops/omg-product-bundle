@@ -24,7 +24,7 @@ func NewLoggregatorTrafficController(c *cli.Context) InstanceGrouper {
 			User:     c.String("nats-user"),
 			Password: c.String("nats-pass"),
 			Machines: c.StringSlice("nats-machine-ip"),
-			Port:     4222,
+			Port:     c.Int("nats-port"),
 		},
 	}
 }
@@ -149,6 +149,12 @@ func (l *loggregatorTrafficController) createRouteRegistrarJob() enaml.InstanceJ
 						"uris":                  []string{"loggregator." + l.SystemDomain},
 					},
 				},
+			},
+			Nats: &route_registrar.Nats{
+				User:     l.Nats.User,
+				Password: l.Nats.Password,
+				Port:     l.Nats.Port,
+				Machines: l.Nats.Machines,
 			},
 		},
 	}
