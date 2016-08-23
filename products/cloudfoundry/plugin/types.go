@@ -325,6 +325,9 @@ type CloudControllerWorkerPartition struct {
 	DbEncryptionKey       string
 	InternalAPIUser       string
 	InternalAPIPassword   string
+	CCDBUsername          string
+	CCDBPassword          string
+	MySQLProxyIP          string
 }
 
 //CloudControllerPartition - Cloud Controller Partition

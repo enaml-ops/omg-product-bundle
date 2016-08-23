@@ -9,6 +9,12 @@ import (
 
 //NewCloudControllerWorkerPartition - Creating a New Cloud Controller Partition
 func NewCloudControllerWorkerPartition(c *cli.Context) InstanceGrouper {
+	var proxyIP string
+	mysqlProxies := c.StringSlice("mysql-proxy-ip")
+	if len(mysqlProxies) > 0 {
+		proxyIP = mysqlProxies[0]
+	}
+
 	return &CloudControllerWorkerPartition{
 		AZs:                   c.StringSlice("az"),
 		VMTypeName:            c.String("cc-worker-vm-type"),
@@ -28,6 +34,9 @@ func NewCloudControllerWorkerPartition(c *cli.Context) InstanceGrouper {
 		InternalAPIUser:       c.String("cc-internal-api-user"),
 		InternalAPIPassword:   c.String("cc-internal-api-password"),
 		DbEncryptionKey:       c.String("cc-db-encryption-key"),
+		CCDBUsername:          c.String("db-ccdb-username"),
+		CCDBPassword:          c.String("db-ccdb-password"),
+		MySQLProxyIP:          proxyIP,
 	}
 }
 
@@ -58,9 +67,25 @@ func (s *CloudControllerWorkerPartition) ToInstanceGroup() (ig *enaml.InstanceGr
 }
 
 func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.InstanceJob {
+	adminRole := make(map[string]string)
+	adminRole["name"] = c.CCDBUsername
+	adminRole["password"] = c.CCDBPassword
+	adminRole["tag"] = "admin"
+
+	var roles []map[string]string
+	roles = append(roles, adminRole)
+
+	ccdb := make(map[string]interface{})
+	ccdb["citext"] = true
+	ccdb["name"] = "ccdb"
+	ccdb["tag"] = "cc"
+
+	var databases []map[string]interface{}
+	databases = append(databases, ccdb)
+
 	return enaml.InstanceJob{
 		Name:    "cloud_controller_worker",
-		Release: "cf",
+		Release: CFReleaseName,
 		Properties: &ccworkerlib.CloudControllerWorkerJob{
 			Domain:                   c.SystemDomain,
 			SystemDomain:             c.SystemDomain,
@@ -105,6 +130,13 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 				InternalApiUser:           c.InternalAPIUser,
 				InternalApiPassword:       c.InternalAPIPassword,
 				DbEncryptionKey:           c.DbEncryptionKey,
+			},
+			Ccdb: &ccworkerlib.Ccdb{
+				Address:   c.MySQLProxyIP,
+				Databases: databases,
+				DbScheme:  "mysql",
+				Port:      3306,
+				Roles:     roles,
 			},
 		},
 	}
