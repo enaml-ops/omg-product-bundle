@@ -137,12 +137,14 @@ var _ = Describe("given a Diego Database Partition", func() {
 					It("then it should use the correct release", func() {
 						Ω(job.Release).Should(Equal(EtcdReleaseName))
 					})
-					It("then it should populate my properties", func() {
+					It("then it should populate my properties under etcd", func() {
 						Ω(job.Properties).ShouldNot(BeNil())
+						props := job.Properties.(*etcd.EtcdJob)
+						Ω(props.Etcd).ShouldNot(BeNil())
 					})
 					It("should have the cluster as an array", func() {
-						props := job.Properties.(*etcd.Etcd)
-						arr := props.Cluster.([]map[string]interface{})
+						props := job.Properties.(*etcd.EtcdJob)
+						arr := props.Etcd.Cluster.([]map[string]interface{})
 						Ω(arr).Should(HaveLen(1))
 					})
 				})

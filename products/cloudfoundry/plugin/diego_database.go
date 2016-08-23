@@ -178,28 +178,27 @@ func (s *diegoDatabase) newBBS() (dbdiego *bbs.Diego) {
 	return
 }
 
-func (s *diegoDatabase) newEtcd() (dbetcd *etcd.Etcd) {
-	dbetcd = &etcd.Etcd{
-		CaCert:                 s.CACert,
-		ServerCert:             s.EtcdServerCert,
-		ServerKey:              s.EtcdServerKey,
-		ClientCert:             s.EtcdClientCert,
-		ClientKey:              s.EtcdClientKey,
-		PeerCaCert:             s.CACert,
-		PeerCert:               s.EtcdPeerCert,
-		PeerKey:                s.EtcdPeerKey,
-		AdvertiseUrlsDnsSuffix: fmt.Sprintf("etcd.%s", s.SystemDomain),
-		Machines: []string{
-			fmt.Sprintf("etcd.%s", s.SystemDomain),
-		},
-		Cluster: []map[string]interface{}{
-			{
-				"name":      diegoDatabaseIGName,
-				"instances": len(s.NetworkIPs),
+func (s *diegoDatabase) newEtcd() *etcd.EtcdJob {
+	return &etcd.EtcdJob{
+		Etcd: &etcd.Etcd{
+			CaCert:                 s.CACert,
+			ServerCert:             s.EtcdServerCert,
+			ServerKey:              s.EtcdServerKey,
+			ClientCert:             s.EtcdClientCert,
+			ClientKey:              s.EtcdClientKey,
+			PeerCaCert:             s.CACert,
+			PeerCert:               s.EtcdPeerCert,
+			PeerKey:                s.EtcdPeerKey,
+			AdvertiseUrlsDnsSuffix: fmt.Sprintf("etcd.%s", s.SystemDomain),
+			Machines:               []string{fmt.Sprintf("etcd.%s", s.SystemDomain)},
+			Cluster: []map[string]interface{}{
+				{
+					"name":      diegoDatabaseIGName,
+					"instances": len(s.NetworkIPs),
+				},
 			},
 		},
 	}
-	return
 }
 
 func (s *diegoDatabase) newBBSEtcd() (dbetcd *bbs.Etcd) {
