@@ -190,6 +190,9 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(props.Uaa.Clients.CloudControllerUsernameLookup.Secret).Should(Equal("usernamelookupsecret"))
 			Ω(props.Uaa.Clients.CcRouting).ShouldNot(BeNil())
 			Ω(props.Uaa.Clients.CcRouting.Secret).Should(Equal("ccroutingsecret"))
+
+			Ω(props.Ssl).ShouldNot(BeNil())
+			Ω(props.Ssl.SkipCertVerify).Should(BeTrue())
 		})
 
 		It("should have NFS Mounter set as a job", func() {

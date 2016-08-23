@@ -363,6 +363,7 @@ type CloudControllerPartition struct {
 	CCServiceDashboardSecret string
 	CCUsernameLookupSecret   string
 	CCRoutingSecret          string
+	SkipSSLCertVerify        bool
 }
 
 //Doppler -

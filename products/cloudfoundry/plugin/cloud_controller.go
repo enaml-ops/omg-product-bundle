@@ -45,6 +45,7 @@ func NewCloudControllerPartition(c *cli.Context) InstanceGrouper {
 		CCServiceDashboardSecret: c.String("cc-service-dashboards-client-secret"),
 		CCUsernameLookupSecret:   c.String("cloud-controller-username-lookup-client-secret"),
 		CCRoutingSecret:          c.String("cc-routing-client-secret"),
+		SkipSSLCertVerify:        c.BoolT("skip-cert-verify"),
 	}
 }
 
@@ -216,6 +217,9 @@ func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJo
 					},
 				},
 			},
+			Ssl: &ccnglib.Ssl{
+				SkipCertVerify: c.SkipSSLCertVerify,
+			},
 		},
 	}
 }
@@ -280,7 +284,7 @@ func (s *CloudControllerPartition) HasValidValues() bool {
 	if s.MySQLProxyIP == "" {
 		lo.G.Debug("missing mysql proxy IP")
 	}
-	
+
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&
