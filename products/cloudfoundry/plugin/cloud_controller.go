@@ -63,8 +63,8 @@ func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 
 func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJob {
 	return enaml.InstanceJob{
-		Name:    "cloud_controller_worker",
-		Release: "cf",
+		Name:    "cloud_controller_ng",
+		Release: CFReleaseName,
 		Properties: &ccnglib.CloudControllerNgJob{
 			AppSsh: &ccnglib.AppSsh{
 				HostKeyFingerprint: c.HostKeyFingerprint,
@@ -78,6 +78,7 @@ func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJo
 				Url: fmt.Sprintf("https://login.%s", c.SystemDomain),
 			},
 			Cc: &ccnglib.Cc{
+				AllowedCorsDomains:    []string{fmt.Sprintf("https://login.%s", c.SystemDomain)},
 				AllowAppSshAccess:     c.AllowAppSSHAccess,
 				DefaultToDiegoBackend: true,
 				Buildpacks: &ccnglib.Buildpacks{
@@ -108,32 +109,59 @@ func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJo
 						LocalRoot: "/var/vcap/nfs/shared",
 					},
 				},
-				ExternalProtocol:          "https",
-				LoggingLevel:              "debug",
-				MaximumHealthCheckTimeout: 600,
-				StagingUploadUser:         c.StagingUploadUser,
-				StagingUploadPassword:     c.StagingUploadPassword,
-				BulkApiUser:               c.BulkAPIUser,
-				BulkApiPassword:           c.BulkAPIPassword,
-				InternalApiUser:           c.InternalAPIUser,
-				InternalApiPassword:       c.InternalAPIPassword,
-				DbEncryptionKey:           c.DbEncryptionKey,
-				DefaultRunningSecurityGroups: []string{
-					"all_open",
+				ClientMaxBodySize:            "1024M",
+				ExternalProtocol:             "https",
+				LoggingLevel:                 "debug",
+				MaximumHealthCheckTimeout:    600,
+				StagingUploadUser:            c.StagingUploadUser,
+				StagingUploadPassword:        c.StagingUploadPassword,
+				BulkApiUser:                  c.BulkAPIUser,
+				BulkApiPassword:              c.BulkAPIPassword,
+				InternalApiUser:              c.InternalAPIUser,
+				InternalApiPassword:          c.InternalAPIPassword,
+				DbEncryptionKey:              c.DbEncryptionKey,
+				DefaultRunningSecurityGroups: []string{"all_open"},
+				DefaultStagingSecurityGroups: []string{"all_open"},
+				DisableCustomBuildpacks:      false,
+				ExternalHost:                 "api",
+				InstallBuildpacks:            []string{},
+				QuotaDefinitions: map[string]interface{}{
+					"default": map[string]interface{}{
+						"memory_limit":               10240,
+						"total_services":             100,
+						"non_basic_services_allowed": true,
+						"total_routes":               1000,
+						"trial_db_allowed":           true,
+					},
+					"runaway": map[string]interface{}{
+						"memory_limit":               102400,
+						"total_services":             -1,
+						"total_routes":               1000,
+						"non_basic_services_allowed": true,
+					},
 				},
-				DefaultStagingSecurityGroups: []string{
-					"all_open",
+				SecurityGroupDefinitions: []map[string]interface{}{
+					map[string]interface{}{
+						"name": "all_open",
+						"rules": []map[string]interface{}{
+							map[string]interface{}{
+								"protocol":    "all",
+								"destination": "0.0.0.0-255.255.255.255",
+							},
+						},
+					},
 				},
-				DisableCustomBuildpacks: false,
-				ExternalHost:            "api",
-				InstallBuildpacks:       []string{},
-
-				QuotaDefinitions: []string{},
-
-				SecurityGroupDefinitions: []string{},
-
-				Stacks: []string{},
-
+				Stacks: []map[string]interface{}{
+					map[string]interface{}{
+						"name":        "cflinuxfs2",
+						"description": "Cloud Foundry Linux-based filesystem",
+					},
+					map[string]interface{}{
+						"name":        "windows2012R2",
+						"description": "Microsoft Windows / .NET 64 bit",
+					},
+				},
+				UaaResourceId:            "cloud_controller,cloud_controller_service_permissions",
 				MinCliVersion:            c.MinCliVersion,
 				MinRecommendedCliVersion: c.MinCliVersion,
 			},

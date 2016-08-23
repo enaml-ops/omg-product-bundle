@@ -31,6 +31,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 				"--consul-server-key", "consulserverkey",
 				"--cc-vm-type", "ccvmtype",
 				"--network", "foundry",
+				"--host-key-fingerprint", "hostkeyfingerprint",
 				"--cc-staging-upload-user", "staginguser",
 				"--cc-staging-upload-password", "stagingpassword",
 				"--cc-bulk-api-user", "bulkapiuser",
@@ -52,12 +53,15 @@ var _ = Describe("Cloud Controller Partition", func() {
 
 			cloudController = NewCloudControllerPartition(c)
 		})
+
 		It("then should not be nil", func() {
 			Ω(cloudController).ShouldNot(BeNil())
 		})
+
 		It("should have valid values", func() {
 			Ω(cloudController.HasValidValues()).Should(BeTrue())
 		})
+
 		It("should have the name of the Network correctly set", func() {
 			igf := cloudController.ToInstanceGroup()
 
@@ -65,24 +69,87 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(len(networks)).Should(Equal(1))
 			Ω(networks[0].Name).Should(Equal("foundry"))
 		})
+
 		It("should have 5 jobs under it", func() {
 			igf := cloudController.ToInstanceGroup()
 			jobs := igf.Jobs
 			Ω(len(jobs)).Should(Equal(5))
 		})
+
+		It("should have configured the cloud_controller_ng job", func() {
+			igf := cloudController.ToInstanceGroup()
+			job := igf.GetJobByName("cloud_controller_ng")
+			Ω(job).ShouldNot(BeNil())
+			Ω(job.Release).Should(Equal(CFReleaseName))
+
+			props := job.Properties.(*ccnglib.CloudControllerNgJob)
+			Ω(props.AppSsh.HostKeyFingerprint).Should(Equal("hostkeyfingerprint"))
+			Ω(props.Domain).Should(Equal("sys.yourdomain.com"))
+			Ω(props.SystemDomain).Should(Equal("sys.yourdomain.com"))
+			Ω(props.SystemDomainOrganization).Should(Equal("system"))
+			Ω(props.Login.Url).Should(Equal("https://login.sys.yourdomain.com"))
+
+			Ω(props.Cc.AllowedCorsDomains).Should(ConsistOf("https://login.sys.yourdomain.com"))
+			Ω(props.Cc.AllowAppSshAccess).Should(BeTrue())
+			Ω(props.Cc.DefaultToDiegoBackend).Should(BeTrue())
+			Ω(props.Cc.ClientMaxBodySize).Should(Equal("1024M"))
+			Ω(props.Cc.ExternalProtocol).Should(Equal("https"))
+			Ω(props.Cc.LoggingLevel).Should(Equal("debug"))
+			Ω(props.Cc.MaximumHealthCheckTimeout).Should(Equal(600))
+			Ω(props.Cc.StagingUploadUser).Should(Equal("staginguser"))
+			Ω(props.Cc.StagingUploadPassword).Should(Equal("stagingpassword"))
+			Ω(props.Cc.BulkApiUser).Should(Equal("bulkapiuser"))
+			Ω(props.Cc.BulkApiPassword).Should(Equal("bulkapipassword"))
+			Ω(props.Cc.InternalApiUser).Should(Equal("internalapiuser"))
+			Ω(props.Cc.InternalApiPassword).Should(Equal("internalapipassword"))
+			Ω(props.Cc.DbEncryptionKey).Should(Equal("dbencryptionkey"))
+			Ω(props.Cc.DefaultRunningSecurityGroups).Should(ConsistOf("all_open"))
+			Ω(props.Cc.DefaultStagingSecurityGroups).Should(ConsistOf("all_open"))
+			Ω(props.Cc.DisableCustomBuildpacks).Should(BeFalse())
+			Ω(props.Cc.ExternalHost).Should(Equal("api"))
+			Ω(props.Cc.QuotaDefinitions).Should(HaveKey("default"))
+			Ω(props.Cc.QuotaDefinitions).Should(HaveKey("runaway"))
+			Ω(props.Cc.SecurityGroupDefinitions).Should(HaveLen(1))
+			sg := props.Cc.SecurityGroupDefinitions.([]map[string]interface{})
+			Ω(sg[0]).Should(HaveKeyWithValue("name", "all_open"))
+			Ω(sg[0]).Should(HaveKey("rules"))
+			Ω(sg[0]["rules"]).Should(HaveLen(1))
+			rules := sg[0]["rules"].([]map[string]interface{})
+			Ω(rules[0]).Should(HaveKeyWithValue("protocol", "all"))
+			Ω(rules[0]).Should(HaveKeyWithValue("destination", "0.0.0.0-255.255.255.255"))
+			stacks := props.Cc.Stacks.([]map[string]interface{})
+			Ω(stacks).Should(HaveLen(2))
+			Ω(stacks[0]).Should(HaveKeyWithValue("name", "cflinuxfs2"))
+			Ω(stacks[1]).Should(HaveKeyWithValue("name", "windows2012R2"))
+			Ω(props.Cc.UaaResourceId).Should(Equal("cloud_controller,cloud_controller_service_permissions"))
+
+			expectedFog := &ccnglib.DefaultFogConnection{
+				Provider:  "Local",
+				LocalRoot: "/var/vcap/nfs/shared",
+			}
+			Ω(props.Cc.Buildpacks.BlobstoreType).Should(Equal("fog"))
+			Ω(props.Cc.Droplets.BlobstoreType).Should(Equal("fog"))
+			Ω(props.Cc.Packages.BlobstoreType).Should(Equal("fog"))
+			Ω(props.Cc.ResourcePool.BlobstoreType).Should(Equal("fog"))
+			Ω(props.Cc.Buildpacks.FogConnection).Should(Equal(expectedFog))
+			Ω(props.Cc.Droplets.FogConnection).Should(Equal(expectedFog))
+			Ω(props.Cc.Packages.FogConnection).Should(Equal(expectedFog))
+			Ω(props.Cc.ResourcePool.FogConnection).Should(Equal(expectedFog))
+		})
+
 		It("should have NFS Mounter set as a job", func() {
 			igf := cloudController.ToInstanceGroup()
 			nfsMounter := igf.Jobs[2]
 			Ω(nfsMounter.Name).Should(Equal("nfs_mounter"))
 		})
+
 		It("should have NFS Mounter details set properly", func() {
 			igf := cloudController.ToInstanceGroup()
 
 			b, _ := yaml.Marshal(igf)
-			//fmt.Print(string(b))
-
 			Ω(string(b)).Should(ContainSubstring("https://login.sys.yourdomain.com"))
 		})
+
 		XIt("should account for QuotaDefinitions structure", func() {
 			igf := cloudController.ToInstanceGroup()
 			Ω(igf.Jobs[0].Name).Should(Equal("cloud_controller_worker"))
@@ -92,6 +159,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 			_, quotaTypeCasted := ccNg.Cc.QuotaDefinitions.([]string)
 			Ω(quotaTypeCasted).Should(BeFalse())
 		})
+
 		XIt("should account for InstallBuildPacks structure", func() {
 			igf := cloudController.ToInstanceGroup()
 			Ω(igf.Jobs[0].Name).Should(Equal("cloud_controller_worker"))
@@ -101,6 +169,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 			_, bpTypecasted := ccNg.Cc.InstallBuildpacks.([]string)
 			Ω(bpTypecasted).Should(BeFalse())
 		})
+
 		XIt("should account for SecurityGroupDefinitions structure", func() {
 			igf := cloudController.ToInstanceGroup()
 			Ω(igf.Jobs[0].Name).Should(Equal("cloud_controller_worker"))
@@ -110,6 +179,5 @@ var _ = Describe("Cloud Controller Partition", func() {
 			_, securityTypcasted := ccNg.Cc.SecurityGroupDefinitions.([]string)
 			Ω(securityTypcasted).Should(BeFalse())
 		})
-
 	})
 })
