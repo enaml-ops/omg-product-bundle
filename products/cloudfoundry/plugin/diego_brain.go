@@ -44,7 +44,6 @@ func NewDiegoBrainPartition(c *cli.Context) InstanceGrouper {
 		BBSCACert:                 caCert,
 		BBSClientCert:             clientCert,
 		BBSClientKey:              clientKey,
-		BBSAPILocation:            c.String("bbs-api"),
 		BBSRequireSSL:             c.BoolT("bbs-require-ssl"),
 		SkipSSLCertVerify:         c.BoolT("skip-cert-verify"),
 		CCUploaderJobPollInterval: c.Int("cc-uploader-poll-interval"),
@@ -137,9 +136,6 @@ func (d *diegoBrain) HasValidValues() bool {
 	if d.BBSClientCert == "" {
 		lo.G.Debugf("could not find a valid bbsclientcert '%v'", d.BBSClientCert)
 	}
-	if d.BBSAPILocation == "" {
-		lo.G.Debugf("could not find a valid BBSAPILocation '%v'", d.BBSAPILocation)
-	}
 	if d.CCInternalAPIUser == "" {
 		lo.G.Debugf("could not find a valid CCInternalAPIUser '%v'", d.CCInternalAPIUser)
 	}
@@ -159,7 +155,6 @@ func (d *diegoBrain) HasValidValues() bool {
 		d.BBSCACert != "" &&
 		d.BBSClientCert != "" &&
 		d.BBSClientKey != "" &&
-		d.BBSAPILocation != "" &&
 		d.CCInternalAPIUser != "" &&
 		d.CCInternalAPIPassword != "" &&
 		d.SystemDomain != "" &&
@@ -173,7 +168,7 @@ func (d *diegoBrain) newAuctioneer() *enaml.InstanceJob {
 		Release: DiegoReleaseName,
 		Properties: &auctioneer.Auctioneer{
 			Bbs: &auctioneer.Bbs{
-				ApiLocation: d.BBSAPILocation,
+				ApiLocation: "bbs.service.cf.internal:8889",
 				CaCert:      d.BBSCACert,
 				ClientCert:  d.BBSClientCert,
 				ClientKey:   d.BBSClientKey,
@@ -205,7 +200,7 @@ func (d *diegoBrain) newConverger() *enaml.InstanceJob {
 		Release: DiegoReleaseName,
 		Properties: &converger.Converger{
 			Bbs: &converger.Bbs{
-				ApiLocation: d.BBSAPILocation,
+				ApiLocation: "bbs.service.cf.internal:8889",
 				CaCert:      d.BBSCACert,
 				ClientCert:  d.BBSClientCert,
 				ClientKey:   d.BBSClientKey,
@@ -250,7 +245,7 @@ func (d *diegoBrain) newNsync() *enaml.InstanceJob {
 						PollingIntervalInSeconds: d.CCUploaderJobPollInterval,
 					},
 					Bbs: &nsync.Bbs{
-						ApiLocation: d.BBSAPILocation,
+						ApiLocation: "bbs.service.cf.internal:8889",
 						CaCert:      d.BBSCACert,
 						ClientCert:  d.BBSClientCert,
 						ClientKey:   d.BBSClientKey,
@@ -269,7 +264,7 @@ func (d *diegoBrain) newRouteEmitter() *enaml.InstanceJob {
 			Diego: &route_emitter.Diego{
 				RouteEmitter: &route_emitter.RouteEmitter{
 					Bbs: &route_emitter.Bbs{
-						ApiLocation: d.BBSAPILocation,
+						ApiLocation: "bbs.service.cf.internal:8889",
 						CaCert:      d.BBSCACert,
 						ClientCert:  d.BBSClientCert,
 						ClientKey:   d.BBSClientKey,
@@ -297,7 +292,7 @@ func (d *diegoBrain) newSSHProxy() *enaml.InstanceJob {
 				Ssl: &ssh_proxy.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
 				SshProxy: &ssh_proxy.SshProxy{
 					Bbs: &ssh_proxy.Bbs{
-						ApiLocation: d.BBSAPILocation,
+						ApiLocation: "bbs.service.cf.internal:8889",
 						CaCert:      d.BBSCACert,
 						ClientCert:  d.BBSClientCert,
 						ClientKey:   d.BBSClientKey,
@@ -325,7 +320,7 @@ func (d *diegoBrain) newStager() *enaml.InstanceJob {
 				Ssl: &stager.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
 				Stager: &stager.Stager{
 					Bbs: &stager.Bbs{
-						ApiLocation: d.BBSAPILocation,
+						ApiLocation: "bbs.service.cf.internal:8889",
 						CaCert:      d.BBSCACert,
 						ClientCert:  d.BBSClientCert,
 						ClientKey:   d.BBSClientKey,
@@ -353,7 +348,7 @@ func (d *diegoBrain) newTPS() *enaml.InstanceJob {
 				Tps: &tps.Tps{
 					TrafficControllerUrl: d.TrafficControllerURL,
 					Bbs: &tps.Bbs{
-						ApiLocation: d.BBSAPILocation,
+						ApiLocation: "bbs.service.cf.internal:8889",
 						CaCert:      d.BBSCACert,
 						ClientCert:  d.BBSClientCert,
 						ClientKey:   d.BBSClientKey,

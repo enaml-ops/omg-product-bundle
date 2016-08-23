@@ -71,7 +71,6 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				"--bbs-ca-cert", "cacert",
 				"--bbs-client-cert", "clientcert",
 				"--bbs-client-key", "clientkey",
-				"--bbs-api", "bbs.service.cf.internal:8889",
 				"--bbs-require-ssl=false",
 				"--skip-cert-verify=false",
 				"--cc-uploader-poll-interval", "25",

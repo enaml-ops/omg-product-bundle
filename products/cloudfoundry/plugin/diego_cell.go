@@ -108,7 +108,7 @@ func (s *diegoCell) newRDiego() (rdiego *rep.RepJob) {
 			},
 			Rep: &rep.Rep{
 				Bbs: &rep.Bbs{
-					ApiLocation: s.DiegoBrain.BBSAPILocation,
+					ApiLocation: "bbs.service.cf.internal:8889",
 					CaCert:      s.DiegoBrain.BBSCACert,
 					ClientCert:  s.DiegoBrain.BBSClientCert,
 					ClientKey:   s.DiegoBrain.BBSClientKey,

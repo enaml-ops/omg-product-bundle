@@ -41,7 +41,6 @@ var _ = Describe("given a Diego Database Partition", func() {
 					"--bbs-client-key", "clientkey",
 					"--bbs-server-cert", "clientcert",
 					"--bbs-server-key", "clientkey",
-					"--bbs-api", "bbs.service.cf.internal:8889",
 					"--consul-ip", "1.0.0.1",
 					"--consul-ip", "1.0.0.2",
 					"--consul-vm-type", "blah",

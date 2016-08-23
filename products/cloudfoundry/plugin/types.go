@@ -139,7 +139,6 @@ type diegoBrain struct {
 	BBSCACert                 string
 	BBSClientCert             string
 	BBSClientKey              string
-	BBSAPILocation            string
 	BBSRequireSSL             bool
 	SkipSSLCertVerify         bool
 	CCUploaderJobPollInterval int

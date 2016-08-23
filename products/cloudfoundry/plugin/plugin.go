@@ -168,7 +168,6 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("bbs-ca-cert", "BBS CA SSL cert (or a file containing it: file format `@filepath`)"),
 		createStringFlag("bbs-client-cert", "BBS client SSL cert (or a file containing it: file format `@filepath`)"),
 		createStringFlag("bbs-client-key", "BBS client SSL key (or a file containing it: file format `@filepath`)"),
-		createStringFlag("bbs-api", "location of the bbs api"),
 		createBoolTFlag("bbs-require-ssl", "enable SSL for all communications with the BBS"),
 
 		createBoolTFlag("skip-cert-verify", "ignore bad SSL certificates when connecting over HTTPS"),

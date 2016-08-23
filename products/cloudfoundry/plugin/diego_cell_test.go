@@ -7,6 +7,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/rep"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -34,7 +35,6 @@ var _ = Describe("given a Diego Cell Partition", func() {
 					"--bbs-ca-cert", "cacert",
 					"--bbs-client-cert", "clientcert",
 					"--bbs-client-key", "clientkey",
-					"--bbs-api", "bbs.service.cf.internal:8889",
 					"--consul-ip", "1.0.0.1",
 					"--consul-ip", "1.0.0.2",
 					"--consul-vm-type", "blah",
@@ -84,6 +84,10 @@ var _ = Describe("given a Diego Cell Partition", func() {
 					})
 					It("then it should use the correct release", func() {
 						Ω(job.Release).Should(Equal(DiegoReleaseName))
+					})
+					It("then it should set the BBS API location", func() {
+						props := job.Properties.(*rep.RepJob)
+						Ω(props.Diego.Rep.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
 					})
 				})
 			})
