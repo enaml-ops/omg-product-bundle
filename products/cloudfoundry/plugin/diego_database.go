@@ -1,8 +1,6 @@
 package cloudfoundry
 
 import (
-	"fmt"
-
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/bbs"
@@ -170,7 +168,7 @@ func (s *diegoDatabase) newBBS() (dbdiego *bbs.Diego) {
 				},
 			},
 			Auctioneer: &bbs.Auctioneer{
-				ApiUrl: fmt.Sprintf("http://auctioneer.%s:9016", s.SystemDomain),
+				ApiUrl: "http://auctioneer.service.cf.internal:9016",
 			},
 			Etcd: s.newBBSEtcd(),
 		},
@@ -189,8 +187,8 @@ func (s *diegoDatabase) newEtcd() *etcd.EtcdJob {
 			PeerCaCert:             s.CACert,
 			PeerCert:               s.EtcdPeerCert,
 			PeerKey:                s.EtcdPeerKey,
-			AdvertiseUrlsDnsSuffix: fmt.Sprintf("etcd.%s", s.SystemDomain),
-			Machines:               []string{fmt.Sprintf("etcd.%s", s.SystemDomain)},
+			AdvertiseUrlsDnsSuffix: "etcd.service.cf.internal",
+			Machines:               []string{"etcd.service.cf.internal"},
 			Cluster: []map[string]interface{}{
 				{
 					"name":      diegoDatabaseIGName,
@@ -206,9 +204,7 @@ func (s *diegoDatabase) newBBSEtcd() (dbetcd *bbs.Etcd) {
 		CaCert:     s.CACert,
 		ClientCert: s.EtcdClientCert,
 		ClientKey:  s.EtcdClientKey,
-		Machines: []string{
-			fmt.Sprintf("etcd.", s.SystemDomain),
-		},
+		Machines:   []string{"etcd.service.cf.internal"},
 	}
 	return
 }

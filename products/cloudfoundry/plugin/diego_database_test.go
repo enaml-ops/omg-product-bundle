@@ -142,10 +142,15 @@ var _ = Describe("given a Diego Database Partition", func() {
 						props := job.Properties.(*etcd.EtcdJob)
 						Ω(props.Etcd).ShouldNot(BeNil())
 					})
-					It("should have the cluster as an array", func() {
+					It("then it should have the cluster as an array", func() {
 						props := job.Properties.(*etcd.EtcdJob)
 						arr := props.Etcd.Cluster.([]map[string]interface{})
 						Ω(arr).Should(HaveLen(1))
+					})
+					It("then it should use internal hostnames for etcd", func() {
+						props := job.Properties.(*etcd.EtcdJob)
+						Ω(props.Etcd.AdvertiseUrlsDnsSuffix).Should(Equal("etcd.service.cf.internal"))
+						Ω(props.Etcd.Machines).Should(ConsistOf("etcd.service.cf.internal"))
 					})
 				})
 			})
@@ -153,33 +158,41 @@ var _ = Describe("given a Diego Database Partition", func() {
 			Describe("given a bbs job", func() {
 				Context("when defined", func() {
 					var job *enaml.InstanceJob
+
 					BeforeEach(func() {
 						job = instanceGroup.GetJobByName("bbs")
 					})
+
 					It("then it should use the correct release", func() {
 						Ω(job.Release).Should(Equal(DiegoReleaseName))
 					})
 
+					It("then it should populate my properties", func() {
+						Ω(job.Properties).ShouldNot(BeNil())
+					})
+
 					It("should properly set my server key/cert", func() {
-						propertiesCasted := job.Properties.(*bbs.Diego)
-						Ω(propertiesCasted.Bbs.ServerCert).Should(Equal("clientcert"))
-						Ω(propertiesCasted.Bbs.ServerKey).Should(Equal("clientkey"))
+						props := job.Properties.(*bbs.Diego)
+						Ω(props.Bbs.ServerCert).Should(Equal("clientcert"))
+						Ω(props.Bbs.ServerKey).Should(Equal("clientkey"))
 					})
 
 					It("should properly set my db passphrase", func() {
-						propertiesCasted := job.Properties.(*bbs.Diego)
-						arr := propertiesCasted.Bbs.EncryptionKeys.([]map[string]string)
+						props := job.Properties.(*bbs.Diego)
+						arr := props.Bbs.EncryptionKeys.([]map[string]string)
 						Ω(arr).Should(HaveLen(1))
 						Ω(arr[0]["passphrase"]).Should(Equal("random-db-encrytionkey"))
 					})
 
-					It("should properly set my bbs.etcd", func() {
-						propertiesCasted := job.Properties.(*bbs.Diego)
-						Ω(propertiesCasted.Bbs.Etcd).ShouldNot(BeNil())
+					It("should properly set my auctioneer API URL", func() {
+						props := job.Properties.(*bbs.Diego)
+						Ω(props.Bbs.Auctioneer.ApiUrl).Should(Equal("http://auctioneer.service.cf.internal:9016"))
 					})
 
-					It("then it should populate my properties", func() {
-						Ω(job.Properties).ShouldNot(BeNil())
+					It("should properly set my bbs.etcd", func() {
+						props := job.Properties.(*bbs.Diego)
+						Ω(props.Bbs.Etcd).ShouldNot(BeNil())
+						Ω(props.Bbs.Etcd.Machines).Should(ConsistOf("etcd.service.cf.internal"))
 					})
 
 					It("should have cnryption keys as an array", func() {
