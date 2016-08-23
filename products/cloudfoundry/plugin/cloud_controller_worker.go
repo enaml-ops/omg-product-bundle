@@ -67,22 +67,6 @@ func (s *CloudControllerWorkerPartition) ToInstanceGroup() (ig *enaml.InstanceGr
 }
 
 func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.InstanceJob {
-	adminRole := make(map[string]string)
-	adminRole["name"] = c.CCDBUsername
-	adminRole["password"] = c.CCDBPassword
-	adminRole["tag"] = "admin"
-
-	var roles []map[string]string
-	roles = append(roles, adminRole)
-
-	ccdb := make(map[string]interface{})
-	ccdb["citext"] = true
-	ccdb["name"] = "ccdb"
-	ccdb["tag"] = "cc"
-
-	var databases []map[string]interface{}
-	databases = append(databases, ccdb)
-
 	return enaml.InstanceJob{
 		Name:    "cloud_controller_worker",
 		Release: CFReleaseName,
@@ -121,22 +105,62 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 						LocalRoot: "/var/vcap/nfs/shared",
 					},
 				},
-				LoggingLevel:              "debug",
-				MaximumHealthCheckTimeout: "600",
-				StagingUploadUser:         c.StagingUploadUser,
-				StagingUploadPassword:     c.StagingUploadPassword,
-				BulkApiUser:               c.BulkAPIUser,
-				BulkApiPassword:           c.BulkAPIPassword,
-				InternalApiUser:           c.InternalAPIUser,
-				InternalApiPassword:       c.InternalAPIPassword,
-				DbEncryptionKey:           c.DbEncryptionKey,
+				QuotaDefinitions: map[string]interface{}{
+					"default": map[string]interface{}{
+						"memory_limit":               10240,
+						"total_services":             100,
+						"non_basic_services_allowed": true,
+						"total_routes":               1000,
+						"trial_db_allowed":           true,
+					},
+					"runaway": map[string]interface{}{
+						"memory_limit":               102400,
+						"total_services":             -1,
+						"non_basic_services_allowed": true,
+						"total_routes":               1000,
+					},
+				},
+				SecurityGroupDefinitions: []map[string]interface{}{
+					map[string]interface{}{
+						"name": "all_open",
+						"rules": []map[string]interface{}{
+							map[string]interface{}{
+								"protocol":    "all",
+								"destination": "0.0.0.0-255.255.255.255",
+							},
+						},
+					},
+				},
+				DefaultRunningSecurityGroups: []string{"all_open"},
+				DefaultStagingSecurityGroups: []string{"all_open"},
+				LoggingLevel:                 "debug",
+				MaximumHealthCheckTimeout:    "600",
+				StagingUploadUser:            c.StagingUploadUser,
+				StagingUploadPassword:        c.StagingUploadPassword,
+				BulkApiUser:                  c.BulkAPIUser,
+				BulkApiPassword:              c.BulkAPIPassword,
+				InternalApiUser:              c.InternalAPIUser,
+				InternalApiPassword:          c.InternalAPIPassword,
+				DbEncryptionKey:              c.DbEncryptionKey,
 			},
 			Ccdb: &ccworkerlib.Ccdb{
-				Address:   c.MySQLProxyIP,
-				Databases: databases,
-				DbScheme:  "mysql",
-				Port:      3306,
-				Roles:     roles,
+				Address: c.MySQLProxyIP,
+				Databases: []map[string]interface{}{
+					map[string]interface{}{
+						"citext": true,
+						"name":   "ccdb",
+						"tag":    "cc",
+					},
+				},
+				DbScheme: "mysql",
+				Port:     3306,
+				Roles: []map[string]interface{}{
+					{
+						"name":     c.CCDBUsername,
+						"password": c.CCDBPassword,
+						"tag":      "admin",
+					},
+				},
 			},
 		},
 	}

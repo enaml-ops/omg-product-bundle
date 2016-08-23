@@ -96,7 +96,7 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 			Ω(ccdb.Port).Should(Equal(3306))
 			Ω(ccdb.Address).Should(Equal("10.0.0.3"))
 
-			roles := ccdb.Roles.([]map[string]string)
+			roles := ccdb.Roles.([]map[string]interface{})
 			Ω(roles).Should(HaveLen(1))
 			Ω(roles[0]).Should(HaveKeyWithValue("name", "ccdbuser"))
 			Ω(roles[0]).Should(HaveKeyWithValue("password", "ccdbpass"))
@@ -107,6 +107,28 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 			Ω(dbs[0]).Should(HaveKeyWithValue("citext", true))
 			Ω(dbs[0]).Should(HaveKeyWithValue("name", "ccdb"))
 			Ω(dbs[0]).Should(HaveKeyWithValue("tag", "cc"))
+
+			cc := props.Cc
+			Ω(cc.DefaultRunningSecurityGroups).Should(ConsistOf("all_open"))
+			Ω(cc.DefaultStagingSecurityGroups).Should(ConsistOf("all_open"))
+
+			quotas := cc.QuotaDefinitions.(map[string]interface{})
+			Ω(quotas).Should(HaveLen(2))
+			Ω(quotas).Should(HaveKey("default"))
+			Ω(quotas).Should(HaveKey("runaway"))
+
+			def := quotas["default"]
+			Ω(def).Should(HaveKeyWithValue("memory_limit", 10240))
+			Ω(def).Should(HaveKeyWithValue("total_services", 100))
+			Ω(def).Should(HaveKeyWithValue("non_basic_services_allowed", true))
+			Ω(def).Should(HaveKeyWithValue("total_routes", 1000))
+			Ω(def).Should(HaveKeyWithValue("trial_db_allowed", true))
+
+			runaway := quotas["runaway"]
+			Ω(runaway).Should(HaveKeyWithValue("memory_limit", 102400))
+			Ω(runaway).Should(HaveKeyWithValue("total_services", -1))
+			Ω(runaway).Should(HaveKeyWithValue("non_basic_services_allowed", true))
+			Ω(runaway).Should(HaveKeyWithValue("total_routes", 1000))
 		})
 	})
 })
