@@ -46,7 +46,9 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 				"--mysql-proxy-ip", "10.0.0.3",
 				"--db-ccdb-username", "ccdbuser",
 				"--db-ccdb-password", "ccdbpass",
+				"--nats-user", "natsuser",
 				"--nats-pass", "natspass",
+				"--nats-port", "4333",
 				"--nats-machine-ip", "10.0.0.4",
 			})
 
@@ -133,8 +135,8 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 			Ω(runaway).Should(HaveKeyWithValue("total_routes", 1000))
 
 			nats := props.Nats
-			Ω(nats.User).Should(Equal("nats"))
-			Ω(nats.Port).Should(Equal(4222))
+			Ω(nats.User).Should(Equal("natsuser"))
+			Ω(nats.Port).Should(Equal(4333))
 			Ω(nats.Password).Should(Equal("natspass"))
 			Ω(nats.Machines).Should(ConsistOf("10.0.0.4"))
 		})

@@ -37,7 +37,9 @@ func NewCloudControllerWorkerPartition(c *cli.Context) InstanceGrouper {
 		CCDBUsername:          c.String("db-ccdb-username"),
 		CCDBPassword:          c.String("db-ccdb-password"),
 		MySQLProxyIP:          proxyIP,
+		NATSUser:              c.String("nats-user"),
 		NATSPassword:          c.String("nats-pass"),
+		NATSPort:              c.Int("nats-port"),
 		NATSMachines:          c.StringSlice("nats-machine-ip"),
 	}
 }
@@ -165,8 +167,8 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 				},
 			},
 			Nats: &ccworkerlib.Nats{
-				User:     "nats",
-				Port:     4222,
+				User:     c.NATSUser,
+				Port:     c.NATSPort,
 				Password: c.NATSPassword,
 				Machines: c.NATSMachines,
 			},

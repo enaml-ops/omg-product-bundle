@@ -57,6 +57,10 @@ var _ = Describe("Cloud Controller Partition", func() {
 				"--cc-service-dashboards-client-secret", "ccdashboardsecret",
 				"--cloud-controller-username-lookup-client-secret", "usernamelookupsecret",
 				"--cc-routing-client-secret", "ccroutingsecret",
+				"--nats-user", "natsuser",
+				"--nats-pass", "natspass",
+				"--nats-port", "4333",
+				"--nats-machine-ip", "10.0.0.4",
 			})
 
 			cloudController = NewCloudControllerPartition(c)
@@ -193,6 +197,22 @@ var _ = Describe("Cloud Controller Partition", func() {
 
 			Ω(props.Ssl).ShouldNot(BeNil())
 			Ω(props.Ssl.SkipCertVerify).Should(BeTrue())
+
+			Ω(props.LoggerEndpoint).ShouldNot(BeNil())
+			Ω(props.LoggerEndpoint.Port).Should(Equal(443))
+
+			Ω(props.Doppler).ShouldNot(BeNil())
+			Ω(props.Doppler.Port).Should(Equal(443))
+
+			Ω(props.NfsServer).ShouldNot(BeNil())
+			Ω(props.NfsServer.Address).Should(Equal("10.0.0.19"))
+			Ω(props.NfsServer.SharePath).Should(Equal("/var/vcap/nfs"))
+
+			Ω(props.Nats).ShouldNot(BeNil())
+			Ω(props.Nats.User).Should(Equal("natsuser"))
+			Ω(props.Nats.Password).Should(Equal("natspass"))
+			Ω(props.Nats.Port).Should(Equal(4333))
+			Ω(props.Nats.Machines).Should(ConsistOf("10.0.0.4"))
 		})
 
 		It("should have NFS Mounter set as a job", func() {

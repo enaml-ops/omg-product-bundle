@@ -328,7 +328,9 @@ type CloudControllerWorkerPartition struct {
 	CCDBUsername          string
 	CCDBPassword          string
 	MySQLProxyIP          string
+	NATSUser              string
 	NATSPassword          string
+	NATSPort              int
 	NATSMachines          []string
 }
 
@@ -364,6 +366,10 @@ type CloudControllerPartition struct {
 	CCUsernameLookupSecret   string
 	CCRoutingSecret          string
 	SkipSSLCertVerify        bool
+	NATSUser                 string
+	NATSPass                 string
+	NATSPort                 int
+	NATSMachines             []string
 }
 
 //Doppler -

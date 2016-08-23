@@ -46,6 +46,10 @@ func NewCloudControllerPartition(c *cli.Context) InstanceGrouper {
 		CCUsernameLookupSecret:   c.String("cloud-controller-username-lookup-client-secret"),
 		CCRoutingSecret:          c.String("cc-routing-client-secret"),
 		SkipSSLCertVerify:        c.BoolT("skip-cert-verify"),
+		NATSUser:                 c.String("nats-user"),
+		NATSPass:                 c.String("nats-pass"),
+		NATSPort:                 c.Int("nats-port"),
+		NATSMachines:             c.StringSlice("nats-machine-ip"),
 	}
 }
 
@@ -219,6 +223,22 @@ func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJo
 			},
 			Ssl: &ccnglib.Ssl{
 				SkipCertVerify: c.SkipSSLCertVerify,
+			},
+			LoggerEndpoint: &ccnglib.LoggerEndpoint{
+				Port: 443,
+			},
+			Doppler: &ccnglib.Doppler{
+				Port: 443,
+			},
+			NfsServer: &ccnglib.NfsServer{
+				Address:   c.NFSMounter.NFSServerAddress,
+				SharePath: "/var/vcap/nfs",
+			},
+			Nats: &ccnglib.Nats{
+				User:     c.NATSUser,
+				Password: c.NATSPass,
+				Port:     c.NATSPort,
+				Machines: c.NATSMachines,
 			},
 		},
 	}
