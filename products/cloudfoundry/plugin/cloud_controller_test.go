@@ -53,6 +53,10 @@ var _ = Describe("Cloud Controller Partition", func() {
 				"--mysql-proxy-ip", "10.0.0.3",
 				"--db-ccdb-username", "ccdbuser",
 				"--db-ccdb-password", "ccdbpass",
+				"--uaa-jwt-verification-key", "uaajwtkey",
+				"--cc-service-dashboards-client-secret", "ccdashboardsecret",
+				"--cloud-controller-username-lookup-client-secret", "usernamelookupsecret",
+				"--cc-routing-client-secret", "ccroutingsecret",
 			})
 
 			cloudController = NewCloudControllerPartition(c)
@@ -174,6 +178,18 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(dbs[0]).Should(HaveKeyWithValue("citext", true))
 			Ω(dbs[0]).Should(HaveKeyWithValue("name", "ccdb"))
 			Ω(dbs[0]).Should(HaveKeyWithValue("tag", "cc"))
+
+			Ω(props.Uaa).ShouldNot(BeNil())
+			Ω(props.Uaa.Url).Should(Equal("https://uaa.sys.yourdomain.com"))
+			Ω(props.Uaa.Jwt.VerificationKey).Should(Equal("uaajwtkey"))
+			Ω(props.Uaa.Clients).ShouldNot(BeNil())
+			Ω(props.Uaa.Clients.CcServiceDashboards).ShouldNot(BeNil())
+			Ω(props.Uaa.Clients.CcServiceDashboards.Scope).Should(Equal("cloud_controller.write,openid,cloud_controller.read,cloud_controller_service_permissions.read"))
+			Ω(props.Uaa.Clients.CcServiceDashboards.Secret).Should(Equal("ccdashboardsecret"))
+			Ω(props.Uaa.Clients.CloudControllerUsernameLookup).ShouldNot(BeNil())
+			Ω(props.Uaa.Clients.CloudControllerUsernameLookup.Secret).Should(Equal("usernamelookupsecret"))
+			Ω(props.Uaa.Clients.CcRouting).ShouldNot(BeNil())
+			Ω(props.Uaa.Clients.CcRouting.Secret).Should(Equal("ccroutingsecret"))
 		})
 
 		It("should have NFS Mounter set as a job", func() {

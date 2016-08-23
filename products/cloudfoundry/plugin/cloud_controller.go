@@ -17,30 +17,34 @@ func NewCloudControllerPartition(c *cli.Context) InstanceGrouper {
 		proxyIP = mysqlProxies[0]
 	}
 	return &CloudControllerPartition{
-		AZs:                   c.StringSlice("az"),
-		VMTypeName:            c.String("cc-vm-type"),
-		StemcellName:          c.String("stemcell-name"),
-		NetworkName:           c.String("network"),
-		SystemDomain:          c.String("system-domain"),
-		AppDomains:            c.StringSlice("app-domain"),
-		AllowAppSSHAccess:     c.Bool("allow-app-ssh-access"),
-		Metron:                NewMetron(c),
-		ConsulAgent:           NewConsulAgent(c, []string{}),
-		NFSMounter:            NewNFSMounter(c),
-		StatsdInjector:        NewStatsdInjector(c),
-		StagingUploadUser:     c.String("cc-staging-upload-user"),
-		StagingUploadPassword: c.String("cc-staging-upload-password"),
-		BulkAPIUser:           c.String("cc-bulk-api-user"),
-		BulkAPIPassword:       c.String("cc-bulk-api-password"),
-		InternalAPIUser:       c.String("cc-internal-api-user"),
-		InternalAPIPassword:   c.String("cc-internal-api-password"),
-		DbEncryptionKey:       c.String("cc-db-encryption-key"),
-		HostKeyFingerprint:    c.String("host-key-fingerprint"),
-		SupportAddress:        c.String("support-address"),
-		MinCliVersion:         c.String("min-cli-version"),
-		CCDBUsername:          c.String("db-ccdb-username"),
-		CCDBPassword:          c.String("db-ccdb-password"),
-		MySQLProxyIP:          proxyIP,
+		AZs:                      c.StringSlice("az"),
+		VMTypeName:               c.String("cc-vm-type"),
+		StemcellName:             c.String("stemcell-name"),
+		NetworkName:              c.String("network"),
+		SystemDomain:             c.String("system-domain"),
+		AppDomains:               c.StringSlice("app-domain"),
+		AllowAppSSHAccess:        c.Bool("allow-app-ssh-access"),
+		Metron:                   NewMetron(c),
+		ConsulAgent:              NewConsulAgent(c, []string{}),
+		NFSMounter:               NewNFSMounter(c),
+		StatsdInjector:           NewStatsdInjector(c),
+		StagingUploadUser:        c.String("cc-staging-upload-user"),
+		StagingUploadPassword:    c.String("cc-staging-upload-password"),
+		BulkAPIUser:              c.String("cc-bulk-api-user"),
+		BulkAPIPassword:          c.String("cc-bulk-api-password"),
+		InternalAPIUser:          c.String("cc-internal-api-user"),
+		InternalAPIPassword:      c.String("cc-internal-api-password"),
+		DbEncryptionKey:          c.String("cc-db-encryption-key"),
+		HostKeyFingerprint:       c.String("host-key-fingerprint"),
+		SupportAddress:           c.String("support-address"),
+		MinCliVersion:            c.String("min-cli-version"),
+		CCDBUsername:             c.String("db-ccdb-username"),
+		CCDBPassword:             c.String("db-ccdb-password"),
+		MySQLProxyIP:             proxyIP,
+		UAAJWTVerificationKey:    c.String("uaa-jwt-verification-key"),
+		CCServiceDashboardSecret: c.String("cc-service-dashboards-client-secret"),
+		CCUsernameLookupSecret:   c.String("cloud-controller-username-lookup-client-secret"),
+		CCRoutingSecret:          c.String("cc-routing-client-secret"),
 	}
 }
 
@@ -194,6 +198,24 @@ func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJo
 					},
 				},
 			},
+			Uaa: &ccnglib.Uaa{
+				Url: fmt.Sprintf("https://uaa.%s", c.SystemDomain),
+				Jwt: &ccnglib.Jwt{
+					VerificationKey: c.UAAJWTVerificationKey,
+				},
+				Clients: &ccnglib.Clients{
+					CcServiceDashboards: &ccnglib.CcServiceDashboards{
+						Scope:  "cloud_controller.write,openid,cloud_controller.read,cloud_controller_service_permissions.read",
+						Secret: c.CCServiceDashboardSecret,
+					},
+					CloudControllerUsernameLookup: &ccnglib.CloudControllerUsernameLookup{
+						Secret: c.CCUsernameLookupSecret,
+					},
+					CcRouting: &ccnglib.CcRouting{
+						Secret: c.CCRoutingSecret,
+					},
+				},
+			},
 		},
 	}
 }
@@ -255,6 +277,10 @@ func (s *CloudControllerPartition) HasValidValues() bool {
 		lo.G.Debugf("could not find a valid metron secret '%v'", s.Metron.Secret)
 	}
 
+	if s.MySQLProxyIP == "" {
+		lo.G.Debug("missing mysql proxy IP")
+	}
+	
 	return (len(s.AZs) > 0 &&
 		s.StemcellName != "" &&
 		s.VMTypeName != "" &&
@@ -264,5 +290,6 @@ func (s *CloudControllerPartition) HasValidValues() bool {
 		s.SystemDomain != "" &&
 		len(s.AppDomains) > 0 &&
 		s.NFSMounter.hasValidValues() &&
-		s.ConsulAgent.HasValidValues())
+		s.ConsulAgent.HasValidValues()) &&
+		s.MySQLProxyIP != ""
 }
