@@ -130,25 +130,26 @@ func (l *loggregatorTrafficController) createLoggregatorTrafficControllerJob() e
 }
 
 func (l *loggregatorTrafficController) createRouteRegistrarJob() enaml.InstanceJob {
-	routes := make([]map[string]interface{}, 2)
-
-	routes[0] = map[string]interface{}{
-		"name":                  "doppler",
-		"port":                  8081,
-		"registration_interval": "20s",
-		"uris":                  []string{"doppler." + l.SystemDomain},
-	}
-	routes[1] = map[string]interface{}{
-		"name":                  "loggregator",
-		"port":                  8080,
-		"registration_interval": "20s",
-		"uris":                  []string{"loggregator." + l.SystemDomain},
-	}
 	return enaml.InstanceJob{
 		Name:    "route_registrar",
 		Release: CFReleaseName,
-		Properties: &route_registrar.RouteRegistrar{
-			Routes: routes,
+		Properties: &route_registrar.RouteRegistrarJob{
+			RouteRegistrar: &route_registrar.RouteRegistrar{
+				Routes: []map[string]interface{}{
+					map[string]interface{}{
+						"name":                  "doppler",
+						"port":                  8081,
+						"registration_interval": "20s",
+						"uris":                  []string{"doppler." + l.SystemDomain},
+					},
+					map[string]interface{}{
+						"name":                  "loggregator",
+						"port":                  8080,
+						"registration_interval": "20s",
+						"uris":                  []string{"loggregator." + l.SystemDomain},
+					},
+				},
+			},
 		},
 	}
 }
