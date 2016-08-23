@@ -6,6 +6,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	ccnglib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_ng"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
 	"github.com/xchapter7x/lo"
 )
 
@@ -52,6 +53,7 @@ func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 			s.NFSMounter.CreateJob(),
 			s.Metron.CreateJob(),
 			s.StatsdInjector.CreateJob(),
+			newRouteRegistrarJob(s),
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -164,6 +166,26 @@ func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJo
 				UaaResourceId:            "cloud_controller,cloud_controller_service_permissions",
 				MinCliVersion:            c.MinCliVersion,
 				MinRecommendedCliVersion: c.MinCliVersion,
+			},
+		},
+	}
+}
+
+func newRouteRegistrarJob(c *CloudControllerPartition) enaml.InstanceJob {
+	return enaml.InstanceJob{
+		Name:    "route_registrar",
+		Release: CFReleaseName,
+		Properties: route_registrar.RouteRegistrar{
+			Routes: []map[string]interface{}{
+				map[string]interface{}{
+					"name":                  "api",
+					"port":                  9022,
+					"registration_interval": "20s",
+					"tags": map[string]interface{}{
+						"component": "CloudController",
+					},
+					"uris": []string{fmt.Sprintf("api.%s", c.SystemDomain)},
+				},
 			},
 		},
 	}

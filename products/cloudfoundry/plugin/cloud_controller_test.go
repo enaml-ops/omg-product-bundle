@@ -9,6 +9,7 @@ import (
 	"gopkg.in/yaml.v2"
 
 	ccnglib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_ng"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
 )
 
 var _ = Describe("Cloud Controller Partition", func() {
@@ -70,10 +71,28 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(networks[0].Name).Should(Equal("foundry"))
 		})
 
-		It("should have 5 jobs under it", func() {
+		It("should have 6 jobs under it", func() {
 			igf := cloudController.ToInstanceGroup()
 			jobs := igf.Jobs
-			Ω(len(jobs)).Should(Equal(5))
+			Ω(len(jobs)).Should(Equal(6))
+		})
+
+		It("should have configured the route_registrar job", func() {
+			igf := cloudController.ToInstanceGroup()
+			job := igf.GetJobByName("route_registrar")
+			Ω(job).ShouldNot(BeNil())
+			Ω(job.Release).Should(Equal(CFReleaseName))
+
+			props := job.Properties.(route_registrar.RouteRegistrar)
+			routes := props.Routes.([]map[string]interface{})
+			Ω(routes).Should(HaveLen(1))
+			Ω(routes[0]).Should(HaveKeyWithValue("name", "api"))
+			Ω(routes[0]).Should(HaveKeyWithValue("port", 9022))
+			Ω(routes[0]).Should(HaveKeyWithValue("registration_interval", "20s"))
+			Ω(routes[0]).Should(HaveKey("tags"))
+			Ω(routes[0]["tags"]).Should(HaveKeyWithValue("component", "CloudController"))
+			Ω(routes[0]).Should(HaveKey("uris"))
+			Ω(routes[0]["uris"]).Should(ConsistOf("api.sys.yourdomain.com"))
 		})
 
 		It("should have configured the cloud_controller_ng job", func() {
