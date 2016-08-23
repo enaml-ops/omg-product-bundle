@@ -24,6 +24,8 @@ const (
 	NotificationsReleaseName   = "notifications"
 	NotificationsUIReleaseName = "notifications-ui"
 	CFAutoscalingReleaseName   = "cf-autoscaling"
+
+	defaultBBSAPILocation = "bbs.service.cf.internal:8889"
 )
 
 var (

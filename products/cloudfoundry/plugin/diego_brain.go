@@ -168,7 +168,7 @@ func (d *diegoBrain) newAuctioneer() *enaml.InstanceJob {
 		Release: DiegoReleaseName,
 		Properties: &auctioneer.Auctioneer{
 			Bbs: &auctioneer.Bbs{
-				ApiLocation: "bbs.service.cf.internal:8889",
+				ApiLocation: defaultBBSAPILocation,
 				CaCert:      d.BBSCACert,
 				ClientCert:  d.BBSClientCert,
 				ClientKey:   d.BBSClientKey,
@@ -200,7 +200,7 @@ func (d *diegoBrain) newConverger() *enaml.InstanceJob {
 		Release: DiegoReleaseName,
 		Properties: &converger.Converger{
 			Bbs: &converger.Bbs{
-				ApiLocation: "bbs.service.cf.internal:8889",
+				ApiLocation: defaultBBSAPILocation,
 				CaCert:      d.BBSCACert,
 				ClientCert:  d.BBSClientCert,
 				ClientKey:   d.BBSClientKey,
@@ -245,7 +245,7 @@ func (d *diegoBrain) newNsync() *enaml.InstanceJob {
 						PollingIntervalInSeconds: d.CCUploaderJobPollInterval,
 					},
 					Bbs: &nsync.Bbs{
-						ApiLocation: "bbs.service.cf.internal:8889",
+						ApiLocation: defaultBBSAPILocation,
 						CaCert:      d.BBSCACert,
 						ClientCert:  d.BBSClientCert,
 						ClientKey:   d.BBSClientKey,
@@ -264,7 +264,7 @@ func (d *diegoBrain) newRouteEmitter() *enaml.InstanceJob {
 			Diego: &route_emitter.Diego{
 				RouteEmitter: &route_emitter.RouteEmitter{
 					Bbs: &route_emitter.Bbs{
-						ApiLocation: "bbs.service.cf.internal:8889",
+						ApiLocation: defaultBBSAPILocation,
 						CaCert:      d.BBSCACert,
 						ClientCert:  d.BBSClientCert,
 						ClientKey:   d.BBSClientKey,
@@ -292,7 +292,7 @@ func (d *diegoBrain) newSSHProxy() *enaml.InstanceJob {
 				Ssl: &ssh_proxy.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
 				SshProxy: &ssh_proxy.SshProxy{
 					Bbs: &ssh_proxy.Bbs{
-						ApiLocation: "bbs.service.cf.internal:8889",
+						ApiLocation: defaultBBSAPILocation,
 						CaCert:      d.BBSCACert,
 						ClientCert:  d.BBSClientCert,
 						ClientKey:   d.BBSClientKey,
@@ -320,7 +320,7 @@ func (d *diegoBrain) newStager() *enaml.InstanceJob {
 				Ssl: &stager.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
 				Stager: &stager.Stager{
 					Bbs: &stager.Bbs{
-						ApiLocation: "bbs.service.cf.internal:8889",
+						ApiLocation: defaultBBSAPILocation,
 						CaCert:      d.BBSCACert,
 						ClientCert:  d.BBSClientCert,
 						ClientKey:   d.BBSClientKey,
@@ -348,7 +348,7 @@ func (d *diegoBrain) newTPS() *enaml.InstanceJob {
 				Tps: &tps.Tps{
 					TrafficControllerUrl: d.TrafficControllerURL,
 					Bbs: &tps.Bbs{
-						ApiLocation: "bbs.service.cf.internal:8889",
+						ApiLocation: defaultBBSAPILocation,
 						CaCert:      d.BBSCACert,
 						ClientCert:  d.BBSClientCert,
 						ClientKey:   d.BBSClientKey,
