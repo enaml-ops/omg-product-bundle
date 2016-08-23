@@ -168,11 +168,21 @@ var _ = Describe("UAA Partition", func() {
 			Ω(roles["tag"]).Should(Equal("admin"))
 			Ω(roles["name"]).Should(Equal("uaa-db-user"))
 			Ω(roles["password"]).Should(Equal("uaa-db-pwd"))
-			Ω(props.Uaadb.Databases).ShouldNot(BeNil())
-			dbs := props.Uaadb.Databases.(map[string]string)
-			Ω(dbs["tag"]).Should(Equal("uaa"))
-			Ω(dbs["name"]).Should(Equal("uaa"))
 		})
+
+		It("then it should have uaa databases as an array", func() {
+			ig := uaaPartition.ToInstanceGroup()
+			job := ig.GetJobByName("uaa")
+			Ω(job).ShouldNot(BeNil())
+			props, _ := job.Properties.(*uaa.UaaJob)
+			Ω(props.Uaadb).ShouldNot(BeNil())
+			Ω(props.Uaadb.Databases).ShouldNot(BeNil())
+			dbs := props.Uaadb.Databases.([]map[string]string)
+			Ω(dbs).Should(HaveLen(1))
+			Ω(dbs[0]["tag"]).Should(Equal("uaa"))
+			Ω(dbs[0]["name"]).Should(Equal("uaa"))
+		})
+
 		It("then it should then have uaa job with Clients", func() {
 			ig := uaaPartition.ToInstanceGroup()
 			job := ig.GetJobByName("uaa")

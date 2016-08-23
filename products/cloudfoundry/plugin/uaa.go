@@ -408,9 +408,14 @@ func (s *UAA) createUAADB() (uaadb *uaa.Uaadb) {
 	roles["name"] = s.DBUserName
 	roles["password"] = s.DBPassword
 
-	dbs := make(map[string]string)
-	dbs["tag"] = uaaVal
-	dbs["name"] = uaaVal
+	var dbs []map[string]string
+
+	db := make(map[string]string)
+	db["tag"] = uaaVal
+	db["name"] = uaaVal
+
+	dbs = append(dbs, db)
+
 	return &uaa.Uaadb{
 		Address:   s.MySQLProxyHost,
 		Port:      3306,

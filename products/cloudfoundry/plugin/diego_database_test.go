@@ -3,6 +3,7 @@ package cloudfoundry_test
 import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/bbs"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -139,6 +140,11 @@ var _ = Describe("given a Diego Database Partition", func() {
 					It("then it should populate my properties", func() {
 						Ω(job.Properties).ShouldNot(BeNil())
 					})
+					It("should have the cluster as an array", func() {
+						props := job.Properties.(*etcd.Etcd)
+						arr := props.Cluster.([]map[string]interface{})
+						Ω(arr).Should(HaveLen(1))
+					})
 				})
 			})
 
@@ -160,7 +166,9 @@ var _ = Describe("given a Diego Database Partition", func() {
 
 					It("should properly set my db passphrase", func() {
 						propertiesCasted := job.Properties.(*bbs.Diego)
-						Ω(propertiesCasted.Bbs.EncryptionKeys.(map[string]string)["passphrase"]).Should(Equal("random-db-encrytionkey"))
+						arr := propertiesCasted.Bbs.EncryptionKeys.([]map[string]string)
+						Ω(arr).Should(HaveLen(1))
+						Ω(arr[0]["passphrase"]).Should(Equal("random-db-encrytionkey"))
 					})
 
 					It("should properly set my bbs.etcd", func() {
@@ -170,6 +178,12 @@ var _ = Describe("given a Diego Database Partition", func() {
 
 					It("then it should populate my properties", func() {
 						Ω(job.Properties).ShouldNot(BeNil())
+					})
+
+					It("should have cnryption keys as an array", func() {
+						props := job.Properties.(*bbs.Diego)
+						arr := props.Bbs.EncryptionKeys.([]map[string]string)
+						Ω(arr).Should(HaveLen(1))
 					})
 				})
 			})

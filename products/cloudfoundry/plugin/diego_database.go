@@ -163,9 +163,11 @@ func (s *diegoDatabase) newBBS() (dbdiego *bbs.Diego) {
 			ServerCert:     s.BBSServerCert,
 			ServerKey:      s.BBSServerKey,
 			ActiveKeyLabel: keyname,
-			EncryptionKeys: map[string]string{
-				"label":      keyname,
-				"passphrase": s.Passphrase,
+			EncryptionKeys: []map[string]string{
+				{
+					"label":      keyname,
+					"passphrase": s.Passphrase,
+				},
 			},
 			Auctioneer: &bbs.Auctioneer{
 				ApiUrl: fmt.Sprintf("http://auctioneer.%s:9016", s.SystemDomain),
@@ -190,9 +192,11 @@ func (s *diegoDatabase) newEtcd() (dbetcd *etcd.Etcd) {
 		Machines: []string{
 			fmt.Sprintf("etcd.%s", s.SystemDomain),
 		},
-		Cluster: map[string]interface{}{
-			"name":      diegoDatabaseIGName,
-			"instances": len(s.NetworkIPs),
+		Cluster: []map[string]interface{}{
+			{
+				"name":      diegoDatabaseIGName,
+				"instances": len(s.NetworkIPs),
+			},
 		},
 	}
 	return
