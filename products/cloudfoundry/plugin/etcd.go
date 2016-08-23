@@ -72,8 +72,10 @@ func (s *Etcd) newEtcdMetricsServerJob() enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "etcd_metrics_server",
 		Release: "cf",
-		Properties: &etcdmetricslib.EtcdMetricsServer{
-			Nats: s.Nats,
+		Properties: &etcdmetricslib.EtcdMetricsServerJob{
+			EtcdMetricsServer: &etcdmetricslib.EtcdMetricsServer{
+				Nats: s.Nats,
+			},
 		},
 	}
 }
