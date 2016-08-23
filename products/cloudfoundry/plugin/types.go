@@ -356,6 +356,9 @@ type CloudControllerPartition struct {
 	HostKeyFingerprint    string
 	SupportAddress        string
 	MinCliVersion         string
+	CCDBUsername          string
+	CCDBPassword          string
+	MySQLProxyIP          string
 }
 
 //Doppler -

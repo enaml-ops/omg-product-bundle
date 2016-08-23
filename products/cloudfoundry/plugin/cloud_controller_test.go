@@ -50,6 +50,9 @@ var _ = Describe("Cloud Controller Partition", func() {
 				"--host-key-fingerprint", "hostkeyfingerprint",
 				"--support-address", "http://support.pivotal.io",
 				"--min-cli-version", "6.7.0",
+				"--mysql-proxy-ip", "10.0.0.3",
+				"--db-ccdb-username", "ccdbuser",
+				"--db-ccdb-password", "ccdbpass",
 			})
 
 			cloudController = NewCloudControllerPartition(c)
@@ -154,6 +157,23 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(props.Cc.Droplets.FogConnection).Should(Equal(expectedFog))
 			Ω(props.Cc.Packages.FogConnection).Should(Equal(expectedFog))
 			Ω(props.Cc.ResourcePool.FogConnection).Should(Equal(expectedFog))
+
+			ccdb := props.Ccdb
+			Ω(ccdb.DbScheme).Should(Equal("mysql"))
+			Ω(ccdb.Port).Should(Equal(3306))
+			Ω(ccdb.Address).Should(Equal("10.0.0.3"))
+
+			roles := ccdb.Roles.([]map[string]interface{})
+			Ω(roles).Should(HaveLen(1))
+			Ω(roles[0]).Should(HaveKeyWithValue("name", "ccdbuser"))
+			Ω(roles[0]).Should(HaveKeyWithValue("password", "ccdbpass"))
+			Ω(roles[0]).Should(HaveKeyWithValue("tag", "admin"))
+
+			dbs := ccdb.Databases.([]map[string]interface{})
+			Ω(dbs).Should(HaveLen(1))
+			Ω(dbs[0]).Should(HaveKeyWithValue("citext", true))
+			Ω(dbs[0]).Should(HaveKeyWithValue("name", "ccdb"))
+			Ω(dbs[0]).Should(HaveKeyWithValue("tag", "cc"))
 		})
 
 		It("should have NFS Mounter set as a job", func() {

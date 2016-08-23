@@ -11,6 +11,11 @@ import (
 )
 
 func NewCloudControllerPartition(c *cli.Context) InstanceGrouper {
+	var proxyIP string
+	mysqlProxies := c.StringSlice("mysql-proxy-ip")
+	if len(mysqlProxies) > 0 {
+		proxyIP = mysqlProxies[0]
+	}
 	return &CloudControllerPartition{
 		AZs:                   c.StringSlice("az"),
 		VMTypeName:            c.String("cc-vm-type"),
@@ -33,6 +38,9 @@ func NewCloudControllerPartition(c *cli.Context) InstanceGrouper {
 		HostKeyFingerprint:    c.String("host-key-fingerprint"),
 		SupportAddress:        c.String("support-address"),
 		MinCliVersion:         c.String("min-cli-version"),
+		CCDBUsername:          c.String("db-ccdb-username"),
+		CCDBPassword:          c.String("db-ccdb-password"),
+		MySQLProxyIP:          proxyIP,
 	}
 }
 
@@ -166,6 +174,25 @@ func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJo
 				UaaResourceId:            "cloud_controller,cloud_controller_service_permissions",
 				MinCliVersion:            c.MinCliVersion,
 				MinRecommendedCliVersion: c.MinCliVersion,
+			},
+			Ccdb: &ccnglib.Ccdb{
+				Address:  c.MySQLProxyIP,
+				Port:     3306,
+				DbScheme: "mysql",
+				Roles: []map[string]interface{}{
+					map[string]interface{}{
+						"tag":      "admin",
+						"name":     c.CCDBUsername,
+						"password": c.CCDBPassword,
+					},
+				},
+				Databases: []map[string]interface{}{
+					map[string]interface{}{
+						"tag":    "cc",
+						"name":   "ccdb",
+						"citext": true,
+					},
+				},
 			},
 		},
 	}
