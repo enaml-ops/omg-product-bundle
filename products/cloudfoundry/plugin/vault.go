@@ -29,7 +29,7 @@ func VaultRotate(args []string, flgs []pcli.Flag) error {
 
 	if c.Bool("vault-rotate") && hasValidVaultFlags(c) && c.String("system-domain") != "" {
 		lo.G.Debug("rotating your vault values")
-		vault := pluginutil.NewVaultUnmarshal(c.String("vault-domain"), c.String("vault-token"), pluginutil.DefaultClient())
+		vault := pluginutil.NewVaultUnmarshal(c.String("vault-domain"), c.String("vault-token"))
 
 		lo.G.Debug("rotating password values")
 		if err = RotatePasswordHash(vault, c.String("vault-hash-password")); err == nil {

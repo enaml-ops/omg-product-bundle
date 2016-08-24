@@ -38,7 +38,7 @@ import:
 - package: github.com/enaml-ops/omg-cli
   version: master
 - package: github.com/enaml-ops/pluginlib
-  version: e88d8ad52c2160a02595fb517956a4170c7e115f
+  version: master
 - package: github.com/golang/protobuf
   subpackages:
   - proto

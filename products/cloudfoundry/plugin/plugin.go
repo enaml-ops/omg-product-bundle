@@ -403,7 +403,7 @@ func VaultDecorate(args []string, flgs []pcli.Flag) {
 
 	if hasValidVaultFlags(c) {
 		lo.G.Debug("connecting to vault at: ", c.String("vault-domain"))
-		vault := pluginutil.NewVaultUnmarshal(c.String("vault-domain"), c.String("vault-token"), pluginutil.DefaultClient())
+		vault := pluginutil.NewVaultUnmarshal(c.String("vault-domain"), c.String("vault-token"))
 		hashes := []string{
 			c.String("vault-hash-password"),
 			c.String("vault-hash-keycert"),
