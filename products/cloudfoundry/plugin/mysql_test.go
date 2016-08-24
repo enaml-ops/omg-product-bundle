@@ -39,7 +39,9 @@ var _ = Describe("MySQL Partition", func() {
 				"--syslog-address", "syslog-server",
 				"--syslog-port", "10601",
 				"--syslog-transport", "tcp",
+				"--db-uaa-password", "uaapassword",
 			})
+
 			mysqlPartition = NewMySQLPartition(c)
 		})
 
@@ -93,6 +95,7 @@ var _ = Describe("MySQL Partition", func() {
 			Ω(ig.Stemcell).ShouldNot(BeEmpty())
 			Ω(ig.Stemcell).Should(Equal("cool-ubuntu-animal"))
 		})
+
 		It("then it should have update max in-flight 1 and serial", func() {
 			ig := mysqlPartition.ToInstanceGroup()
 			Ω(ig.Update.MaxInFlight).Should(Equal(1))
@@ -103,6 +106,7 @@ var _ = Describe("MySQL Partition", func() {
 			ig := mysqlPartition.ToInstanceGroup()
 			Ω(len(ig.Jobs)).Should(Equal(1))
 		})
+
 		It("then it should then have mysql job", func() {
 			ig := mysqlPartition.ToInstanceGroup()
 			job := ig.GetJobByName("mysql")
@@ -118,72 +122,14 @@ var _ = Describe("MySQL Partition", func() {
 			Ω(props.SyslogAggregator.Port).Should(Equal(10601))
 			Ω(props.SyslogAggregator.Transport).Should(Equal("tcp"))
 			Ω(props.ClusterIps).Should(ConsistOf("1.0.10.1", "1.0.10.2"))
-			Ω(props.SeededDatabases).Should(BeEmpty())
+			Ω(props.SeededDatabases).ShouldNot(BeEmpty())
 		})
-		Context("when initialized WITH a complete set of arguments and seeded databases", func() {
-			var err error
-			var mysqlPartition InstanceGrouper
-			BeforeEach(func() {
-				plugin := new(Plugin)
-				c := plugin.GetContext([]string{
-					"cloudfoundry",
-					"--stemcell-name", "cool-ubuntu-animal",
-					"--az", "eastprod-1",
-					"--mysql-ip", "1.0.10.1",
-					"--mysql-ip", "1.0.10.2",
-					"--network", "foundry-net",
-					"--mysql-vm-type", "blah",
-					"--mysql-disk-type", "blah",
-					"--mysql-admin-password", "mysqladmin",
-					"--mysql-bootstrap-username", "mysqlbootstrap",
-					"--mysql-bootstrap-password", "mysqlbootstrappwd",
-					"--syslog-address", "syslog-server",
-					"--syslog-port", "10601",
-					"--syslog-transport", "tcp",
-					"--db-uaa-username", "uaa-username",
-					"--db-uaa-password", "uaa-password",
-					"--db-ccdb-username", "ccdb-username",
-					"--db-ccdb-password", "ccdb-password",
-					"--db-console-username", "console-username",
-					"--db-console-password", "console-password",
-				})
-				mysqlPartition = NewMySQLPartition(c)
-			})
-			It("then it should not return an error", func() {
-				Ω(err).Should(BeNil())
-			})
-			It("then it should then have mysql job with 3 seeded dbs", func() {
-				ig := mysqlPartition.ToInstanceGroup()
-				job := ig.GetJobByName("mysql")
-				Ω(job).ShouldNot(BeNil())
-				props, _ := job.Properties.(*mysql.MysqlJob)
-				Ω(props.AdminPassword).Should(Equal("mysqladmin"))
-				Ω(props.DatabaseStartupTimeout).Should(Equal(1200))
-				Ω(props.MaxConnections).Should(Equal(1500))
-				Ω(props.InnodbBufferPoolSize).Should(Equal(2147483648))
-				Ω(props.BootstrapEndpoint.Username).Should(Equal("mysqlbootstrap"))
-				Ω(props.BootstrapEndpoint.Password).Should(Equal("mysqlbootstrappwd"))
-				Ω(props.SyslogAggregator.Address).Should(Equal("syslog-server"))
-				Ω(props.SyslogAggregator.Port).Should(Equal(10601))
-				Ω(props.SyslogAggregator.Transport).Should(Equal("tcp"))
-				Ω(props.ClusterIps).Should(ConsistOf("1.0.10.1", "1.0.10.2"))
-				Ω(len(props.SeededDatabases.([]MySQLSeededDatabase))).Should(Equal(3))
-				for _, seededDB := range props.SeededDatabases.([]MySQLSeededDatabase) {
-					switch seededDB.Name {
-					case "uaa":
-						Ω(seededDB.Username).Should(Equal("uaa-username"))
-						Ω(seededDB.Password).Should(Equal("uaa-password"))
-					case "ccdb":
-						Ω(seededDB.Username).Should(Equal("ccdb-username"))
-						Ω(seededDB.Password).Should(Equal("ccdb-password"))
-					case "console":
-						Ω(seededDB.Username).Should(Equal("console-username"))
-						Ω(seededDB.Password).Should(Equal("console-password"))
-					default:
-						panic("Unexpected db")
-					}
-				}
-			})
+
+		It("then the mysql job should have seeded databases", func() {
+			mysql := mysqlPartition.(*MySQL)
+			Ω(mysql.MySQLSeededDatabases).ShouldNot(BeEmpty())
+			Ω(mysql.MySQLSeededDatabases[0].Password).Should(Equal("uaapassword"))
+			Ω(mysql.MySQLSeededDatabases[0].Name).Should(Equal("uaa"))
 		})
 	})
 })

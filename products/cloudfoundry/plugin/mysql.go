@@ -70,6 +70,7 @@ func parseSeededDBs(c *cli.Context) (dbs []MySQLSeededDatabase) {
 			}
 		}
 	}
+
 	for _, value := range dbMap {
 		dbs = append(dbs, value)
 	}
