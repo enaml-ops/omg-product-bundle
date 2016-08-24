@@ -6,6 +6,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/auctioneer"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cc_uploader"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/converger"
@@ -276,11 +277,16 @@ func (d *diegoBrain) newRouteEmitter() *enaml.InstanceJob {
 }
 
 func (d *diegoBrain) newSSHProxy() *enaml.InstanceJob {
+	_, privateKey, err := utils.GenerateKeys()
+	if err != nil {
+		lo.G.Error("couldn't generate private key for SSH proxy")
+		return nil
+	}
+
 	return &enaml.InstanceJob{
 		Name:    "ssh_proxy",
 		Release: DiegoReleaseName,
 		Properties: &ssh_proxy.SshProxyJob{
-
 			Diego: &ssh_proxy.Diego{
 				Ssl: &ssh_proxy.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
 				SshProxy: &ssh_proxy.SshProxy{
@@ -298,6 +304,7 @@ func (d *diegoBrain) newSSHProxy() *enaml.InstanceJob {
 					EnableDiegoAuth: d.AllowSSHAccess,
 					UaaSecret:       d.SSHProxyClientSecret,
 					UaaTokenUrl:     prefixSystemDomain(d.SystemDomain, "uaa") + "/oauth/token",
+					HostKey:         privateKey,
 				},
 			},
 		},

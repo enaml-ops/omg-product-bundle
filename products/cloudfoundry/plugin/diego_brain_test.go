@@ -231,7 +231,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(r.Diego.RouteEmitter.Nats.Machines).Should(ContainElement("10.0.0.12"))
 		})
 
-		It("then it should allow the user to configure the SSH proxy", func() {
+		FIt("then it should allow the user to configure the SSH proxy", func() {
 			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
 			job := ig.GetJobByName("ssh_proxy")
 			s := job.Properties.(*ssh_proxy.SshProxyJob)
@@ -246,6 +246,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(s.Diego.SshProxy.Cc.ExternalPort).Should(Equal(9023))
 			Ω(s.Diego.SshProxy.UaaTokenUrl).Should(Equal("https://uaa.sys.test.com/oauth/token"))
 			Ω(s.Diego.SshProxy.UaaSecret).Should(Equal("secret"))
+			Ω(s.Diego.SshProxy.HostKey).ShouldNot(BeEmpty())
 		})
 
 		It("then it should allow the user to configure the stager", func() {
