@@ -49,7 +49,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
 		// shared for all instance groups:
 		createBoolFlag("infer-from-cloud", "setting this flag will attempt to pull as many defaults from your targetted bosh's cloud config as it can (vmtype, network, disk, etc)."),
-		createStringFlag("stemcell-name", "the name of your desired stemcell", "ubuntu-trusty"),
+		createStringFlag("stemcell-name", "the alias of your desired stemcell", StemcellAlias),
 		createStringSliceFlag("az", "list of AZ names to use"),
 		createStringFlag("network", "the name of the network to use"),
 		createStringFlag("system-domain", "System Domain"),
