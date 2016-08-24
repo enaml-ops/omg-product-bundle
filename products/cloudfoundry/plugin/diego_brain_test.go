@@ -231,7 +231,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(r.Diego.RouteEmitter.Nats.Machines).Should(ContainElement("10.0.0.12"))
 		})
 
-		FIt("then it should allow the user to configure the SSH proxy", func() {
+		It("then it should allow the user to configure the SSH proxy", func() {
 			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
 			job := ig.GetJobByName("ssh_proxy")
 			s := job.Properties.(*ssh_proxy.SshProxyJob)
