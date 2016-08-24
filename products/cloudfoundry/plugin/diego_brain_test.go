@@ -31,22 +31,6 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			ig = NewDiegoBrainPartition(c)
 		})
 
-		It("then it should contain the appropriate jobs", func() {
-			group := ig.ToInstanceGroup()
-			Ω(group.GetJobByName("auctioneer")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("cc_uploader")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("converger")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("file_server")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("nsync")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("route_emitter")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("ssh_proxy")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("stager")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("tps")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("consul_agent")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("metron_agent")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("statsd-injector")).ShouldNot(BeNil())
-		})
-
 		It("then it should not validate", func() {
 			Ω(ig.HasValidValues()).Should(BeFalse())
 		})
@@ -111,53 +95,41 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			deploymentManifest.AddInstanceGroup(grouper.ToInstanceGroup())
 		})
 
-		It("then it should validate", func() {
-			Ω(grouper.HasValidValues()).Should(BeTrue())
-		})
+		It("then it should configure the instance group correctly", func() {
 
-		It("then it should allow the user to configure the AZs", func() {
+			By("having valid values")
+			Ω(grouper.HasValidValues()).Should(BeTrue())
+
 			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
+
+			By("configuring the AZs")
 			Ω(len(ig.AZs)).Should(Equal(1))
 			Ω(ig.AZs[0]).Should(Equal("eastprod-1"))
-		})
 
-		It("then it should allow the user to configure the used stemcell", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
+			By("configuring the stemcell")
 			Ω(ig.Stemcell).Should(Equal("cool-ubuntu-animal"))
-		})
 
-		It("then it should allow the user to configure the network to use", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
+			By("configuring the network")
 			network := ig.GetNetworkByName("foundry-net")
 			Ω(network).ShouldNot(BeNil())
 			Ω(len(network.StaticIPs)).Should(Equal(2))
 			Ω(network.StaticIPs[0]).Should(Equal("10.0.0.39"))
 			Ω(network.StaticIPs[1]).Should(Equal("10.0.0.40"))
-		})
 
-		It("then it should allow the user to configure the VM type", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
+			By("configuring the VM type")
 			Ω(ig.VMType).Should(Equal("brainvmtype"))
-		})
 
-		It("then it should allow the user to configure the disk type", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
+			By("configuring the disk type")
 			Ω(ig.PersistentDiskType).Should(Equal("braindisktype"))
-		})
 
-		It("then it should configure the correct number of instances automatically from the count of IPs", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
+			By("setting the correct number of instances")
 			Ω(len(ig.Networks)).Should(Equal(1))
 			Ω(len(ig.Networks[0].StaticIPs)).Should(Equal(ig.Instances))
-		})
 
-		It("then it should have update max-in-flight 1", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
+			By("configuring update")
 			Ω(ig.Update.MaxInFlight).Should(Equal(1))
-		})
 
-		It("then it should allow the user to configure the auctioneer BBS", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
+			By("configuring the auctioneer job")
 			job := ig.GetJobByName("auctioneer")
 			Ω(job.Release).Should(Equal(DiegoReleaseName))
 			a := job.Properties.(*auctioneer.Auctioneer)
@@ -165,40 +137,31 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(a.Bbs.ClientCert).Should(Equal("clientcert"))
 			Ω(a.Bbs.ClientKey).Should(Equal("clientkey"))
 			Ω(a.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
-		})
 
-		It("then it should allow the user to configure the CC uploader", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("cc_uploader")
+			By("configuring the CC uploader")
+			job = ig.GetJobByName("cc_uploader")
 			Ω(job.Release).Should(Equal(DiegoReleaseName))
 			cc := job.Properties.(*cc_uploader.CcUploaderJob)
 			Ω(cc.Diego.Ssl.SkipCertVerify).Should(BeFalse())
 			Ω(cc.Diego.CcUploader.Cc.JobPollingIntervalInSeconds).Should(Equal(25))
-		})
 
-		It("then it should allow the user to configure the converger", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("converger")
+			By("configuring the converger")
+			job = ig.GetJobByName("converger")
 			Ω(job.Release).Should(Equal(DiegoReleaseName))
 			c := job.Properties.(*converger.Converger)
 			Ω(c.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
 			Ω(c.Bbs.CaCert).Should(Equal("cacert"))
 			Ω(c.Bbs.ClientCert).Should(Equal("clientcert"))
 			Ω(c.Bbs.ClientKey).Should(Equal("clientkey"))
-		})
 
-		It("then it should allow the user to configure the file server", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("file_server")
+			By("configuring the file server")
+			job = ig.GetJobByName("file_server")
 			Ω(job.Release).Should(Equal(DiegoReleaseName))
 			fs := job.Properties.(*file_server.FileServerJob)
-
 			Ω(fs.Diego.Ssl.SkipCertVerify).Should(BeFalse())
-		})
 
-		It("then it should allow the user to configure nsync", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("nsync")
+			By("configuring nsync")
+			job = ig.GetJobByName("nsync")
 			Ω(job.Release).Should(Equal(DiegoReleaseName))
 			n := job.Properties.(*nsync.NsyncJob)
 			Ω(n.Diego.Ssl.SkipCertVerify).Should(BeFalse())
@@ -212,11 +175,9 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(n.Diego.Nsync.Cc.BulkBatchSize).Should(Equal(5))
 			Ω(n.Diego.Nsync.Cc.FetchTimeoutInSeconds).Should(Equal(30))
 			Ω(n.Diego.Nsync.Cc.PollingIntervalInSeconds).Should(Equal(25))
-		})
 
-		It("then it should allows the user to configure the route emitter", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("route_emitter")
+			By("configuring the route emitter")
+			job = ig.GetJobByName("route_emitter")
 			Ω(job.Release).Should(Equal(DiegoReleaseName))
 			r := job.Properties.(*route_emitter.RouteEmitterJob)
 			Ω(r.Diego.RouteEmitter.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
@@ -229,11 +190,9 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(r.Diego.RouteEmitter.Nats.Port).Should(Equal(1234))
 			Ω(r.Diego.RouteEmitter.Nats.Machines).Should(ContainElement("10.0.0.11"))
 			Ω(r.Diego.RouteEmitter.Nats.Machines).Should(ContainElement("10.0.0.12"))
-		})
 
-		It("then it should allow the user to configure the SSH proxy", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("ssh_proxy")
+			By("configuring the SSH proxy")
+			job = ig.GetJobByName("ssh_proxy")
 			s := job.Properties.(*ssh_proxy.SshProxyJob)
 			Ω(s.Diego.Ssl.SkipCertVerify).Should(BeFalse())
 			Ω(s.Diego.SshProxy.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
@@ -247,27 +206,23 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(s.Diego.SshProxy.UaaTokenUrl).Should(Equal("https://uaa.sys.test.com/oauth/token"))
 			Ω(s.Diego.SshProxy.UaaSecret).Should(Equal("secret"))
 			Ω(s.Diego.SshProxy.HostKey).ShouldNot(BeEmpty())
-		})
 
-		It("then it should allow the user to configure the stager", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("stager")
+			By("configuring the stager")
+			job = ig.GetJobByName("stager")
 			Ω(job.Release).Should(Equal(DiegoReleaseName))
-			s := job.Properties.(*stager.StagerJob)
+			stager := job.Properties.(*stager.StagerJob)
 			Ω(s.Diego.Ssl.SkipCertVerify).Should(BeFalse())
-			Ω(s.Diego.Stager.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
-			Ω(s.Diego.Stager.Bbs.CaCert).Should(Equal("cacert"))
-			Ω(s.Diego.Stager.Bbs.ClientCert).Should(Equal("clientcert"))
-			Ω(s.Diego.Stager.Bbs.ClientKey).Should(Equal("clientkey"))
-			Ω(s.Diego.Stager.Bbs.RequireSsl).Should(BeFalse())
-			Ω(s.Diego.Stager.Cc.ExternalPort).Should(Equal(9023))
-			Ω(s.Diego.Stager.Cc.BasicAuthUsername).Should(Equal("internaluser"))
-			Ω(s.Diego.Stager.Cc.BasicAuthPassword).Should(Equal("internalpassword"))
-		})
+			Ω(stager.Diego.Stager.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
+			Ω(stager.Diego.Stager.Bbs.CaCert).Should(Equal("cacert"))
+			Ω(stager.Diego.Stager.Bbs.ClientCert).Should(Equal("clientcert"))
+			Ω(stager.Diego.Stager.Bbs.ClientKey).Should(Equal("clientkey"))
+			Ω(stager.Diego.Stager.Bbs.RequireSsl).Should(BeFalse())
+			Ω(stager.Diego.Stager.Cc.ExternalPort).Should(Equal(9023))
+			Ω(stager.Diego.Stager.Cc.BasicAuthUsername).Should(Equal("internaluser"))
+			Ω(stager.Diego.Stager.Cc.BasicAuthPassword).Should(Equal("internalpassword"))
 
-		It("then it should allow the user to configure the tps", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("tps")
+			By("configuring the tps")
+			job = ig.GetJobByName("tps")
 			Ω(job.Release).Should(Equal(DiegoReleaseName))
 			t := job.Properties.(*tps.TpsJob)
 			Ω(t.Diego.Ssl.SkipCertVerify).Should(BeFalse())
@@ -280,35 +235,28 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(t.Diego.Tps.Cc.ExternalPort).Should(Equal(9023))
 			Ω(t.Diego.Tps.Cc.BasicAuthUsername).Should(Equal("internaluser"))
 			Ω(t.Diego.Tps.Cc.BasicAuthPassword).Should(Equal("internalpassword"))
-		})
 
-		It("then it should allow the user to configure the consul agent", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("consul_agent")
-			c := job.Properties.(*consul_agent.ConsulAgentJob)
-			Ω(c.Consul.ServerKey).Should(Equal("server-key"))
-			Ω(c.Consul.ServerCert).Should(Equal("server-cert"))
-			Ω(c.Consul.AgentCert).Should(Equal("agent-cert"))
-			Ω(c.Consul.AgentKey).Should(Equal("agent-key"))
-			Ω(c.Consul.CaCert).Should(Equal("ca-cert"))
-			Ω(c.Consul.EncryptKeys).Should(Equal([]string{"encyption-key"}))
-			Ω(c.Consul.Agent.Servers.Lan).Should(Equal([]string{"1.0.0.1", "1.0.0.2"}))
-		})
+			By("configuring the consul agent")
+			job = ig.GetJobByName("consul_agent")
+			consul := job.Properties.(*consul_agent.ConsulAgentJob)
+			Ω(consul.Consul.ServerKey).Should(Equal("server-key"))
+			Ω(consul.Consul.ServerCert).Should(Equal("server-cert"))
+			Ω(consul.Consul.AgentCert).Should(Equal("agent-cert"))
+			Ω(consul.Consul.AgentKey).Should(Equal("agent-key"))
+			Ω(consul.Consul.CaCert).Should(Equal("ca-cert"))
+			Ω(consul.Consul.EncryptKeys).Should(Equal([]string{"encyption-key"}))
+			Ω(consul.Consul.Agent.Servers.Lan).Should(Equal([]string{"1.0.0.1", "1.0.0.2"}))
 
-		It("then it should allow the user to configure the metron agent", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("metron_agent")
+			By("configuring the metron agent")
+			job = ig.GetJobByName("metron_agent")
 			m := job.Properties.(*metron_agent.MetronAgentJob)
-
 			Ω(m.MetronAgent.Zone).Should(Equal("metronzoneguid"))
 			Ω(m.MetronAgent.Deployment).Should(Equal("cf"))
 			Ω(m.MetronEndpoint.SharedSecret).Should(Equal("metronsecret"))
 			Ω(m.Loggregator.Etcd.Machines).Should(Equal([]string{"1.0.0.7", "1.0.0.8"}))
-		})
 
-		It("then it should allow the user to configure the statsd injector", func() {
-			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
-			job := ig.GetJobByName("statsd-injector")
+			By("configuring the statsd injector")
+			job = ig.GetJobByName("statsd-injector")
 			Ω(job.Properties).Should(BeEmpty())
 		})
 	})
