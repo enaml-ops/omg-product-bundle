@@ -12,20 +12,20 @@ go get github.com/enaml-ops/omg-cli/plugins/products/cloudfoundry/cmd/certgen
 #generate all the key/certs we need
 certgen --host google.com --prefix router
 certgen --host google.com --prefix consul-ca --ca
-certgen --host google.com --prefix consul-agent 
-certgen --host google.com --prefix consul-server 
-certgen --host google.com --prefix etcd-server 
-certgen --host google.com --prefix etcd-client 
-certgen --host google.com --prefix etcd-peer 
-certgen --host google.com --prefix bbs-ca --ca 
-certgen --host google.com --prefix bbs-server 
-certgen --host google.com --prefix bbs-client 
+certgen --host google.com --prefix consul-agent
+certgen --host google.com --prefix consul-server
+certgen --host google.com --prefix etcd-server
+certgen --host google.com --prefix etcd-client
+certgen --host google.com --prefix etcd-peer
+certgen --host google.com --prefix bbs-ca --ca
+certgen --host google.com --prefix bbs-server
+certgen --host google.com --prefix bbs-client
 
 #load the generated key/certs into vault
 ../vault write ${VAULT_HASH} \
 router-ssl-cert=@router-cert.pem \
 router-ssl-key=@router-key.pem \
-consul-ca-cert=@consul-ca-cert.pem \
+consul-server-ca-cert=@consul-server-ca-cert.pem \
 consul-agent-cert=@consul-agent-cert.pem \
 consul-agent-key=@consul-agent-key.pem \
 consul-server-cert=@consul-server-cert.pem \
@@ -38,7 +38,7 @@ etcd-client-key=@etcd-client-key.pem \
 etcd-client-cert=@etcd-client-cert.pem \
 etcd-peer-key=@etcd-peer-key.pem \
 etcd-peer-cert=@etcd-peer-cert.pem \
-bbs-ca-cert=@bbs-ca-cert.pem \
+bbs-server-ca-cert=@bbs-ca-cert.pem \
 bbs-client-cert=@bbs-client-cert.pem \
 bbs-client-key=@bbs-client-key.pem
 
@@ -47,4 +47,3 @@ bbs-client-key=@bbs-client-key.pem
 
 #cleanup local files
 # rm *.pem
-

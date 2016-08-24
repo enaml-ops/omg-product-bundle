@@ -18,6 +18,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
@@ -55,8 +56,10 @@ func RotatePasswordHash(vault VaultRotater, hash string) error {
 }
 
 func RotateCertHash(vault VaultRotater, hash string, host string) error {
-	var err error
-	secrets := getKeyCertObject(host)
+	secrets, err := getKeyCertObject(host)
+	if err != nil {
+		return err
+	}
 
 	if err = vault.RotateSecrets(hash, secrets); err != nil {
 		lo.G.Errorf("error updating hash: %v", err.Error())
@@ -137,40 +140,40 @@ func getPasswordObject() []byte {
 	return b
 }
 
-func getKeyCertObject(host string) []byte {
-	keysuffix := "-key"
-	certsuffix := "-cert"
-	fieldnames := []string{
-		"router-ssl",
-		"consul-agent",
-		"consul-server",
-		"bbs-server",
-		"etcd-server",
-		"etcd-client",
-		"etcd-peer",
-		"bbs-client",
-	}
-	cafieldnames := []string{
-		"consul-ca-cert",
-		"bbs-ca-cert",
-	}
-	var certVault map[string]string = make(map[string]string)
+func getKeyCertObject(systemDomain string) ([]byte, error) {
+	const (
+		keysuffix    = "-key"
+		certsuffix   = "-cert"
+		caCertSuffix = "-ca-cert"
+	)
 
+	type certGenerator struct{ flag, host string }
+
+	fieldnames := []certGenerator{
+		{"router-ssl", systemDomain},
+		{"consul-agent", "consul_agent_cert"},
+		{"consul-server", "server.dc1.cf.internal"},
+		{"bbs-client", "bbs_client_cert"},
+		{"bbs-server", "bbs.service.cf.internal"},
+		{"etcd-server", "etcd.service.cf.internal"},
+		{"etcd-client", "etcd_client_cert"},
+		{"etcd-peer", "etcd.service.cf.internal"},
+	}
+
+	certVault := make(map[string]string)
 	for _, fn := range fieldnames {
-		ca := false
-		curve := ""
-		cert, key := certgen(&host, &ca, &curve)
-		certVault[fn+certsuffix] = cert
-		certVault[fn+keysuffix] = key
+		ca, cert, key, err := utils.GenerateCert([]string{fn.host, "*." + fn.host})
+		if err != nil {
+			lo.G.Errorf("couldn't create cert for flag %s", fn.flag)
+			return nil, err
+		}
+		certVault[fn.flag+certsuffix] = cert
+		certVault[fn.flag+keysuffix] = key
+		certVault[fn.flag+caCertSuffix] = ca
 	}
 
-	for _, fn := range cafieldnames {
-		ca := true
-		curve := ""
-		certVault[fn], _ = certgen(&host, &ca, &curve)
-	}
-	b, _ := json.Marshal(certVault)
-	return b
+	b, err := json.Marshal(certVault)
+	return b, err
 }
 
 func publicKey(priv interface{}) interface{} {

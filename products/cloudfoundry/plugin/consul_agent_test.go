@@ -29,7 +29,7 @@ var _ = Describe("Consul Agent", func() {
 				"--consul-ip", "1.0.0.1",
 				"--consul-ip", "1.0.0.2",
 				"--consul-encryption-key", "encyption-key",
-				"--consul-ca-cert", "ca-cert",
+				"--consul-server-ca-cert", "ca-cert",
 				"--consul-agent-cert", "agent-cert",
 				"--consul-agent-key", "agent-key",
 				"--consul-server-cert", "server-cert",

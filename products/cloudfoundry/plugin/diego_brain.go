@@ -21,7 +21,7 @@ import (
 )
 
 func NewDiegoBrainPartition(c *cli.Context) InstanceGrouper {
-	caCert, err := pluginutil.LoadResourceFromContext(c, "bbs-ca-cert")
+	caCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-ca-cert")
 	if err != nil {
 		lo.G.Fatalf("bbs ca cert: %s\n", err.Error())
 	}

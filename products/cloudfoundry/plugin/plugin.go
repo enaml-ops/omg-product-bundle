@@ -81,7 +81,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringSliceFlag("consul-ip", "a list of the consul ips you wish to use"),
 		createStringFlag("consul-vm-type", "the name of your desired vm size for consul"),
 		createStringSliceFlag("consul-encryption-key", "encryption key for consul"),
-		createStringFlag("consul-ca-cert", "ca cert for consul, or a filename preceded by '@'"),
+		createStringFlag("consul-server-ca-cert", "ca cert for consul server, or a filename preceded by '@'"),
 		createStringFlag("consul-agent-cert", "agent cert for consul, or a filename preceded by '@'"),
 		createStringFlag("consul-agent-key", "agent key for consul, or a filename preceded by '@'"),
 		createStringFlag("consul-server-cert", "server cert for consul, or a filename preceded by '@'"),
@@ -165,7 +165,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("diego-brain-vm-type", "the name of the desired vm type for the diego brain"),
 		createStringFlag("diego-brain-disk-type", "the name of your desired persistent disk type for the diego brain"),
 
-		createStringFlag("bbs-ca-cert", "BBS CA SSL cert (or a file containing it: file format `@filepath`)"),
+		createStringFlag("bbs-server-ca-cert", "BBS CA SSL cert (or a file containing it: file format `@filepath`)"),
 		createStringFlag("bbs-client-cert", "BBS client SSL cert (or a file containing it: file format `@filepath`)"),
 		createStringFlag("bbs-client-key", "BBS client SSL key (or a file containing it: file format `@filepath`)"),
 		createBoolTFlag("bbs-require-ssl", "enable SSL for all communications with the BBS"),

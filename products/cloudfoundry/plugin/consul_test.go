@@ -42,7 +42,7 @@ var _ = Describe("Consul Partition", func() {
 				"--network", "foundry-net",
 				"--consul-vm-type", "blah",
 				"--consul-encryption-key", "encyption-key",
-				"--consul-ca-cert", "ca-cert",
+				"--consul-server-ca-cert", "ca-cert",
 				"--consul-agent-cert", "agent-cert",
 				"--consul-agent-key", "agent-key",
 				"--consul-server-cert", "server-cert",

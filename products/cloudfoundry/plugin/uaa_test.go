@@ -35,7 +35,7 @@ var _ = Describe("UAA Partition", func() {
 				"--consul-ip", "1.0.0.1",
 				"--consul-ip", "1.0.0.2",
 				"--consul-encryption-key", "consulencryptionkey",
-				"--consul-ca-cert", "consul-ca-cert",
+				"--consul-server-ca-cert", "consul-ca-cert",
 				"--consul-agent-cert", "consul-agent-cert",
 				"--consul-agent-key", "consul-agent-key",
 				"--consul-server-cert", "consulservercert",

@@ -13,7 +13,7 @@ const diegoDatabaseIGName = "diego_database-partition"
 
 func NewDiegoDatabasePartition(c *cli.Context) InstanceGrouper {
 
-	caCert, err := pluginutil.LoadResourceFromContext(c, "bbs-ca-cert")
+	caCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-ca-cert")
 	if err != nil {
 		lo.G.Fatalf("ca cert: %s\n", err.Error())
 	}
@@ -133,7 +133,7 @@ func (s *diegoDatabase) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 func (s *diegoDatabase) HasValidValues() bool {
 	lo.G.Debugf("checking %v for valid flags", "diego database")
 	validStrings := hasValidStringFlags(s.context, []string{
-		"bbs-ca-cert",
+		"bbs-server-ca-cert",
 		"bbs-server-cert",
 		"bbs-server-key",
 		"etcd-server-cert",

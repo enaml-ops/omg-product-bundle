@@ -22,7 +22,7 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 				"--az", "az",
 				"--stemcell-name", "stemcell",
 				"--consul-encryption-key", "consulencryptionkey",
-				"--consul-ca-cert", "consul-ca-cert",
+				"--consul-server-ca-cert", "consul-ca-cert",
 				"--consul-agent-cert", "consul-agent-cert",
 				"--consul-agent-key", "consul-agent-key",
 				"--consul-server-cert", "consulservercert",

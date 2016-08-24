@@ -31,7 +31,7 @@ func NewConsulAgentServer(c *cli.Context) *ConsulAgent {
 }
 
 func (ca *ConsulAgent) loadSSL(c *cli.Context) {
-	caCert, err := pluginutil.LoadResourceFromContext(c, "consul-ca-cert")
+	caCert, err := pluginutil.LoadResourceFromContext(c, "consul-server-ca-cert")
 	if err != nil {
 		lo.G.Fatalf("consul ca cert: %s\n", err.Error())
 	}

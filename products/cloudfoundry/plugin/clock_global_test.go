@@ -62,7 +62,7 @@ var _ = Describe("given a clock_global partition", func() {
 				"--metron-zone", "metronzoneguid",
 				"--nfs-server-address", "10.0.0.19",
 				"--nfs-share-path", "/var/vcap/nfs",
-				"--consul-ca-cert", "consul-ca-cert",
+				"--consul-server-ca-cert", "consul-ca-cert",
 				"--consul-agent-cert", "consul-agent-cert",
 				"--consul-agent-key", "consul-agent-key",
 				"--consul-server-cert", "consulservercert",
