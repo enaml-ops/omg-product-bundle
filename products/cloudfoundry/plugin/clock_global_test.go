@@ -185,13 +185,17 @@ runaway:
 			Ω(props.Ccdb.Port).Should(Equal(3306))
 			Ω(props.Ccdb.DbScheme).Should(Equal("mysql"))
 
-			Ω(props.Ccdb.Roles).Should(HaveKeyWithValue("tag", "admin"))
-			Ω(props.Ccdb.Roles).Should(HaveKeyWithValue("name", "ccdb-user"))
-			Ω(props.Ccdb.Roles).Should(HaveKeyWithValue("password", "ccdb-password"))
+			Ω(props.Ccdb.Roles).Should(HaveLen(1))
+			role := props.Ccdb.Roles.([]map[string]interface{})[0]
+			Ω(role).Should(HaveKeyWithValue("tag", "admin"))
+			Ω(role).Should(HaveKeyWithValue("name", "ccdb-user"))
+			Ω(role).Should(HaveKeyWithValue("password", "ccdb-password"))
 
-			Ω(props.Ccdb.Databases).Should(HaveKeyWithValue("tag", "cc"))
-			Ω(props.Ccdb.Databases).Should(HaveKeyWithValue("name", "ccdb"))
-			Ω(props.Ccdb.Databases).Should(HaveKeyWithValue("citext", true))
+			Ω(props.Ccdb.Databases).Should(HaveLen(1))
+			db := props.Ccdb.Databases.([]map[string]interface{})[0]
+			Ω(db).Should(HaveKeyWithValue("tag", "cc"))
+			Ω(db).Should(HaveKeyWithValue("name", "ccdb"))
+			Ω(db).Should(HaveKeyWithValue("citext", true))
 
 			Ω(props.Uaa.Url).Should(Equal("https://uaa.sys.test.com"))
 			Ω(props.Uaa.Jwt).ShouldNot(BeNil())

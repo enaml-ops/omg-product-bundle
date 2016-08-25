@@ -80,16 +80,6 @@ func (c *clockGlobal) ToInstanceGroup() *enaml.InstanceGroup {
 }
 
 func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.CloudControllerNgJob) *enaml.InstanceJob {
-	roles := make(map[string]string)
-	roles["tag"] = "admin"
-	roles["name"] = c.CCDBUser
-	roles["password"] = c.CCDBPassword
-
-	dbs := make(map[string]interface{})
-	dbs["tag"] = "cc"
-	dbs["name"] = "ccdb"
-	dbs["citext"] = true
-
 	props := &cloud_controller_clock.CloudControllerClockJob{
 		Domain:                   c.SystemDomain,
 		SystemDomain:             c.SystemDomain,
@@ -97,11 +87,23 @@ func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.Cloud
 		AppDomains:               c.AppDomains,
 		Cc:                       &cloud_controller_clock.Cc{},
 		Ccdb: &cloud_controller_clock.Ccdb{
-			Address:   c.CCDBAddress,
-			Port:      3306,
-			DbScheme:  "mysql",
-			Roles:     roles,
-			Databases: dbs,
+			Address:  c.CCDBAddress,
+			Port:     3306,
+			DbScheme: "mysql",
+			Roles: []map[string]interface{}{
+				{
+					"name":     c.CCDBUser,
+					"password": c.CCDBPassword,
+					"tag":      "admin",
+				},
+			},
+			Databases: []map[string]interface{}{
+				map[string]interface{}{
+					"citext": true,
+					"name":   "ccdb",
+					"tag":    "cc",
+				},
+			},
 		},
 		Uaa: &cloud_controller_clock.Uaa{
 			Url: prefixSystemDomain(c.SystemDomain, "uaa"),
