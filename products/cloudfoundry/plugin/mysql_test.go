@@ -128,8 +128,11 @@ var _ = Describe("MySQL Partition", func() {
 		It("then the mysql job should have seeded databases", func() {
 			mysql := mysqlPartition.(*MySQL)
 			Ω(mysql.MySQLSeededDatabases).ShouldNot(BeEmpty())
-			Ω(mysql.MySQLSeededDatabases[0].Password).Should(Equal("uaapassword"))
-			Ω(mysql.MySQLSeededDatabases[0].Name).Should(Equal("uaa"))
+			for _, db := range mysql.MySQLSeededDatabases {
+				if db.Name == "uaa" {
+					Ω(db.Password).Should(Equal("uaapassword"))
+				}
+			}
 		})
 	})
 })
