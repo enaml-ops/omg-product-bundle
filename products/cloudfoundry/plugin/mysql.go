@@ -38,7 +38,7 @@ func parseSeededDBs(c *cli.Context) (dbs []MySQLSeededDatabase) {
 	dbMap := make(map[string]MySQLSeededDatabase)
 	for _, flag := range c.FlagNames() {
 		if strings.HasPrefix(flag, "db-") {
-			if c.IsSet(flag) {
+			if c.String(flag) != "" {
 				baseName := strings.Replace(flag, "db-", "", 1)
 				if strings.HasSuffix(flag, "-password") {
 					dbName = strings.Replace(baseName, "-password", "", 1)
