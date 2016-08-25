@@ -17,6 +17,7 @@ func NewAcceptanceTestsPartition(c *cli.Context, internet bool) InstanceGrouper 
 		AdminPassword:            c.String("admin-password"),
 		SkipCertVerify:           c.BoolT("skip-cert-verify"),
 		IncludeInternetDependent: internet,
+		VMType: c.String("acceptance-tests-vm-type"),
 	}
 }
 
@@ -28,7 +29,7 @@ func (a *acceptanceTests) ToInstanceGroup() *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
 		Name:      "acceptance-tests",
 		Instances: 1,
-		VMType:    "errand",
+		VMType:    a.VMType,
 		Lifecycle: "errand",
 		AZs:       a.AZs,
 		Stemcell:  a.StemcellName,

@@ -64,6 +64,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 				"--stemcell-name", "cool-ubuntu-animal",
 				"--network", "foundry-net",
 				"--admin-password", "adminpass",
+				"--acceptance-tests-vm-type", "foo",
 			})
 			ig = NewAcceptanceTestsPartition(c, includeInternetDependent)
 			dm = new(enaml.DeploymentManifest)
@@ -77,7 +78,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 		It("should have the correct VM type and lifecycle", func() {
 			group := dm.GetInstanceGroupByName("acceptance-tests")
 			Ω(group.Lifecycle).Should(Equal("errand"))
-			Ω(group.VMType).Should(Equal("errand"))
+			Ω(group.VMType).Should(Equal("foo"))
 		})
 
 		It("should have a single instance", func() {

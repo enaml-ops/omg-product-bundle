@@ -33,6 +33,7 @@ type acceptanceTests struct {
 	AppsDomain               []string
 	SystemDomain             string
 	AdminPassword            string
+	VMType                   string
 	SkipCertVerify           bool
 	IncludeInternetDependent bool
 }
@@ -44,6 +45,7 @@ type bootstrap struct {
 	MySQLIPs      []string
 	MySQLUser     string
 	MySQLPassword string
+	VMType        string
 }
 
 type clockGlobal struct {

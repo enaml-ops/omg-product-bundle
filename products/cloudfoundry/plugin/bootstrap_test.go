@@ -46,6 +46,7 @@ var _ = Describe("given a bootstrap partition", func() {
 				"--mysql-ip", "10.0.0.28",
 				"--mysql-bootstrap-username", "user",
 				"--mysql-bootstrap-password", "pass",
+				"--bootstrap-vm-type", "foo",
 			})
 			ig = NewBootstrapPartition(c)
 
@@ -60,7 +61,7 @@ var _ = Describe("given a bootstrap partition", func() {
 		It("should have the correct VM type and lifecycle", func() {
 			group := dm.GetInstanceGroupByName("bootstrap")
 			Ω(group.Lifecycle).Should(Equal("errand"))
-			Ω(group.VMType).Should(Equal("errand"))
+			Ω(group.VMType).Should(Equal("foo"))
 		})
 
 		It("should have a single instance", func() {

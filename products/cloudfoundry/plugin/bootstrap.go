@@ -15,6 +15,7 @@ func NewBootstrapPartition(c *cli.Context) InstanceGrouper {
 		MySQLIPs:      c.StringSlice("mysql-ip"),
 		MySQLUser:     c.String("mysql-bootstrap-username"),
 		MySQLPassword: c.String("mysql-bootstrap-password"),
+		VMType:        c.String("bootstrap-vm-type"),
 	}
 }
 
@@ -22,7 +23,7 @@ func (b *bootstrap) ToInstanceGroup() *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
 		Name:      "bootstrap",
 		Instances: 1,
-		VMType:    "errand",
+		VMType:    b.VMType,
 		Lifecycle: "errand",
 		AZs:       b.AZs,
 		Stemcell:  b.StemcellName,
