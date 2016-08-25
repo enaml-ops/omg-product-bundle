@@ -171,32 +171,32 @@ var _ = Describe("given a Diego Database Partition", func() {
 					})
 
 					It("should properly set my server key/cert", func() {
-						props := job.Properties.(*bbs.Diego)
-						Ω(props.Bbs.ServerCert).Should(Equal("clientcert"))
-						Ω(props.Bbs.ServerKey).Should(Equal("clientkey"))
+						props := job.Properties.(*bbs.BbsJob)
+						Ω(props.Diego.Bbs.ServerCert).Should(Equal("clientcert"))
+						Ω(props.Diego.Bbs.ServerKey).Should(Equal("clientkey"))
 					})
 
 					It("should properly set my db passphrase", func() {
-						props := job.Properties.(*bbs.Diego)
-						arr := props.Bbs.EncryptionKeys.([]map[string]string)
+						props := job.Properties.(*bbs.BbsJob)
+						arr := props.Diego.Bbs.EncryptionKeys.([]map[string]string)
 						Ω(arr).Should(HaveLen(1))
 						Ω(arr[0]["passphrase"]).Should(Equal("random-db-encrytionkey"))
 					})
 
 					It("should properly set my auctioneer API URL", func() {
-						props := job.Properties.(*bbs.Diego)
-						Ω(props.Bbs.Auctioneer.ApiUrl).Should(Equal("http://auctioneer.service.cf.internal:9016"))
+						props := job.Properties.(*bbs.BbsJob)
+						Ω(props.Diego.Bbs.Auctioneer.ApiUrl).Should(Equal("http://auctioneer.service.cf.internal:9016"))
 					})
 
 					It("should properly set my bbs.etcd", func() {
-						props := job.Properties.(*bbs.Diego)
-						Ω(props.Bbs.Etcd).ShouldNot(BeNil())
-						Ω(props.Bbs.Etcd.Machines).Should(ConsistOf("etcd.service.cf.internal"))
+						props := job.Properties.(*bbs.BbsJob)
+						Ω(props.Diego.Bbs.Etcd).ShouldNot(BeNil())
+						Ω(props.Diego.Bbs.Etcd.Machines).Should(ConsistOf("etcd.service.cf.internal"))
 					})
 
-					It("should have cnryption keys as an array", func() {
-						props := job.Properties.(*bbs.Diego)
-						arr := props.Bbs.EncryptionKeys.([]map[string]string)
+					It("should have encryption keys as an array", func() {
+						props := job.Properties.(*bbs.BbsJob)
+						arr := props.Diego.Bbs.EncryptionKeys.([]map[string]string)
 						Ω(arr).Should(HaveLen(1))
 					})
 				})

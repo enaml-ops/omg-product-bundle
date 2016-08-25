@@ -152,28 +152,29 @@ func (s *diegoDatabase) HasValidValues() bool {
 	return validStrings
 }
 
-func (s *diegoDatabase) newBBS() (dbdiego *bbs.Diego) {
+func (s *diegoDatabase) newBBS() (dbdiego *bbs.BbsJob) {
 	var keyname = "key1"
-	dbdiego = &bbs.Diego{
-		Bbs: &bbs.Bbs{
-			RequireSsl:     false,
-			CaCert:         s.DiegoBrain.BBSCACert,
-			ServerCert:     s.BBSServerCert,
-			ServerKey:      s.BBSServerKey,
-			ActiveKeyLabel: keyname,
-			EncryptionKeys: []map[string]string{
-				{
-					"label":      keyname,
-					"passphrase": s.Passphrase,
+	return &bbs.BbsJob{
+		Diego: &bbs.Diego{
+			Bbs: &bbs.Bbs{
+				RequireSsl:     false,
+				CaCert:         s.DiegoBrain.BBSCACert,
+				ServerCert:     s.BBSServerCert,
+				ServerKey:      s.BBSServerKey,
+				ActiveKeyLabel: keyname,
+				EncryptionKeys: []map[string]string{
+					{
+						"label":      keyname,
+						"passphrase": s.Passphrase,
+					},
 				},
+				Auctioneer: &bbs.Auctioneer{
+					ApiUrl: "http://auctioneer.service.cf.internal:9016",
+				},
+				Etcd: s.newBBSEtcd(),
 			},
-			Auctioneer: &bbs.Auctioneer{
-				ApiUrl: "http://auctioneer.service.cf.internal:9016",
-			},
-			Etcd: s.newBBSEtcd(),
 		},
 	}
-	return
 }
 
 func (s *diegoDatabase) newEtcd() *etcd.EtcdJob {
