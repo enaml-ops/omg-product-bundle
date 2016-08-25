@@ -1,8 +1,6 @@
 package cloudfoundry
 
 import (
-	"strconv"
-
 	"gopkg.in/yaml.v2"
 
 	"github.com/codegangsta/cli"
@@ -87,10 +85,10 @@ func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.Cloud
 	roles["name"] = c.CCDBUser
 	roles["password"] = c.CCDBPassword
 
-	dbs := make(map[string]string)
+	dbs := make(map[string]interface{})
 	dbs["tag"] = "cc"
 	dbs["name"] = "ccdb"
-	dbs["citext"] = "true"
+	dbs["citext"] = true
 
 	props := &cloud_controller_clock.CloudControllerClockJob{
 		Domain:                   c.SystemDomain,
@@ -117,7 +115,7 @@ func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.Cloud
 			},
 		},
 		LoggerEndpoint: &cloud_controller_clock.LoggerEndpoint{
-			Port: strconv.Itoa(443),
+			Port: 443,
 		},
 		Ssl: &cloud_controller_clock.Ssl{
 			SkipCertVerify: c.SkipSSLCertVerify,

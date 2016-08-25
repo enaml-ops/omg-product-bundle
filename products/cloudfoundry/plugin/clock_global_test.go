@@ -191,7 +191,7 @@ runaway:
 
 			Ω(props.Ccdb.Databases).Should(HaveKeyWithValue("tag", "cc"))
 			Ω(props.Ccdb.Databases).Should(HaveKeyWithValue("name", "ccdb"))
-			Ω(props.Ccdb.Databases).Should(HaveKeyWithValue("citext", "true"))
+			Ω(props.Ccdb.Databases).Should(HaveKeyWithValue("citext", true))
 
 			Ω(props.Uaa.Url).Should(Equal("https://uaa.sys.test.com"))
 			Ω(props.Uaa.Jwt).ShouldNot(BeNil())
@@ -200,7 +200,7 @@ runaway:
 			Ω(props.Uaa.Clients).ShouldNot(BeNil())
 			Ω(props.Uaa.Clients.CcServiceDashboards.Secret).Should(Equal("ccsecret"))
 
-			Ω(props.LoggerEndpoint.Port).Should(Equal("443"))
+			Ω(props.LoggerEndpoint.Port).Should(Equal(443))
 			Ω(props.Ssl.SkipCertVerify).Should(BeFalse())
 
 			Ω(props.Nats.User).Should(Equal("nats"))
