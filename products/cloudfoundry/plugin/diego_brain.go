@@ -167,12 +167,16 @@ func (d *diegoBrain) newAuctioneer() *enaml.InstanceJob {
 	return &enaml.InstanceJob{
 		Name:    "auctioneer",
 		Release: DiegoReleaseName,
-		Properties: &auctioneer.Auctioneer{
-			Bbs: &auctioneer.Bbs{
-				ApiLocation: defaultBBSAPILocation,
-				CaCert:      d.BBSCACert,
-				ClientCert:  d.BBSClientCert,
-				ClientKey:   d.BBSClientKey,
+		Properties: &auctioneer.AuctioneerJob{
+			Diego: &auctioneer.Diego{
+				Auctioneer: &auctioneer.Auctioneer{
+					Bbs: &auctioneer.Bbs{
+						ApiLocation: defaultBBSAPILocation,
+						CaCert:      d.BBSCACert,
+						ClientCert:  d.BBSClientCert,
+						ClientKey:   d.BBSClientKey,
+					},
+				},
 			},
 		},
 	}
