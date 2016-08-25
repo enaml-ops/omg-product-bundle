@@ -248,17 +248,25 @@ func newRouteRegistrarJob(c *CloudControllerPartition) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "route_registrar",
 		Release: CFReleaseName,
-		Properties: route_registrar.RouteRegistrar{
-			Routes: []map[string]interface{}{
-				map[string]interface{}{
-					"name":                  "api",
-					"port":                  9022,
-					"registration_interval": "20s",
-					"tags": map[string]interface{}{
-						"component": "CloudController",
+		Properties: route_registrar.RouteRegistrarJob{
+			RouteRegistrar: &route_registrar.RouteRegistrar{
+				Routes: []map[string]interface{}{
+					map[string]interface{}{
+						"name":                  "api",
+						"port":                  9022,
+						"registration_interval": "20s",
+						"tags": map[string]interface{}{
+							"component": "CloudController",
+						},
+						"uris": []string{fmt.Sprintf("api.%s", c.SystemDomain)},
 					},
-					"uris": []string{fmt.Sprintf("api.%s", c.SystemDomain)},
 				},
+			},
+			Nats: &route_registrar.Nats{
+				User:     c.NATSUser,
+				Password: c.NATSPass,
+				Port:     c.NATSPort,
+				Machines: c.NATSMachines,
 			},
 		},
 	}

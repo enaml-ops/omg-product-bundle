@@ -94,8 +94,8 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(job).ShouldNot(BeNil())
 			Ω(job.Release).Should(Equal(CFReleaseName))
 
-			props := job.Properties.(route_registrar.RouteRegistrar)
-			routes := props.Routes.([]map[string]interface{})
+			props := job.Properties.(route_registrar.RouteRegistrarJob)
+			routes := props.RouteRegistrar.Routes.([]map[string]interface{})
 			Ω(routes).Should(HaveLen(1))
 			Ω(routes[0]).Should(HaveKeyWithValue("name", "api"))
 			Ω(routes[0]).Should(HaveKeyWithValue("port", 9022))
@@ -104,6 +104,12 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(routes[0]["tags"]).Should(HaveKeyWithValue("component", "CloudController"))
 			Ω(routes[0]).Should(HaveKey("uris"))
 			Ω(routes[0]["uris"]).Should(ConsistOf("api.sys.yourdomain.com"))
+			nats := props.Nats
+			Ω(nats).ShouldNot(BeNil())
+			Ω(nats.User).Should(Equal("natsuser"))
+			Ω(nats.Password).Should(Equal("natspass"))
+			Ω(nats.Port).Should(Equal(4333))
+			Ω(nats.Machines).Should(ConsistOf("10.0.0.4"))
 		})
 
 		It("should have configured the cloud_controller_ng job", func() {
