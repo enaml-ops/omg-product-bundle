@@ -203,12 +203,16 @@ func (d *diegoBrain) newConverger() *enaml.InstanceJob {
 	return &enaml.InstanceJob{
 		Name:    "converger",
 		Release: DiegoReleaseName,
-		Properties: &converger.Converger{
-			Bbs: &converger.Bbs{
-				ApiLocation: defaultBBSAPILocation,
-				CaCert:      d.BBSCACert,
-				ClientCert:  d.BBSClientCert,
-				ClientKey:   d.BBSClientKey,
+		Properties: &converger.ConvergerJob{
+			Diego: &converger.Diego{
+				Converger: &converger.Converger{
+					Bbs: &converger.Bbs{
+						ApiLocation: defaultBBSAPILocation,
+						CaCert:      d.BBSCACert,
+						ClientCert:  d.BBSClientCert,
+						ClientKey:   d.BBSClientKey,
+					},
+				},
 			},
 		},
 	}
