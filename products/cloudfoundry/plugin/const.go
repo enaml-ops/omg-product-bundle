@@ -32,7 +32,7 @@ var (
 	//DeploymentName -
 	DeploymentName = "cf"
 	//CFReleaseVersion -
-	CFReleaseVersion = "235.5"
+	CFReleaseVersion = "235.5.62"
 	//StemcellVersion -
 	StemcellVersion = "3232.17"
 	//DiegoReleaseVerion
