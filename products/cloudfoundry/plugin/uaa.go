@@ -403,13 +403,8 @@ func (s *UAA) createUAAJob() enaml.InstanceJob {
 
 func (s *UAA) createUAADB() (uaadb *uaa.Uaadb) {
 	const uaaVal = "uaa"
-	roles := make(map[string]string)
-	roles["tag"] = "admin"
-	roles["name"] = s.DBUserName
-	roles["password"] = s.DBPassword
 
 	var dbs []map[string]string
-
 	db := make(map[string]string)
 	db["tag"] = uaaVal
 	db["name"] = uaaVal
@@ -417,11 +412,22 @@ func (s *UAA) createUAADB() (uaadb *uaa.Uaadb) {
 	dbs = append(dbs, db)
 
 	return &uaa.Uaadb{
-		Address:   s.MySQLProxyHost,
-		Port:      3306,
-		DbScheme:  "mysql",
-		Roles:     roles,
-		Databases: dbs,
+		Address:  s.MySQLProxyHost,
+		Port:     3306,
+		DbScheme: "mysql",
+		Roles: []map[string]interface{}{
+			map[string]interface{}{
+				"tag":      "admin",
+				"name":     s.DBUserName,
+				"password": s.DBPassword,
+			},
+		},
+		Databases: []map[string]interface{}{
+			map[string]interface{}{
+				"tag":  uaaVal,
+				"name": uaaVal,
+			},
+		},
 	}
 }
 

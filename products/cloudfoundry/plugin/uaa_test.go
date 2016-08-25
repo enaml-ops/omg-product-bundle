@@ -163,11 +163,11 @@ var _ = Describe("UAA Partition", func() {
 			Ω(props.Uaadb.DbScheme).Should(Equal("mysql"))
 			Ω(props.Uaadb.Port).Should(Equal(3306))
 			Ω(props.Uaadb.Address).Should(Equal("1.0.10.3"))
-			Ω(props.Uaadb.Roles).ShouldNot(BeNil())
-			roles := props.Uaadb.Roles.(map[string]string)
-			Ω(roles["tag"]).Should(Equal("admin"))
-			Ω(roles["name"]).Should(Equal("uaa-db-user"))
-			Ω(roles["password"]).Should(Equal("uaa-db-pwd"))
+			Ω(props.Uaadb.Roles).Should(HaveLen(1))
+			role := props.Uaadb.Roles.([]map[string]interface{})[0]
+			Ω(role).Should(HaveKeyWithValue("tag", "admin"))
+			Ω(role).Should(HaveKeyWithValue("name", "uaa-db-user"))
+			Ω(role).Should(HaveKeyWithValue("password", "uaa-db-pwd"))
 		})
 
 		It("then it should have uaa databases as an array", func() {
@@ -177,7 +177,7 @@ var _ = Describe("UAA Partition", func() {
 			props, _ := job.Properties.(*uaa.UaaJob)
 			Ω(props.Uaadb).ShouldNot(BeNil())
 			Ω(props.Uaadb.Databases).ShouldNot(BeNil())
-			dbs := props.Uaadb.Databases.([]map[string]string)
+			dbs := props.Uaadb.Databases.([]map[string]interface{})
 			Ω(dbs).Should(HaveLen(1))
 			Ω(dbs[0]["tag"]).Should(Equal("uaa"))
 			Ω(dbs[0]["name"]).Should(Equal("uaa"))
