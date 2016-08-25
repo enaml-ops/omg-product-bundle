@@ -107,6 +107,7 @@ var _ = Describe("MySQL Proxy Partition", func() {
 			props, _ := job.Properties.(*proxy.ProxyJob)
 			Ω(props.Proxy.ApiUsername).Should(Equal("apiuser"))
 			Ω(props.Proxy.ApiPassword).Should(Equal("apipassword"))
+			Ω(props.Proxy.ProxyIps).Should(ConsistOf("1.0.10.3", "1.0.10.4"))
 			Ω(props.ExternalHost).Should(Equal("mysqlhostname"))
 			Ω(props.ClusterIps).Should(ConsistOf("1.0.10.1", "1.0.10.2"))
 			Ω(props.SyslogAggregator.Address).Should(Equal("syslog-server"))

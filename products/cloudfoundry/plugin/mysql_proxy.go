@@ -63,6 +63,7 @@ func (s *MySQLProxy) newMySQLProxyJob() enaml.InstanceJob {
 			Proxy: &proxy.Proxy{
 				ApiUsername: s.APIUsername,
 				ApiPassword: s.APIPassword,
+				ProxyIps:    s.NetworkIPs,
 			},
 			ExternalHost:     s.ExternalHost,
 			ClusterIps:       s.ClusterIPs,
