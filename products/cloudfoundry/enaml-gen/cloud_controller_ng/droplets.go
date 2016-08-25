@@ -5,10 +5,6 @@ package cloud_controller_ng
 */
 type Droplets struct {
 
-	/*WebdavConfig - Descr: The location of the webdav server eg: https://blobstore.com Default: 
-*/
-	WebdavConfig *DropletsWebdavConfig `yaml:"webdav_config,omitempty"`
-
 	/*MaxStagedDropletsStored - Descr: Number of recent, staged droplets stored per app (not including current droplet) Default: 5
 */
 	MaxStagedDropletsStored interface{} `yaml:"max_staged_droplets_stored,omitempty"`
@@ -16,6 +12,10 @@ type Droplets struct {
 	/*Cdn - Descr: Private key for signing download URIs Default: 
 */
 	Cdn *DropletsCdn `yaml:"cdn,omitempty"`
+
+	/*DropletDirectoryKey - Descr: Directory (bucket) used store droplets.  It does not have be pre-created. Default: cc-droplets
+*/
+	DropletDirectoryKey interface{} `yaml:"droplet_directory_key,omitempty"`
 
 	/*FogConnection - Descr: Fog connection hash Default: <nil>
 */
@@ -25,8 +25,12 @@ type Droplets struct {
 */
 	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
 
-	/*DropletDirectoryKey - Descr: Directory (bucket) used store droplets.  It does not have be pre-created. Default: cc-droplets
+	/*WebdavConfig - Descr: The basic auth user that CC uses to connect to the admin endpoint on webdav Default: 
 */
-	DropletDirectoryKey interface{} `yaml:"droplet_directory_key,omitempty"`
+	WebdavConfig *DropletsWebdavConfig `yaml:"webdav_config,omitempty"`
+
+	/*FogAwsStorageOptions - Descr: Storage options passed to fog for aws blobstores. Valid keys: ['encryption']. Default: <nil>
+*/
+	FogAwsStorageOptions interface{} `yaml:"fog_aws_storage_options,omitempty"`
 
 }

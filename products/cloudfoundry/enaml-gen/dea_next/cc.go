@@ -9,12 +9,12 @@ type Cc struct {
 */
 	InternalApiUser interface{} `yaml:"internal_api_user,omitempty"`
 
-	/*ExternalPort - Descr: External Cloud Controller port Default: 9022
-*/
-	ExternalPort interface{} `yaml:"external_port,omitempty"`
-
 	/*InternalApiPassword - Descr: Password to access internal endpoints Default: <nil>
 */
 	InternalApiPassword interface{} `yaml:"internal_api_password,omitempty"`
+
+	/*ExternalPort - Descr: External Cloud Controller port Default: 9022
+*/
+	ExternalPort interface{} `yaml:"external_port,omitempty"`
 
 }

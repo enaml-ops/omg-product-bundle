@@ -5,10 +5,6 @@ package blobstore
 */
 type Tls struct {
 
-	/*PrivateKey - Descr: The PEM-encoded private key for signing TLS/SSL traffic Default: <nil>
-*/
-	PrivateKey interface{} `yaml:"private_key,omitempty"`
-
 	/*Port - Descr: The TCP port on which the internal blobstore server listens Default: 443
 */
 	Port interface{} `yaml:"port,omitempty"`
@@ -16,5 +12,9 @@ type Tls struct {
 	/*Cert - Descr: The PEM-encoded certificate (optionally as a certificate chain) for serving blobs over TLS/SSL Default: <nil>
 */
 	Cert interface{} `yaml:"cert,omitempty"`
+
+	/*PrivateKey - Descr: The PEM-encoded private key for signing TLS/SSL traffic Default: <nil>
+*/
+	PrivateKey interface{} `yaml:"private_key,omitempty"`
 
 }

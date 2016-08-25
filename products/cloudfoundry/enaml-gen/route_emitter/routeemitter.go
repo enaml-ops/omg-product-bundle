@@ -5,28 +5,28 @@ package route_emitter
 */
 type RouteEmitter struct {
 
-	/*Bbs - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
-*/
-	Bbs *Bbs `yaml:"bbs,omitempty"`
-
-	/*Nats - Descr: Password for server authentication. Default: <nil>
-*/
-	Nats *Nats `yaml:"nats,omitempty"`
-
-	/*SyncIntervalInSeconds - Descr: Interval to sync routes to the router in seconds. Default: 60
-*/
-	SyncIntervalInSeconds interface{} `yaml:"sync_interval_in_seconds,omitempty"`
-
 	/*LogLevel - Descr: Log level Default: info
 */
 	LogLevel interface{} `yaml:"log_level,omitempty"`
+
+	/*Bbs - Descr: PEM-encoded client certificate Default: <nil>
+*/
+	Bbs *Bbs `yaml:"bbs,omitempty"`
 
 	/*DropsondePort - Descr: local metron agent's port Default: 3457
 */
 	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
 
+	/*Nats - Descr: Password for server authentication. Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
+
 	/*DebugAddr - Descr: address at which to serve debug info Default: 0.0.0.0:17009
 */
 	DebugAddr interface{} `yaml:"debug_addr,omitempty"`
+
+	/*SyncIntervalInSeconds - Descr: Interval to sync routes to the router in seconds. Default: 60
+*/
+	SyncIntervalInSeconds interface{} `yaml:"sync_interval_in_seconds,omitempty"`
 
 }

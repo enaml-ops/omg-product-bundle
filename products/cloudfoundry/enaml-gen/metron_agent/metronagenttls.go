@@ -5,12 +5,12 @@ package metron_agent
 */
 type MetronAgentTls struct {
 
-	/*ClientCert - Descr: TLS client certificate Default: 
-*/
-	ClientCert interface{} `yaml:"client_cert,omitempty"`
-
 	/*ClientKey - Descr: TLS client key Default: 
 */
 	ClientKey interface{} `yaml:"client_key,omitempty"`
+
+	/*ClientCert - Descr: TLS client certificate Default: 
+*/
+	ClientCert interface{} `yaml:"client_cert,omitempty"`
 
 }

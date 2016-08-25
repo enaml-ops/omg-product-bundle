@@ -5,14 +5,6 @@ package doppler
 */
 type DopplerTls struct {
 
-	/*ServerKey - Descr: TLS server key Default: 
-*/
-	ServerKey interface{} `yaml:"server_key,omitempty"`
-
-	/*Enable - Descr: Enable TLS listener on doppler so that it can receive dropsonde envelopes over TLS transport. If enabled, Cert and Key files must be specified. Default: false
-*/
-	Enable interface{} `yaml:"enable,omitempty"`
-
 	/*ServerCert - Descr: TLS server certificate Default: 
 */
 	ServerCert interface{} `yaml:"server_cert,omitempty"`
@@ -20,5 +12,13 @@ type DopplerTls struct {
 	/*Port - Descr: Port for incoming messages in the dropsonde format over tls listener Default: 3459
 */
 	Port interface{} `yaml:"port,omitempty"`
+
+	/*ServerKey - Descr: TLS server key Default: 
+*/
+	ServerKey interface{} `yaml:"server_key,omitempty"`
+
+	/*Enable - Descr: Enable TLS listener on doppler so that it can receive dropsonde envelopes over TLS transport. If enabled, Cert and Key files must be specified. Default: false
+*/
+	Enable interface{} `yaml:"enable,omitempty"`
 
 }

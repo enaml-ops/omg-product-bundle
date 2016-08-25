@@ -5,36 +5,36 @@ package proxy
 */
 type Proxy struct {
 
-	/*Port - Descr: Port for the proxy to listen on Default: 3306
+	/*ApiPort - Descr: Port for the proxy API to listen on Default: 80
 */
-	Port interface{} `yaml:"port,omitempty"`
+	ApiPort interface{} `yaml:"api_port,omitempty"`
 
-	/*HealthcheckTimeoutMillis - Descr: Timeout (milliseconds) before assuming a backend is unhealthy Default: 5000
+	/*ApiUsername - Descr: Username for Basic Auth used to secure API Default: <nil>
 */
-	HealthcheckTimeoutMillis interface{} `yaml:"healthcheck_timeout_millis,omitempty"`
+	ApiUsername interface{} `yaml:"api_username,omitempty"`
 
 	/*HealthPort - Descr: Port for checking the health of the proxy process Default: 1936
 */
 	HealthPort interface{} `yaml:"health_port,omitempty"`
 
-	/*ApiForceHttps - Descr: Redirect all HTTP requests to the API to HTTPS Default: true
+	/*Port - Descr: Port for the proxy to listen on Default: 3306
 */
-	ApiForceHttps interface{} `yaml:"api_force_https,omitempty"`
+	Port interface{} `yaml:"port,omitempty"`
 
 	/*ApiPassword - Descr: Password for Basic Auth used to secure API Default: <nil>
 */
 	ApiPassword interface{} `yaml:"api_password,omitempty"`
 
-	/*ApiPort - Descr: Port for the proxy API to listen on Default: 80
-*/
-	ApiPort interface{} `yaml:"api_port,omitempty"`
-
 	/*ProxyIps - Descr: List of IP addresses for all proxy jobs Default: <nil>
 */
 	ProxyIps interface{} `yaml:"proxy_ips,omitempty"`
 
-	/*ApiUsername - Descr: Username for Basic Auth used to secure API Default: <nil>
+	/*HealthcheckTimeoutMillis - Descr: Timeout (milliseconds) before assuming a backend is unhealthy Default: 5000
 */
-	ApiUsername interface{} `yaml:"api_username,omitempty"`
+	HealthcheckTimeoutMillis interface{} `yaml:"healthcheck_timeout_millis,omitempty"`
+
+	/*ApiForceHttps - Descr: Redirect all HTTP requests to the API to HTTPS Default: true
+*/
+	ApiForceHttps interface{} `yaml:"api_force_https,omitempty"`
 
 }

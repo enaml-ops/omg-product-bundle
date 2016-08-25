@@ -5,21 +5,21 @@ package acceptance_tests
 */
 type AcceptanceTestsJob struct {
 
-	/*OrgName - Descr: The name of the Org to run acceptance tests against Default: 
+	/*StandaloneTestsOnly - Descr: Instead of running the full acceptance test suite, only run a minimal set of tests that do not require a running CF deployment Default: false
 */
-	OrgName interface{} `yaml:"org_name,omitempty"`
+	StandaloneTestsOnly interface{} `yaml:"standalone_tests_only,omitempty"`
 
-	/*Cf - Descr: Whether to add --skip-ssl-validation for cf cli Default: false
-*/
-	Cf *Cf `yaml:"cf,omitempty"`
-
-	/*Standalone - Descr: MySQL admin username Default: root
+	/*Standalone - Descr: Hostname of proxy or load balancer used to communicate with MySQL nodes in a standalone deployment Default: <nil>
 */
 	Standalone *Standalone `yaml:"standalone,omitempty"`
 
-	/*SmokeTestsOnly - Descr: Instead of running the full acceptance test suite, only run a shorter smoke test Default: true
+	/*Broker - Descr: Host for the broker. Should be the same as jobs.cf-mysql-broker.properties.external_host Default: <nil>
 */
-	SmokeTestsOnly interface{} `yaml:"smoke_tests_only,omitempty"`
+	Broker *Broker `yaml:"broker,omitempty"`
+
+	/*Service - Descr: Name of the MySQL service Default: <nil>
+*/
+	Service *Service `yaml:"service,omitempty"`
 
 	/*Proxy - Descr: Tests will skip validation of SSL certificates Default: true
 */
@@ -29,20 +29,20 @@ type AcceptanceTestsJob struct {
 */
 	TimeoutScale interface{} `yaml:"timeout_scale,omitempty"`
 
-	/*Service - Descr: number of user connections to allow in a plan if not specified Default: 40
+	/*OrgName - Descr: The name of the Org to run acceptance tests against Default: 
 */
-	Service *Service `yaml:"service,omitempty"`
+	OrgName interface{} `yaml:"org_name,omitempty"`
+
+	/*SmokeTestsOnly - Descr: Instead of running the full acceptance test suite, only run a shorter smoke test Default: true
+*/
+	SmokeTestsOnly interface{} `yaml:"smoke_tests_only,omitempty"`
+
+	/*Cf - Descr: Username of the admin user Default: <nil>
+*/
+	Cf *Cf `yaml:"cf,omitempty"`
 
 	/*SmokeTestPassword - Descr: Password for smoke tests to comply with CF password policy, if exists. Default: @Ma8rtj2vu
 */
 	SmokeTestPassword interface{} `yaml:"smoke_test_password,omitempty"`
-
-	/*StandaloneTestsOnly - Descr: Instead of running the full acceptance test suite, only run a minimal set of tests that do not require a running CF deployment Default: false
-*/
-	StandaloneTestsOnly interface{} `yaml:"standalone_tests_only,omitempty"`
-
-	/*Broker - Descr: Host for the broker. Should be the same as jobs.cf-mysql-broker.properties.external_host Default: <nil>
-*/
-	Broker *Broker `yaml:"broker,omitempty"`
 
 }

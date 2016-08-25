@@ -5,25 +5,13 @@ package uaa
 */
 type Login struct {
 
-	/*Ldap - Descr: Deprecated. Use uaa.ldap.userPassword - login.ldap prefix is used for backwards compatibility to enable ldap from login config Default: <nil>
+	/*Protocol - Descr: Scheme to use for HTTP communication (http/https) Default: https
 */
-	Ldap *LoginLdap `yaml:"ldap,omitempty"`
+	Protocol interface{} `yaml:"protocol,omitempty"`
 
-	/*SignupsEnabled - Descr: Deprecated. Use login.self_service_links_enabled. Instructs UAA to use 'enable account creation flow'. Enabled by default. Default: true
+	/*Analytics - Descr: Google analytics domain. If Google Analytics is desired set both login.analytics.code and login.analytics.domain Default: <nil>
 */
-	SignupsEnabled interface{} `yaml:"signups_enabled,omitempty"`
-
-	/*Branding - Descr: This is a base64 encoded PNG image which will be used as the logo on all UAA pages like Login, Sign Up etc. Default: <nil>
-*/
-	Branding *Branding `yaml:"branding,omitempty"`
-
-	/*Prompt - Descr: The text used to prompt for a password during login Default: Password
-*/
-	Prompt *Prompt `yaml:"prompt,omitempty"`
-
-	/*Links - Descr: URL for requesting to signup/register for an account Default: /create_account
-*/
-	Links *Links `yaml:"links,omitempty"`
+	Analytics *Analytics `yaml:"analytics,omitempty"`
 
 	/*Url - Descr: Set if you have an external login server.
 The UAA uses this link on by its email service to create links
@@ -33,61 +21,17 @@ This defaults to the uaa.url property, and if not set, to login.<domain>
 */
 	Url interface{} `yaml:"url,omitempty"`
 
-	/*Saml - Descr: Deprecated. Use login.saml.providers list objects Default: 1
+	/*SignupsEnabled - Descr: Deprecated. Use login.self_service_links_enabled. Instructs UAA to use 'enable account creation flow'. Enabled by default. Default: true
 */
-	Saml *Saml `yaml:"saml,omitempty"`
+	SignupsEnabled interface{} `yaml:"signups_enabled,omitempty"`
 
-	/*Analytics - Descr: Google analytics domain. If Google Analytics is desired set both login.analytics.code and login.analytics.domain Default: <nil>
+	/*IdpDiscoveryEnabled - Descr: IDP Discovery should be set to true if you have configured more than one identity provider for UAA. The discovery relies on email domain being set for each additional provider Default: false
 */
-	Analytics *Analytics `yaml:"analytics,omitempty"`
+	IdpDiscoveryEnabled interface{} `yaml:"idpDiscoveryEnabled,omitempty"`
 
-	/*Smtp - Descr: SMTP server password Default: <nil>
+	/*Ldap - Descr: Deprecated. Use uaa.ldap.sslCertificateAlias - login.ldap prefix is used for backwards compatibility to enable ldap from login config Default: <nil>
 */
-	Smtp *Smtp `yaml:"smtp,omitempty"`
-
-	/*Protocol - Descr: Scheme to use for HTTP communication (http/https) Default: https
-*/
-	Protocol interface{} `yaml:"protocol,omitempty"`
-
-	/*SelfServiceLinksEnabled - Descr: Enable self-service account creation and password resets links. Default: <nil>
-*/
-	SelfServiceLinksEnabled interface{} `yaml:"self_service_links_enabled,omitempty"`
-
-	/*AssetBaseUrl - Descr: Base url for static assets, allows custom styling of the login server.  Use '/resources/pivotal' for Pivotal style. Default: /resources/oss
-*/
-	AssetBaseUrl interface{} `yaml:"asset_base_url,omitempty"`
-
-	/*InvitationsEnabled - Descr: Allows users to send invitations to email addresses outside the system and invite them to create an account. Disabled by default. Default: <nil>
-*/
-	InvitationsEnabled interface{} `yaml:"invitations_enabled,omitempty"`
-
-	/*EntityId - Descr: Deprecated. Use login.saml.entityid Default: <nil>
-*/
-	EntityId interface{} `yaml:"entity_id,omitempty"`
-
-	/*HomeRedirect - Descr: URL for configuring a custom home page Default: <nil>
-*/
-	HomeRedirect interface{} `yaml:"home_redirect,omitempty"`
-
-	/*Notifications - Descr: The url for the notifications service (configure to use Notifications Service instead of SMTP server) Default: <nil>
-*/
-	Notifications *Notifications `yaml:"notifications,omitempty"`
-
-	/*SpringProfiles - Descr: Deprecated. Use uaa.ldap.enabled - login.spring_profiles is used for backwards compatibility to enable ldap from login config Default: <nil>
-*/
-	SpringProfiles interface{} `yaml:"spring_profiles,omitempty"`
-
-	/*UaaBase - Descr: Deprecated. Use uaa.url for setting the location of UAA. Default: <nil>
-*/
-	UaaBase interface{} `yaml:"uaa_base,omitempty"`
-
-	/*Logout - Descr: A list of URLs. When this list is non null, including empty, and disable=false, logout redirects are allowed, but limited to the whitelist URLs. If a redirect parameter value is not white listed, redirect will be to the default URL. Default: <nil>
-*/
-	Logout *Logout `yaml:"logout,omitempty"`
-
-	/*Tiles - Descr: A list of links to other services to show on the landing page after log in. Default: <nil>
-*/
-	Tiles interface{} `yaml:"tiles,omitempty"`
+	Ldap *LoginLdap `yaml:"ldap,omitempty"`
 
 	/*Messages - Descr: A nested or flat hash of messages that the login server uses to display UI message
 This will be flattened into a java.util.Properties file. The example below will lead
@@ -95,5 +39,61 @@ to four properties, where the key is the concatenated value delimited by dot, fo
  Default: <nil>
 */
 	Messages interface{} `yaml:"messages,omitempty"`
+
+	/*SelfServiceLinksEnabled - Descr: Enable self-service account creation and password resets links. Default: <nil>
+*/
+	SelfServiceLinksEnabled interface{} `yaml:"self_service_links_enabled,omitempty"`
+
+	/*EntityId - Descr: Deprecated. Use login.saml.entityid Default: <nil>
+*/
+	EntityId interface{} `yaml:"entity_id,omitempty"`
+
+	/*Prompt - Descr: The text used to prompt for a username during login Default: Email
+*/
+	Prompt *Prompt `yaml:"prompt,omitempty"`
+
+	/*Notifications - Descr: The url for the notifications service (configure to use Notifications Service instead of SMTP server) Default: <nil>
+*/
+	Notifications *Notifications `yaml:"notifications,omitempty"`
+
+	/*HomeRedirect - Descr: URL for configuring a custom home page Default: <nil>
+*/
+	HomeRedirect interface{} `yaml:"home_redirect,omitempty"`
+
+	/*AssetBaseUrl - Descr: Base url for static assets, allows custom styling of the login server.  Use '/resources/pivotal' for Pivotal style. Default: /resources/oss
+*/
+	AssetBaseUrl interface{} `yaml:"asset_base_url,omitempty"`
+
+	/*Oauth - Descr: Contains a hash of OpenID Connect/Oauth Identity Providers, the key will be used as the origin key for that provider, followed by key/value pairs. Presence of the userInfoUrl will mark it as an OpenID provider instead of OAuth. Default: <nil>
+*/
+	Oauth *Oauth `yaml:"oauth,omitempty"`
+
+	/*UaaBase - Descr: Deprecated. Use uaa.url for setting the location of UAA. Default: <nil>
+*/
+	UaaBase interface{} `yaml:"uaa_base,omitempty"`
+
+	/*Branding - Descr: These links appear on the footer of all UAA pages. You may choose to add multiple urls for things like Support, Terms of Service etc. Default: <nil>
+*/
+	Branding *Branding `yaml:"branding,omitempty"`
+
+	/*Saml - Descr: Global property to sign Local/SP requests Default: true
+*/
+	Saml *Saml `yaml:"saml,omitempty"`
+
+	/*Tiles - Descr: A list of links to other services to show on the landing page after log in. Default: <nil>
+*/
+	Tiles interface{} `yaml:"tiles,omitempty"`
+
+	/*Smtp - Descr: SMTP server port Default: 2525
+*/
+	Smtp *Smtp `yaml:"smtp,omitempty"`
+
+	/*Links - Descr: URL for requesting to signup/register for an account Default: /create_account
+*/
+	Links *Links `yaml:"links,omitempty"`
+
+	/*Logout - Descr: The Location of the redirect header following a logout of the the UAA (/logout.do). Default: /login
+*/
+	Logout *Logout `yaml:"logout,omitempty"`
 
 }

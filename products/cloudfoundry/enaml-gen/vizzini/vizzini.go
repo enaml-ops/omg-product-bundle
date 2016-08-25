@@ -5,28 +5,28 @@ package vizzini
 */
 type Vizzini struct {
 
-	/*Nodes - Descr: The number of nodes to run the tests with Default: 4
+	/*Bbs - Descr: The address of the BBS Default: bbs.service.cf.internal:8889
 */
-	Nodes interface{} `yaml:"nodes,omitempty"`
+	Bbs *Bbs `yaml:"bbs,omitempty"`
+
+	/*Ssh - Descr: Host and port for the SSH proxy Default: ssh-proxy.service.cf.internal:2222
+*/
+	Ssh *Ssh `yaml:"ssh,omitempty"`
 
 	/*Verbose - Descr: Run tests in verbose mode Default: false
 */
 	Verbose interface{} `yaml:"verbose,omitempty"`
 
-	/*Bbs - Descr: PEM-encoded client certificate Default: <nil>
-*/
-	Bbs *Bbs `yaml:"bbs,omitempty"`
-
 	/*EventuallyTimeout - Descr: default timeout for ginkgo assertions Default: <nil>
 */
 	EventuallyTimeout interface{} `yaml:"eventually_timeout,omitempty"`
 
-	/*Ssh - Descr: Shared secret for the SSH proxy's Diego authenticator Default: <nil>
-*/
-	Ssh *Ssh `yaml:"ssh,omitempty"`
-
 	/*RoutableDomainSuffix - Descr: The deployment's routable domain name Default: <nil>
 */
 	RoutableDomainSuffix interface{} `yaml:"routable_domain_suffix,omitempty"`
+
+	/*Nodes - Descr: The number of nodes to run the tests with Default: 4
+*/
+	Nodes interface{} `yaml:"nodes,omitempty"`
 
 }

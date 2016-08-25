@@ -9,16 +9,16 @@ type SyslogDrainBinder struct {
 */
 	UpdateIntervalSeconds interface{} `yaml:"update_interval_seconds,omitempty"`
 
-	/*PollingBatchSize - Descr: Batch size for the poll from cloud controller Default: 1000
+	/*Debug - Descr: boolean value to turn on verbose logging for syslog_drain_binder Default: false
 */
-	PollingBatchSize interface{} `yaml:"polling_batch_size,omitempty"`
+	Debug interface{} `yaml:"debug,omitempty"`
 
 	/*DrainUrlTtlSeconds - Descr: Time to live for drain urls in seconds Default: 60
 */
 	DrainUrlTtlSeconds interface{} `yaml:"drain_url_ttl_seconds,omitempty"`
 
-	/*Debug - Descr: boolean value to turn on verbose logging for syslog_drain_binder Default: false
+	/*PollingBatchSize - Descr: Batch size for the poll from cloud controller Default: 1000
 */
-	Debug interface{} `yaml:"debug,omitempty"`
+	PollingBatchSize interface{} `yaml:"polling_batch_size,omitempty"`
 
 }

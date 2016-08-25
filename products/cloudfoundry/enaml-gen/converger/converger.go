@@ -5,9 +5,9 @@ package converger
 */
 type Converger struct {
 
-	/*DebugAddr - Descr: address at which to serve debug info Default: 0.0.0.0:17002
+	/*DropsondePort - Descr: local metron agent's port Default: 3457
 */
-	DebugAddr interface{} `yaml:"debug_addr,omitempty"`
+	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
 
 	/*RepeatIntervalInSeconds - Descr: the interval between runs of the converge process Default: 30
 */
@@ -17,10 +17,6 @@ type Converger struct {
 */
 	ExpireCompletedTaskDurationInSeconds interface{} `yaml:"expire_completed_task_duration_in_seconds,omitempty"`
 
-	/*ExpirePendingTaskDurationInSeconds - Descr: unclaimed tasks are marked as failed, after this duration in seconds Default: 1800
-*/
-	ExpirePendingTaskDurationInSeconds interface{} `yaml:"expire_pending_task_duration_in_seconds,omitempty"`
-
 	/*LogLevel - Descr: Log level Default: info
 */
 	LogLevel interface{} `yaml:"log_level,omitempty"`
@@ -29,12 +25,16 @@ type Converger struct {
 */
 	KickTaskDurationInSeconds interface{} `yaml:"kick_task_duration_in_seconds,omitempty"`
 
-	/*DropsondePort - Descr: local metron agent's port Default: 3457
+	/*ExpirePendingTaskDurationInSeconds - Descr: unclaimed tasks are marked as failed, after this duration in seconds Default: 1800
 */
-	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
+	ExpirePendingTaskDurationInSeconds interface{} `yaml:"expire_pending_task_duration_in_seconds,omitempty"`
 
-	/*Bbs - Descr: PEM-encoded client certificate Default: <nil>
+	/*Bbs - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
 */
 	Bbs *Bbs `yaml:"bbs,omitempty"`
+
+	/*DebugAddr - Descr: address at which to serve debug info Default: 0.0.0.0:17002
+*/
+	DebugAddr interface{} `yaml:"debug_addr,omitempty"`
 
 }

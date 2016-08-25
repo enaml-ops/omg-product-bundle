@@ -5,6 +5,10 @@ package file_server
 */
 type FileServer struct {
 
+	/*DropsondePort - Descr: local metron agent's port Default: 3457
+*/
+	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
+
 	/*ListenAddr - Descr: Address of interface on which to serve files Default: 0.0.0.0:8080
 */
 	ListenAddr interface{} `yaml:"listen_addr,omitempty"`
@@ -20,9 +24,5 @@ type FileServer struct {
 	/*LogLevel - Descr: Log level Default: info
 */
 	LogLevel interface{} `yaml:"log_level,omitempty"`
-
-	/*DropsondePort - Descr: local metron agent's port Default: 3457
-*/
-	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
 
 }

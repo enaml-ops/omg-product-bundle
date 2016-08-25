@@ -5,7 +5,7 @@ package etcd_metrics_server
 */
 type EtcdMetricsServerJob struct {
 
-	/*EtcdMetricsServer - Descr: address of ETCD server to instrument Default: 127.0.0.1
+	/*EtcdMetricsServer - Descr: port of ETCD server to instrument Default: 4001
 */
 	EtcdMetricsServer *EtcdMetricsServer `yaml:"etcd_metrics_server,omitempty"`
 

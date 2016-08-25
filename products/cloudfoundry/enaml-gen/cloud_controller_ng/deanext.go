@@ -17,6 +17,10 @@ type DeaNext struct {
 */
 	ClientCert interface{} `yaml:"client_cert,omitempty"`
 
+	/*CaCert - Descr: PEM-encoded CA certificate Default: <nil>
+*/
+	CaCert interface{} `yaml:"ca_cert,omitempty"`
+
 	/*StagingMemoryLimitMb - Descr: Memory limit in mb for staging tasks Default: 1024
 */
 	StagingMemoryLimitMb interface{} `yaml:"staging_memory_limit_mb,omitempty"`
@@ -24,9 +28,5 @@ type DeaNext struct {
 	/*AdvertiseIntervalInSeconds - Descr: Advertise interval for DEAs Default: 5
 */
 	AdvertiseIntervalInSeconds interface{} `yaml:"advertise_interval_in_seconds,omitempty"`
-
-	/*CaCert - Descr: PEM-encoded CA certificate Default: <nil>
-*/
-	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
 }

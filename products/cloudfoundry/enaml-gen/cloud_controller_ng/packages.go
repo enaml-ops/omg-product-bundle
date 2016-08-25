@@ -5,32 +5,36 @@ package cloud_controller_ng
 */
 type Packages struct {
 
-	/*MaxPackageSize - Descr: Maximum size of application package Default: 1073741824
+	/*WebdavConfig - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
 */
-	MaxPackageSize interface{} `yaml:"max_package_size,omitempty"`
+	WebdavConfig *PackagesWebdavConfig `yaml:"webdav_config,omitempty"`
 
-	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
+	/*FogConnection - Descr: Fog connection hash Default: <nil>
 */
-	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
+	FogConnection interface{} `yaml:"fog_connection,omitempty"`
+
+	/*Cdn - Descr: URI for a CDN to used for app package downloads Default: 
+*/
+	Cdn *PackagesCdn `yaml:"cdn,omitempty"`
 
 	/*AppPackageDirectoryKey - Descr: Directory (bucket) used store app packages.  It does not have be pre-created. Default: cc-packages
 */
 	AppPackageDirectoryKey interface{} `yaml:"app_package_directory_key,omitempty"`
 
-	/*WebdavConfig - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
+	/*FogAwsStorageOptions - Descr: Storage options passed to fog for aws blobstores. Valid keys: ['encryption']. Default: <nil>
 */
-	WebdavConfig *PackagesWebdavConfig `yaml:"webdav_config,omitempty"`
+	FogAwsStorageOptions interface{} `yaml:"fog_aws_storage_options,omitempty"`
+
+	/*MaxPackageSize - Descr: Maximum size of application package Default: 1073741824
+*/
+	MaxPackageSize interface{} `yaml:"max_package_size,omitempty"`
 
 	/*MaxValidPackagesStored - Descr: Number of recent, valid packages stored per app (not including package for current droplet) Default: 5
 */
 	MaxValidPackagesStored interface{} `yaml:"max_valid_packages_stored,omitempty"`
 
-	/*Cdn - Descr: Private key for signing download URIs Default: 
+	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
 */
-	Cdn *PackagesCdn `yaml:"cdn,omitempty"`
-
-	/*FogConnection - Descr: Fog connection hash Default: <nil>
-*/
-	FogConnection interface{} `yaml:"fog_connection,omitempty"`
+	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
 
 }

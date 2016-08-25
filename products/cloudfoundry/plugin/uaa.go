@@ -235,7 +235,7 @@ func (s *UAA) CreateUAA(c *cli.Context) (login *uaa.Uaa) {
 	}
 	return &uaa.Uaa{
 		RequireHttps: true,
-		Ssl: &uaa.Ssl{
+		Ssl: &uaa.UaaSsl{
 			Port: -1,
 		},
 		Admin: &uaa.Admin{

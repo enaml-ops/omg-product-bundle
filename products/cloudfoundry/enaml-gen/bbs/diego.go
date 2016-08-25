@@ -5,7 +5,7 @@ package bbs
 */
 type Diego struct {
 
-	/*Bbs - Descr: capacity of the tls client cache Default: <nil>
+	/*Bbs - Descr: EXPERIMENTAL: connection string to use for SQL backend [username:password@tcp(1.1.1.1:1234)/database] Default: <nil>
 */
 	Bbs *Bbs `yaml:"bbs,omitempty"`
 

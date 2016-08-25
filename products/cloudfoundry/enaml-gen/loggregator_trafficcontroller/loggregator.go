@@ -5,10 +5,6 @@ package loggregator_trafficcontroller
 */
 type Loggregator struct {
 
-	/*OutgoingDropsondePort - Descr: Port for outgoing dropsonde messages Default: 8081
-*/
-	OutgoingDropsondePort interface{} `yaml:"outgoing_dropsonde_port,omitempty"`
-
 	/*Etcd - Descr: Number of concurrent requests to ETCD Default: 10
 */
 	Etcd *Etcd `yaml:"etcd,omitempty"`
@@ -16,5 +12,9 @@ type Loggregator struct {
 	/*DopplerPort - Descr: Port for outgoing doppler messages Default: 8081
 */
 	DopplerPort interface{} `yaml:"doppler_port,omitempty"`
+
+	/*OutgoingDropsondePort - Descr: Port for outgoing dropsonde messages Default: 8081
+*/
+	OutgoingDropsondePort interface{} `yaml:"outgoing_dropsonde_port,omitempty"`
 
 }

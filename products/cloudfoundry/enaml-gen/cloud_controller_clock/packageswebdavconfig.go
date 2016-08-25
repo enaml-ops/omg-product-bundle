@@ -5,9 +5,9 @@ package cloud_controller_clock
 */
 type PackagesWebdavConfig struct {
 
-	/*PublicEndpoint - Descr: The location of the webdav server eg: https://blobstore.com Default: 
+	/*PrivateEndpoint - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
 */
-	PublicEndpoint interface{} `yaml:"public_endpoint,omitempty"`
+	PrivateEndpoint interface{} `yaml:"private_endpoint,omitempty"`
 
 	/*Username - Descr: The basic auth user that CC uses to connect to the admin endpoint on webdav Default: 
 */
@@ -17,12 +17,12 @@ type PackagesWebdavConfig struct {
 */
 	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
-	/*PrivateEndpoint - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
-*/
-	PrivateEndpoint interface{} `yaml:"private_endpoint,omitempty"`
-
 	/*Password - Descr: The basic auth password that CC uses to connect to the admin endpoint on webdav Default: 
 */
 	Password interface{} `yaml:"password,omitempty"`
+
+	/*PublicEndpoint - Descr: The location of the webdav server eg: https://blobstore.com Default: 
+*/
+	PublicEndpoint interface{} `yaml:"public_endpoint,omitempty"`
 
 }

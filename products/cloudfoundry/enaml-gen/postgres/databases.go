@@ -5,13 +5,21 @@ package postgres
 */
 type Databases struct {
 
-	/*Roles - Descr: A list of database roles and associated properties to create Default: <nil>
+	/*CollectStatementStatistics - Descr: Enable the `pg_stat_statements` extension and collect statement execution statistics Default: false
 */
-	Roles interface{} `yaml:"roles,omitempty"`
+	CollectStatementStatistics interface{} `yaml:"collect_statement_statistics,omitempty"`
 
-	/*AdditionalConfig - Descr: A map of additional key/value pairs to include as extra configuration properties Default: <nil>
+	/*Port - Descr: The database port Default: <nil>
 */
-	AdditionalConfig interface{} `yaml:"additional_config,omitempty"`
+	Port interface{} `yaml:"port,omitempty"`
+
+	/*DbScheme - Descr: The database scheme Default: <nil>
+*/
+	DbScheme interface{} `yaml:"db_scheme,omitempty"`
+
+	/*Address - Descr: The database address Default: <nil>
+*/
+	Address interface{} `yaml:"address,omitempty"`
 
 	/*Databases - Descr: A list of databases and associated properties to create Default: <nil>
 */
@@ -21,24 +29,16 @@ type Databases struct {
 */
 	LogLinePrefix interface{} `yaml:"log_line_prefix,omitempty"`
 
-	/*CollectStatementStatistics - Descr: Enable the `pg_stat_statements` extension and collect statement execution statistics Default: false
+	/*Roles - Descr: A list of database roles and associated properties to create Default: <nil>
 */
-	CollectStatementStatistics interface{} `yaml:"collect_statement_statistics,omitempty"`
-
-	/*DbScheme - Descr: The database scheme Default: <nil>
-*/
-	DbScheme interface{} `yaml:"db_scheme,omitempty"`
+	Roles interface{} `yaml:"roles,omitempty"`
 
 	/*MaxConnections - Descr: Maximum number of database connections Default: <nil>
 */
 	MaxConnections interface{} `yaml:"max_connections,omitempty"`
 
-	/*Address - Descr: The database address Default: <nil>
+	/*AdditionalConfig - Descr: A map of additional key/value pairs to include as extra configuration properties Default: <nil>
 */
-	Address interface{} `yaml:"address,omitempty"`
-
-	/*Port - Descr: The database port Default: <nil>
-*/
-	Port interface{} `yaml:"port,omitempty"`
+	AdditionalConfig interface{} `yaml:"additional_config,omitempty"`
 
 }

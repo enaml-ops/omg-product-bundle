@@ -5,7 +5,7 @@ package ssh_proxy
 */
 type SshProxyJob struct {
 
-	/*Diego - Descr: maximum number of idle http connections Default: <nil>
+	/*Diego - Descr: Comma separated list of allowed cipher algorithms Default: <nil>
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

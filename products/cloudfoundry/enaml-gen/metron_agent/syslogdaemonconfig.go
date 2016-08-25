@@ -17,6 +17,10 @@ type SyslogDaemonConfig struct {
 */
 	CustomRule interface{} `yaml:"custom_rule,omitempty"`
 
+	/*Address - Descr: IP address for syslog aggregator Default: <nil>
+*/
+	Address interface{} `yaml:"address,omitempty"`
+
 	/*FallbackAddresses - Descr: Addresses of fallback servers to be used if the primary syslog server is down. Only tcp or relp are supported. Each list entry should consist of "address", "transport" and "port" keys.  Default: []
 */
 	FallbackAddresses interface{} `yaml:"fallback_addresses,omitempty"`
@@ -24,9 +28,5 @@ type SyslogDaemonConfig struct {
 	/*MaxMessageSize - Descr: maximum message size to be sent Default: 4k
 */
 	MaxMessageSize interface{} `yaml:"max_message_size,omitempty"`
-
-	/*Address - Descr: IP address for syslog aggregator Default: <nil>
-*/
-	Address interface{} `yaml:"address,omitempty"`
 
 }

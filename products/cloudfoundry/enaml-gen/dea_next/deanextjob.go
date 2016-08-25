@@ -5,36 +5,36 @@ package dea_next
 */
 type DeaNextJob struct {
 
-	/*Domain - Descr: DNS domain name for this Cloud Foundry deployment Default: <nil>
-*/
-	Domain interface{} `yaml:"domain,omitempty"`
-
-	/*Nats - Descr: TCP port of NATS server Default: <nil>
-*/
-	Nats *Nats `yaml:"nats,omitempty"`
-
-	/*DeaNext - Descr:  Default: 1
-*/
-	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
-
-	/*MetronEndpoint - Descr: The host used to emit messages to the Metron agent Default: 127.0.0.1
-*/
-	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
-
-	/*Cc - Descr: User name to access internal endpoints Default: internal_user
-*/
-	Cc *Cc `yaml:"cc,omitempty"`
-
 	/*DiskQuotaEnabled - Descr: disk quota must be disabled to use warden-inside-warden with the warden cpi Default: true
 */
 	DiskQuotaEnabled interface{} `yaml:"disk_quota_enabled,omitempty"`
 
-	/*Hm9000 - Descr: PEM-encoded client key Default: <nil>
-*/
-	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
-
 	/*Router - Descr: Interval at which the router requests routes to be registered. Default: 20
 */
 	Router *Router `yaml:"router,omitempty"`
+
+	/*MetronEndpoint - Descr: The port used to emit messages to the Metron agent Default: 3457
+*/
+	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
+
+	/*DeaNext - Descr: The maximum number of CPU shares that can be given to an app Default: 256
+*/
+	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
+
+	/*Hm9000 - Descr: PEM-encoded CA certificate Default: <nil>
+*/
+	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
+
+	/*Nats - Descr: password for NATS login Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
+
+	/*Domain - Descr: DNS domain name for this Cloud Foundry deployment Default: <nil>
+*/
+	Domain interface{} `yaml:"domain,omitempty"`
+
+	/*Cc - Descr: Password to access internal endpoints Default: <nil>
+*/
+	Cc *Cc `yaml:"cc,omitempty"`
 
 }

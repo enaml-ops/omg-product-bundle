@@ -5,6 +5,10 @@ package haproxy
 */
 type HaproxyJob struct {
 
+	/*RequestTimeoutInSeconds - Descr: Server and client timeouts in seconds Default: 900
+*/
+	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
+
 	/*Cc - Descr: Allow users to change the value of the app-level allow_ssh attribute Default: true
 */
 	Cc *Cc `yaml:"cc,omitempty"`
@@ -13,15 +17,11 @@ type HaproxyJob struct {
 */
 	AppSsh *AppSsh `yaml:"app_ssh,omitempty"`
 
-	/*HaProxy - Descr: Disable port 80 traffic Default: false
+	/*HaProxy - Descr: SSL certificate (PEM file) Default: <nil>
 */
 	HaProxy *HaProxy `yaml:"ha_proxy,omitempty"`
 
-	/*RequestTimeoutInSeconds - Descr: Server and client timeouts in seconds Default: 900
-*/
-	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
-
-	/*Router - Descr: Array of the router IPs acting as the first group of HTTP/TCP backends Default: []
+	/*Router - Descr: Array of the router IPs acting as the second group of HTTP/TCP backends Default: []
 */
 	Router *Router `yaml:"router,omitempty"`
 

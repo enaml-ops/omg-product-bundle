@@ -5,11 +5,11 @@ package uaa
 */
 type UaaJob struct {
 
-	/*Login - Descr: Deprecated. Use login.saml.providers list objects Default: 1
+	/*Login - Descr: Global property to sign Local/SP requests Default: true
 */
 	Login *Login `yaml:"login,omitempty"`
 
-	/*Uaa - Descr: Used with search-and-bind and search-and-compare. A valid LDAP ID that has read permissions to perform a search of the LDAP tree for user information.  Default: <nil>
+	/*Uaa - Descr: The file to be used for configuring the LDAP authentication. Options are: 'simple-bind', 'search-and-bind', 'search-and-compare' Default: search-and-bind
 */
 	Uaa *Uaa `yaml:"uaa,omitempty"`
 
@@ -17,7 +17,7 @@ type UaaJob struct {
 */
 	Uaadb *Uaadb `yaml:"uaadb,omitempty"`
 
-	/*Env - Descr: The http_proxy across the VMs Default: <nil>
+	/*Env - Descr: Set No_Proxy across the VMs Default: <nil>
 */
 	Env *Env `yaml:"env,omitempty"`
 

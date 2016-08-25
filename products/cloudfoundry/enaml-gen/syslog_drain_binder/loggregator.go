@@ -5,7 +5,7 @@ package syslog_drain_binder
 */
 type Loggregator struct {
 
-	/*Etcd - Descr: Number of concurrent requests to ETCD Default: 10
+	/*Etcd - Descr: IPs pointing to the ETCD cluster Default: <nil>
 */
 	Etcd *Etcd `yaml:"etcd,omitempty"`
 

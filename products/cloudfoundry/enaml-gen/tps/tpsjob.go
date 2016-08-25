@@ -5,7 +5,7 @@ package tps
 */
 type TpsJob struct {
 
-	/*Diego - Descr: maximum number of idle http connections Default: <nil>
+	/*Diego - Descr: when connecting over https, ignore bad ssl certificates Default: false
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

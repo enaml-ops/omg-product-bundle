@@ -5,12 +5,12 @@ package bootstrap
 */
 type BootstrapEndpoint struct {
 
-	/*Username - Descr: Username used to contact the bootstrap endpoints via Basic Auth Default: <nil>
-*/
-	Username interface{} `yaml:"username,omitempty"`
-
 	/*Password - Descr: Password used to contact the bootstrap endpoints via Basic Auth Default: <nil>
 */
 	Password interface{} `yaml:"password,omitempty"`
+
+	/*Username - Descr: Username used to contact the bootstrap endpoints via Basic Auth Default: <nil>
+*/
+	Username interface{} `yaml:"username,omitempty"`
 
 }

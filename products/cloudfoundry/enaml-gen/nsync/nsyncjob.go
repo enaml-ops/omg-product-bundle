@@ -5,7 +5,7 @@ package nsync
 */
 type NsyncJob struct {
 
-	/*Diego - Descr: PEM-encoded client certificate Default: <nil>
+	/*Diego - Descr: when connecting over https, ignore bad ssl certificates Default: false
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

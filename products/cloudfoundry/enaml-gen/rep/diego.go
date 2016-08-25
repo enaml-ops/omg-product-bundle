@@ -5,11 +5,11 @@ package rep
 */
 type Diego struct {
 
-	/*Rep - Descr: PEM-encoded CA certificate Default: <nil>
+	/*Rep - Descr: maximum number of idle http connections Default: <nil>
 */
 	Rep *Rep `yaml:"rep,omitempty"`
 
-	/*Executor - Descr: Maximum number of concurrent health check operations. Default: 64
+	/*Executor - Descr: Concatenation of trusted CA certificates to be used when downloading assets. Default: <nil>
 */
 	Executor *Executor `yaml:"executor,omitempty"`
 

@@ -5,7 +5,7 @@ package route_emitter
 */
 type Diego struct {
 
-	/*RouteEmitter - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
+	/*RouteEmitter - Descr: PEM-encoded client certificate Default: <nil>
 */
 	RouteEmitter *RouteEmitter `yaml:"route_emitter,omitempty"`
 

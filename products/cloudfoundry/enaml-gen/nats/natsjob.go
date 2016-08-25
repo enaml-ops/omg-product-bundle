@@ -5,7 +5,7 @@ package nats
 */
 type NatsJob struct {
 
-	/*Nats - Descr: Enable debug logging output. Default: false
+	/*Nats - Descr: After accepting a connection, wait up to this many seconds for credentials. Default: 15
 */
 	Nats *Nats `yaml:"nats,omitempty"`
 

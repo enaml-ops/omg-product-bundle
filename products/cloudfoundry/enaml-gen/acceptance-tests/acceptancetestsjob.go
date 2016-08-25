@@ -5,7 +5,7 @@ package acceptance_tests
 */
 type AcceptanceTestsJob struct {
 
-	/*AcceptanceTests - Descr: Flag to include the security groups test suite. Default: false
+	/*AcceptanceTests - Descr: Flag for using HTTP when making api and application requests rather than the default HTTPS Default: false
 */
 	AcceptanceTests *AcceptanceTests `yaml:"acceptance_tests,omitempty"`
 

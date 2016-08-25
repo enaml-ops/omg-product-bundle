@@ -5,6 +5,22 @@ package uaa
 */
 type Saml struct {
 
+	/*MetadataTrustCheck - Descr: Deprecated. Use login.saml.providers list objects Default: true
+*/
+	MetadataTrustCheck interface{} `yaml:"metadataTrustCheck,omitempty"`
+
+	/*ServiceProviderKeyPassword - Descr: Password to protect the service provider private key. Default: <nil>
+*/
+	ServiceProviderKeyPassword interface{} `yaml:"serviceProviderKeyPassword,omitempty"`
+
+	/*AssertionConsumerIndex - Descr: Deprecated. Use login.saml.providers list objects Default: 1
+*/
+	AssertionConsumerIndex interface{} `yaml:"assertionConsumerIndex,omitempty"`
+
+	/*SignRequest - Descr: Global property to sign Local/SP requests Default: true
+*/
+	SignRequest interface{} `yaml:"signRequest,omitempty"`
+
 	/*SignMetaData - Descr: Global property to sign Local/SP metadata Default: true
 */
 	SignMetaData interface{} `yaml:"signMetaData,omitempty"`
@@ -13,37 +29,39 @@ type Saml struct {
 */
 	IdpMetadataURL interface{} `yaml:"idpMetadataURL,omitempty"`
 
-	/*NameidFormat - Descr: Deprecated. Use login.saml.providers list objects Default: urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
+	/*IdpEntityAlias - Descr: Deprecated. Use login.saml.providers list objects Default: <nil>
 */
-	NameidFormat interface{} `yaml:"nameidFormat,omitempty"`
-
-	/*Socket - Descr: Timeout in milliseconds for connection pooling for SAML metadata HTTP requests Default: 10000
-*/
-	Socket *Socket `yaml:"socket,omitempty"`
-
-	/*ServiceProviderKey - Descr: Private key for the service provider certificate. Default: <nil>
-*/
-	ServiceProviderKey interface{} `yaml:"serviceProviderKey,omitempty"`
+	IdpEntityAlias interface{} `yaml:"idpEntityAlias,omitempty"`
 
 	/*ServiceProviderCertificate - Descr: Service provider certificate. Default: <nil>
 */
 	ServiceProviderCertificate interface{} `yaml:"serviceProviderCertificate,omitempty"`
 
-	/*WantAssertionSigned - Descr: Global property to request that external IDPs sign their SAML assertion before sending them to the UAA Default: false
+	/*Entityid - Descr: This is used as the SAML Service Provider Entity ID. Each zone has a unique entity ID. Zones other than
+the default zone will derive their entity ID from this setting by prefexing it with the subdomain.
+ Default: <nil>
 */
-	WantAssertionSigned interface{} `yaml:"wantAssertionSigned,omitempty"`
+	Entityid interface{} `yaml:"entityid,omitempty"`
+
+	/*NameidFormat - Descr: Deprecated. Use login.saml.providers list objects Default: urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
+*/
+	NameidFormat interface{} `yaml:"nameidFormat,omitempty"`
+
+	/*Socket - Descr: Read timeout in milliseconds for SAML metadata HTTP requests Default: 10000
+*/
+	Socket *Socket `yaml:"socket,omitempty"`
+
+	/*IdpMetadataFile - Descr: Deprecated. Use login.saml.providers list objects Default: <nil>
+*/
+	IdpMetadataFile interface{} `yaml:"idp_metadata_file,omitempty"`
 
 	/*Providers - Descr: Contains a hash of SAML Identity Providers, the key is the IDP Alias, followed by key/value pairs. To learn more about how to setup a saml identity provider go to https://simplesamlphp.org Default: <nil>
 */
 	Providers interface{} `yaml:"providers,omitempty"`
 
-	/*IdpEntityAlias - Descr: Deprecated. Use login.saml.providers list objects Default: <nil>
+	/*WantAssertionSigned - Descr: Global property to request that external IDPs sign their SAML assertion before sending them to the UAA Default: false
 */
-	IdpEntityAlias interface{} `yaml:"idpEntityAlias,omitempty"`
-
-	/*SignRequest - Descr: Global property to sign Local/SP requests Default: true
-*/
-	SignRequest interface{} `yaml:"signRequest,omitempty"`
+	WantAssertionSigned interface{} `yaml:"wantAssertionSigned,omitempty"`
 
 	/*EntityBaseUrl - Descr: The URL for which SAML identity providers will post assertions to.
 If set it overrides the default.
@@ -55,24 +73,8 @@ The UAA will display this link in the cf --sso call if there is a SAML provider 
 */
 	EntityBaseUrl interface{} `yaml:"entity_base_url,omitempty"`
 
-	/*AssertionConsumerIndex - Descr: Deprecated. Use login.saml.providers list objects Default: 1
+	/*ServiceProviderKey - Descr: Private key for the service provider certificate. Default: <nil>
 */
-	AssertionConsumerIndex interface{} `yaml:"assertionConsumerIndex,omitempty"`
-
-	/*IdpMetadataFile - Descr: Deprecated. Use login.saml.providers list objects Default: <nil>
-*/
-	IdpMetadataFile interface{} `yaml:"idp_metadata_file,omitempty"`
-
-	/*Entityid - Descr: This is used as the SAML Service Provider Entity ID. Each  Default: <nil>
-*/
-	Entityid interface{} `yaml:"entityid,omitempty"`
-
-	/*ServiceProviderKeyPassword - Descr: Password to protect the service provider private key. Default: <nil>
-*/
-	ServiceProviderKeyPassword interface{} `yaml:"serviceProviderKeyPassword,omitempty"`
-
-	/*MetadataTrustCheck - Descr: Deprecated. Use login.saml.providers list objects Default: true
-*/
-	MetadataTrustCheck interface{} `yaml:"metadataTrustCheck,omitempty"`
+	ServiceProviderKey interface{} `yaml:"serviceProviderKey,omitempty"`
 
 }

@@ -5,7 +5,7 @@ package uaa
 */
 type Authentication struct {
 
-	/*Policy - Descr: Number of seconds in which lockoutAfterFailures failures must occur in order for account to be locked Default: 3600
+	/*Policy - Descr: Number of seconds to lock out an account when lockoutAfterFailures failures is exceeded Default: 300
 */
 	Policy *AuthenticationPolicy `yaml:"policy,omitempty"`
 

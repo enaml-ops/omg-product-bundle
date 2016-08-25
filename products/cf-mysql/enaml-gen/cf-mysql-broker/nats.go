@@ -5,20 +5,20 @@ package cf_mysql_broker
 */
 type Nats struct {
 
-	/*Machines - Descr: IP of each NATS cluster member. Default: <nil>
+	/*Port - Descr: IP port of Cloud Foundry NATS server Default: <nil>
 */
-	Machines interface{} `yaml:"machines,omitempty"`
+	Port interface{} `yaml:"port,omitempty"`
 
 	/*User - Descr: Username for broker to register a route with NATS Default: <nil>
 */
 	User interface{} `yaml:"user,omitempty"`
 
+	/*Machines - Descr: IP of each NATS cluster member. Default: <nil>
+*/
+	Machines interface{} `yaml:"machines,omitempty"`
+
 	/*Password - Descr: Password for broker to register a route with NATS Default: <nil>
 */
 	Password interface{} `yaml:"password,omitempty"`
-
-	/*Port - Descr: IP port of Cloud Foundry NATS server Default: <nil>
-*/
-	Port interface{} `yaml:"port,omitempty"`
 
 }

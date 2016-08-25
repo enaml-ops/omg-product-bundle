@@ -13,12 +13,12 @@ type SyslogAggregator struct {
 */
 	Address interface{} `yaml:"address,omitempty"`
 
-	/*All - Descr: Define whether forwarders should also send non-mysql syslog activity to the aggregator. Default: false
-*/
-	All interface{} `yaml:"all,omitempty"`
-
 	/*Port - Descr: TCP port of syslog aggregator Default: <nil>
 */
 	Port interface{} `yaml:"port,omitempty"`
+
+	/*All - Descr: Define whether forwarders should also send non-mysql syslog activity to the aggregator. Default: false
+*/
+	All interface{} `yaml:"all,omitempty"`
 
 }

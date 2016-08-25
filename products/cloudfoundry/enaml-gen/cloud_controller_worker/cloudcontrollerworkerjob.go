@@ -5,88 +5,88 @@ package cloud_controller_worker
 */
 type CloudControllerWorkerJob struct {
 
-	/*AppDomains - Descr: Array of domains for user apps (example: 'user.app.space.foo', a user app called 'neat' will listen at 'http://neat.user.app.space.foo') Default: <nil>
+	/*SupportAddress - Descr: 'support' attribute in the /v2/info endpoint Default: 
 */
-	AppDomains interface{} `yaml:"app_domains,omitempty"`
-
-	/*Build - Descr: 'build' attribute in the /v2/info endpoint Default: 
-*/
-	Build interface{} `yaml:"build,omitempty"`
+	SupportAddress interface{} `yaml:"support_address,omitempty"`
 
 	/*Login - Descr: http or https Default: https
 */
 	Login *Login `yaml:"login,omitempty"`
 
-	/*LoggerEndpoint - Descr: Port for logger endpoint listed at /v2/info Default: 443
+	/*Build - Descr: 'build' attribute in the /v2/info endpoint Default: 
 */
-	LoggerEndpoint *LoggerEndpoint `yaml:"logger_endpoint,omitempty"`
-
-	/*Version - Descr: 'version' attribute in the /v2/info endpoint Default: 0
-*/
-	Version interface{} `yaml:"version,omitempty"`
-
-	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
-*/
-	Domain interface{} `yaml:"domain,omitempty"`
-
-	/*Description - Descr: 'description' attribute in the /v2/info endpoint Default: 
-*/
-	Description interface{} `yaml:"description,omitempty"`
-
-	/*Uaa - Descr: Used for generating SSO clients for service brokers. Default: <nil>
-*/
-	Uaa *Uaa `yaml:"uaa,omitempty"`
-
-	/*DeaNext - Descr: Disk limit in mb for staging tasks Default: 6144
-*/
-	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
+	Build interface{} `yaml:"build,omitempty"`
 
 	/*SystemDomainOrganization - Descr: The User Org that owns the system_domain, required if system_domain is defined Default: 
 */
 	SystemDomainOrganization interface{} `yaml:"system_domain_organization,omitempty"`
 
-	/*SupportAddress - Descr: 'support' attribute in the /v2/info endpoint Default: 
+	/*AppDomains - Descr: Array of domains for user apps (example: 'user.app.space.foo', a user app called 'neat' will listen at 'http://neat.user.app.space.foo') Default: <nil>
 */
-	SupportAddress interface{} `yaml:"support_address,omitempty"`
+	AppDomains interface{} `yaml:"app_domains,omitempty"`
 
-	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
+	/*Version - Descr: 'version' attribute in the /v2/info endpoint Default: 0
 */
-	SystemDomain interface{} `yaml:"system_domain,omitempty"`
+	Version interface{} `yaml:"version,omitempty"`
 
-	/*Cc - Descr: Private key for signing download URIs Default: 
+	/*LoggerEndpoint - Descr: Whether to use ssl for logger endpoint listed at /v2/info Default: true
+*/
+	LoggerEndpoint *LoggerEndpoint `yaml:"logger_endpoint,omitempty"`
+
+	/*Ccdb - Descr: The address of the database server Default: <nil>
+*/
+	Ccdb *Ccdb `yaml:"ccdb,omitempty"`
+
+	/*Nats - Descr: IP of each NATS cluster member. Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
+
+	/*DeaNext - Descr: Memory limit in mb for staging tasks Default: 1024
+*/
+	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
+
+	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
+*/
+	Domain interface{} `yaml:"domain,omitempty"`
+
+	/*Cc - Descr: The longest this job can take before it is cancelled Default: <nil>
 */
 	Cc *Cc `yaml:"cc,omitempty"`
+
+	/*Description - Descr: 'description' attribute in the /v2/info endpoint Default: 
+*/
+	Description interface{} `yaml:"description,omitempty"`
 
 	/*Hm9000 - Descr: URL of the hm9000 server Default: <nil>
 */
 	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
 
-	/*Ccdb - Descr: Contains the name of the database on the database server Default: <nil>
-*/
-	Ccdb *Ccdb `yaml:"ccdb,omitempty"`
-
-	/*MetronEndpoint - Descr: The port used to emit messages to the Metron agent Default: 3457
-*/
-	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
-
 	/*Name - Descr: 'name' attribute in the /v2/info endpoint Default: 
 */
 	Name interface{} `yaml:"name,omitempty"`
-
-	/*Ssl - Descr: specifies that the job is allowed to skip ssl cert verification Default: false
-*/
-	Ssl *Ssl `yaml:"ssl,omitempty"`
-
-	/*Nats - Descr: Password for cc client to connect to NATS Default: <nil>
-*/
-	Nats *Nats `yaml:"nats,omitempty"`
 
 	/*RequestTimeoutInSeconds - Descr: Timeout for requests in seconds. Default: 900
 */
 	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
 
-	/*NfsServer - Descr: NFS server for droplets and apps (not used in an AWS deploy, use s3 instead) Default: <nil>
+	/*MetronEndpoint - Descr: The port used to emit messages to the Metron agent Default: 3457
+*/
+	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
+
+	/*NfsServer - Descr: The location at which to mount the nfs share Default: /var/vcap/nfs
 */
 	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
+
+	/*Ssl - Descr: specifies that the job is allowed to skip ssl cert verification Default: false
+*/
+	Ssl *Ssl `yaml:"ssl,omitempty"`
+
+	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
+*/
+	SystemDomain interface{} `yaml:"system_domain,omitempty"`
+
+	/*Uaa - Descr: URL of the UAA server Default: <nil>
+*/
+	Uaa *Uaa `yaml:"uaa,omitempty"`
 
 }

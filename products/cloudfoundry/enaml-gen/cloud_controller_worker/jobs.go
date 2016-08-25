@@ -9,13 +9,9 @@ type Jobs struct {
 */
 	BlobstoreDelete *BlobstoreDelete `yaml:"blobstore_delete,omitempty"`
 
-	/*AppEventsCleanup - Descr: The longest this job can take before it is cancelled Default: <nil>
+	/*AppUsageEventsCleanup - Descr: The longest this job can take before it is cancelled Default: <nil>
 */
-	AppEventsCleanup *AppEventsCleanup `yaml:"app_events_cleanup,omitempty"`
-
-	/*DropletDeletion - Descr: The longest this job can take before it is cancelled Default: <nil>
-*/
-	DropletDeletion *DropletDeletion `yaml:"droplet_deletion,omitempty"`
+	AppUsageEventsCleanup *AppUsageEventsCleanup `yaml:"app_usage_events_cleanup,omitempty"`
 
 	/*BlobstoreUpload - Descr: The longest this job can take before it is cancelled Default: <nil>
 */
@@ -25,17 +21,21 @@ type Jobs struct {
 */
 	AppBitsPacker *AppBitsPacker `yaml:"app_bits_packer,omitempty"`
 
-	/*Generic - Descr: Number of generic cloud_controller_worker workers Default: 1
-*/
-	Generic *Generic `yaml:"generic,omitempty"`
-
 	/*Global - Descr: The longest any job can take before it is cancelled unless overriden per job Default: 14400
 */
 	Global *Global `yaml:"global,omitempty"`
 
-	/*AppUsageEventsCleanup - Descr: The longest this job can take before it is cancelled Default: <nil>
+	/*DropletDeletion - Descr: The longest this job can take before it is cancelled Default: <nil>
 */
-	AppUsageEventsCleanup *AppUsageEventsCleanup `yaml:"app_usage_events_cleanup,omitempty"`
+	DropletDeletion *DropletDeletion `yaml:"droplet_deletion,omitempty"`
+
+	/*Generic - Descr: Number of generic cloud_controller_worker workers Default: 1
+*/
+	Generic *Generic `yaml:"generic,omitempty"`
+
+	/*AppEventsCleanup - Descr: The longest this job can take before it is cancelled Default: <nil>
+*/
+	AppEventsCleanup *AppEventsCleanup `yaml:"app_events_cleanup,omitempty"`
 
 	/*DropletUpload - Descr: The longest this job can take before it is cancelled Default: <nil>
 */

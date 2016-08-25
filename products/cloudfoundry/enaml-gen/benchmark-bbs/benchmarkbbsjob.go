@@ -5,7 +5,7 @@ package benchmark_bbs
 */
 type BenchmarkBbsJob struct {
 
-	/*BenchmarkBbs - Descr: PEM-encoded client certificate Default: <nil>
+	/*BenchmarkBbs - Descr: PEM-encoded root CA certificate Default: <nil>
 */
 	BenchmarkBbs *BenchmarkBbs `yaml:"benchmark-bbs,omitempty"`
 

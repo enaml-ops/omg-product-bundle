@@ -5,17 +5,13 @@ package cloud_controller_ng
 */
 type BuildpacksWebdavConfig struct {
 
-	/*PublicEndpoint - Descr: The location of the webdav server eg: https://blobstore.com Default: 
-*/
-	PublicEndpoint interface{} `yaml:"public_endpoint,omitempty"`
-
 	/*Password - Descr: The basic auth password that CC uses to connect to the admin endpoint on webdav Default: 
 */
 	Password interface{} `yaml:"password,omitempty"`
 
-	/*Username - Descr: The basic auth user that CC uses to connect to the admin endpoint on webdav Default: 
+	/*PublicEndpoint - Descr: The location of the webdav server eg: https://blobstore.com Default: 
 */
-	Username interface{} `yaml:"username,omitempty"`
+	PublicEndpoint interface{} `yaml:"public_endpoint,omitempty"`
 
 	/*PrivateEndpoint - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
 */
@@ -24,5 +20,9 @@ type BuildpacksWebdavConfig struct {
 	/*CaCert - Descr: The ca cert to use when communicating with webdav Default: 
 */
 	CaCert interface{} `yaml:"ca_cert,omitempty"`
+
+	/*Username - Descr: The basic auth user that CC uses to connect to the admin endpoint on webdav Default: 
+*/
+	Username interface{} `yaml:"username,omitempty"`
 
 }

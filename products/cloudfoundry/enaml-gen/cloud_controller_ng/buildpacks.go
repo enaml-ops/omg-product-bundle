@@ -5,15 +5,7 @@ package cloud_controller_ng
 */
 type Buildpacks struct {
 
-	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
-*/
-	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
-
-	/*WebdavConfig - Descr: The location of the webdav server eg: https://blobstore.com Default: 
-*/
-	WebdavConfig *BuildpacksWebdavConfig `yaml:"webdav_config,omitempty"`
-
-	/*Cdn - Descr: Private key for signing download URIs Default: 
+	/*Cdn - Descr: Key pair name for signed download URIs Default: 
 */
 	Cdn *BuildpacksCdn `yaml:"cdn,omitempty"`
 
@@ -21,8 +13,20 @@ type Buildpacks struct {
 */
 	BuildpackDirectoryKey interface{} `yaml:"buildpack_directory_key,omitempty"`
 
+	/*WebdavConfig - Descr: The ca cert to use when communicating with webdav Default: 
+*/
+	WebdavConfig *BuildpacksWebdavConfig `yaml:"webdav_config,omitempty"`
+
+	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
+*/
+	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
+
 	/*FogConnection - Descr: Fog connection hash Default: <nil>
 */
 	FogConnection interface{} `yaml:"fog_connection,omitempty"`
+
+	/*FogAwsStorageOptions - Descr: Storage options passed to fog for aws blobstores. Valid keys: ['encryption']. Default: <nil>
+*/
+	FogAwsStorageOptions interface{} `yaml:"fog_aws_storage_options,omitempty"`
 
 }

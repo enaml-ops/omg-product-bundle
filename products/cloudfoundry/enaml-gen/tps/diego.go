@@ -5,12 +5,12 @@ package tps
 */
 type Diego struct {
 
-	/*Tps - Descr: maximum number of idle http connections Default: <nil>
-*/
-	Tps *Tps `yaml:"tps,omitempty"`
-
 	/*Ssl - Descr: when connecting over https, ignore bad ssl certificates Default: false
 */
 	Ssl *Ssl `yaml:"ssl,omitempty"`
+
+	/*Tps - Descr: Maximum number of requests to handle at once. Default: 200
+*/
+	Tps *Tps `yaml:"tps,omitempty"`
 
 }

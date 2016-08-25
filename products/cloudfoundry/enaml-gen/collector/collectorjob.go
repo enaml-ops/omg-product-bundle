@@ -5,12 +5,12 @@ package collector
 */
 type CollectorJob struct {
 
-	/*Collector - Descr: name for this bosh deployment. All metrics will be tagged with deployment:XXX when sending them to CloudWatch, Datadog and Graphite Default: <nil>
-*/
-	Collector *Collector `yaml:"collector,omitempty"`
-
 	/*Nats - Descr: NATS password Default: <nil>
 */
 	Nats *Nats `yaml:"nats,omitempty"`
+
+	/*Collector - Descr: Datadog application key Default: <nil>
+*/
+	Collector *Collector `yaml:"collector,omitempty"`
 
 }

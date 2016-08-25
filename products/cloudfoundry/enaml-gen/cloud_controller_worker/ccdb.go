@@ -13,10 +13,6 @@ type Ccdb struct {
 */
 	DbScheme interface{} `yaml:"db_scheme,omitempty"`
 
-	/*Port - Descr: The port of the database server Default: <nil>
-*/
-	Port interface{} `yaml:"port,omitempty"`
-
 	/*Address - Descr: The address of the database server Default: <nil>
 */
 	Address interface{} `yaml:"address,omitempty"`
@@ -25,12 +21,16 @@ type Ccdb struct {
 */
 	MaxConnections interface{} `yaml:"max_connections,omitempty"`
 
-	/*PoolTimeout - Descr: The timeout for Sequel pooled connections Default: 10
-*/
-	PoolTimeout interface{} `yaml:"pool_timeout,omitempty"`
-
 	/*Roles - Descr: Users to create on the database when seeding Default: <nil>
 */
 	Roles interface{} `yaml:"roles,omitempty"`
+
+	/*Port - Descr: The port of the database server Default: <nil>
+*/
+	Port interface{} `yaml:"port,omitempty"`
+
+	/*PoolTimeout - Descr: The timeout for Sequel pooled connections Default: 10
+*/
+	PoolTimeout interface{} `yaml:"pool_timeout,omitempty"`
 
 }

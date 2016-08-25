@@ -5,7 +5,7 @@ package nsync
 */
 type Diego struct {
 
-	/*Nsync - Descr: PEM-encoded client certificate Default: <nil>
+	/*Nsync - Descr: enable ssl for all communication with the bbs Default: true
 */
 	Nsync *Nsync `yaml:"nsync,omitempty"`
 

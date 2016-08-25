@@ -5,7 +5,7 @@ package ssh_proxy
 */
 type Diego struct {
 
-	/*SshProxy - Descr: maximum number of idle http connections Default: <nil>
+	/*SshProxy - Descr: Comma separated list of allowed cipher algorithms Default: <nil>
 */
 	SshProxy *SshProxy `yaml:"ssh_proxy,omitempty"`
 

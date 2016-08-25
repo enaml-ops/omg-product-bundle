@@ -5,6 +5,22 @@ package canary
 */
 type Canary struct {
 
+	/*User - Descr: The Elastic Runtime API user Default: <nil>
+*/
+	User interface{} `yaml:"user,omitempty"`
+
+	/*Space - Descr: The Elastic Runtime space name to use for the canary app Default: <nil>
+*/
+	Space interface{} `yaml:"space,omitempty"`
+
+	/*Password - Descr: The Elastic Runtime API user's password Default: <nil>
+*/
+	Password interface{} `yaml:"password,omitempty"`
+
+	/*AppName - Descr: App name for the canary app Default: <nil>
+*/
+	AppName interface{} `yaml:"app_name,omitempty"`
+
 	/*CfStack - Descr: Stack for the canary app Default: cflinuxfs2
 */
 	CfStack interface{} `yaml:"cf_stack,omitempty"`
@@ -12,22 +28,6 @@ type Canary struct {
 	/*DeploymentName - Descr: Deployment name for the canary app Default: <nil>
 */
 	DeploymentName interface{} `yaml:"deployment_name,omitempty"`
-
-	/*InstanceCount - Descr: Number of instances of the canary app Default: <nil>
-*/
-	InstanceCount interface{} `yaml:"instance_count,omitempty"`
-
-	/*Org - Descr: The Elastic Runtime organization name to use for the canary app Default: <nil>
-*/
-	Org interface{} `yaml:"org,omitempty"`
-
-	/*Space - Descr: The Elastic Runtime space name to use for the canary app Default: <nil>
-*/
-	Space interface{} `yaml:"space,omitempty"`
-
-	/*User - Descr: The Elastic Runtime API user Default: <nil>
-*/
-	User interface{} `yaml:"user,omitempty"`
 
 	/*DatadogApiKey - Descr: Datadog API key for the canary app Default: <nil>
 */
@@ -37,16 +37,16 @@ type Canary struct {
 */
 	Api interface{} `yaml:"api,omitempty"`
 
-	/*AppName - Descr: App name for the canary app Default: <nil>
+	/*InstanceCount - Descr: Number of instances of the canary app Default: <nil>
 */
-	AppName interface{} `yaml:"app_name,omitempty"`
+	InstanceCount interface{} `yaml:"instance_count,omitempty"`
+
+	/*Org - Descr: The Elastic Runtime organization name to use for the canary app Default: <nil>
+*/
+	Org interface{} `yaml:"org,omitempty"`
 
 	/*AppDomain - Descr: The domain to use for the canary app Default: <nil>
 */
 	AppDomain interface{} `yaml:"app_domain,omitempty"`
-
-	/*Password - Descr: The Elastic Runtime API user's password Default: <nil>
-*/
-	Password interface{} `yaml:"password,omitempty"`
 
 }

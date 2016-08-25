@@ -5,7 +5,7 @@ package stager
 */
 type StagerJob struct {
 
-	/*Diego - Descr: URL for staging task callbacks Default: http://stager.service.cf.internal:8888
+	/*Diego - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

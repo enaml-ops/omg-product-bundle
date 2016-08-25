@@ -5,6 +5,10 @@ package cc_uploader
 */
 type Cc struct {
 
+	/*ExternalPort - Descr: External Cloud Controller port Default: 9022
+*/
+	ExternalPort interface{} `yaml:"external_port,omitempty"`
+
 	/*JobPollingIntervalInSeconds - Descr: the interval between job polling requests Default: <nil>
 */
 	JobPollingIntervalInSeconds interface{} `yaml:"job_polling_interval_in_seconds,omitempty"`

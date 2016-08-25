@@ -5,6 +5,14 @@ package cf_mysql_broker
 */
 type MysqlNode struct {
 
+	/*GcacheSize - Descr: Cache size used by galera (maximum amount of data possible in an IST), in MB Default: 512
+*/
+	GcacheSize interface{} `yaml:"gcache_size,omitempty"`
+
+	/*IbLogFileSize - Descr: Size of the ib_log_file used by innodb, in MB Default: 1024
+*/
+	IbLogFileSize interface{} `yaml:"ib_log_file_size,omitempty"`
+
 	/*Port - Descr: Port used by the broker and bound applications to reach the service Default: 3306
 */
 	Port interface{} `yaml:"port,omitempty"`
@@ -13,24 +21,16 @@ type MysqlNode struct {
 */
 	AdminUsername interface{} `yaml:"admin_username,omitempty"`
 
+	/*AdminPassword - Descr: Password for the admin MySQL account Default: <nil>
+*/
+	AdminPassword interface{} `yaml:"admin_password,omitempty"`
+
 	/*PersistentDisk - Descr: Size of the persistent disk allocated to the MySQL node for storage Default: <nil>
 */
 	PersistentDisk interface{} `yaml:"persistent_disk,omitempty"`
 
-	/*IbLogFileSize - Descr: Size of the ib_log_file used by innodb, in MB Default: 1024
-*/
-	IbLogFileSize interface{} `yaml:"ib_log_file_size,omitempty"`
-
-	/*GcacheSize - Descr: Cache size used by galera (maximum amount of data possible in an IST), in MB Default: 512
-*/
-	GcacheSize interface{} `yaml:"gcache_size,omitempty"`
-
 	/*Host - Descr: Host (DNS) or IP address used by the broker and bound applications to reach the service Default: <nil>
 */
 	Host interface{} `yaml:"host,omitempty"`
-
-	/*AdminPassword - Descr: Password for the admin MySQL account Default: <nil>
-*/
-	AdminPassword interface{} `yaml:"admin_password,omitempty"`
 
 }

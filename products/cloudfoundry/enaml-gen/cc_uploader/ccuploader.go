@@ -5,13 +5,9 @@ package cc_uploader
 */
 type CcUploader struct {
 
-	/*LogLevel - Descr: Log level Default: info
+	/*Cc - Descr: External Cloud Controller port Default: 9022
 */
-	LogLevel interface{} `yaml:"log_level,omitempty"`
-
-	/*DropsondePort - Descr: local metron agent's port Default: 3457
-*/
-	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
+	Cc *Cc `yaml:"cc,omitempty"`
 
 	/*ListenAddr - Descr: Address of interface on which to serve files Default: 0.0.0.0:9090
 */
@@ -21,8 +17,16 @@ type CcUploader struct {
 */
 	DebugAddr interface{} `yaml:"debug_addr,omitempty"`
 
-	/*Cc - Descr: the interval between job polling requests Default: <nil>
+	/*LogLevel - Descr: Log level Default: info
 */
-	Cc *Cc `yaml:"cc,omitempty"`
+	LogLevel interface{} `yaml:"log_level,omitempty"`
+
+	/*DropsondePort - Descr: local metron agent's port Default: 3457
+*/
+	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
+
+	/*ConsulAgentPort - Descr: local consul agent's port Default: 8500
+*/
+	ConsulAgentPort interface{} `yaml:"consul_agent_port,omitempty"`
 
 }

@@ -5,33 +5,13 @@ package bbs
 */
 type Bbs struct {
 
-	/*Sql - Descr: EXPERIMENTAL: connection string to use for SQL backend [username:password@tcp(1.1.1.1:1234)/database] Default: <nil>
+	/*ListenAddr - Descr: address at which to serve API requests Default: 0.0.0.0:8889
 */
-	Sql *Sql `yaml:"sql,omitempty"`
+	ListenAddr interface{} `yaml:"listen_addr,omitempty"`
 
-	/*EncryptionKeys - Descr: List of encryption keys to be used Default: []
+	/*ServerCert - Descr: PEM-encoded client certificate Default: <nil>
 */
-	EncryptionKeys interface{} `yaml:"encryption_keys,omitempty"`
-
-	/*Auctioneer - Descr: Address of the auctioneer API Default: http://auctioneer.service.cf.internal:9016
-*/
-	Auctioneer *Auctioneer `yaml:"auctioneer,omitempty"`
-
-	/*Etcd - Descr: capacity of the tls client cache Default: <nil>
-*/
-	Etcd *Etcd `yaml:"etcd,omitempty"`
-
-	/*DropsondePort - Descr: local metron agent's port Default: 3457
-*/
-	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
-
-	/*ServerKey - Descr: PEM-encoded client key Default: <nil>
-*/
-	ServerKey interface{} `yaml:"server_key,omitempty"`
-
-	/*DesiredLrpCreationTimeout - Descr: expected maximum time to create all components of a desired LRP Default: <nil>
-*/
-	DesiredLrpCreationTimeout interface{} `yaml:"desired_lrp_creation_timeout,omitempty"`
+	ServerCert interface{} `yaml:"server_cert,omitempty"`
 
 	/*RequireSsl - Descr: require ssl for all communication the bbs Default: true
 */
@@ -41,28 +21,48 @@ type Bbs struct {
 */
 	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
-	/*AdvertisementBaseHostname - Descr: Suffix for the BBS advertised hostname Default: bbs.service.cf.internal
+	/*Auctioneer - Descr: Address of the auctioneer API Default: http://auctioneer.service.cf.internal:9016
 */
-	AdvertisementBaseHostname interface{} `yaml:"advertisement_base_hostname,omitempty"`
+	Auctioneer *Auctioneer `yaml:"auctioneer,omitempty"`
 
 	/*ActiveKeyLabel - Descr: Label of the encryption key to be used when writing to the database Default: <nil>
 */
 	ActiveKeyLabel interface{} `yaml:"active_key_label,omitempty"`
 
-	/*ListenAddr - Descr: address at which to serve API requests Default: 0.0.0.0:8889
+	/*AdvertisementBaseHostname - Descr: Suffix for the BBS advertised hostname Default: bbs.service.cf.internal
 */
-	ListenAddr interface{} `yaml:"listen_addr,omitempty"`
+	AdvertisementBaseHostname interface{} `yaml:"advertisement_base_hostname,omitempty"`
 
-	/*LogLevel - Descr: Log level Default: info
+	/*DesiredLrpCreationTimeout - Descr: expected maximum time to create all components of a desired LRP Default: <nil>
 */
-	LogLevel interface{} `yaml:"log_level,omitempty"`
+	DesiredLrpCreationTimeout interface{} `yaml:"desired_lrp_creation_timeout,omitempty"`
 
 	/*DebugAddr - Descr: address at which to serve debug info Default: 0.0.0.0:17017
 */
 	DebugAddr interface{} `yaml:"debug_addr,omitempty"`
 
-	/*ServerCert - Descr: PEM-encoded client certificate Default: <nil>
+	/*Sql - Descr: EXPERIMENTAL: connection string to use for SQL backend [username:password@tcp(1.1.1.1:1234)/database] Default: <nil>
 */
-	ServerCert interface{} `yaml:"server_cert,omitempty"`
+	Sql *Sql `yaml:"sql,omitempty"`
+
+	/*EncryptionKeys - Descr: List of encryption keys to be used Default: []
+*/
+	EncryptionKeys interface{} `yaml:"encryption_keys,omitempty"`
+
+	/*ServerKey - Descr: PEM-encoded client key Default: <nil>
+*/
+	ServerKey interface{} `yaml:"server_key,omitempty"`
+
+	/*DropsondePort - Descr: local metron agent's port Default: 3457
+*/
+	DropsondePort interface{} `yaml:"dropsonde_port,omitempty"`
+
+	/*LogLevel - Descr: Log level Default: info
+*/
+	LogLevel interface{} `yaml:"log_level,omitempty"`
+
+	/*Etcd - Descr: PEM-encoded CA certificate Default: <nil>
+*/
+	Etcd *Etcd `yaml:"etcd,omitempty"`
 
 }

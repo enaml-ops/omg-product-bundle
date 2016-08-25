@@ -5,21 +5,25 @@ package nats
 */
 type Nats struct {
 
-	/*Debug - Descr: Enable debug logging output. Default: false
-*/
-	Debug interface{} `yaml:"debug,omitempty"`
-
 	/*Trace - Descr: Enable trace logging output. Default: false
 */
 	Trace interface{} `yaml:"trace,omitempty"`
+
+	/*Password - Descr: Password for server authentication. Default: <nil>
+*/
+	Password interface{} `yaml:"password,omitempty"`
 
 	/*MonitorPort - Descr: Port for varz and connz monitoring. 0 means disabled. Default: 0
 */
 	MonitorPort interface{} `yaml:"monitor_port,omitempty"`
 
-	/*ProfPort - Descr: Port for pprof. 0 means disabled. Default: 0
+	/*AuthorizationTimeout - Descr: After accepting a connection, wait up to this many seconds for credentials. Default: 15
 */
-	ProfPort interface{} `yaml:"prof_port,omitempty"`
+	AuthorizationTimeout interface{} `yaml:"authorization_timeout,omitempty"`
+
+	/*User - Descr: Username for server authentication. Default: <nil>
+*/
+	User interface{} `yaml:"user,omitempty"`
 
 	/*Port - Descr: The port for the NATS server to listen on. Default: <nil>
 */
@@ -29,16 +33,12 @@ type Nats struct {
 */
 	Machines interface{} `yaml:"machines,omitempty"`
 
-	/*Password - Descr: Password for server authentication. Default: <nil>
+	/*ProfPort - Descr: Port for pprof. 0 means disabled. Default: 0
 */
-	Password interface{} `yaml:"password,omitempty"`
+	ProfPort interface{} `yaml:"prof_port,omitempty"`
 
-	/*User - Descr: Username for server authentication. Default: <nil>
+	/*Debug - Descr: Enable debug logging output. Default: false
 */
-	User interface{} `yaml:"user,omitempty"`
-
-	/*AuthorizationTimeout - Descr: After accepting a connection, wait up to this many seconds for credentials. Default: 15
-*/
-	AuthorizationTimeout interface{} `yaml:"authorization_timeout,omitempty"`
+	Debug interface{} `yaml:"debug,omitempty"`
 
 }

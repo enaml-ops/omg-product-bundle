@@ -5,13 +5,13 @@ package collector
 */
 type Intervals struct {
 
-	/*Discover - Descr: the interval in seconds that the collector attempts to discover components Default: 60
+	/*NatsPing - Descr: the interval in seconds that the collector pings nats to record latency Default: 30
 */
-	Discover interface{} `yaml:"discover,omitempty"`
+	NatsPing interface{} `yaml:"nats_ping,omitempty"`
 
-	/*Prune - Descr: the interval in seconds that the collector attempts to prune unresponsive components Default: 300
+	/*LocalMetrics - Descr: the interval in seconds that local_metrics are checked Default: 30
 */
-	Prune interface{} `yaml:"prune,omitempty"`
+	LocalMetrics interface{} `yaml:"local_metrics,omitempty"`
 
 	/*Varz - Descr: the interval in seconds that varz is checked Default: 30
 */
@@ -21,12 +21,12 @@ type Intervals struct {
 */
 	Healthz interface{} `yaml:"healthz,omitempty"`
 
-	/*LocalMetrics - Descr: the interval in seconds that local_metrics are checked Default: 30
+	/*Prune - Descr: the interval in seconds that the collector attempts to prune unresponsive components Default: 300
 */
-	LocalMetrics interface{} `yaml:"local_metrics,omitempty"`
+	Prune interface{} `yaml:"prune,omitempty"`
 
-	/*NatsPing - Descr: the interval in seconds that the collector pings nats to record latency Default: 30
+	/*Discover - Descr: the interval in seconds that the collector attempts to discover components Default: 60
 */
-	NatsPing interface{} `yaml:"nats_ping,omitempty"`
+	Discover interface{} `yaml:"discover,omitempty"`
 
 }

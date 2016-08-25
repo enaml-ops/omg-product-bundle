@@ -13,20 +13,20 @@ type BenchmarkBbsEtcd struct {
 */
 	ClientCert interface{} `yaml:"client_cert,omitempty"`
 
-	/*Machines - Descr: Addresses pointing to the ETCD cluster Default: <nil>
-*/
-	Machines interface{} `yaml:"machines,omitempty"`
-
 	/*ClientSessionCacheSize - Descr: capacity of the etcd client tls client cache Default: <nil>
 */
 	ClientSessionCacheSize interface{} `yaml:"client_session_cache_size,omitempty"`
 
-	/*CaCert - Descr: PEM-encoded root CA certificate Default: <nil>
-*/
-	CaCert interface{} `yaml:"ca_cert,omitempty"`
-
 	/*ClientKey - Descr: PEM-encoded client key Default: <nil>
 */
 	ClientKey interface{} `yaml:"client_key,omitempty"`
+
+	/*Machines - Descr: Addresses pointing to the ETCD cluster Default: <nil>
+*/
+	Machines interface{} `yaml:"machines,omitempty"`
+
+	/*CaCert - Descr: PEM-encoded root CA certificate Default: <nil>
+*/
+	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
 }

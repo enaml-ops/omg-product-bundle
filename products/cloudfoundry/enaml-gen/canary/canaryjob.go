@@ -5,7 +5,7 @@ package canary
 */
 type CanaryJob struct {
 
-	/*Diego - Descr: Stack for the canary app Default: cflinuxfs2
+	/*Diego - Descr: Number of instances of the canary app Default: <nil>
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

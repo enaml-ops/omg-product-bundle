@@ -5,7 +5,7 @@ package statsd_injector
 */
 type StatsdInjectorJob struct {
 
-	/*StatsdInjector - Descr: The port on which metron is running Default: 3457
+	/*StatsdInjector - Descr: The log level for the statsd injector Default: info
 */
 	StatsdInjector *StatsdInjector `yaml:"statsd_injector,omitempty"`
 

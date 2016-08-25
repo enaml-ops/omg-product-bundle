@@ -5,7 +5,7 @@ package rep
 */
 type RepJob struct {
 
-	/*Diego - Descr: PEM-encoded CA certificate Default: <nil>
+	/*Diego - Descr: maximum number of idle http connections Default: <nil>
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

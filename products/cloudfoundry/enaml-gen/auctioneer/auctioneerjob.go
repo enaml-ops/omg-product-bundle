@@ -5,7 +5,7 @@ package auctioneer
 */
 type AuctioneerJob struct {
 
-	/*Diego - Descr: Log level Default: info
+	/*Diego - Descr: PEM-encoded client key Default: <nil>
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

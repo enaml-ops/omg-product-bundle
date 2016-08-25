@@ -5,17 +5,21 @@ package hm9000
 */
 type Hm9000Job struct {
 
+	/*DeaNext - Descr: Heartbeat interval for DEAs Default: <nil>
+*/
+	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
+
+	/*Hm9000 - Descr: Each API call to the CC must succeed within this timeout. Default: 30
+*/
+	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
+
 	/*Etcd - Descr: IPs pointing to the ETCD cluster Default: <nil>
 */
 	Etcd *Etcd `yaml:"etcd,omitempty"`
 
-	/*Hm9000 - Descr: The batch size when fetching desired state information from the CC. Default: 5000
+	/*Cc - Descr: Password used to access the bulk_api, health_manager uses it to connect to the cc, announced over NATS Default: <nil>
 */
-	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
-
-	/*DeaNext - Descr: Heartbeat interval for DEAs Default: <nil>
-*/
-	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
+	Cc *Cc `yaml:"cc,omitempty"`
 
 	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
 */
@@ -24,10 +28,6 @@ type Hm9000Job struct {
 	/*Nats - Descr:  Default: <nil>
 */
 	Nats *Nats `yaml:"nats,omitempty"`
-
-	/*Cc - Descr:  Default: <nil>
-*/
-	Cc *Cc `yaml:"cc,omitempty"`
 
 	/*Ssl - Descr: when connecting over https, ignore bad ssl certificates Default: false
 */

@@ -9,17 +9,9 @@ type Ccdb struct {
 */
 	Port interface{} `yaml:"port,omitempty"`
 
-	/*DbScheme - Descr: The type of database being used. mysql or postgres Default: postgres
+	/*MaxConnections - Descr: Maximum connections for Sequel Default: 25
 */
-	DbScheme interface{} `yaml:"db_scheme,omitempty"`
-
-	/*PoolTimeout - Descr: The timeout for Sequel pooled connections Default: 10
-*/
-	PoolTimeout interface{} `yaml:"pool_timeout,omitempty"`
-
-	/*Address - Descr: The address of the database server Default: <nil>
-*/
-	Address interface{} `yaml:"address,omitempty"`
+	MaxConnections interface{} `yaml:"max_connections,omitempty"`
 
 	/*Databases - Descr: Contains the name of the database on the database server Default: <nil>
 */
@@ -29,8 +21,16 @@ type Ccdb struct {
 */
 	Roles interface{} `yaml:"roles,omitempty"`
 
-	/*MaxConnections - Descr: Maximum connections for Sequel Default: 25
+	/*PoolTimeout - Descr: The timeout for Sequel pooled connections Default: 10
 */
-	MaxConnections interface{} `yaml:"max_connections,omitempty"`
+	PoolTimeout interface{} `yaml:"pool_timeout,omitempty"`
+
+	/*DbScheme - Descr: The type of database being used. mysql or postgres Default: postgres
+*/
+	DbScheme interface{} `yaml:"db_scheme,omitempty"`
+
+	/*Address - Descr: The address of the database server Default: <nil>
+*/
+	Address interface{} `yaml:"address,omitempty"`
 
 }

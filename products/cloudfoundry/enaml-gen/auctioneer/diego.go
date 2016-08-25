@@ -5,7 +5,7 @@ package auctioneer
 */
 type Diego struct {
 
-	/*Auctioneer - Descr: Log level Default: info
+	/*Auctioneer - Descr: PEM-encoded client key Default: <nil>
 */
 	Auctioneer *Auctioneer `yaml:"auctioneer,omitempty"`
 

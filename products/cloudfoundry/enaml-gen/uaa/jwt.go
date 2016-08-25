@@ -5,20 +5,24 @@ package uaa
 */
 type Jwt struct {
 
-	/*SigningKey - Descr: The key used to sign the JWT-based OAuth2 tokens Default: <nil>
-*/
-	SigningKey interface{} `yaml:"signing_key,omitempty"`
-
-	/*Policy - Descr: Map of key ids to key pairs (signing and verification keys) Default: <nil>
+	/*Policy - Descr: Map of key IDs and signing keys, each defined with a property `signingKey` Default: <nil>
 */
 	Policy *JwtPolicy `yaml:"policy,omitempty"`
+
+	/*VerificationKey - Descr: The key used to verify JWT-based OAuth2 tokens Default: <nil>
+*/
+	VerificationKey interface{} `yaml:"verification_key,omitempty"`
 
 	/*Claims - Descr: List of claims to exclude from the JWT-based OAuth2 tokens Default: <nil>
 */
 	Claims *Claims `yaml:"claims,omitempty"`
 
-	/*VerificationKey - Descr: The key used to verify JWT-based OAuth2 tokens Default: <nil>
+	/*SigningKey - Descr: The key used to sign the JWT-based OAuth2 tokens Default: <nil>
 */
-	VerificationKey interface{} `yaml:"verification_key,omitempty"`
+	SigningKey interface{} `yaml:"signing_key,omitempty"`
+
+	/*Revocable - Descr: Set to true if you wish that even JWT tokens become individually revocable and stored in the UAA token storage. This setting applies to the default zone only. Default: false
+*/
+	Revocable interface{} `yaml:"revocable,omitempty"`
 
 }

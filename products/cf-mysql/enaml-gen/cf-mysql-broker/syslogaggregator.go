@@ -13,12 +13,12 @@ type SyslogAggregator struct {
 */
 	Transport interface{} `yaml:"transport,omitempty"`
 
-	/*Address - Descr: IP address for syslog aggregator Default: <nil>
-*/
-	Address interface{} `yaml:"address,omitempty"`
-
 	/*Port - Descr: TCP port of syslog aggregator Default: <nil>
 */
 	Port interface{} `yaml:"port,omitempty"`
+
+	/*Address - Descr: IP address for syslog aggregator Default: <nil>
+*/
+	Address interface{} `yaml:"address,omitempty"`
 
 }

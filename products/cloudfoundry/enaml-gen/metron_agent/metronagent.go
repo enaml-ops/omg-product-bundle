@@ -5,44 +5,44 @@ package metron_agent
 */
 type MetronAgent struct {
 
+	/*Deployment - Descr: Name of deployment (added as tag on all outgoing metrics) Default: <nil>
+*/
+	Deployment interface{} `yaml:"deployment,omitempty"`
+
+	/*Tls - Descr: TLS client key Default: 
+*/
+	Tls *MetronAgentTls `yaml:"tls,omitempty"`
+
 	/*Debug - Descr: boolean value to turn on verbose mode Default: false
 */
 	Debug interface{} `yaml:"debug,omitempty"`
 
-	/*Tcp - Descr: The number of bytes which can be buffered prior to TCP writes (applies to TLS over TCP) Default: 10240
+	/*Logrotate - Descr: The number of files that logrotate will keep around on the VM Default: 7
 */
-	Tcp *Tcp `yaml:"tcp,omitempty"`
-
-	/*PreferredProtocol - Descr: Preferred protocol to droppler (udp|tls) Default: udp
-*/
-	PreferredProtocol interface{} `yaml:"preferred_protocol,omitempty"`
-
-	/*DropsondeIncomingPort - Descr: Incoming port for dropsonde log messages Default: 3457
-*/
-	DropsondeIncomingPort interface{} `yaml:"dropsonde_incoming_port,omitempty"`
-
-	/*Deployment - Descr: Name of deployment (added as tag on all outgoing metrics) Default: <nil>
-*/
-	Deployment interface{} `yaml:"deployment,omitempty"`
+	Logrotate *Logrotate `yaml:"logrotate,omitempty"`
 
 	/*BufferSize - Descr: DEPRECATED Default: 10000
 */
 	BufferSize interface{} `yaml:"buffer_size,omitempty"`
 
-	/*Tls - Descr: TLS client certificate Default: 
+	/*EnableBuffer - Descr: DEPRECATED Default: false
 */
-	Tls *MetronAgentTls `yaml:"tls,omitempty"`
-
-	/*Logrotate - Descr: The frequency in minutes which logrotate will rotate VM logs Default: 5
-*/
-	Logrotate *Logrotate `yaml:"logrotate,omitempty"`
+	EnableBuffer interface{} `yaml:"enable_buffer,omitempty"`
 
 	/*Zone - Descr: Availability zone where this agent is running Default: <nil>
 */
 	Zone interface{} `yaml:"zone,omitempty"`
 
-	/*EnableBuffer - Descr: DEPRECATED Default: false
+	/*Tcp - Descr: The number of bytes which can be buffered prior to TCP writes (applies to TLS over TCP) Default: 10240
 */
-	EnableBuffer interface{} `yaml:"enable_buffer,omitempty"`
+	Tcp *Tcp `yaml:"tcp,omitempty"`
+
+	/*DropsondeIncomingPort - Descr: Incoming port for dropsonde log messages Default: 3457
+*/
+	DropsondeIncomingPort interface{} `yaml:"dropsonde_incoming_port,omitempty"`
+
+	/*PreferredProtocol - Descr: Preferred protocol to droppler (udp|tls) Default: udp
+*/
+	PreferredProtocol interface{} `yaml:"preferred_protocol,omitempty"`
 
 }

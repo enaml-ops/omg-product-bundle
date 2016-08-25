@@ -5,6 +5,10 @@ package syslog_drain_binder
 */
 type SyslogDrainBinderJob struct {
 
+	/*Cc - Descr: API URI of cloud controller Default: <nil>
+*/
+	Cc *Cc `yaml:"cc,omitempty"`
+
 	/*Ssl - Descr: when connecting over https, ignore bad ssl certificates Default: false
 */
 	Ssl *Ssl `yaml:"ssl,omitempty"`
@@ -13,20 +17,16 @@ type SyslogDrainBinderJob struct {
 */
 	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
 
-	/*Loggregator - Descr: Number of concurrent requests to ETCD Default: 10
-*/
-	Loggregator *Loggregator `yaml:"loggregator,omitempty"`
-
 	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
 */
 	SystemDomain interface{} `yaml:"system_domain,omitempty"`
 
-	/*SyslogDrainBinder - Descr: Interval on which to poll cloud controller in seconds Default: 15
+	/*Loggregator - Descr: IPs pointing to the ETCD cluster Default: <nil>
+*/
+	Loggregator *Loggregator `yaml:"loggregator,omitempty"`
+
+	/*SyslogDrainBinder - Descr: Time to live for drain urls in seconds Default: 60
 */
 	SyslogDrainBinder *SyslogDrainBinder `yaml:"syslog_drain_binder,omitempty"`
-
-	/*Cc - Descr: API URI of cloud controller Default: <nil>
-*/
-	Cc *Cc `yaml:"cc,omitempty"`
 
 }

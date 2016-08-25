@@ -5,6 +5,10 @@ package uaa
 */
 type Scim struct {
 
+	/*User - Descr: If true override users defined in uaa.scim.users found in the database. Default: true
+*/
+	User *ScimUser `yaml:"user,omitempty"`
+
 	/*Users - Descr: A list of users to be bootstrapped with authorities.
 Each entry supports the following format:
   Short Pipe: username|password|comma,separated,groups
@@ -29,10 +33,6 @@ Each entry supports the following format:
 */
 	Users interface{} `yaml:"users,omitempty"`
 
-	/*User - Descr: If true override users defined in uaa.scim.users found in the database. Default: true
-*/
-	User *ScimUser `yaml:"user,omitempty"`
-
 	/*Groups - Descr: Contains a hash of group names and their descriptions. These groups will be added to the UAA database for the default zone but not associated with any user.
 Example:
   uaa:
@@ -50,7 +50,24 @@ Comma separated list of groups that should be added to the UAA db, but not assig
 */
 	UseridsEnabled interface{} `yaml:"userids_enabled,omitempty"`
 
-	/*ExternalGroups - Descr: A list of external group mappings. Pipe delimited. A value may look as '- internal.read|cn=developers,ou=scopes,dc=test,dc=com' Default: <nil>
+	/*ExternalGroups - Descr: External group mappings. Either formatted as an OpenStruct or a list of pipe-separated specifications. The list format is deprecated.
+As an OpenStruct, the mapping additionally specifies an origin to which the mapping is applied:
+  origin1:
+    external_group1:
+      - internal_group1
+      - internal_group2
+      - internal_group3
+    external_group2:
+      - internal_group2
+      - internal_group4
+  origin2:
+    external_group3:
+      - internal_group3
+      - internal_group4
+      - internal_group5
+As a list, each entry consists of the following (The origin defaults to ldap in this case.):
+  - internal_group_name|space_delimited_external_groups another_group another_group_etc
+ Default: <nil>
 */
 	ExternalGroups interface{} `yaml:"external_groups,omitempty"`
 

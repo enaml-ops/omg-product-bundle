@@ -5,15 +5,15 @@ package etcd_metrics_server
 */
 type EtcdMetricsServer struct {
 
-	/*Etcd - Descr: address of ETCD server to instrument Default: 127.0.0.1
+	/*Etcd - Descr: port of ETCD server to instrument Default: 4001
 */
 	Etcd *Etcd `yaml:"etcd,omitempty"`
 
-	/*Nats - Descr: NATS server port Default: 4222
+	/*Nats - Descr: NATS server password Default: <nil>
 */
 	Nats *Nats `yaml:"nats,omitempty"`
 
-	/*Status - Descr: listening port for metrics server Default: 5678
+	/*Status - Descr: basic auth username for metrics server (leave empty for generated) Default: 
 */
 	Status *Status `yaml:"status,omitempty"`
 

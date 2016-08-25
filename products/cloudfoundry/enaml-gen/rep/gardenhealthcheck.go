@@ -9,16 +9,16 @@ type GardenHealthcheck struct {
 */
 	CommandRetryPause interface{} `yaml:"command_retry_pause,omitempty"`
 
-	/*Interval - Descr: Frequency for healtchecking garden Default: 10m
+	/*Process - Descr: User to use while performing a container healthcheck Default: vcap
 */
-	Interval interface{} `yaml:"interval,omitempty"`
+	Process *Process `yaml:"process,omitempty"`
 
 	/*Timeout - Descr: Maximum allowed time for garden healthcheck Default: 10m
 */
 	Timeout interface{} `yaml:"timeout,omitempty"`
 
-	/*Process - Descr: List of command line args to pass to the garden health check process Default: -c, ls > /tmp/test
+	/*Interval - Descr: Frequency for healtchecking garden Default: 10m
 */
-	Process *Process `yaml:"process,omitempty"`
+	Interval interface{} `yaml:"interval,omitempty"`
 
 }

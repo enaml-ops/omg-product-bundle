@@ -5,7 +5,7 @@ package cc_uploader
 */
 type CcUploaderJob struct {
 
-	/*Diego - Descr: Address of interface on which to serve files Default: 0.0.0.0:9090
+	/*Diego - Descr: External Cloud Controller port Default: 9022
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

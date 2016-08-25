@@ -5,9 +5,9 @@ package broker_registrar
 */
 type Cf struct {
 
-	/*ApiUrl - Descr: Full URL of Cloud Foundry API Default: <nil>
+	/*AdminPassword - Descr: Password of the admin user Default: <nil>
 */
-	ApiUrl interface{} `yaml:"api_url,omitempty"`
+	AdminPassword interface{} `yaml:"admin_password,omitempty"`
 
 	/*SkipSslValidation - Descr: Skip SSL validation when connecting to Cloud Foundry API Default: false
 */
@@ -17,8 +17,8 @@ type Cf struct {
 */
 	AdminUsername interface{} `yaml:"admin_username,omitempty"`
 
-	/*AdminPassword - Descr: Password of the admin user Default: <nil>
+	/*ApiUrl - Descr: Full URL of Cloud Foundry API Default: <nil>
 */
-	AdminPassword interface{} `yaml:"admin_password,omitempty"`
+	ApiUrl interface{} `yaml:"api_url,omitempty"`
 
 }

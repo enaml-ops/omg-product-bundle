@@ -5,10 +5,6 @@ package rep
 */
 type Bbs struct {
 
-	/*ClientCert - Descr: PEM-encoded client certificate Default: <nil>
-*/
-	ClientCert interface{} `yaml:"client_cert,omitempty"`
-
 	/*ClientKey - Descr: PEM-encoded client key Default: <nil>
 */
 	ClientKey interface{} `yaml:"client_key,omitempty"`
@@ -17,9 +13,13 @@ type Bbs struct {
 */
 	CaCert interface{} `yaml:"ca_cert,omitempty"`
 
-	/*RequireSsl - Descr: enable ssl for all communication with the bbs Default: true
+	/*ClientCert - Descr: PEM-encoded client certificate Default: <nil>
 */
-	RequireSsl interface{} `yaml:"require_ssl,omitempty"`
+	ClientCert interface{} `yaml:"client_cert,omitempty"`
+
+	/*ApiLocation - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
+*/
+	ApiLocation interface{} `yaml:"api_location,omitempty"`
 
 	/*ClientSessionCacheSize - Descr: capacity of the tls client cache Default: <nil>
 */
@@ -29,8 +29,8 @@ type Bbs struct {
 */
 	MaxIdleConnsPerHost interface{} `yaml:"max_idle_conns_per_host,omitempty"`
 
-	/*ApiLocation - Descr: Address to the BBS Server Default: bbs.service.cf.internal:8889
+	/*RequireSsl - Descr: enable ssl for all communication with the bbs Default: true
 */
-	ApiLocation interface{} `yaml:"api_location,omitempty"`
+	RequireSsl interface{} `yaml:"require_ssl,omitempty"`
 
 }

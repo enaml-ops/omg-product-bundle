@@ -34,19 +34,22 @@ var (
 	//CFReleaseVersion -
 	CFReleaseVersion = "235.5"
 	//StemcellVersion -
-	StemcellVersion = "3232.4"
+	StemcellVersion = "3232.17"
 	//DiegoReleaseVerion
-	DiegoReleaseVersion = "0.1467.0"
+	DiegoReleaseVersion = "0.1467.29"
 	//CFMysqlReleaseVersion
 	CFMysqlReleaseVersion = "25.2"
 
-	GardenReleaseVersion          = "0.337.0"
-	CFLinuxReleaseVersion         = "1.3.0"
+	GardenReleaseVersion          = "0.338.0"
+	CFLinuxReleaseVersion         = "1.26.0"
 	EtcdReleaseVersion            = "48"
-	PushAppsReleaseVersion        = "621"
-	NotificationsReleaseVersion   = "19"
-	NotificationsUIReleaseVersion = "10"
-	CFAutoscalingReleaseVersion   = "28"
+	PushAppsReleaseVersion        = "629.7"
+	NotificationsReleaseVersion   = "24"
+	NotificationsUIReleaseVersion = "17"
+	CFAutoscalingReleaseVersion   = "36"
+
+	MySQLBackupReleaseVersion   = "1"
+	ServiceBackupReleaseVersion = "1"
 )
 
 var factories []InstanceGrouperFactory

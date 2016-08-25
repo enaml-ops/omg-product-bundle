@@ -5,104 +5,104 @@ package cloud_controller_ng
 */
 type CloudControllerNgJob struct {
 
-	/*SystemDomainOrganization - Descr: The User Org that owns the system_domain, required if system_domain is defined Default: 
+	/*Build - Descr: 'build' attribute in the /v2/info endpoint Default: 
 */
-	SystemDomainOrganization interface{} `yaml:"system_domain_organization,omitempty"`
-
-	/*SupportAddress - Descr: 'support' attribute in the /v2/info endpoint Default: 
-*/
-	SupportAddress interface{} `yaml:"support_address,omitempty"`
-
-	/*Description - Descr: 'description' attribute in the /v2/info endpoint Default: 
-*/
-	Description interface{} `yaml:"description,omitempty"`
-
-	/*Ccdb - Descr: Users to create on the database when seeding Default: <nil>
-*/
-	Ccdb *Ccdb `yaml:"ccdb,omitempty"`
-
-	/*LoggerEndpoint - Descr: Whether to use ssl for logger endpoint listed at /v2/info Default: true
-*/
-	LoggerEndpoint *LoggerEndpoint `yaml:"logger_endpoint,omitempty"`
-
-	/*RoutingApi - Descr: Whether to expose the routing_endpoint listed at /v2/info. Enable this after deploying the Routing API Default: false
-*/
-	RoutingApi *RoutingApi `yaml:"routing_api,omitempty"`
-
-	/*Doppler - Descr: Whether to use ssl for the doppler_logging_endpoint listed at /v2/info Default: true
-*/
-	Doppler *Doppler `yaml:"doppler,omitempty"`
-
-	/*Ssl - Descr: specifies that the job is allowed to skip ssl cert verification Default: false
-*/
-	Ssl *Ssl `yaml:"ssl,omitempty"`
-
-	/*Hm9000 - Descr: URL of the hm9000 server Default: <nil>
-*/
-	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
-
-	/*Version - Descr: 'version' attribute in the /v2/info endpoint Default: 0
-*/
-	Version interface{} `yaml:"version,omitempty"`
+	Build interface{} `yaml:"build,omitempty"`
 
 	/*Router - Descr: Support for route services is disabled when no value is configured. Default: 
 */
 	Router *Router `yaml:"router,omitempty"`
 
-	/*DeaNext - Descr: Disk limit in mb for staging tasks Default: 6144
+	/*DeaNext - Descr: PEM-encoded server certificate Default: <nil>
 */
 	DeaNext *DeaNext `yaml:"dea_next,omitempty"`
 
-	/*Uaa - Descr: Used for fetching routing information from the Routing API Default: <nil>
+	/*SystemDomainOrganization - Descr: The User Org that owns the system_domain, required if system_domain is defined Default: 
 */
-	Uaa *Uaa `yaml:"uaa,omitempty"`
+	SystemDomainOrganization interface{} `yaml:"system_domain_organization,omitempty"`
 
-	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
+	/*Login - Descr: http or https Default: https
 */
-	SystemDomain interface{} `yaml:"system_domain,omitempty"`
+	Login *Login `yaml:"login,omitempty"`
 
-	/*MetronEndpoint - Descr: The host used to emit messages to the Metron agent Default: 127.0.0.1
+	/*Description - Descr: 'description' attribute in the /v2/info endpoint Default: 
 */
-	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
+	Description interface{} `yaml:"description,omitempty"`
 
-	/*Name - Descr: 'name' attribute in the /v2/info endpoint Default: 
+	/*Ssl - Descr: specifies that the job is allowed to skip ssl cert verification Default: false
 */
-	Name interface{} `yaml:"name,omitempty"`
+	Ssl *Ssl `yaml:"ssl,omitempty"`
 
-	/*RequestTimeoutInSeconds - Descr: Timeout for requests in seconds. Default: 900
+	/*RoutingApi - Descr: Whether to expose the routing_endpoint listed at /v2/info. Enable this after deploying the Routing API Default: false
 */
-	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
-
-	/*Build - Descr: 'build' attribute in the /v2/info endpoint Default: 
-*/
-	Build interface{} `yaml:"build,omitempty"`
+	RoutingApi *RoutingApi `yaml:"routing_api,omitempty"`
 
 	/*AppDomains - Descr: Array of domains for user apps (example: 'user.app.space.foo', a user app called 'neat' will listen at 'http://neat.user.app.space.foo') Default: <nil>
 */
 	AppDomains interface{} `yaml:"app_domains,omitempty"`
 
-	/*NfsServer - Descr: The location at which to mount the nfs share Default: /var/vcap/nfs
+	/*RequestTimeoutInSeconds - Descr: Timeout for requests in seconds. Default: 900
 */
-	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
+	RequestTimeoutInSeconds interface{} `yaml:"request_timeout_in_seconds,omitempty"`
 
-	/*AppSsh - Descr: Fingerprint of the host key of the SSH proxy that brokers connections to application instances Default: <nil>
+	/*Cc - Descr: The environment name used by NewRelic Default: development
 */
-	AppSsh *AppSsh `yaml:"app_ssh,omitempty"`
+	Cc *Cc `yaml:"cc,omitempty"`
+
+	/*Nats - Descr: Password for cc client to connect to NATS Default: <nil>
+*/
+	Nats *Nats `yaml:"nats,omitempty"`
+
+	/*SupportAddress - Descr: 'support' attribute in the /v2/info endpoint Default: 
+*/
+	SupportAddress interface{} `yaml:"support_address,omitempty"`
 
 	/*Domain - Descr: domain where cloud_controller will listen (api.domain) often the same as the system domain Default: <nil>
 */
 	Domain interface{} `yaml:"domain,omitempty"`
 
-	/*Cc - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
+	/*Version - Descr: 'version' attribute in the /v2/info endpoint Default: 0
 */
-	Cc *Cc `yaml:"cc,omitempty"`
+	Version interface{} `yaml:"version,omitempty"`
 
-	/*Nats - Descr: IP port of Cloud Foundry NATS server Default: <nil>
+	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
 */
-	Nats *Nats `yaml:"nats,omitempty"`
+	SystemDomain interface{} `yaml:"system_domain,omitempty"`
 
-	/*Login - Descr: http or https Default: https
+	/*Name - Descr: 'name' attribute in the /v2/info endpoint Default: 
 */
-	Login *Login `yaml:"login,omitempty"`
+	Name interface{} `yaml:"name,omitempty"`
+
+	/*Ccdb - Descr: The address of the database server Default: <nil>
+*/
+	Ccdb *Ccdb `yaml:"ccdb,omitempty"`
+
+	/*Uaa - Descr: Used for generating SSO clients for service brokers. Default: <nil>
+*/
+	Uaa *Uaa `yaml:"uaa,omitempty"`
+
+	/*AppSsh - Descr: Fingerprint of the host key of the SSH proxy that brokers connections to application instances Default: <nil>
+*/
+	AppSsh *AppSsh `yaml:"app_ssh,omitempty"`
+
+	/*MetronEndpoint - Descr: The host used to emit messages to the Metron agent Default: 127.0.0.1
+*/
+	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
+
+	/*Hm9000 - Descr: URL of the hm9000 server Default: <nil>
+*/
+	Hm9000 *Hm9000 `yaml:"hm9000,omitempty"`
+
+	/*LoggerEndpoint - Descr: Whether to use ssl for logger endpoint listed at /v2/info Default: true
+*/
+	LoggerEndpoint *LoggerEndpoint `yaml:"logger_endpoint,omitempty"`
+
+	/*Doppler - Descr: Whether to use ssl for the doppler_logging_endpoint listed at /v2/info Default: true
+*/
+	Doppler *Doppler `yaml:"doppler,omitempty"`
+
+	/*NfsServer - Descr: The location at which to mount the nfs share Default: /var/vcap/nfs
+*/
+	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
 
 }

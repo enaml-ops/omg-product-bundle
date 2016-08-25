@@ -9,153 +9,177 @@ type Cc struct {
 */
 	AllowAppSshAccess interface{} `yaml:"allow_app_ssh_access,omitempty"`
 
-	/*DisableCustomBuildpacks - Descr: Disable external (i.e. git) buildpacks? (Admin buildpacks and system buildpacks only.) Default: false
-*/
-	DisableCustomBuildpacks interface{} `yaml:"disable_custom_buildpacks,omitempty"`
-
-	/*Droplets - Descr: Fog connection hash Default: <nil>
-*/
-	Droplets *Droplets `yaml:"droplets,omitempty"`
-
-	/*Renderer - Descr: Maximum depth of inlined relationships in the result Default: 2
-*/
-	Renderer *Renderer `yaml:"renderer,omitempty"`
-
-	/*MaximumHealthCheckTimeout - Descr: Maximum health check timeout (in seconds) that can be set for the app Default: 180
-*/
-	MaximumHealthCheckTimeout interface{} `yaml:"maximum_health_check_timeout,omitempty"`
-
-	/*MaximumAppDiskInMb - Descr: The maximum amount of disk a user can request Default: 2048
-*/
-	MaximumAppDiskInMb interface{} `yaml:"maximum_app_disk_in_mb,omitempty"`
-
-	/*Stacks - Descr: Tag used by the DEA to describe capabilities (i.e. 'Windows7', 'python-linux'). DEA and CC must agree. Default: [map[description:Cloud Foundry Linux-based filesystem name:cflinuxfs2]]
-*/
-	Stacks interface{} `yaml:"stacks,omitempty"`
-
-	/*DefaultQuotaDefinition - Descr: Local to use a local (NFS) file system.  AWS to use AWS. Default: default
-*/
-	DefaultQuotaDefinition interface{} `yaml:"default_quota_definition,omitempty"`
-
-	/*FlappingCrashCountThreshold - Descr: The threshold of crashes after which the app is marked as flapping Default: 3
-*/
-	FlappingCrashCountThreshold interface{} `yaml:"flapping_crash_count_threshold,omitempty"`
-
-	/*DefaultStagingSecurityGroups - Descr: The default staging security groups that will be seeded in CloudController. Default: <nil>
-*/
-	DefaultStagingSecurityGroups interface{} `yaml:"default_staging_security_groups,omitempty"`
-
 	/*Diego - Descr: URL of the Diego nsync service Default: http://nsync.service.cf.internal:8787
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 
-	/*InternalServiceHostname - Descr: Internal hostname used to resolve the address of the Cloud Controller Default: cloud-controller-ng.service.cf.internal
+	/*DisableCustomBuildpacks - Descr: Disable external (i.e. git) buildpacks? (Admin buildpacks and system buildpacks only.) Default: false
 */
-	InternalServiceHostname interface{} `yaml:"internal_service_hostname,omitempty"`
+	DisableCustomBuildpacks interface{} `yaml:"disable_custom_buildpacks,omitempty"`
 
-	/*QuotaDefinitions - Descr: Hash of default quota definitions. Overriden by custom quota definitions. Default: <nil>
+	/*Stacks - Descr: Tag used by the DEA to describe capabilities (i.e. 'Windows7', 'python-linux'). DEA and CC must agree. Default: [map[name:cflinuxfs2 description:Cloud Foundry Linux-based filesystem]]
 */
-	QuotaDefinitions interface{} `yaml:"quota_definitions,omitempty"`
-
-	/*InternalApiPassword - Descr: Password used by Diego to access internal endpoints Default: <nil>
-*/
-	InternalApiPassword interface{} `yaml:"internal_api_password,omitempty"`
-
-	/*CompletedTasks - Descr: How long a completed task will stay in cloud controller database before being cleaned up based on last updated time with success or failure. Default: 31
-*/
-	CompletedTasks *CompletedTasks `yaml:"completed_tasks,omitempty"`
-
-	/*Buildpacks - Descr: The basic auth user that CC uses to connect to the admin endpoint on webdav Default: 
-*/
-	Buildpacks *Buildpacks `yaml:"buildpacks,omitempty"`
-
-	/*StagingFileDescriptorLimit - Descr: File descriptor limit for staging tasks Default: 16384
-*/
-	StagingFileDescriptorLimit interface{} `yaml:"staging_file_descriptor_limit,omitempty"`
-
-	/*ResourcePool - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
-*/
-	ResourcePool *ResourcePool `yaml:"resource_pool,omitempty"`
-
-	/*Newrelic - Descr: The api key for NewRelic Default: <nil>
-*/
-	Newrelic *Newrelic `yaml:"newrelic,omitempty"`
+	Stacks interface{} `yaml:"stacks,omitempty"`
 
 	/*BrokerClientTimeoutSeconds - Descr: For requests to service brokers, this is the HTTP (open and read) timeout setting. Default: 60
 */
 	BrokerClientTimeoutSeconds interface{} `yaml:"broker_client_timeout_seconds,omitempty"`
 
-	/*ReservedPrivateDomains - Descr: File location of a list of reserved private domains (for file format, see https://publicsuffix.org/) Default: <nil>
+	/*UsersCanSelectBackend - Descr: Allow non-admin users to switch their apps between DEA and Diego backends Default: true
 */
-	ReservedPrivateDomains interface{} `yaml:"reserved_private_domains,omitempty"`
-
-	/*DbLoggingLevel - Descr: Log level for cc database operations Default: debug2
-*/
-	DbLoggingLevel interface{} `yaml:"db_logging_level,omitempty"`
-
-	/*AppEvents - Descr: How old an app event should stay in cloud controller database before being cleaned up Default: 31
-*/
-	AppEvents *AppEvents `yaml:"app_events,omitempty"`
-
-	/*ServiceUsageEvents - Descr: How old a service usage event should stay in cloud controller database before being cleaned up Default: 31
-*/
-	ServiceUsageEvents *ServiceUsageEvents `yaml:"service_usage_events,omitempty"`
-
-	/*AuditEvents - Descr: How old an audit event should stay in cloud controller database before being cleaned up Default: 31
-*/
-	AuditEvents *AuditEvents `yaml:"audit_events,omitempty"`
-
-	/*DefaultHealthCheckTimeout - Descr: Default health check timeout (in seconds) that can be set for the app Default: 60
-*/
-	DefaultHealthCheckTimeout interface{} `yaml:"default_health_check_timeout,omitempty"`
-
-	/*Jobs - Descr: The longest this job can take before it is cancelled Default: <nil>
-*/
-	Jobs *Jobs `yaml:"jobs,omitempty"`
-
-	/*SecurityGroupDefinitions - Descr: Array of security groups that will be seeded into CloudController. Default: <nil>
-*/
-	SecurityGroupDefinitions interface{} `yaml:"security_group_definitions,omitempty"`
-
-	/*DbEncryptionKey - Descr: key for encrypting sensitive values in the CC database Default: 
-*/
-	DbEncryptionKey interface{} `yaml:"db_encryption_key,omitempty"`
-
-	/*DefaultFogConnection - Descr: Local fog provider (should always be 'Local'), used if fog_connection hash is not provided in the manifest Default: Local
-*/
-	DefaultFogConnection *DefaultFogConnection `yaml:"default_fog_connection,omitempty"`
-
-	/*ExternalPort - Descr: External Cloud Controller port Default: 9022
-*/
-	ExternalPort interface{} `yaml:"external_port,omitempty"`
-
-	/*InternalApiUser - Descr: User name used by Diego to access internal endpoints Default: internal_user
-*/
-	InternalApiUser interface{} `yaml:"internal_api_user,omitempty"`
-
-	/*Thresholds - Descr: The cc will restart if memory remains above this threshold for 15 monit cycles Default: 3500
-*/
-	Thresholds *Thresholds `yaml:"thresholds,omitempty"`
+	UsersCanSelectBackend interface{} `yaml:"users_can_select_backend,omitempty"`
 
 	/*DefaultStack - Descr: The default stack to use if no custom stack is specified by an app. Default: cflinuxfs2
 */
 	DefaultStack interface{} `yaml:"default_stack,omitempty"`
 
-	/*StagingUploadPassword - Descr: User's password used to access internal endpoints of Cloud Controller to upload files when staging Default: 
+	/*InstallBuildpacks - Descr: Set of buildpacks to install during deploy Default: <nil>
 */
-	StagingUploadPassword interface{} `yaml:"staging_upload_password,omitempty"`
+	InstallBuildpacks interface{} `yaml:"install_buildpacks,omitempty"`
+
+	/*DbEncryptionKey - Descr: key for encrypting sensitive values in the CC database Default: 
+*/
+	DbEncryptionKey interface{} `yaml:"db_encryption_key,omitempty"`
+
+	/*InternalApiPassword - Descr: Password used by Diego to access internal endpoints Default: <nil>
+*/
+	InternalApiPassword interface{} `yaml:"internal_api_password,omitempty"`
 
 	/*AppUsageEvents - Descr: How old an app usage event should stay in cloud controller database before being cleaned up Default: 31
 */
 	AppUsageEvents *AppUsageEvents `yaml:"app_usage_events,omitempty"`
 
+	/*StagingTimeoutInSeconds - Descr: Timeout for staging a droplet Default: 900
+*/
+	StagingTimeoutInSeconds interface{} `yaml:"staging_timeout_in_seconds,omitempty"`
+
+	/*Buildpacks - Descr: URI for a CDN to used for buildpack downloads Default: 
+*/
+	Buildpacks *Buildpacks `yaml:"buildpacks,omitempty"`
+
+	/*SecurityGroupDefinitions - Descr: Array of security groups that will be seeded into CloudController. Default: <nil>
+*/
+	SecurityGroupDefinitions interface{} `yaml:"security_group_definitions,omitempty"`
+
+	/*Thresholds - Descr: The cc will restart if memory remains above this threshold for 3 monit cycles Default: 3750
+*/
+	Thresholds *Thresholds `yaml:"thresholds,omitempty"`
+
+	/*DefaultToDiegoBackend - Descr: Use Diego backend by default for new apps Default: false
+*/
+	DefaultToDiegoBackend interface{} `yaml:"default_to_diego_backend,omitempty"`
+
+	/*AppEvents - Descr: How old an app event should stay in cloud controller database before being cleaned up Default: 31
+*/
+	AppEvents *AppEvents `yaml:"app_events,omitempty"`
+
+	/*LoggingLevel - Descr: Log level for cc Default: debug2
+*/
+	LoggingLevel interface{} `yaml:"logging_level,omitempty"`
+
 	/*FailedJobs - Descr: How old a failed job should stay in cloud controller database before being cleaned up Default: 31
 */
 	FailedJobs *FailedJobs `yaml:"failed_jobs,omitempty"`
 
+	/*DefaultAppMemory - Descr: How much memory given to an app if not specified Default: 1024
+*/
+	DefaultAppMemory interface{} `yaml:"default_app_memory,omitempty"`
+
+	/*ExternalPort - Descr: External Cloud Controller port Default: 9022
+*/
+	ExternalPort interface{} `yaml:"external_port,omitempty"`
+
+	/*AppBitsUploadGracePeriodInSeconds - Descr: Extra token expiry time while uploading big apps. Default: 1200
+*/
+	AppBitsUploadGracePeriodInSeconds interface{} `yaml:"app_bits_upload_grace_period_in_seconds,omitempty"`
+
+	/*Jobs - Descr: The longest this job can take before it is cancelled Default: <nil>
+*/
+	Jobs *Jobs `yaml:"jobs,omitempty"`
+
+	/*MaximumAppDiskInMb - Descr: The maximum amount of disk a user can request Default: 2048
+*/
+	MaximumAppDiskInMb interface{} `yaml:"maximum_app_disk_in_mb,omitempty"`
+
+	/*InstanceFileDescriptorLimit - Descr: The file descriptors made available to each app instance Default: 16384
+*/
+	InstanceFileDescriptorLimit interface{} `yaml:"instance_file_descriptor_limit,omitempty"`
+
+	/*InternalApiUser - Descr: User name used by Diego to access internal endpoints Default: internal_user
+*/
+	InternalApiUser interface{} `yaml:"internal_api_user,omitempty"`
+
+	/*StagingUploadPassword - Descr: User's password used to access internal endpoints of Cloud Controller to upload files when staging Default: 
+*/
+	StagingUploadPassword interface{} `yaml:"staging_upload_password,omitempty"`
+
+	/*StagingFileDescriptorLimit - Descr: File descriptor limit for staging tasks Default: 16384
+*/
+	StagingFileDescriptorLimit interface{} `yaml:"staging_file_descriptor_limit,omitempty"`
+
+	/*Renderer - Descr: Default number of results returned per page if user does not specify Default: 50
+*/
+	Renderer *Renderer `yaml:"renderer,omitempty"`
+
+	/*AuditEvents - Descr: How old an audit event should stay in cloud controller database before being cleaned up Default: 31
+*/
+	AuditEvents *AuditEvents `yaml:"audit_events,omitempty"`
+
+	/*MaximumHealthCheckTimeout - Descr: Maximum health check timeout (in seconds) that can be set for the app Default: 180
+*/
+	MaximumHealthCheckTimeout interface{} `yaml:"maximum_health_check_timeout,omitempty"`
+
+	/*DbLoggingLevel - Descr: Log level for cc database operations Default: debug2
+*/
+	DbLoggingLevel interface{} `yaml:"db_logging_level,omitempty"`
+
+	/*Droplets - Descr: Storage options passed to fog for aws blobstores. Valid keys: ['encryption']. Default: <nil>
+*/
+	Droplets *Droplets `yaml:"droplets,omitempty"`
+
+	/*LoggingMaxRetries - Descr: Passthru value for Steno logger Default: 1
+*/
+	LoggingMaxRetries interface{} `yaml:"logging_max_retries,omitempty"`
+
+	/*CcPartition - Descr: Deprecated. Defines a 'partition' for the health_manager job Default: default
+*/
+	CcPartition interface{} `yaml:"cc_partition,omitempty"`
+
+	/*BulkApiPassword - Descr: Password used to access the bulk_api, health_manager uses it to connect to the cc, announced over NATS Default: <nil>
+*/
+	BulkApiPassword interface{} `yaml:"bulk_api_password,omitempty"`
+
+	/*DefaultStagingSecurityGroups - Descr: The default staging security groups that will be seeded in CloudController. Default: <nil>
+*/
+	DefaultStagingSecurityGroups interface{} `yaml:"default_staging_security_groups,omitempty"`
+
+	/*ClientMaxBodySize - Descr: Maximum body size for nginx Default: 1536M
+*/
+	ClientMaxBodySize interface{} `yaml:"client_max_body_size,omitempty"`
+
+	/*ServiceUsageEvents - Descr: How old a service usage event should stay in cloud controller database before being cleaned up Default: 31
+*/
+	ServiceUsageEvents *ServiceUsageEvents `yaml:"service_usage_events,omitempty"`
+
+	/*Packages - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
+*/
+	Packages *Packages `yaml:"packages,omitempty"`
+
 	/*ExternalProtocol - Descr: The protocol used to access the CC API from an external entity Default: https
 */
 	ExternalProtocol interface{} `yaml:"external_protocol,omitempty"`
+
+	/*ReservedPrivateDomains - Descr: File location of a list of reserved private domains (for file format, see https://publicsuffix.org/) Default: <nil>
+*/
+	ReservedPrivateDomains interface{} `yaml:"reserved_private_domains,omitempty"`
+
+	/*DefaultAppDiskInMb - Descr: The default disk space an app gets Default: 1024
+*/
+	DefaultAppDiskInMb interface{} `yaml:"default_app_disk_in_mb,omitempty"`
+
+	/*UaaResourceId - Descr: Name of service to register to UAA Default: cloud_controller,cloud_controller_service_permissions
+*/
+	UaaResourceId interface{} `yaml:"uaa_resource_id,omitempty"`
 
 	/*ExternalHost - Descr: Host part of the cloud_controller api URI, will be joined with value of 'domain' Default: api
 */
@@ -165,76 +189,52 @@ type Cc struct {
 */
 	DefaultRunningSecurityGroups interface{} `yaml:"default_running_security_groups,omitempty"`
 
-	/*PendingPackages - Descr: How often the package pending cleanup job runs Default: 300
+	/*DefaultQuotaDefinition - Descr: Local to use a local (NFS) file system.  AWS to use AWS. Default: default
+*/
+	DefaultQuotaDefinition interface{} `yaml:"default_quota_definition,omitempty"`
+
+	/*InternalServiceHostname - Descr: Internal hostname used to resolve the address of the Cloud Controller Default: cloud-controller-ng.service.cf.internal
+*/
+	InternalServiceHostname interface{} `yaml:"internal_service_hostname,omitempty"`
+
+	/*PendingPackages - Descr: How long packages can remain in pending state before being cleaned up Default: 1200
 */
 	PendingPackages *PendingPackages `yaml:"pending_packages,omitempty"`
 
-	/*ClientMaxBodySize - Descr: Maximum body size for nginx Default: 1536M
+	/*QuotaDefinitions - Descr: Hash of default quota definitions. Overriden by custom quota definitions. Default: <nil>
 */
-	ClientMaxBodySize interface{} `yaml:"client_max_body_size,omitempty"`
+	QuotaDefinitions interface{} `yaml:"quota_definitions,omitempty"`
 
-	/*DefaultAppMemory - Descr: How much memory given to an app if not specified Default: 1024
+	/*Newrelic - Descr: Enable transaction tracing in NewRelic Default: false
 */
-	DefaultAppMemory interface{} `yaml:"default_app_memory,omitempty"`
+	Newrelic *Newrelic `yaml:"newrelic,omitempty"`
 
-	/*InstallBuildpacks - Descr: Set of buildpacks to install during deploy Default: <nil>
+	/*ResourcePool - Descr: Key pair name for signed download URIs Default: 
 */
-	InstallBuildpacks interface{} `yaml:"install_buildpacks,omitempty"`
+	ResourcePool *ResourcePool `yaml:"resource_pool,omitempty"`
 
-	/*LoggingLevel - Descr: Log level for cc Default: debug2
+	/*DefaultHealthCheckTimeout - Descr: Default health check timeout (in seconds) that can be set for the app Default: 60
 */
-	LoggingLevel interface{} `yaml:"logging_level,omitempty"`
+	DefaultHealthCheckTimeout interface{} `yaml:"default_health_check_timeout,omitempty"`
 
-	/*LoggingMaxRetries - Descr: Passthru value for Steno logger Default: 1
+	/*FlappingCrashCountThreshold - Descr: The threshold of crashes after which the app is marked as flapping Default: 3
 */
-	LoggingMaxRetries interface{} `yaml:"logging_max_retries,omitempty"`
-
-	/*DefaultAppDiskInMb - Descr: The default disk space an app gets Default: 1024
-*/
-	DefaultAppDiskInMb interface{} `yaml:"default_app_disk_in_mb,omitempty"`
-
-	/*Packages - Descr: Fog connection hash Default: <nil>
-*/
-	Packages *Packages `yaml:"packages,omitempty"`
-
-	/*CcPartition - Descr: Deprecated. Defines a 'partition' for the health_manager job Default: default
-*/
-	CcPartition interface{} `yaml:"cc_partition,omitempty"`
-
-	/*AppBitsUploadGracePeriodInSeconds - Descr: Extra token expiry time while uploading big apps. Default: 1200
-*/
-	AppBitsUploadGracePeriodInSeconds interface{} `yaml:"app_bits_upload_grace_period_in_seconds,omitempty"`
-
-	/*UsersCanSelectBackend - Descr: Allow non-admin users to switch their apps between DEA and Diego backends Default: true
-*/
-	UsersCanSelectBackend interface{} `yaml:"users_can_select_backend,omitempty"`
-
-	/*UaaResourceId - Descr: Name of service to register to UAA Default: cloud_controller,cloud_controller_service_permissions
-*/
-	UaaResourceId interface{} `yaml:"uaa_resource_id,omitempty"`
+	FlappingCrashCountThreshold interface{} `yaml:"flapping_crash_count_threshold,omitempty"`
 
 	/*StagingUploadUser - Descr: User name used to access internal endpoints of Cloud Controller to upload files when staging Default: 
 */
 	StagingUploadUser interface{} `yaml:"staging_upload_user,omitempty"`
 
-	/*StagingTimeoutInSeconds - Descr: Timeout for staging a droplet Default: 900
-*/
-	StagingTimeoutInSeconds interface{} `yaml:"staging_timeout_in_seconds,omitempty"`
-
-	/*DefaultToDiegoBackend - Descr: Use Diego backend by default for new apps Default: false
-*/
-	DefaultToDiegoBackend interface{} `yaml:"default_to_diego_backend,omitempty"`
-
-	/*InstanceFileDescriptorLimit - Descr: The file descriptors made available to each app instance Default: 16384
-*/
-	InstanceFileDescriptorLimit interface{} `yaml:"instance_file_descriptor_limit,omitempty"`
-
-	/*BulkApiPassword - Descr: Password used to access the bulk_api, health_manager uses it to connect to the cc, announced over NATS Default: <nil>
-*/
-	BulkApiPassword interface{} `yaml:"bulk_api_password,omitempty"`
-
 	/*BulkApiUser - Descr: User used to access the bulk_api, health_manager uses it to connect to the cc, announced over NATS Default: bulk_api
 */
 	BulkApiUser interface{} `yaml:"bulk_api_user,omitempty"`
+
+	/*CompletedTasks - Descr: How long a completed task will stay in cloud controller database before being cleaned up based on last updated time with success or failure. Default: 31
+*/
+	CompletedTasks *CompletedTasks `yaml:"completed_tasks,omitempty"`
+
+	/*DefaultFogConnection - Descr: Local fog provider (should always be 'Local'), used if fog_connection hash is not provided in the manifest Default: Local
+*/
+	DefaultFogConnection *DefaultFogConnection `yaml:"default_fog_connection,omitempty"`
 
 }

@@ -5,7 +5,7 @@ package bbs
 */
 type BbsJob struct {
 
-	/*Diego - Descr: capacity of the tls client cache Default: <nil>
+	/*Diego - Descr: EXPERIMENTAL: connection string to use for SQL backend [username:password@tcp(1.1.1.1:1234)/database] Default: <nil>
 */
 	Diego *Diego `yaml:"diego,omitempty"`
 

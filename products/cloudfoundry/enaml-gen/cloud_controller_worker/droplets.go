@@ -9,11 +9,11 @@ type Droplets struct {
 */
 	FogConnection interface{} `yaml:"fog_connection,omitempty"`
 
-	/*DropletDirectoryKey - Descr: Directory (bucket) used store droplets.  It does not have be pre-created. Default: cc-droplets
+	/*FogAwsStorageOptions - Descr: Storage options passed to fog for aws blobstores. Valid keys: ['encryption']. Default: <nil>
 */
-	DropletDirectoryKey interface{} `yaml:"droplet_directory_key,omitempty"`
+	FogAwsStorageOptions interface{} `yaml:"fog_aws_storage_options,omitempty"`
 
-	/*WebdavConfig - Descr: The location of the webdav server eg: https://blobstore.com Default: 
+	/*WebdavConfig - Descr: The ca cert to use when communicating with webdav Default: 
 */
 	WebdavConfig *DropletsWebdavConfig `yaml:"webdav_config,omitempty"`
 
@@ -21,8 +21,12 @@ type Droplets struct {
 */
 	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
 
-	/*Cdn - Descr: Key pair name for signed download URIs Default: 
+	/*Cdn - Descr: Private key for signing download URIs Default: 
 */
 	Cdn *DropletsCdn `yaml:"cdn,omitempty"`
+
+	/*DropletDirectoryKey - Descr: Directory (bucket) used store droplets.  It does not have be pre-created. Default: cc-droplets
+*/
+	DropletDirectoryKey interface{} `yaml:"droplet_directory_key,omitempty"`
 
 }

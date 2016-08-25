@@ -5,7 +5,7 @@ package smoke_tests
 */
 type SmokeTestsJob struct {
 
-	/*SmokeTests - Descr: The Elastic Runtime API user Default: <nil>
+	/*SmokeTests - Descr: Toggles setup and cleanup of the Elastic Runtime organization Default: false
 */
 	SmokeTests *SmokeTests `yaml:"smoke_tests,omitempty"`
 

@@ -5,19 +5,15 @@ package loggregator_trafficcontroller
 */
 type LoggregatorTrafficcontrollerJob struct {
 
-	/*Login - Descr: Protocol to use to connect to UAA (used in case uaa.url is not set) Default: https
+	/*Uaa - Descr: Doppler's client secret to connect to UAA Default: <nil>
 */
-	Login *Login `yaml:"login,omitempty"`
-
-	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
-*/
-	SystemDomain interface{} `yaml:"system_domain,omitempty"`
+	Uaa *Uaa `yaml:"uaa,omitempty"`
 
 	/*MetronEndpoint - Descr: The port used to emit dropsonde messages to the Metron agent Default: 3457
 */
 	MetronEndpoint *MetronEndpoint `yaml:"metron_endpoint,omitempty"`
 
-	/*TrafficController - Descr: Zone of the loggregator_trafficcontroller Default: <nil>
+	/*TrafficController - Descr: Enable logging of all requests made to the Traffic Controller in CEF format Default: false
 */
 	TrafficController *TrafficController `yaml:"traffic_controller,omitempty"`
 
@@ -25,17 +21,21 @@ type LoggregatorTrafficcontrollerJob struct {
 */
 	Doppler *Doppler `yaml:"doppler,omitempty"`
 
-	/*Loggregator - Descr: Port for outgoing dropsonde messages Default: 8081
+	/*Login - Descr: Protocol to use to connect to UAA (used in case uaa.url is not set) Default: https
+*/
+	Login *Login `yaml:"login,omitempty"`
+
+	/*Loggregator - Descr: Number of concurrent requests to ETCD Default: 10
 */
 	Loggregator *Loggregator `yaml:"loggregator,omitempty"`
+
+	/*SystemDomain - Descr: Domain reserved for CF operator, base URL where the login, uaa, and other non-user apps listen Default: <nil>
+*/
+	SystemDomain interface{} `yaml:"system_domain,omitempty"`
 
 	/*Cc - Descr: API URI of cloud controller Default: <nil>
 */
 	Cc *Cc `yaml:"cc,omitempty"`
-
-	/*Uaa - Descr: URL of UAA Default: <nil>
-*/
-	Uaa *Uaa `yaml:"uaa,omitempty"`
 
 	/*Ssl - Descr: when connecting over https, ignore bad ssl certificates Default: false
 */

@@ -5,29 +5,13 @@ package uaa
 */
 type UaaLdap struct {
 
-	/*Groups - Descr: Boolean value, set to true to search below the search base Default: true
+	/*UserDNPattern - Descr: Used with simple-bind only. A semi-colon separated lists of DN patterns to construct a DN direct from the user ID without performing a search. Default: <nil>
 */
-	Groups *LdapGroups `yaml:"groups,omitempty"`
+	UserDNPattern interface{} `yaml:"userDNPattern,omitempty"`
 
-	/*AttributeMappings - Descr: Specifies how UAA user attributes map to LDAP attributes. given_name, family_name, and phone_number are UAA user attributes, while other attributes should be included using the prefix `user.attribute` Default: <nil>
+	/*Enabled - Descr: Set to true to enable LDAP Default: false
 */
-	AttributeMappings interface{} `yaml:"attributeMappings,omitempty"`
-
-	/*EmailDomain - Descr: Sets the whitelist of emails domains that the LDAP identity provider handles Default: <nil>
-*/
-	EmailDomain interface{} `yaml:"emailDomain,omitempty"`
-
-	/*MailSubstitute - Descr: Defines an email pattern containing a {0} to generate an email address for an LDAP user during authentication Default: 
-*/
-	MailSubstitute interface{} `yaml:"mailSubstitute,omitempty"`
-
-	/*UserDN - Descr: Used with search-and-bind and search-and-compare. A valid LDAP ID that has read permissions to perform a search of the LDAP tree for user information.  Default: <nil>
-*/
-	UserDN interface{} `yaml:"userDN,omitempty"`
-
-	/*SearchFilter - Descr: Used with search-and-bind and search-and-compare. Search filter used. Takes one parameter, user ID defined as {0} Default: cn={0}
-*/
-	SearchFilter interface{} `yaml:"searchFilter,omitempty"`
+	Enabled interface{} `yaml:"enabled,omitempty"`
 
 	/*ProfileType - Descr: The file to be used for configuring the LDAP authentication. Options are: 'simple-bind', 'search-and-bind', 'search-and-compare' Default: search-and-bind
 */
@@ -37,53 +21,49 @@ type UaaLdap struct {
 */
 	UserDNPatternDelimiter interface{} `yaml:"userDNPatternDelimiter,omitempty"`
 
-	/*SslCertificate - Descr: Used with ldaps:// URLs. The certificate, if self signed, to be trusted by this connection. Default: <nil>
+	/*PasswordAttributeName - Descr: Used with search-and-compare only. The name of the password attribute in the LDAP directory Default: userPassword
 */
-	SslCertificate interface{} `yaml:"sslCertificate,omitempty"`
+	PasswordAttributeName interface{} `yaml:"passwordAttributeName,omitempty"`
 
-	/*Enabled - Descr: Set to true to enable LDAP Default: false
+	/*AttributeMappings - Descr: Specifies how UAA user attributes map to LDAP attributes. given_name, family_name, and phone_number are UAA user attributes, while other attributes should be included using the prefix `user.attribute` Default: <nil>
 */
-	Enabled interface{} `yaml:"enabled,omitempty"`
-
-	/*Url - Descr: The URL to the ldap server, must start with ldap:// or ldaps:// Default: <nil>
-*/
-	Url interface{} `yaml:"url,omitempty"`
-
-	/*MailSubstituteOverridesLdap - Descr: Set to true if you wish to override an LDAP user email address with a generated one Default: false
-*/
-	MailSubstituteOverridesLdap interface{} `yaml:"mailSubstituteOverridesLdap,omitempty"`
-
-	/*MailAttributeName - Descr: The name of the LDAP attribute that contains the users email address Default: mail
-*/
-	MailAttributeName interface{} `yaml:"mailAttributeName,omitempty"`
-
-	/*UserDNPattern - Descr: Used with simple-bind only. A semi-colon separated lists of DN patterns to construct a DN direct from the user ID without performing a search. Default: <nil>
-*/
-	UserDNPattern interface{} `yaml:"userDNPattern,omitempty"`
-
-	/*SslCertificateAlias - Descr: Used with ldaps:// URLs. The certificate alias, to be trusted by this connection and stored in the keystore. Default: <nil>
-*/
-	SslCertificateAlias interface{} `yaml:"sslCertificateAlias,omitempty"`
-
-	/*PasswordEncoder - Descr: Used with search-and-compare only. The encoder used to properly encode user password to match the one in the LDAP directory. Default: org.cloudfoundry.identity.uaa.ldap.DynamicPasswordComparator
-*/
-	PasswordEncoder interface{} `yaml:"passwordEncoder,omitempty"`
+	AttributeMappings interface{} `yaml:"attributeMappings,omitempty"`
 
 	/*UserPassword - Descr: Used with search-and-bind and search-and-compare. Password for the LDAP ID that performs a search of the LDAP tree for user information. Default: <nil>
 */
 	UserPassword interface{} `yaml:"userPassword,omitempty"`
 
-	/*PasswordAttributeName - Descr: Used with search-and-compare only. The name of the password attribute in the LDAP directory Default: userPassword
+	/*SearchBase - Descr: Used with search-and-bind and search-and-compare. Define a base where the search starts at. Default: 
 */
-	PasswordAttributeName interface{} `yaml:"passwordAttributeName,omitempty"`
+	SearchBase interface{} `yaml:"searchBase,omitempty"`
+
+	/*ExternalGroupsWhitelist - Descr: Whitelist of external groups from LDAP that get added as roles in the ID Token Default: <nil>
+*/
+	ExternalGroupsWhitelist interface{} `yaml:"externalGroupsWhitelist,omitempty"`
+
+	/*SearchFilter - Descr: Used with search-and-bind and search-and-compare. Search filter used. Takes one parameter, user ID defined as {0} Default: cn={0}
+*/
+	SearchFilter interface{} `yaml:"searchFilter,omitempty"`
+
+	/*MailSubstitute - Descr: Defines an email pattern containing a {0} to generate an email address for an LDAP user during authentication Default: 
+*/
+	MailSubstitute interface{} `yaml:"mailSubstitute,omitempty"`
+
+	/*PasswordEncoder - Descr: Used with search-and-compare only. The encoder used to properly encode user password to match the one in the LDAP directory. Default: org.cloudfoundry.identity.uaa.ldap.DynamicPasswordComparator
+*/
+	PasswordEncoder interface{} `yaml:"passwordEncoder,omitempty"`
 
 	/*LocalPasswordCompare - Descr: Used with search-and-compare only. Set to true if passwords are retrieved by the search, and should be compared in the login server. Default: true
 */
 	LocalPasswordCompare interface{} `yaml:"localPasswordCompare,omitempty"`
 
-	/*SearchBase - Descr: Used with search-and-bind and search-and-compare. Define a base where the search starts at. Default: 
+	/*Url - Descr: The URL to the ldap server, must start with ldap:// or ldaps:// Default: <nil>
 */
-	SearchBase interface{} `yaml:"searchBase,omitempty"`
+	Url interface{} `yaml:"url,omitempty"`
+
+	/*UserDN - Descr: Used with search-and-bind and search-and-compare. A valid LDAP ID that has read permissions to perform a search of the LDAP tree for user information.  Default: <nil>
+*/
+	UserDN interface{} `yaml:"userDN,omitempty"`
 
 	/*Referral - Descr: Configures the UAA LDAP referral behavior. The following values are possible:
 - follow -> Referrals are followed
@@ -94,8 +74,32 @@ Reference: http://docs.oracle.com/javase/jndi/tutorial/ldap/referral/jndi.html
 */
 	Referral interface{} `yaml:"referral,omitempty"`
 
-	/*ExternalGroupsWhitelist - Descr: Whitelist of external groups from LDAP that get added as roles in the ID Token Default: <nil>
+	/*MailSubstituteOverridesLdap - Descr: Set to true if you wish to override an LDAP user email address with a generated one Default: false
 */
-	ExternalGroupsWhitelist interface{} `yaml:"externalGroupsWhitelist,omitempty"`
+	MailSubstituteOverridesLdap interface{} `yaml:"mailSubstituteOverridesLdap,omitempty"`
+
+	/*SslCertificateAlias - Descr: Used with ldaps:// URLs. The certificate alias, to be trusted by this connection and stored in the keystore. Default: <nil>
+*/
+	SslCertificateAlias interface{} `yaml:"sslCertificateAlias,omitempty"`
+
+	/*MailAttributeName - Descr: The name of the LDAP attribute that contains the users email address Default: mail
+*/
+	MailAttributeName interface{} `yaml:"mailAttributeName,omitempty"`
+
+	/*Groups - Descr: Search start point for a user group membership search Default: 
+*/
+	Groups *LdapGroups `yaml:"groups,omitempty"`
+
+	/*Ssl - Descr: Set to true, and LDAPS connection will not validate the server certificate. Default: false
+*/
+	Ssl *LdapSsl `yaml:"ssl,omitempty"`
+
+	/*SslCertificate - Descr: Used with ldaps:// URLs. The certificate, if self signed, to be trusted by this connection. Default: <nil>
+*/
+	SslCertificate interface{} `yaml:"sslCertificate,omitempty"`
+
+	/*EmailDomain - Descr: Sets the whitelist of emails domains that the LDAP identity provider handles Default: <nil>
+*/
+	EmailDomain interface{} `yaml:"emailDomain,omitempty"`
 
 }

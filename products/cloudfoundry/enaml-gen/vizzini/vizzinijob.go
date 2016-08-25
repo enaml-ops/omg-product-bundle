@@ -5,7 +5,7 @@ package vizzini
 */
 type VizziniJob struct {
 
-	/*Vizzini - Descr: The number of nodes to run the tests with Default: 4
+	/*Vizzini - Descr: default timeout for ginkgo assertions Default: <nil>
 */
 	Vizzini *Vizzini `yaml:"vizzini,omitempty"`
 

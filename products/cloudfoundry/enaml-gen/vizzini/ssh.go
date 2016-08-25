@@ -5,12 +5,12 @@ package vizzini
 */
 type Ssh struct {
 
-	/*ProxySecret - Descr: Shared secret for the SSH proxy's Diego authenticator Default: <nil>
-*/
-	ProxySecret interface{} `yaml:"proxy_secret,omitempty"`
-
 	/*ProxyAddress - Descr: Host and port for the SSH proxy Default: ssh-proxy.service.cf.internal:2222
 */
 	ProxyAddress interface{} `yaml:"proxy_address,omitempty"`
+
+	/*ProxySecret - Descr: Shared secret for the SSH proxy's Diego authenticator Default: <nil>
+*/
+	ProxySecret interface{} `yaml:"proxy_secret,omitempty"`
 
 }

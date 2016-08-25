@@ -5,7 +5,7 @@ package debian_nfs_server
 */
 type DebianNfsServerJob struct {
 
-	/*NfsServer - Descr: Domain name for NFS idmapd Default: localdomain
+	/*NfsServer - Descr: Exports /var/vcap/store with no_root_squash when set to true Default: false
 */
 	NfsServer *NfsServer `yaml:"nfs_server,omitempty"`
 

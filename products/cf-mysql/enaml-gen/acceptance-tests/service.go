@@ -9,12 +9,12 @@ type Service struct {
 */
 	Name interface{} `yaml:"name,omitempty"`
 
-	/*Plans - Descr: Array of MySQL plans Default: <nil>
-*/
-	Plans interface{} `yaml:"plans,omitempty"`
-
 	/*MaxUserConnectionsDefault - Descr: number of user connections to allow in a plan if not specified Default: 40
 */
 	MaxUserConnectionsDefault interface{} `yaml:"max_user_connections_default,omitempty"`
+
+	/*Plans - Descr: Array of MySQL plans Default: <nil>
+*/
+	Plans interface{} `yaml:"plans,omitempty"`
 
 }

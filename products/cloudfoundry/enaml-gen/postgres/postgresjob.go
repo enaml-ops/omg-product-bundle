@@ -5,7 +5,7 @@ package postgres
 */
 type PostgresJob struct {
 
-	/*Databases - Descr: A list of database roles and associated properties to create Default: <nil>
+	/*Databases - Descr: The database scheme Default: <nil>
 */
 	Databases *Databases `yaml:"databases,omitempty"`
 

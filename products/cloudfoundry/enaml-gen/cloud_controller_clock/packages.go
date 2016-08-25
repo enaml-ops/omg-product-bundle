@@ -5,10 +5,6 @@ package cloud_controller_clock
 */
 type Packages struct {
 
-	/*AppPackageDirectoryKey - Descr: Directory (bucket) used store app packages.  It does not have be pre-created. Default: cc-packages
-*/
-	AppPackageDirectoryKey interface{} `yaml:"app_package_directory_key,omitempty"`
-
 	/*WebdavConfig - Descr: The location of the webdav server eg: https://blobstore.internal Default: https://blobstore.service.cf.internal
 */
 	WebdavConfig *PackagesWebdavConfig `yaml:"webdav_config,omitempty"`
@@ -17,16 +13,24 @@ type Packages struct {
 */
 	MaxPackageSize interface{} `yaml:"max_package_size,omitempty"`
 
-	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
+	/*FogAwsStorageOptions - Descr: Storage options passed to fog for aws blobstores. Valid keys: ['encryption']. Default: <nil>
 */
-	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
+	FogAwsStorageOptions interface{} `yaml:"fog_aws_storage_options,omitempty"`
+
+	/*Cdn - Descr: Private key for signing download URIs Default: 
+*/
+	Cdn *PackagesCdn `yaml:"cdn,omitempty"`
 
 	/*FogConnection - Descr: Fog connection hash Default: <nil>
 */
 	FogConnection interface{} `yaml:"fog_connection,omitempty"`
 
-	/*Cdn - Descr: Key pair name for signed download URIs Default: 
+	/*AppPackageDirectoryKey - Descr: Directory (bucket) used store app packages.  It does not have be pre-created. Default: cc-packages
 */
-	Cdn *PackagesCdn `yaml:"cdn,omitempty"`
+	AppPackageDirectoryKey interface{} `yaml:"app_package_directory_key,omitempty"`
+
+	/*BlobstoreType - Descr: The type of blobstore backing to use. Valid values: ['fog', 'webdav'] Default: fog
+*/
+	BlobstoreType interface{} `yaml:"blobstore_type,omitempty"`
 
 }

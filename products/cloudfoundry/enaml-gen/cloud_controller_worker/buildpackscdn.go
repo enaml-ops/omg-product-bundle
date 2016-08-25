@@ -9,12 +9,12 @@ type BuildpacksCdn struct {
 */
 	PrivateKey interface{} `yaml:"private_key,omitempty"`
 
-	/*Uri - Descr: URI for a CDN to used for buildpack downloads Default: 
-*/
-	Uri interface{} `yaml:"uri,omitempty"`
-
 	/*KeyPairId - Descr: Key pair name for signed download URIs Default: 
 */
 	KeyPairId interface{} `yaml:"key_pair_id,omitempty"`
+
+	/*Uri - Descr: URI for a CDN to used for buildpack downloads Default: 
+*/
+	Uri interface{} `yaml:"uri,omitempty"`
 
 }

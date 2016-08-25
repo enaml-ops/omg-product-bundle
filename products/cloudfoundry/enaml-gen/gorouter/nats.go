@@ -13,12 +13,12 @@ type Nats struct {
 */
 	Machines interface{} `yaml:"machines,omitempty"`
 
-	/*Password - Descr:  Default: <nil>
-*/
-	Password interface{} `yaml:"password,omitempty"`
-
 	/*User - Descr:  Default: <nil>
 */
 	User interface{} `yaml:"user,omitempty"`
+
+	/*Password - Descr:  Default: <nil>
+*/
+	Password interface{} `yaml:"password,omitempty"`
 
 }
