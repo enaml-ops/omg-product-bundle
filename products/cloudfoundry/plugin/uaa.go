@@ -404,13 +404,6 @@ func (s *UAA) createUAAJob() enaml.InstanceJob {
 func (s *UAA) createUAADB() (uaadb *uaa.Uaadb) {
 	const uaaVal = "uaa"
 
-	var dbs []map[string]string
-	db := make(map[string]string)
-	db["tag"] = uaaVal
-	db["name"] = uaaVal
-
-	dbs = append(dbs, db)
-
 	return &uaa.Uaadb{
 		Address:  s.MySQLProxyHost,
 		Port:     3306,
