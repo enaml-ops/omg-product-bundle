@@ -37,7 +37,7 @@ var _ = Describe("Vault helpers", func() {
 			BeforeEach(func() {
 				fakeVault = new(pluginfakes.FakeVaultRotater)
 				fakeVault.RotateSecretsReturns(nil)
-				err = RotateCertHash(fakeVault, "secret/hash/of/stuff", "fake.domain.io")
+				err = RotateCertHash(fakeVault, "secret/hash/of/stuff", "sys.fake.domain.io", []string{"apps.fake.domain.io"})
 			})
 			It("should set a valid set of secrets to vault", func() {
 				_, givenSecrets := fakeVault.RotateSecretsArgsForCall(0)

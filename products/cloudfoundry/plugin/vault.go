@@ -35,7 +35,7 @@ func VaultRotate(args []string, flgs []pcli.Flag) error {
 		lo.G.Debug("rotating password values")
 		if err = RotatePasswordHash(vault, c.String("vault-hash-password")); err == nil {
 			lo.G.Debug("rotating keycert values")
-			err = RotateCertHash(vault, c.String("vault-hash-keycert"), c.String("system-domain"))
+			err = RotateCertHash(vault, c.String("vault-hash-keycert"), c.String("system-domain"), c.StringSlice("app-domain"))
 		}
 		lo.G.Debugf("checking respone from rotate: %v", err)
 
@@ -55,8 +55,8 @@ func RotatePasswordHash(vault VaultRotater, hash string) error {
 	return err
 }
 
-func RotateCertHash(vault VaultRotater, hash string, host string) error {
-	secrets, err := getKeyCertObject(host)
+func RotateCertHash(vault VaultRotater, hash, systemDomain string, appsDomain []string) error {
+	secrets, err := getKeyCertObject(systemDomain, appsDomain)
 	if err != nil {
 		return err
 	}
@@ -137,7 +137,7 @@ func getPasswordObject() []byte {
 	return b
 }
 
-func getKeyCertObject(systemDomain string) ([]byte, error) {
+func getKeyCertObject(systemDomain string, appDomain []string) ([]byte, error) {
 	const (
 		keysuffix    = "-key"
 		certsuffix   = "-cert"
@@ -174,12 +174,26 @@ func getKeyCertObject(systemDomain string) ([]byte, error) {
 		certVault[fn.flag+caCertSuffix] = ca
 	}
 
+	hosts := []string{
+		"*." + systemDomain,
+		"*.uaa." + systemDomain,
+		"*.login." + systemDomain,
+	}
+	for _, ad := range appDomain {
+		hosts = append(hosts, "*."+ad)
+	}
+	_, cert, key, err := utils.GenerateCertWithCA(hosts, caCert, caKey)
+	if err != nil {
+		lo.G.Error("coudln't generate haproxy cert")
+		return nil, err
+	}
+	certVault["haproxy-sslpem"] = cert + key
+
 	jwtPublicKey, jwtPrivateKey, err := utils.GenerateKeys()
 	if err != nil {
 		lo.G.Error("couldn't generate UAA JWT keys")
 		return nil, err
 	}
-
 	certVault["uaa-jwt-signing-key"] = jwtPrivateKey
 	certVault["uaa-jwt-verification-key"] = jwtPublicKey
 

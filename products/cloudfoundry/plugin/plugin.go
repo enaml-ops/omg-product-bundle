@@ -54,7 +54,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringSliceFlag("az", "list of AZ names to use"),
 		createStringFlag("network", "the name of the network to use"),
 		createStringFlag("system-domain", "System Domain"),
-		createStringSliceFlag("app-domain", "Applications Domain"),
+		createStringSliceFlag("app-domain", "Applications Domains"),
 		createBoolFlag("allow-app-ssh-access", "Allow SSH access for CF applications"),
 
 		createStringSliceFlag("router-ip", "a list of the router ips you wish to use"),
