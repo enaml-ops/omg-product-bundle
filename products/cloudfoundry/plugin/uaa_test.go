@@ -303,11 +303,13 @@ var _ = Describe("UAA Partition", func() {
 			Ω(props.Nats.Port).Should(Equal(4222))
 			Ω(props.Nats.Machines).Should(ConsistOf("1.0.0.5", "1.0.0.6"))
 			Ω(props.RouteRegistrar.Routes).ShouldNot(BeNil())
-			routes := props.RouteRegistrar.Routes.(map[string]interface{})
-			Ω(routes["name"]).Should(Equal("uaa"))
-			Ω(routes["port"]).Should(Equal(8080))
-			Ω(routes["registration_interval"]).Should(Equal("40s"))
-			Ω(routes["uris"]).Should(ConsistOf("uaa.sys.test.com", "*.uaa.sys.test.com", "login.sys.test.com", "*.login.sys.test.com"))
+			routes := props.RouteRegistrar.Routes.([]map[string]interface{})
+			Ω(routes).Should(HaveLen(1))
+			route := routes[0]
+			Ω(route["name"]).Should(Equal("uaa"))
+			Ω(route["port"]).Should(Equal(8080))
+			Ω(route["registration_interval"]).Should(Equal("40s"))
+			Ω(route["uris"]).Should(ConsistOf("uaa.sys.test.com", "*.uaa.sys.test.com", "login.sys.test.com", "*.login.sys.test.com"))
 		})
 	})
 	Context("when Creating Branding with flags", func() {

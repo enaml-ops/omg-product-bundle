@@ -371,17 +371,19 @@ func (s *UAA) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 }
 
 func (s *UAA) createRouteRegistrarJob() enaml.InstanceJob {
-	routes := make(map[string]interface{})
-	routes["name"] = "uaa"
-	routes["port"] = 8080
-	routes["registration_interval"] = "40s"
-	routes["uris"] = []string{fmt.Sprintf("uaa.%s", s.SystemDomain), fmt.Sprintf("*.uaa.%s", s.SystemDomain), fmt.Sprintf("login.%s", s.SystemDomain), fmt.Sprintf("*.login.%s", s.SystemDomain)}
 	return enaml.InstanceJob{
 		Name:    "route_registrar",
 		Release: "cf",
 		Properties: &route_registrar.RouteRegistrarJob{
 			RouteRegistrar: &route_registrar.RouteRegistrar{
-				Routes: routes,
+				Routes: []map[string]interface{}{
+					map[string]interface{}{
+						"name":                  "uaa",
+						"port":                  8080,
+						"registration_interval": "40s",
+						"uris":                  []string{fmt.Sprintf("uaa.%s", s.SystemDomain), fmt.Sprintf("*.uaa.%s", s.SystemDomain), fmt.Sprintf("login.%s", s.SystemDomain), fmt.Sprintf("*.login.%s", s.SystemDomain)},
+					},
+				},
 			},
 			Nats: s.Nats,
 		},
