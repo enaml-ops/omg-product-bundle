@@ -18,7 +18,7 @@ func NewDiegoCellPartition(c *cli.Context) InstanceGrouper {
 		PersistentDiskType: c.String("diego-cell-disk-type"),
 		NetworkName:        c.String("network"),
 		NetworkIPs:         c.StringSlice("diego-cell-ip"),
-		ConsulAgent:        NewConsulAgentServer(c),
+		ConsulAgent:        NewConsulAgent(c, []string{}),
 		Metron:             NewMetron(c),
 		StatsdInjector:     NewStatsdInjector(c),
 		DiegoBrain:         NewDiegoBrainPartition(c).(*diegoBrain),

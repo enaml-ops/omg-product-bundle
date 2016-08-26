@@ -77,7 +77,7 @@ func NewDiegoDatabasePartition(c *cli.Context) InstanceGrouper {
 		EtcdClientKey:      etcdClientKey,
 		EtcdPeerCert:       etcdPeerCert,
 		EtcdPeerKey:        etcdPeerKey,
-		ConsulAgent:        NewConsulAgentServer(c),
+		ConsulAgent:        NewConsulAgent(c, []string{"bbs", "etcd"}),
 		Metron:             NewMetron(c),
 		StatsdInjector:     NewStatsdInjector(c),
 		DiegoBrain:         NewDiegoBrainPartition(c).(*diegoBrain),

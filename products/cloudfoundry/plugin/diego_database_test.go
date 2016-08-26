@@ -3,6 +3,7 @@ package cloudfoundry_test
 import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/bbs"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/consul_agent"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	. "github.com/onsi/ginkgo"
@@ -92,6 +93,11 @@ var _ = Describe("given a Diego Database Partition", func() {
 
 					It("then it should populate my properties", func() {
 						Ω(job.Properties).ShouldNot(BeNil())
+						props := job.Properties.(*consul_agent.ConsulAgentJob)
+						Ω(props.Consul.Agent.Mode).Should(BeNil())
+						services := props.Consul.Agent.Services.(map[string]map[string]string)
+						Ω(services).Should(HaveKey("bbs"))
+						Ω(services).Should(HaveKey("etcd"))
 					})
 				})
 			})

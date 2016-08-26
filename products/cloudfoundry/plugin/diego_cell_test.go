@@ -7,6 +7,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/consul_agent"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/rep"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	. "github.com/onsi/ginkgo"
@@ -104,6 +105,9 @@ var _ = Describe("given a Diego Cell Partition", func() {
 
 					It("then it should populate my properties", func() {
 						Ω(job.Properties).ShouldNot(BeNil())
+						props := job.Properties.(*consul_agent.ConsulAgentJob)
+						Ω(props.Consul.Agent.Mode).Should(BeNil())
+						Ω(props.Consul.Agent.Services).Should(BeEmpty())
 					})
 				})
 			})
