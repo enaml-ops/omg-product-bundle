@@ -113,8 +113,8 @@ func (s *diegoCell) newRDiego() (rdiego *rep.RepJob) {
 					ClientCert:  s.DiegoBrain.BBSClientCert,
 					ClientKey:   s.DiegoBrain.BBSClientKey,
 				},
-				PreloadedRootfses: map[string]string{
-					"cflinuxfs2": "/var/vcap/packages/cflinuxfs2/rootfs",
+				PreloadedRootfses: []string{
+					"cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs",
 				},
 				Zone: s.Metron.Zone,
 			},

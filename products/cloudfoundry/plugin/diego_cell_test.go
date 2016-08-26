@@ -90,6 +90,11 @@ var _ = Describe("given a Diego Cell Partition", func() {
 						props := job.Properties.(*rep.RepJob)
 						Ω(props.Diego.Rep.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
 					})
+					It("should make rootfses an array", func() {
+						props := job.Properties.(*rep.RepJob)
+						Ω(props.Diego.Rep.PreloadedRootfses).Should(HaveLen(1))
+						Ω(props.Diego.Rep.PreloadedRootfses).Should(ConsistOf("cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs"))
+					})
 				})
 			})
 
