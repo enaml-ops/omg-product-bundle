@@ -161,8 +161,12 @@ func getKeyCertObject(systemDomain string) ([]byte, error) {
 	}
 
 	certVault := make(map[string]string)
+	caKey, caCert, err := utils.Initialize()
+	if err != nil {
+		return nil, err
+	}
 	for _, fn := range fieldnames {
-		ca, cert, key, err := utils.GenerateCert([]string{fn.host, "*." + fn.host})
+		ca, cert, key, err := utils.GenerateCertWithCA([]string{fn.host, "*." + fn.host}, caCert, caKey)
 		if err != nil {
 			lo.G.Errorf("couldn't create cert for flag %s", fn.flag)
 			return nil, err

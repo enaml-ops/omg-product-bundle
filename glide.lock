@@ -1,5 +1,5 @@
 hash: 044c9fbc7a3fc24afd4f58549c2ef979d88d724055710a24107a5ca781075200
-updated: 2016-08-23T21:07:46.24586652-07:00
+updated: 2016-08-26T13:34:33.344778177-06:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -19,7 +19,7 @@ imports:
   - cloudproperties/aws
   - cloudproperties/azure
 - name: github.com/enaml-ops/omg-cli
-  version: 482dfa512fcab337988bcc29f47c123ca0e3a497
+  version: ffff0e95971e85a7d0b4b46efdb004720043d70a
   subpackages:
   - utils
   - bosh
@@ -59,7 +59,7 @@ imports:
   - internal/spec
   - internal/specrunner
 - name: github.com/onsi/gomega
-  version: c90bd38f8da6e92f8b114953db2f0ad7361fb4b4
+  version: b48c9a8b2644326d0a44eaaacc8d83e35174a05d
   subpackages:
   - ghttp
   - internal/assertion
