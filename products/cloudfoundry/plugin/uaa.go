@@ -39,7 +39,7 @@ func NewUAAPartition(c *cli.Context) InstanceGrouper {
 		},
 		Protocol:                                  protocol,
 		SAMLServiceProviderKey:                    c.String("uaa-saml-service-provider-key"),
-		SAMLServiceProviderCertificate:            c.String("uaa-saml-service-provider-certificate"),
+		SAMLServiceProviderCertificate:            c.String("uaa-saml-service-provider-cert"),
 		JWTSigningKey:                             c.String("uaa-jwt-signing-key"),
 		JWTVerificationKey:                        c.String("uaa-jwt-verification-key"),
 		AdminSecret:                               c.String("uaa-admin-secret"),

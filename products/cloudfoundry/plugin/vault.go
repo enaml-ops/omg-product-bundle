@@ -127,9 +127,6 @@ func getPasswordObject() []byte {
 		"consul-encryption-key",
 		"cc-db-encryption-key",
 		"host-key-fingerprint",
-		"uaa-jwt-signing-key",
-		"uaa-jwt-verification-key",
-		"uaa-saml-service-provider-key",
 	}
 	var passVault map[string]string = make(map[string]string)
 
@@ -158,6 +155,7 @@ func getKeyCertObject(systemDomain string) ([]byte, error) {
 		{"etcd-server", "etcd.service.cf.internal"},
 		{"etcd-client", "etcd_client_cert"},
 		{"etcd-peer", "etcd.service.cf.internal"},
+		{"uaa-saml-service-provider", "service_provider_key_credentials"},
 	}
 
 	certVault := make(map[string]string)
@@ -175,6 +173,15 @@ func getKeyCertObject(systemDomain string) ([]byte, error) {
 		certVault[fn.flag+keysuffix] = key
 		certVault[fn.flag+caCertSuffix] = ca
 	}
+
+	jwtPublicKey, jwtPrivateKey, err := utils.GenerateKeys()
+	if err != nil {
+		lo.G.Error("couldn't generate UAA JWT keys")
+		return nil, err
+	}
+
+	certVault["uaa-jwt-signing-key"] = jwtPrivateKey
+	certVault["uaa-jwt-verification-key"] = jwtPublicKey
 
 	b, err := json.Marshal(certVault)
 	return b, err

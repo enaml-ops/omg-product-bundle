@@ -210,7 +210,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createBoolTFlag("uaa-signups-enabled", "enable signups"),
 		createStringFlag("uaa-login-protocol", "uaa login protocol, default https", "https"),
 		createStringFlag("uaa-saml-service-provider-key", "saml service provider key for uaa"),
-		createStringFlag("uaa-saml-service-provider-certificate", "saml service provider certificate for uaa"),
+		createStringFlag("uaa-saml-service-provider-cert", "saml service provider certificate for uaa"),
 		createStringFlag("uaa-jwt-signing-key", "signing key for jwt used by UAA"),
 		createStringFlag("uaa-jwt-verification-key", "verification key for jwt used by UAA"),
 		createBoolFlag("uaa-ldap-enabled", "is ldap enabled for UAA"),

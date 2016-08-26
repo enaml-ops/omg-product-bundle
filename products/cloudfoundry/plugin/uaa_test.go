@@ -52,7 +52,7 @@ var _ = Describe("UAA Partition", func() {
 				"--nats-machine-ip", "1.0.0.5",
 				"--nats-machine-ip", "1.0.0.6",
 				"--uaa-saml-service-provider-key", "saml-key",
-				"--uaa-saml-service-provider-certificate", "saml-cert",
+				"--uaa-saml-service-provider-cert", "saml-cert",
 				"--uaa-jwt-verification-key", "jwt-verificationkey",
 				"--uaa-jwt-signing-key", "jwt-signingkey",
 				"--uaa-ldap-enabled",
