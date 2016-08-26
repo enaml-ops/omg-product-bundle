@@ -32,7 +32,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 	})
 
 	Context("when initialized with valid flags", func() {
-		It("generates different job names for internet-less tests", func() {
+		It("generates different instance group names for internet-less tests", func() {
 			p := new(Plugin)
 			c := p.GetContext([]string{
 				"cloudfoundry",
@@ -46,7 +46,8 @@ var _ = Describe("given the acceptance-tests partition", func() {
 
 			withInternet := NewAcceptanceTestsPartition(c, true).ToInstanceGroup()
 			withoutInternet := NewAcceptanceTestsPartition(c, false).ToInstanceGroup()
-			Ω(withInternet.Jobs[0].Name).ShouldNot(Equal(withoutInternet.Jobs[0].Name))
+			Ω(withInternet.Name).ShouldNot(Equal(withoutInternet.Name))
+			Ω(withInternet.Jobs[0].Name).Should(Equal(withoutInternet.Jobs[0].Name))
 		})
 	})
 
@@ -152,7 +153,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 
 		It("should not be configured to include internet-dependent tests", func() {
 			group := ig.ToInstanceGroup()
-			job := group.GetJobByName("acceptance-tests-internetless")
+			job := group.GetJobByName("acceptance-tests")
 			Ω(job.Release).Should(Equal(CFReleaseName))
 			props := job.Properties.(*acceptance_tests.AcceptanceTestsJob)
 			Ω(props.AcceptanceTests.Api).Should(Equal("https://api.sys.yourdomain.com"))
