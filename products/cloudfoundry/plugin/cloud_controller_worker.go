@@ -17,6 +17,7 @@ func NewCloudControllerWorkerPartition(c *cli.Context) InstanceGrouper {
 
 	return &CloudControllerWorkerPartition{
 		AZs:                   c.StringSlice("az"),
+		Instances:             c.Int("cc-worker-instances"),
 		VMTypeName:            c.String("cc-worker-vm-type"),
 		StemcellName:          c.String("stemcell-name"),
 		NetworkName:           c.String("network"),
@@ -49,7 +50,7 @@ func (s *CloudControllerWorkerPartition) ToInstanceGroup() (ig *enaml.InstanceGr
 	ig = &enaml.InstanceGroup{
 		Name:      "cloud_controller_worker-partition",
 		AZs:       s.AZs,
-		Instances: 2, //Not sure where this number should be coming from!
+		Instances: s.Instances,
 		VMType:    s.VMTypeName,
 		Stemcell:  s.StemcellName,
 		Networks: []enaml.Network{

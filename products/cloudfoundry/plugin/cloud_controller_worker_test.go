@@ -29,6 +29,7 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 				"--consul-server-key", "consulserverkey",
 				"--cc-worker-vm-type", "ccworkervmtype",
 				"--network", "foundry",
+				"--cc-worker-instances", "2",
 				"--cc-staging-upload-user", "staginguser",
 				"--cc-staging-upload-password", "stagingpassword",
 				"--cc-bulk-api-user", "bulkapiuser",
@@ -57,6 +58,11 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 
 		It("then should not be nil", func() {
 			Ω(cloudControllerWorker).ShouldNot(BeNil())
+		})
+
+		It("then it should allow the user to configure the number of instances", func() {
+			ig := cloudControllerWorker.ToInstanceGroup()
+			Ω(ig.Instances).Should(Equal(2))
 		})
 
 		It("should have valid values", func() {

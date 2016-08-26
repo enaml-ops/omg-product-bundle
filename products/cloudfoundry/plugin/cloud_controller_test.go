@@ -74,6 +74,11 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(cloudController.HasValidValues()).Should(BeTrue())
 		})
 
+		It("then it should configure 1 instance by default", func() {
+			ig := cloudController.ToInstanceGroup()
+			Ω(ig.Instances).Should(Equal(1))
+		})
+
 		It("should have the name of the Network correctly set", func() {
 			igf := cloudController.ToInstanceGroup()
 

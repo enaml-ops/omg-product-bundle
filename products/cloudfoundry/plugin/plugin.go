@@ -120,6 +120,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("mysql-proxy-api-password", "Proxy API password"),
 
 		//CC Worker Partition Flags
+		createIntFlag("cc-worker-instances", "the number of vms for cc workers", "1"),
 		createStringFlag("cc-worker-vm-type", "the name of the desired vm type for cc worker"),
 		createStringFlag("cc-staging-upload-user", "user name for staging upload"),
 		createStringFlag("cc-staging-upload-password", "password for staging upload"),
@@ -132,6 +133,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createIntFlag("cc-uploader-poll-interval", "CC uploader job polling interval, in seconds"),
 		createIntFlag("cc-fetch-timeout", "how long to wait for completion of requests to CC, in seconds"),
 		createStringFlag("cc-vm-type", "Cloud Controller VM Type"),
+		createIntFlag("cc-instances", "the number of vms for cc", "1"),
 		createStringFlag("host-key-fingerprint", "Host Key Fingerprint"),
 		createStringFlag("support-address", "Support URL"),
 		createStringFlag("min-cli-version", "Min CF CLI Version supported"),

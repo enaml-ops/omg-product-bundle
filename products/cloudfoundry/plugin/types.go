@@ -309,6 +309,7 @@ type MySQLProxy struct {
 //CloudControllerWorkerPartition - Cloud Controller Worker Partition
 type CloudControllerWorkerPartition struct {
 	AZs                   []string
+	Instances             int
 	VMTypeName            string
 	StemcellName          string
 	NetworkName           string
@@ -339,6 +340,7 @@ type CloudControllerWorkerPartition struct {
 //CloudControllerPartition - Cloud Controller Partition
 type CloudControllerPartition struct {
 	AZs                      []string
+	Instances                int
 	VMTypeName               string
 	StemcellName             string
 	NetworkName              string
