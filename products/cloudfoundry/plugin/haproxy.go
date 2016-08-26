@@ -4,11 +4,18 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/haproxy"
+	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 )
 
 //NewHaProxyPartition -
 func NewHaProxyPartition(c *cli.Context) InstanceGrouper {
+	sslpem, err := pluginutil.LoadResourceFromContext(c, "haproxy-sslpem")
+	if err != nil {
+		lo.G.Error("couldn't load haproxy-sslpem:" + err.Error())
+		return nil
+	}
+
 	return &HAProxy{
 		Skip:           c.BoolT("skip-haproxy"),
 		AZs:            c.StringSlice("az"),
@@ -20,7 +27,7 @@ func NewHaProxyPartition(c *cli.Context) InstanceGrouper {
 		Metron:         NewMetron(c),
 		StatsdInjector: NewStatsdInjector(c),
 		RouterMachines: c.StringSlice("router-ip"),
-		SSLPem:         c.String("haproxy-sslpem"),
+		SSLPem:         sslpem,
 	}
 }
 
