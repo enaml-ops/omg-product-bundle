@@ -175,6 +175,7 @@ func getKeyCertObject(systemDomain string, appDomain []string) ([]byte, error) {
 	}
 
 	hosts := []string{
+		systemDomain,
 		"*." + systemDomain,
 		"*.uaa." + systemDomain,
 		"*.login." + systemDomain,
