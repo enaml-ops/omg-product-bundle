@@ -1,24 +1,16 @@
 - name: staticfile_buildpack
   package: staticfile-buildpack
-  properties: {}
 - name: java_buildpack_offline
   package: java-offline-buildpack
-  properties: {}
 - name: ruby_buildpack
   package: ruby-buildpack
-  properties: {}
 - name: nodejs_buildpack
   package: nodejs-buildpack
-  properties: {}
 - name: go_buildpack
   package: go-buildpack
-  properties: {}
 - name: python_buildpack
   package: python-buildpack
-  properties: {}
 - name: php_buildpack
   package: php-buildpack
-  properties: {}
 - name: binary_buildpack
   package: binary-buildpack
-  properties: {}

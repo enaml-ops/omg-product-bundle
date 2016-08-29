@@ -56,6 +56,15 @@ func NewCloudControllerPartition(c *cli.Context) InstanceGrouper {
 
 //ToInstanceGroup - Convert CLoud Controller Partition to an Instance Group
 func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
+	buildpacks := []string{"go-buildpack",
+		"binary-buildpack",
+		"nodejs-buildpack",
+		"ruby-buildpack",
+		"php-buildpack",
+		"python-buildpack",
+		"java-offline-buildpack",
+		"staticfile-buildpack"}
+
 	ig = &enaml.InstanceGroup{
 		Name:      "cloud_controller-partition",
 		AZs:       s.AZs,
@@ -73,10 +82,14 @@ func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 			s.StatsdInjector.CreateJob(),
 			newRouteRegistrarJob(s),
 		},
+
 		Update: enaml.Update{
 			MaxInFlight: 1,
 			Serial:      true,
 		},
+	}
+	for _, buildpack := range buildpacks {
+		ig.Jobs = append(ig.Jobs, enaml.InstanceJob{Name: buildpack, Release: CFReleaseName})
 	}
 	return
 }
@@ -146,44 +159,36 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				ExternalHost:                 "api",
 				InstallBuildpacks: []map[string]interface{}{
 					map[string]interface{}{
-						"name":       "staticfile_buildpack",
-						"package":    "staticfile-buildpack",
-						"properties": struct{}{},
+						"name":    "staticfile_buildpack",
+						"package": "staticfile-buildpack",
 					},
 					map[string]interface{}{
-						"name":       "java_buildpack_offline",
-						"package":    "java-offline-buildpack",
-						"properties": struct{}{},
+						"name":    "java_buildpack_offline",
+						"package": "java-offline-buildpack",
 					},
 					map[string]interface{}{
-						"name":       "ruby_buildpack",
-						"package":    "ruby-buildpack",
-						"properties": struct{}{},
+						"name":    "ruby_buildpack",
+						"package": "ruby-buildpack",
 					},
 					map[string]interface{}{
-						"name":       "nodejs_buildpack",
-						"package":    "nodejs-buildpack",
-						"properties": struct{}{},
+						"name":    "nodejs_buildpack",
+						"package": "nodejs-buildpack",
 					},
 					map[string]interface{}{
-						"name":       "go_buildpack",
-						"package":    "go-buildpack",
-						"properties": struct{}{},
+						"name":    "go_buildpack",
+						"package": "go-buildpack",
 					},
 					map[string]interface{}{
-						"name":       "python_buildpack",
-						"package":    "python-buildpack",
-						"properties": struct{}{},
+						"name":    "python_buildpack",
+						"package": "python-buildpack",
 					},
 					map[string]interface{}{
-						"name":       "php_buildpack",
-						"package":    "php-buildpack",
-						"properties": struct{}{},
+						"name":    "php_buildpack",
+						"package": "php-buildpack",
 					},
 					map[string]interface{}{
-						"name":       "binary_buildpack",
-						"package":    "binary-buildpack",
-						"properties": struct{}{},
+						"name":    "binary_buildpack",
+						"package": "binary-buildpack",
 					},
 				},
 				QuotaDefinitions: map[string]interface{}{

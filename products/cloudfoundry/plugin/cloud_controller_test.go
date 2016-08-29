@@ -89,10 +89,28 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(networks[0].Name).Should(Equal("foundry"))
 		})
 
-		It("should have 6 jobs under it", func() {
+		It("should have 13 jobs under it", func() {
 			igf := cloudController.ToInstanceGroup()
 			jobs := igf.Jobs
-			Ω(len(jobs)).Should(Equal(6))
+			jobNames := []string{}
+			for _, job := range jobs {
+				jobNames = append(jobNames, job.Name)
+			}
+			Ω(len(jobs)).Should(Equal(14))
+			Ω(jobNames).Should(ConsistOf("cloud_controller_ng",
+				"consul_agent",
+				"nfs_mounter",
+				"metron_agent",
+				"statsd-injector",
+				"route_registrar",
+				"go-buildpack",
+				"binary-buildpack",
+				"nodejs-buildpack",
+				"ruby-buildpack",
+				"php-buildpack",
+				"python-buildpack",
+				"java-offline-buildpack",
+				"staticfile-buildpack"))
 		})
 
 		It("should have configured the route_registrar job", func() {
