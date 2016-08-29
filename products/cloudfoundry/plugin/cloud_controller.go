@@ -147,35 +147,35 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				InstallBuildpacks: []map[string]interface{}{
 					map[string]interface{}{
 						"name":    "staticfile_buildpack",
-						"package": "buildpack_staticfile",
+						"package": "staticfile-buildpack",
 					},
 					map[string]interface{}{
 						"name":    "java_buildpack_offline",
-						"package": "buildpack_java_offline",
+						"package": "java-offline-buildpack",
 					},
 					map[string]interface{}{
 						"name":    "ruby_buildpack",
-						"package": "buildpack_ruby",
+						"package": "ruby-buildpack",
 					},
 					map[string]interface{}{
 						"name":    "nodejs_buildpack",
-						"package": "buildpack_nodejs",
+						"package": "nodejs-buildpack",
 					},
 					map[string]interface{}{
 						"name":    "go_buildpack",
-						"package": "buildpack_go",
+						"package": "go-buildpack",
 					},
 					map[string]interface{}{
 						"name":    "python_buildpack",
-						"package": "buildpack_python",
+						"package": "python-buildpack",
 					},
 					map[string]interface{}{
 						"name":    "php_buildpack",
-						"package": "buildpack_php",
+						"package": "php-buildpack",
 					},
 					map[string]interface{}{
 						"name":    "binary_buildpack",
-						"package": "buildpack_binary",
+						"package": "binary-buildpack",
 					},
 				},
 				QuotaDefinitions: map[string]interface{}{
