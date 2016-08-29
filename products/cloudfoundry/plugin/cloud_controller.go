@@ -66,7 +66,7 @@ func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 			enaml.Network{Name: s.NetworkName},
 		},
 		Jobs: []enaml.InstanceJob{
-			newCloudControllerNgWorkerJob(s),
+			newCloudControllerNgJob(s),
 			s.ConsulAgent.CreateJob(),
 			s.NFSMounter.CreateJob(),
 			s.Metron.CreateJob(),
@@ -81,7 +81,7 @@ func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 	return
 }
 
-func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJob {
+func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "cloud_controller_ng",
 		Release: CFReleaseName,
@@ -144,7 +144,40 @@ func newCloudControllerNgWorkerJob(c *CloudControllerPartition) enaml.InstanceJo
 				DefaultStagingSecurityGroups: []string{"all_open"},
 				DisableCustomBuildpacks:      false,
 				ExternalHost:                 "api",
-				InstallBuildpacks:            []string{},
+				InstallBuildpacks: []map[string]interface{}{
+					map[string]interface{}{
+						"name":    "staticfile_buildpack",
+						"package": "buildpack_staticfile",
+					},
+					map[string]interface{}{
+						"name":    "java_buildpack_offline",
+						"package": "buildpack_java_offline",
+					},
+					map[string]interface{}{
+						"name":    "ruby_buildpack",
+						"package": "buildpack_ruby",
+					},
+					map[string]interface{}{
+						"name":    "nodejs_buildpack",
+						"package": "buildpack_nodejs",
+					},
+					map[string]interface{}{
+						"name":    "go_buildpack",
+						"package": "buildpack_go",
+					},
+					map[string]interface{}{
+						"name":    "python_buildpack",
+						"package": "buildpack_python",
+					},
+					map[string]interface{}{
+						"name":    "php_buildpack",
+						"package": "buildpack_php",
+					},
+					map[string]interface{}{
+						"name":    "binary_buildpack",
+						"package": "buildpack_binary",
+					},
+				},
 				QuotaDefinitions: map[string]interface{}{
 					"default": map[string]interface{}{
 						"memory_limit":               10240,

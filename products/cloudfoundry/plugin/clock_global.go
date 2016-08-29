@@ -69,7 +69,7 @@ func (c *clockGlobal) ToInstanceGroup() *enaml.InstanceGroup {
 	nfsJob := c.NFS.CreateJob()
 	statsdJob := c.Statsd.CreateJob()
 
-	ccw := newCloudControllerNgWorkerJob(c.CloudController)
+	ccw := newCloudControllerNgJob(c.CloudController)
 	props := ccw.Properties.(*cloud_controller_ng.CloudControllerNgJob)
 
 	ig.AddJob(c.newCloudControllerClockJob(props))

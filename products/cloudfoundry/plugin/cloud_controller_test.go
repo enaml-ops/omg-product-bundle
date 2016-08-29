@@ -3,6 +3,8 @@ package cloudfoundry_test
 import (
 	//"fmt"
 
+	"io/ioutil"
+
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -130,6 +132,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(props.SystemDomainOrganization).Should(Equal("system"))
 			Ω(props.Login.Url).Should(Equal("https://login.sys.yourdomain.com"))
 
+			By("configuring CC")
 			Ω(props.Cc.AllowedCorsDomains).Should(ConsistOf("https://login.sys.yourdomain.com"))
 			Ω(props.Cc.AllowAppSshAccess).Should(BeTrue())
 			Ω(props.Cc.DefaultToDiegoBackend).Should(BeTrue())
@@ -177,6 +180,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(props.Cc.Packages.FogConnection).Should(Equal(expectedFog))
 			Ω(props.Cc.ResourcePool.FogConnection).Should(Equal(expectedFog))
 
+			By("configuring CCDB roles")
 			ccdb := props.Ccdb
 			Ω(ccdb.DbScheme).Should(Equal("mysql"))
 			Ω(ccdb.Port).Should(Equal(3306))
@@ -194,6 +198,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(dbs[0]).Should(HaveKeyWithValue("name", "ccdb"))
 			Ω(dbs[0]).Should(HaveKeyWithValue("tag", "cc"))
 
+			By("configuring UAA")
 			Ω(props.Uaa).ShouldNot(BeNil())
 			Ω(props.Uaa.Url).Should(Equal("https://uaa.sys.yourdomain.com"))
 			Ω(props.Uaa.Jwt.VerificationKey).Should(Equal("uaajwtkey"))
@@ -206,24 +211,36 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(props.Uaa.Clients.CcRouting).ShouldNot(BeNil())
 			Ω(props.Uaa.Clients.CcRouting.Secret).Should(Equal("ccroutingsecret"))
 
+			By("configuring SSL")
 			Ω(props.Ssl).ShouldNot(BeNil())
 			Ω(props.Ssl.SkipCertVerify).Should(BeTrue())
 
+			By("configuring the logger endpoint")
 			Ω(props.LoggerEndpoint).ShouldNot(BeNil())
 			Ω(props.LoggerEndpoint.Port).Should(Equal(443))
 
+			By("configuring doppler")
 			Ω(props.Doppler).ShouldNot(BeNil())
 			Ω(props.Doppler.Port).Should(Equal(443))
 
+			By("configuring nfs server")
 			Ω(props.NfsServer).ShouldNot(BeNil())
 			Ω(props.NfsServer.Address).Should(Equal("10.0.0.19"))
 			Ω(props.NfsServer.SharePath).Should(Equal("/var/vcap/nfs"))
 
+			By("configuring nats")
 			Ω(props.Nats).ShouldNot(BeNil())
 			Ω(props.Nats.User).Should(Equal("natsuser"))
 			Ω(props.Nats.Password).Should(Equal("natspass"))
 			Ω(props.Nats.Port).Should(Equal(4333))
 			Ω(props.Nats.Machines).Should(ConsistOf("10.0.0.4"))
+
+			By("setting installed buildpacks")
+			buildpacks, err := ioutil.ReadFile("fixtures/install_buildpacks.yml")
+			Ω(err).ShouldNot(HaveOccurred())
+			yml, err := yaml.Marshal(props.Cc.InstallBuildpacks)
+			Ω(err).ShouldNot(HaveOccurred())
+			Ω(yml).Should(MatchYAML(buildpacks))
 		})
 
 		It("should have NFS Mounter set as a job", func() {
