@@ -21,7 +21,7 @@ var _ = Describe("NFS Partition", func() {
 				"--etcd-machine-ip", "1.0.0.7",
 				"--etcd-machine-ip", "1.0.0.8",
 			})
-			Ω(NewNFSPartition(c).HasValidValues()).Should(Equal(false))
+			Ω(NewNFSPartition(c, &Config{}).HasValidValues()).Should(Equal(false))
 		})
 	})
 	Context("when initialized WITH a complete set of arguments", func() {
@@ -30,10 +30,7 @@ var _ = Describe("NFS Partition", func() {
 			plugin := new(Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--az", "eastprod-1",
 				"--nfs-ip", "1.0.0.1",
-				"--network", "foundry-net",
 				"--nfs-vm-type", "blah",
 				"--nfs-disk-type", "blah-disk",
 				"--nfs-allow-from-network-cidr", "1.0.0.0/22",
@@ -45,7 +42,12 @@ var _ = Describe("NFS Partition", func() {
 				"--etcd-machine-ip", "1.0.0.7",
 				"--etcd-machine-ip", "1.0.0.8",
 			})
-			nfsPartition = NewNFSPartition(c)
+			config := &Config{
+				StemcellName: "cool-ubuntu-animal",
+				AZs:          []string{"eastprod-1"},
+				NetworkName:  "foundry-net",
+			}
+			nfsPartition = NewNFSPartition(c, config)
 		})
 		It("HasValidValues should return true", func() {
 			Ω(nfsPartition.HasValidValues()).Should(Equal(true))

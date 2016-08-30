@@ -69,19 +69,6 @@ type NatsPartition struct {
 	StatsdInjector *StatsdInjector
 }
 
-//NFS -
-type NFS struct {
-	AZs                  []string
-	StemcellName         string
-	VMTypeName           string
-	NetworkName          string
-	NetworkIPs           []string
-	PersistentDiskType   string
-	AllowFromNetworkCIDR []string
-	Metron               *Metron
-	StatsdInjector       *StatsdInjector
-}
-
 //UAAClient - Structure to represent map of client priviledges
 type UAAClient struct {
 	ID                   string      `yaml:"id,omitempty"`
