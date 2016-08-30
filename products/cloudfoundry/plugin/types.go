@@ -3,7 +3,6 @@ package cloudfoundry
 import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	mysqlproxylib "github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/proxy"
 	etcdmetricslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd_metrics_server"
 	grtrlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/gorouter"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
@@ -101,21 +100,6 @@ type NFS struct {
 	AllowFromNetworkCIDR []string
 	Metron               *Metron
 	StatsdInjector       *StatsdInjector
-}
-
-//MySQLProxy -
-type MySQLProxy struct {
-	AZs              []string
-	StemcellName     string
-	VMTypeName       string
-	NetworkName      string
-	NetworkIPs       []string
-	ExternalHost     string
-	APIUsername      string
-	APIPassword      string
-	ClusterIPs       []string
-	Nats             *mysqlproxylib.Nats
-	SyslogAggregator *mysqlproxylib.SyslogAggregator
 }
 
 //UAAClient - Structure to represent map of client priviledges

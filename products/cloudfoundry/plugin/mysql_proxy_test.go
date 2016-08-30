@@ -14,7 +14,7 @@ var _ = Describe("MySQL Proxy Partition", func() {
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
 			})
-			mySQLProxy := NewMySQLProxyPartition(c)
+			mySQLProxy := NewMySQLProxyPartition(c, &Config{})
 			Ω(mySQLProxy).ShouldNot(BeNil())
 			Ω(mySQLProxy.HasValidValues()).Should(BeFalse())
 		})
@@ -25,13 +25,10 @@ var _ = Describe("MySQL Proxy Partition", func() {
 			plugin := new(Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--az", "eastprod-1",
 				"--mysql-ip", "1.0.10.1",
 				"--mysql-ip", "1.0.10.2",
 				"--mysql-proxy-ip", "1.0.10.3",
 				"--mysql-proxy-ip", "1.0.10.4",
-				"--network", "foundry-net",
 				"--mysql-proxy-vm-type", "blah",
 				"--mysql-proxy-external-host", "mysqlhostname",
 				"--mysql-proxy-api-username", "apiuser",
@@ -39,12 +36,17 @@ var _ = Describe("MySQL Proxy Partition", func() {
 				"--syslog-address", "syslog-server",
 				"--syslog-port", "10601",
 				"--syslog-transport", "tcp",
-				"--nats-user", "nats",
-				"--nats-pass", "pass",
-				"--nats-machine-ip", "1.0.0.5",
-				"--nats-machine-ip", "1.0.0.6",
 			})
-			mysqlProxyPartition = NewMySQLProxyPartition(c)
+			config := &Config{
+				StemcellName: "cool-ubuntu-animal",
+				AZs:          []string{"eastprod-1"},
+				NetworkName:  "foundry-net",
+				NATSUser:     "nats",
+				NATSPassword: "pass",
+				NATSMachines: []string{"1.0.0.5", "1.0.0.6"},
+				NATSPort:     4222,
+			}
+			mysqlProxyPartition = NewMySQLProxyPartition(c, config)
 		})
 		It("then it should have all valid values", func() {
 			Ω(mysqlProxyPartition.HasValidValues()).Should(BeTrue())
