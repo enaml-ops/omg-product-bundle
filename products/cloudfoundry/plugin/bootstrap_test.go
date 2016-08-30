@@ -14,7 +14,7 @@ var _ = Describe("given a bootstrap partition", func() {
 		BeforeEach(func() {
 			p := new(Plugin)
 			c := p.GetContext([]string{"cloudfoundry"})
-			ig = NewBootstrapPartition(c)
+			ig = NewBootstrapPartition(c, &Config{})
 		})
 
 		It("should not be nil", func() {
@@ -38,17 +38,16 @@ var _ = Describe("given a bootstrap partition", func() {
 			p := new(Plugin)
 			c := p.GetContext([]string{
 				"cloudfoundry",
-				"--az", "z1",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--network", "foundry-net",
-				"--mysql-ip", "10.0.0.26",
-				"--mysql-ip", "10.0.0.27",
-				"--mysql-ip", "10.0.0.28",
-				"--mysql-bootstrap-username", "user",
-				"--mysql-bootstrap-password", "pass",
 				"--bootstrap-vm-type", "foo",
 			})
-			ig = NewBootstrapPartition(c)
+			ig = NewBootstrapPartition(c, &Config{
+				AZs:                    []string{"z1"},
+				StemcellName:           "cool-ubuntu-animal",
+				NetworkName:            "foundry-net",
+				MySQLIPs:               []string{"10.0.0.26", "10.0.0.27", "10.0.0.28"},
+				MySQLBootstrapUser:     "user",
+				MySQLBootstrapPassword: "pass",
+			})
 
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())

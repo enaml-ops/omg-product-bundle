@@ -17,7 +17,7 @@ var _ = Describe("given a clock_global partition", func() {
 			c := cf.GetContext([]string{
 				"cloudfoundry",
 			})
-			ig = NewClockGlobalPartition(c)
+			ig = NewClockGlobalPartition(c, &Config{})
 		})
 
 		It("should contain the appropriate jobs", func() {
@@ -41,14 +41,7 @@ var _ = Describe("given a clock_global partition", func() {
 			cf := new(Plugin)
 			c := cf.GetContext([]string{
 				"cloudfoundry",
-				"--skip-cert-verify=false",
-				"--az", "eastprod-1",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--network", "foundry-net",
 				"--clock-global-vm-type", "vmtype",
-				"--allow-app-ssh-access",
-				"--system-domain", "sys.test.com",
-				"--app-domain", "apps.test.com",
 				"--cc-vm-type", "ccvmtype",
 				"--cc-staging-upload-user", "staginguser",
 				"--cc-staging-upload-password", "stagingpassword",
@@ -80,8 +73,27 @@ var _ = Describe("given a clock_global partition", func() {
 				"--nats-machine-ip", "1.0.0.5",
 				"--nats-machine-ip", "1.0.0.6",
 				"--nats-port", "4333",
+				"--allow-app-ssh-access",
+				"--system-domain", "sys.test.com",
+				"--app-domain", "apps.test.com",
+				"--skip-cert-verify=false",
+				"--az", "eastprod-1",
+				"--stemcell-name", "cool-ubuntu-animal",
+				"--network", "foundry-net",
 			})
-			ig = NewClockGlobalPartition(c)
+			ig = NewClockGlobalPartition(c, &Config{
+				AZs:               []string{"eastprod-1"},
+				StemcellName:      "cool-ubuntu-animal",
+				NetworkName:       "foundry-net",
+				SkipSSLCertVerify: false,
+				AllowSSHAccess:    true,
+				SystemDomain:      "sys.test.com",
+				AppDomains:        []string{"apps.test.com"},
+				NATSUser:          "nats",
+				NATSPassword:      "pass",
+				NATSMachines:      []string{"1.0.0.5", "1.0.0.6"},
+				NATSPort:          4333,
+			})
 			deploymentManifest = new(enaml.DeploymentManifest)
 			deploymentManifest.AddInstanceGroup(ig.ToInstanceGroup())
 		})

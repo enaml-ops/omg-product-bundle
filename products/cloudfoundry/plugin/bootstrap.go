@@ -7,15 +7,10 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
-func NewBootstrapPartition(c *cli.Context) InstanceGrouper {
+func NewBootstrapPartition(c *cli.Context, config *Config) InstanceGrouper {
 	return &bootstrap{
-		AZs:           c.StringSlice("az"),
-		StemcellName:  c.String("stemcell-name"),
-		NetworkName:   c.String("network"),
-		MySQLIPs:      c.StringSlice("mysql-ip"),
-		MySQLUser:     c.String("mysql-bootstrap-username"),
-		MySQLPassword: c.String("mysql-bootstrap-password"),
-		VMType:        c.String("bootstrap-vm-type"),
+		Config: config,
+		VMType: c.String("bootstrap-vm-type"),
 	}
 }
 
@@ -25,10 +20,10 @@ func (b *bootstrap) ToInstanceGroup() *enaml.InstanceGroup {
 		Instances: 1,
 		VMType:    b.VMType,
 		Lifecycle: "errand",
-		AZs:       b.AZs,
-		Stemcell:  b.StemcellName,
+		AZs:       b.Config.AZs,
+		Stemcell:  b.Config.StemcellName,
 		Networks: []enaml.Network{
-			{Name: b.NetworkName},
+			{Name: b.Config.NetworkName},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -38,11 +33,11 @@ func (b *bootstrap) ToInstanceGroup() *enaml.InstanceGroup {
 				Name:    "bootstrap",
 				Release: CFMysqlReleaseName,
 				Properties: &bstraplib.BootstrapJob{
-					ClusterIps:             b.MySQLIPs,
+					ClusterIps:             b.Config.MySQLIPs,
 					DatabaseStartupTimeout: 1200,
 					BootstrapEndpoint: &bstraplib.BootstrapEndpoint{
-						Username: b.MySQLUser,
-						Password: b.MySQLPassword,
+						Username: b.Config.MySQLBootstrapUser,
+						Password: b.Config.MySQLBootstrapPassword,
 					},
 				},
 			},
@@ -54,34 +49,5 @@ func (b *bootstrap) HasValidValues() bool {
 
 	lo.G.Debugf("checking '%s' for valid flags", "bootstrap")
 
-	if len(b.AZs) <= 0 {
-		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(b.AZs), b.AZs)
-	}
-
-	if b.StemcellName == "" {
-		lo.G.Debugf("could not find a valid stemcellname '%v'", b.StemcellName)
-	}
-
-	if b.NetworkName == "" {
-		lo.G.Debugf("could not find a valid networkname '%v'", b.NetworkName)
-	}
-
-	if len(b.MySQLIPs) <= 0 {
-		lo.G.Debugf("could not find the correct number of mysql ips '%v' : '%v'", len(b.MySQLIPs), b.MySQLIPs)
-	}
-
-	if b.MySQLUser == "" {
-		lo.G.Debugf("could not find a valid mysql user '%v'", b.MySQLUser)
-	}
-
-	if b.MySQLPassword == "" {
-		lo.G.Debugf("could not find a valid admin password '%v'", b.MySQLPassword)
-	}
-
-	return len(b.AZs) > 0 &&
-		b.StemcellName != "" &&
-		b.NetworkName != "" &&
-		len(b.MySQLIPs) > 0 &&
-		b.MySQLUser != "" &&
-		b.MySQLPassword != ""
+	return b.VMType != ""
 }

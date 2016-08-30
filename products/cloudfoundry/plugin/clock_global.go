@@ -10,30 +10,19 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
-func NewClockGlobalPartition(c *cli.Context) InstanceGrouper {
+func NewClockGlobalPartition(c *cli.Context, config *Config) InstanceGrouper {
 	var db string
 	mysqlProxies := c.StringSlice("mysql-proxy-ip")
 	if len(mysqlProxies) > 0 {
 		db = mysqlProxies[0]
 	}
-
 	cg := &clockGlobal{
-		Instances:                1,
-		AZs:                      c.StringSlice("az"),
-		StemcellName:             c.String("stemcell-name"),
-		VMTypeName:               c.String("clock-global-vm-type"),
-		NetworkName:              c.String("network"),
-		SystemDomain:             c.String("system-domain"),
-		AppDomains:               c.StringSlice("app-domain"),
-		Metron:                   NewMetron(c),
-		Statsd:                   NewStatsdInjector(c),
-		NFS:                      NewNFSMounter(c),
-		AllowSSHAccess:           c.Bool("allow-app-ssh-access"),
-		SkipSSLCertVerify:        c.BoolT("skip-cert-verify"),
-		NATSUser:                 c.String("nats-user"),
-		NATSPassword:             c.String("nats-pass"),
-		NATSPort:                 c.Int("nats-port"),
-		NATSMachines:             c.StringSlice("nats-machine-ip"),
+		Config:     config,
+		VMTypeName: c.String("clock-global-vm-type"),
+		Metron:     NewMetron(c),
+		Statsd:     NewStatsdInjector(c),
+		NFS:        NewNFSMounter(c),
+
 		CloudController:          NewCloudControllerPartition(c).(*CloudControllerPartition),
 		CCDBAddress:              db,
 		JWTVerificationKey:       c.String("uaa-jwt-verification-key"),
@@ -55,10 +44,10 @@ func (c *clockGlobal) ToInstanceGroup() *enaml.InstanceGroup {
 		Name:      "clock_global-partition",
 		Instances: 1,
 		VMType:    c.VMTypeName,
-		AZs:       c.AZs,
-		Stemcell:  c.StemcellName,
+		AZs:       c.Config.AZs,
+		Stemcell:  c.Config.StemcellName,
 		Networks: []enaml.Network{
-			{Name: c.NetworkName},
+			{Name: c.Config.NetworkName},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -81,10 +70,10 @@ func (c *clockGlobal) ToInstanceGroup() *enaml.InstanceGroup {
 
 func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.CloudControllerNgJob) *enaml.InstanceJob {
 	props := &cloud_controller_clock.CloudControllerClockJob{
-		Domain:                   c.SystemDomain,
-		SystemDomain:             c.SystemDomain,
+		Domain:                   c.Config.SystemDomain,
+		SystemDomain:             c.Config.SystemDomain,
 		SystemDomainOrganization: "system",
-		AppDomains:               c.AppDomains,
+		AppDomains:               c.Config.AppDomains,
 		Cc:                       &cloud_controller_clock.Cc{},
 		Ccdb: &cloud_controller_clock.Ccdb{
 			Address:  c.CCDBAddress,
@@ -106,7 +95,7 @@ func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.Cloud
 			},
 		},
 		Uaa: &cloud_controller_clock.Uaa{
-			Url: prefixSystemDomain(c.SystemDomain, "uaa"),
+			Url: prefixSystemDomain(c.Config.SystemDomain, "uaa"),
 			Jwt: &cloud_controller_clock.Jwt{
 				VerificationKey: c.JWTVerificationKey,
 			},
@@ -120,13 +109,13 @@ func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.Cloud
 			Port: 443,
 		},
 		Ssl: &cloud_controller_clock.Ssl{
-			SkipCertVerify: c.SkipSSLCertVerify,
+			SkipCertVerify: c.Config.SkipSSLCertVerify,
 		},
 		Nats: &cloud_controller_clock.Nats{
-			User:     c.NATSUser,
-			Password: c.NATSPassword,
-			Port:     c.NATSPort,
-			Machines: c.NATSMachines,
+			User:     c.Config.NATSUser,
+			Password: c.Config.NATSPassword,
+			Port:     c.Config.NATSPort,
+			Machines: c.Config.NATSMachines,
 		},
 	}
 
@@ -171,21 +160,7 @@ func (c *clockGlobal) HasValidValues() bool {
 
 	lo.G.Debugf("checking '%s' for valid flags", "clock global")
 
-	if len(c.AZs) <= 0 {
-		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(c.AZs), c.AZs)
-	}
-
-	if c.StemcellName == "" {
-		lo.G.Debugf("could not find a valid stemcellname '%v'", c.StemcellName)
-	}
-
-	if c.NetworkName == "" {
-		lo.G.Debugf("could not find a valid networkname '%v'", c.NetworkName)
-	}
-	return len(c.AZs) > 0 &&
-		c.StemcellName != "" &&
-		c.VMTypeName != "" &&
-		c.NetworkName != "" &&
+	return c.VMTypeName != "" &&
 		c.Metron.HasValidValues() &&
 		c.Statsd.HasValidValues() &&
 		c.NFS.hasValidValues() &&

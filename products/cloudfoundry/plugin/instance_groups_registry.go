@@ -6,3 +6,7 @@ package cloudfoundry
 func RegisterInstanceGrouperFactory(igf InstanceGrouperFactory) {
 	factories = append(factories, igf)
 }
+
+func RegisterInstanceGrouperConfigFactory(igf InstanceGrouperConfigFactory) {
+	configFactories = append(configFactories, igf)
+}

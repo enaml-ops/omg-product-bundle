@@ -43,11 +43,14 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 
 	Context("when using groupers that generate nil instance groups", func() {
 		var oldFactories []InstanceGrouperFactory
+		var oldConfigFactories []InstanceGrouperConfigFactory
 		var dm *enaml.DeploymentManifest
 
 		BeforeEach(func() {
 			oldFactories = factories
+			oldConfigFactories = configFactories
 			factories = factories[:0]
+			configFactories = configFactories[:0]
 
 			// register two simple instance group factories that don't depend on CLI flags:
 			// one that always returns a nil instance group, and one that returns non-nil
@@ -62,6 +65,7 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 		AfterEach(func() {
 			// restore original set of registered instance groups
 			factories = oldFactories
+			configFactories = oldConfigFactories
 		})
 
 		It("should not include the nil instance groups in the manifest", func() {

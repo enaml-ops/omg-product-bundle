@@ -24,7 +24,7 @@ func init() {
 	RegisterInstanceGrouperFactory(NewMySQLPartition)
 	RegisterInstanceGrouperFactory(NewCloudControllerPartition)
 	RegisterInstanceGrouperFactory(NewHaProxyPartition)
-	RegisterInstanceGrouperFactory(NewClockGlobalPartition)
+	RegisterInstanceGrouperConfigFactory(NewClockGlobalPartition)
 	RegisterInstanceGrouperFactory(NewCloudControllerWorkerPartition)
 	RegisterInstanceGrouperFactory(NewUAAPartition)
 	RegisterInstanceGrouperFactory(NewDiegoBrainPartition)
@@ -34,7 +34,7 @@ func init() {
 
 	//errands
 	RegisterInstanceGrouperFactory(NewSmokeErrand)
-	RegisterInstanceGrouperFactory(NewBootstrapPartition)
+	RegisterInstanceGrouperConfigFactory(NewBootstrapPartition)
 	acceptanceTests := func(c *cli.Context) InstanceGrouper {
 		return NewAcceptanceTestsPartition(c, true)
 	}
@@ -371,6 +371,35 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 			lo.G.Fatal("incomplete flag set. please check --help and documentation or use debug output for more details")
 		}
 	}
+	if len(configFactories) > 0 {
+		if config, err := NewConfig(c); err == nil {
+			for _, factory := range configFactories {
+				grouper := factory(c, config)
+
+				if grouper.HasValidValues() {
+					if ig := grouper.ToInstanceGroup(); ig != nil {
+						lo.G.Debug("instance-group: ", ig)
+						dm.AddInstanceGroup(ig)
+					}
+				} else {
+					b, _ := yaml.Marshal(grouper)
+					lo.G.Info("invalid values in instance group: ", string(b))
+					lo.G.Info("here is a list of flags not currently set by default or vault for you: ")
+
+					for _, fl := range flgs {
+
+						if fl.Value == "" && os.Getenv(fl.EnvVar) == "" {
+							lo.G.Info(fl.Name)
+						}
+					}
+					lo.G.Fatal("incomplete flag set. please check --help and documentation or use debug output for more details")
+				}
+			}
+		} else {
+			lo.G.Fatal("incomplete flag set. please check --help and documentation or use debug output for more details", err)
+		}
+	}
+
 	return dm.Bytes()
 }
 
