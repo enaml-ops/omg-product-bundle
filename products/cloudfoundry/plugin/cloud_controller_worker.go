@@ -42,7 +42,7 @@ func NewCloudControllerWorkerPartition(c *cli.Context, config *Config) InstanceG
 		Instances:             c.Int("cc-worker-instances"),
 		VMTypeName:            c.String("cc-worker-vm-type"),
 		Metron:                NewMetron(config),
-		ConsulAgent:           NewConsulAgent(c, []string{}, config),
+		ConsulAgent:           NewConsulAgent([]string{}, config),
 		NFSMounter:            NewNFSMounter(c),
 		StatsdInjector:        NewStatsdInjector(c),
 		StagingUploadUser:     c.String("cc-staging-upload-user"),
@@ -199,6 +199,5 @@ func (s *CloudControllerWorkerPartition) HasValidValues() bool {
 	}
 
 	return (s.VMTypeName != "" &&
-		s.NFSMounter.hasValidValues() &&
-		s.ConsulAgent.HasValidValues())
+		s.NFSMounter.hasValidValues())
 }

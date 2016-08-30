@@ -28,7 +28,7 @@ func init() {
 	RegisterInstanceGrouperConfigFactory(NewCloudControllerWorkerPartition)
 	RegisterInstanceGrouperConfigFactory(NewUAAPartition)
 	RegisterInstanceGrouperConfigFactory(NewDiegoBrainPartition)
-	RegisterInstanceGrouperConfigFactory(NewDiegoCellPartition)
+	RegisterInstanceGrouperFactory(NewDiegoCellPartition)
 	RegisterInstanceGrouperFactory(NewDopplerPartition)
 	RegisterInstanceGrouperFactory(NewLoggregatorTrafficController)
 

@@ -71,7 +71,7 @@ func NewUAAPartition(c *cli.Context, config *Config) InstanceGrouper {
 		VMTypeName:     c.String("uaa-vm-type"),
 		Instances:      c.Int("uaa-instances"),
 		Metron:         NewMetron(config),
-		ConsulAgent:    NewConsulAgent(c, []string{"uaa"}, config),
+		ConsulAgent:    NewConsulAgent([]string{"uaa"}, config),
 		StatsdInjector: NewStatsdInjector(c),
 		Nats: &route_registrar.Nats{
 			User:     config.NATSUser,
@@ -571,7 +571,6 @@ func (s *UAA) HasValidValues() bool {
 		s.Instances > 0 &&
 		s.Config.SystemDomain != "" &&
 		s.StatsdInjector.HasValidValues() &&
-		s.ConsulAgent.HasValidValues() &&
 		s.SAMLServiceProviderKey != "" &&
 		s.JWTSigningKey != "" &&
 		s.JWTVerificationKey != "" &&

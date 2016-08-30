@@ -84,7 +84,7 @@ func NewDiegoBrainPartition(c *cli.Context, config *Config) InstanceGrouper {
 		SSHProxyClientSecret:      c.String("ssh-proxy-uaa-secret"),
 		CCExternalPort:            c.Int("cc-external-port"),
 		TrafficControllerURL:      c.String("traffic-controller-url"),
-		ConsulAgent:               NewConsulAgent(c, []string{}, config),
+		ConsulAgent:               NewConsulAgent([]string{}, config),
 		Metron:                    NewMetron(config),
 		Statsd:                    NewStatsdInjector(c),
 	}
@@ -158,8 +158,7 @@ func (d *diegoBrain) HasValidValues() bool {
 		d.BBSClientCert != "" &&
 		d.BBSClientKey != "" &&
 		d.CCInternalAPIUser != "" &&
-		d.CCInternalAPIPassword != "" &&
-		d.ConsulAgent.HasValidValues()
+		d.CCInternalAPIPassword != ""
 }
 
 func (d *diegoBrain) newAuctioneer() *enaml.InstanceJob {

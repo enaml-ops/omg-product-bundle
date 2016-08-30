@@ -8,27 +8,6 @@ import (
 )
 
 var _ = Describe("Consul Partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("then it should return the error and exit", func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--consul-ip", "1.0.0.1",
-				"--consul-ip", "1.0.0.2",
-				"--network", "foundry-net",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-				"--etcd-machine-ip", "1.0.0.7",
-				"--etcd-machine-ip", "1.0.0.8",
-			})
-			config := &Config{}
-			consul := NewConsulPartition(c, config)
-			Ω(consul.HasValidValues()).Should(BeFalse())
-		})
-	})
 	Context("when initialized WITH a complete set of arguments", func() {
 		var err error
 		var consul InstanceGrouper
@@ -66,6 +45,7 @@ var _ = Describe("Consul Partition", func() {
 				ConsulAgentKey:    "agent-key",
 				ConsulServerCert:  "server-cert",
 				ConsulServerKey:   "server-key",
+				ConsulIPs:         []string{"1.0.0.1", "1.0.0.2"},
 			}
 			consul = NewConsulPartition(c, config)
 		})

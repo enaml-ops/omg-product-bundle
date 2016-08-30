@@ -18,12 +18,12 @@ var _ = Describe("given a Diego Cell Partition", func() {
 	Describe("given valid flags", func() {
 
 		var instanceGroup *enaml.InstanceGroup
-		var grouper InstanceGrouper
+		var grouper InstanceGroupCreator
 
 		Context("when ToInstanceGroup is called", func() {
 
 			BeforeEach(func() {
-				cf := new(Plugin)
+				/*cf := new(Plugin)
 				c := cf.GetContext([]string{
 					"cloudfoundry",
 					"--diego-cell-ip", "10.0.0.39",
@@ -43,20 +43,36 @@ var _ = Describe("given a Diego Cell Partition", func() {
 					"--syslog-transport", "tcp",
 					"--etcd-machine-ip", "1.0.0.7",
 					"--etcd-machine-ip", "1.0.0.8",
-				})
+				})*/
 				config := &Config{
-					AZs:               []string{"eastprod-1"},
-					StemcellName:      "cool-ubuntu-animal",
-					NetworkName:       "foundry-net",
-					AllowSSHAccess:    true,
-					ConsulEncryptKeys: []string{"encyption-key"},
-					ConsulCaCert:      "ca-cert",
-					ConsulAgentCert:   "agent-cert",
-					ConsulAgentKey:    "agent-key",
-					ConsulServerCert:  "server-cert",
-					ConsulServerKey:   "server-key",
+					AZs:                         []string{"eastprod-1"},
+					StemcellName:                "cool-ubuntu-animal",
+					NetworkName:                 "foundry-net",
+					AllowSSHAccess:              true,
+					ConsulEncryptKeys:           []string{"encyption-key"},
+					ConsulCaCert:                "ca-cert",
+					ConsulAgentCert:             "agent-cert",
+					ConsulAgentKey:              "agent-key",
+					ConsulServerCert:            "server-cert",
+					ConsulServerKey:             "server-key",
+					DiegoCellIPs:                []string{"10.0.0.39", "10.0.0.40"},
+					DiegoCellVMType:             "cellvmtype",
+					DiegoCellPersistentDiskType: "celldisktype",
+					BBSCACert:                   "cacert",
+					BBSClientCert:               "clientcert",
+					BBSClientKey:                "clientkey",
+					MetronSecret:                "metronsecret",
+					MetronZone:                  "metronzoneguid",
+					SyslogAddress:               "syslog-server",
+					SyslogPort:                  10601,
+					SyslogTransport:             "tcp",
+					EtcdMachines:                []string{"1.0.0.7", "1.0.0.8"},
+					/*"--consul-ip", "1.0.0.1",
+					"--consul-ip", "1.0.0.2",
+					"--consul-vm-type", "blah",
+					*/
 				}
-				grouper = NewDiegoCellPartition(c, config)
+				grouper = NewDiegoCellPartition(config)
 				instanceGroup = grouper.ToInstanceGroup()
 			})
 

@@ -78,6 +78,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				MetronZone:        "metronzoneguid",
 				MetronSecret:      "metronsecret",
 				EtcdMachines:      []string{"1.0.0.7", "1.0.0.8"},
+				ConsulIPs:         []string{"1.0.0.1", "1.0.0.2"},
 			}
 			grouper = NewDiegoBrainPartition(c, config)
 			deploymentManifest = new(enaml.DeploymentManifest)

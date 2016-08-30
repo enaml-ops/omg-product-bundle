@@ -34,7 +34,7 @@ func NewHaProxyPartition(c *cli.Context, config *Config) InstanceGrouper {
 		Skip:           c.BoolT("skip-haproxy"),
 		NetworkIPs:     c.StringSlice("haproxy-ip"),
 		VMTypeName:     c.String("haproxy-vm-type"),
-		ConsulAgent:    NewConsulAgent(c, []string{}, config),
+		ConsulAgent:    NewConsulAgent([]string{}, config),
 		Metron:         NewMetron(config),
 		StatsdInjector: NewStatsdInjector(c),
 		RouterMachines: c.StringSlice("router-ip"),

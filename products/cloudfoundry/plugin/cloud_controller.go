@@ -50,7 +50,7 @@ func NewCloudControllerPartition(c *cli.Context, config *Config) InstanceGrouper
 		Instances:                c.Int("cc-instances"),
 		VMTypeName:               c.String("cc-vm-type"),
 		Metron:                   NewMetron(config),
-		ConsulAgent:              NewConsulAgent(c, []string{}, config),
+		ConsulAgent:              NewConsulAgent([]string{}, config),
 		NFSMounter:               NewNFSMounter(c),
 		StatsdInjector:           NewStatsdInjector(c),
 		StagingUploadUser:        c.String("cc-staging-upload-user"),
@@ -353,6 +353,5 @@ func (s *CloudControllerPartition) HasValidValues() bool {
 
 	return (s.VMTypeName != "" &&
 		s.NFSMounter.hasValidValues() &&
-		s.ConsulAgent.HasValidValues()) &&
-		s.MySQLProxyIP != ""
+		s.MySQLProxyIP != "")
 }

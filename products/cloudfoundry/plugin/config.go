@@ -55,6 +55,13 @@ type Config struct {
 	DopplerMessageDrainBufferSize int
 	DopplerSharedSecret           string
 	CCBuilkAPIPassword            string
+	DiegoCellVMType               string
+	DiegoCellPersistentDiskType   string
+	DiegoCellIPs                  []string
+	ConsulIPs                     []string
+	BBSCACert                     string
+	BBSClientCert                 string
+	BBSClientKey                  string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -105,6 +112,11 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		DopplerMessageDrainBufferSize: c.Int("doppler-drain-buffer-size"),
 		DopplerSharedSecret:           c.String("doppler-shared-secret"),
 		CCBuilkAPIPassword:            c.String("cc-bulk-api-password"),
+		DiegoCellVMType:               c.String("diego-cell-vm-type"),
+		DiegoCellPersistentDiskType:   c.String("diego-cell-disk-type"),
+		DiegoCellIPs:                  c.StringSlice("diego-cell-ip"),
+
+		ConsulIPs: c.StringSlice("consul-ip"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err
@@ -133,12 +145,29 @@ func (ca *Config) loadSSL(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
+	bbsCaCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-ca-cert")
+	if err != nil {
+		return err
+	}
+
+	bbsClientCert, err := pluginutil.LoadResourceFromContext(c, "bbs-client-cert")
+	if err != nil {
+		return err
+	}
+
+	bbsClientKey, err := pluginutil.LoadResourceFromContext(c, "bbs-client-key")
+	if err != nil {
+		return err
+	}
 
 	ca.ConsulCaCert = caCert
 	ca.ConsulAgentCert = agentCert
 	ca.ConsulServerCert = serverCert
 	ca.ConsulAgentKey = agentKey
 	ca.ConsulServerKey = serverKey
+	ca.BBSCACert = bbsCaCert
+	ca.BBSClientCert = bbsClientCert
+	ca.BBSClientKey = bbsClientKey
 	return nil
 }
 
