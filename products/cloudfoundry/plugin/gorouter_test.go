@@ -22,7 +22,7 @@ var _ = Describe("Go-Router Partition", func() {
 				"--router-ip", "1.0.0.2",
 				"--network", "foundry-net",
 			})
-			gr := NewGoRouterPartition(c)
+			gr := NewGoRouterPartition(c, &Config{})
 			Ω(gr.HasValidValues()).Should(BeFalse())
 		})
 	})
@@ -33,11 +33,8 @@ var _ = Describe("Go-Router Partition", func() {
 			cf := new(Plugin)
 			c := cf.GetContext([]string{
 				"cloudfoundry",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--az", "eastprod-1",
 				"--router-ip", "1.0.0.1",
 				"--router-ip", "1.0.0.2",
-				"--network", "foundry-net",
 				"--gorouter-client-secret", controlSecret,
 				"--router-vm-type", "blah",
 				"--router-ssl-cert", "@fixtures/sample.cert",
@@ -45,15 +42,20 @@ var _ = Describe("Go-Router Partition", func() {
 				"--router-pass", "blabadebleblahblah",
 				"--metron-secret", "metronsecret",
 				"--metron-zone", "metronzoneguid",
-				"--nats-user", "nats",
-				"--nats-pass", "pass",
-				"--nats-machine-ip", "1.0.0.5",
-				"--nats-machine-ip", "1.0.0.6",
 				"--etcd-machine-ip", "1.0.0.7",
 				"--etcd-machine-ip", "1.0.0.8",
 				"--router-enable-ssl",
 			})
-			gr := NewGoRouterPartition(c)
+			config := &Config{
+				StemcellName: "cool-ubuntu-animal",
+				AZs:          []string{"eastprod-1"},
+				NetworkName:  "foundry-net",
+				NATSUser:     "nats",
+				NATSPassword: "pass",
+				NATSMachines: []string{"1.0.0.5", "1.0.0.6"},
+				NATSPort:     4222,
+			}
+			gr := NewGoRouterPartition(c, config)
 			deploymentManifest = new(enaml.DeploymentManifest)
 			deploymentManifest.AddInstanceGroup(gr.ToInstanceGroup())
 		})
@@ -164,7 +166,7 @@ var _ = Describe("Go-Router Partition", func() {
 					"--router-ssl-cert", "blah",
 					"--router-ssl-key", "blahblah",
 				})
-				gr := NewGoRouterPartition(c)
+				gr := NewGoRouterPartition(c, &Config{})
 				deploymentManifest = new(enaml.DeploymentManifest)
 				deploymentManifest.AddInstanceGroup(gr.ToInstanceGroup())
 			})
@@ -187,7 +189,7 @@ var _ = Describe("Go-Router Partition", func() {
 					"--router-ssl-cert", "blah",
 					"--router-ssl-key", "blahblah",
 				})
-				gr := NewGoRouterPartition(c)
+				gr := NewGoRouterPartition(c, &Config{})
 				deploymentManifest = new(enaml.DeploymentManifest)
 				deploymentManifest.AddInstanceGroup(gr.ToInstanceGroup())
 			})

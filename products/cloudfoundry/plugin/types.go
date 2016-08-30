@@ -4,7 +4,6 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	etcdmetricslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd_metrics_server"
-	grtrlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/gorouter"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
 	natslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/nats"
 )
@@ -24,25 +23,6 @@ type InstanceGrouper interface {
 type InstanceGrouperFactory func(*cli.Context) InstanceGrouper
 
 type InstanceGrouperConfigFactory func(*cli.Context, *Config) InstanceGrouper
-
-type gorouter struct {
-	Instances    int
-	AZs          []string
-	StemcellName string
-	VMTypeName   string
-	NetworkName  string
-	NetworkIPs   []string
-	SSLCert      string
-	SSLKey       string
-	EnableSSL    bool
-	ClientSecret string
-	Nats         grtrlib.Nats
-	Loggregator  metron_agent.Loggregator
-	RouterUser   string
-	RouterPass   string
-	MetronZone   string
-	MetronSecret string
-}
 
 //Etcd -
 type Etcd struct {

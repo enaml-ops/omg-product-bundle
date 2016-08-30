@@ -21,7 +21,7 @@ func NewNatsPartition(c *cli.Context) (igf InstanceGrouper) {
 				User:     c.String("nats-user"),
 				Password: c.String("nats-pass"),
 				Machines: c.StringSlice("nats-machine-ip"),
-				Port:     natsPort,
+				Port:     4222,
 			},
 		},
 		StatsdInjector: NewStatsdInjector(c),
