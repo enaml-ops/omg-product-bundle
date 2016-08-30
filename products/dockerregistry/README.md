@@ -1,4 +1,4 @@
-# Docker Registry `omg` plugin
+to# Docker Registry `omg` plugin
 
 This plugin extends `omg` to be able to deploy the a HA docker-registry with NFS server shared by 1-N registry nodes and a Proxy to route https traffic to registry nodes running on port 5000.
 
@@ -29,20 +29,23 @@ Verify installation with:
 --bosh-user <bosh-user> \
 --bosh-pass <bosh-pwd> \
 --ssl-ignore \
-docker-registry-plugin-osx \
---proxy-ip 192.168.0.10 \
---registry-ip 192.168.0.11 \
---registry-ip 192.168.0.12 \
---nfs-server-ip 192.168.0.13 \
---registry-vm-type medium \
---proxy-vm-type medium \
---nfs-server-vm-type medium \
---nfs-server-disk-type large \
---network-name private \
+--print-manifest \
+concourse-plugin-osx \
+--web-ip 192.168.10.31 \
+--web-ip 192.168.10.32 \
+--web-vm-type medium \
+--worker-vm-type large.cpu \
+--database-vm-type large.cpu \
+--network-name concourse \
+--concourse-ip 10.0.100.1 \
+--concourse-username concourse \
 --az z1 \
---public-host-name <optional public host/ip if nat'ed>
+--database-storage-type medium \
+--worker-instance-count 2
 ```
 ## Tips and tricks
 
 - Set `LOG_LEVEL=debug` for verbose output
 - Add the `--print-manifest` flag to see the manifest you are about to deploy:
+
+    `omg deploy-product --print-manifest ...`
