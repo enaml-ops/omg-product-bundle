@@ -82,6 +82,18 @@ type Config struct {
 	SSHProxyClientSecret         string
 	CCExternalPort               int
 	TrafficControllerURL         string
+
+	EtcdServerCert string
+	EtcdServerKey  string
+	EtcdClientCert string
+	EtcdClientKey  string
+	EtcdPeerCert   string
+	EtcdPeerKey    string
+
+	DiegoDBPassphrase         string
+	DiegoDBVMType             string
+	DiegoDBPersistentDiskType string
+	DiegoDBIPs                []string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -155,6 +167,11 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		SSHProxyClientSecret:         c.String("ssh-proxy-uaa-secret"),
 		CCExternalPort:               c.Int("cc-external-port"),
 		TrafficControllerURL:         c.String("traffic-controller-url"),
+
+		DiegoDBVMType:             c.String("diego-db-vm-type"),
+		DiegoDBPersistentDiskType: c.String("diego-db-disk-type"),
+		DiegoDBIPs:                c.StringSlice("diego-db-ip"),
+		DiegoDBPassphrase:         c.String("diego-db-passphrase"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err
@@ -207,6 +224,36 @@ func (ca *Config) loadSSL(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
+
+	etcdServerCert, err := pluginutil.LoadResourceFromContext(c, "etcd-server-cert")
+	if err != nil {
+		return err
+	}
+
+	etcdServerKey, err := pluginutil.LoadResourceFromContext(c, "etcd-server-key")
+	if err != nil {
+		return err
+	}
+
+	etcdClientCert, err := pluginutil.LoadResourceFromContext(c, "etcd-client-cert")
+	if err != nil {
+		return err
+	}
+
+	etcdClientKey, err := pluginutil.LoadResourceFromContext(c, "etcd-client-key")
+	if err != nil {
+		return err
+	}
+
+	etcdPeerCert, err := pluginutil.LoadResourceFromContext(c, "etcd-peer-cert")
+	if err != nil {
+		return err
+	}
+
+	etcdPeerKey, err := pluginutil.LoadResourceFromContext(c, "etcd-peer-key")
+	if err != nil {
+		return err
+	}
 	ca.ConsulCaCert = caCert
 	ca.ConsulAgentCert = agentCert
 	ca.ConsulServerCert = serverCert
@@ -217,6 +264,12 @@ func (ca *Config) loadSSL(c *cli.Context) error {
 	ca.BBSClientKey = bbsClientKey
 	ca.BBSServerCert = bbsServerCert
 	ca.BBSServerKey = bbsServerKey
+	ca.EtcdClientCert = etcdClientCert
+	ca.EtcdClientKey = etcdClientKey
+	ca.EtcdPeerCert = etcdPeerCert
+	ca.EtcdPeerKey = etcdPeerKey
+	ca.EtcdServerKey = etcdServerKey
+	ca.EtcdServerCert = etcdServerCert
 	return nil
 }
 

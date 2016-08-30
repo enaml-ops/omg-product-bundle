@@ -14,58 +14,48 @@ var _ = Describe("given a Diego Database Partition", func() {
 	Describe("given valid flags", func() {
 
 		var instanceGroup *enaml.InstanceGroup
-		var grouper InstanceGrouper
+		var grouper InstanceGroupCreator
 
 		Context("when ToInstanceGroup is called", func() {
 
 			BeforeEach(func() {
-				cf := new(Plugin)
-				c := cf.GetContext([]string{
-					"cloudfoundry",
-					"--diego-db-ip", "10.0.0.39",
-					"--diego-db-ip", "10.0.0.40",
-					"--diego-db-vm-type", "dbvmtype",
-					"--diego-db-disk-type", "dbdisktype",
-					"--diego-db-passphrase", "random-db-encrytionkey",
-					"--bbs-server-ca-cert", "cacert",
-					"--etcd-server-cert", "blah-cert",
-					"--etcd-server-key", "blah-key",
-					"--etcd-client-cert", "bleh-cert",
-					"--etcd-client-key", "bleh-key",
-					"--etcd-peer-cert", "blee-cert",
-					"--etcd-peer-key", "blee-key",
-					"--bbs-client-cert", "clientcert",
-					"--bbs-client-key", "clientkey",
-					"--bbs-server-cert", "clientcert",
-					"--bbs-server-key", "clientkey",
-					"--consul-ip", "1.0.0.1",
-					"--consul-ip", "1.0.0.2",
-					"--consul-vm-type", "blah",
-					"--metron-secret", "metronsecret",
-					"--metron-zone", "metronzoneguid",
-					"--syslog-address", "syslog-server",
-					"--syslog-port", "10601",
-					"--syslog-transport", "tcp",
-					"--etcd-machine-ip", "1.0.0.7",
-					"--etcd-machine-ip", "1.0.0.8",
-				})
+
 				config := &Config{
-					SystemDomain:      "service.cf.domain.com",
-					AZs:               []string{"eastprod-1"},
-					StemcellName:      "cool-ubuntu-animal",
-					NetworkName:       "foundry-net",
-					AllowSSHAccess:    true,
-					ConsulEncryptKeys: []string{"encyption-key"},
-					ConsulCaCert:      "ca-cert",
-					ConsulAgentCert:   "agent-cert",
-					ConsulAgentKey:    "agent-key",
-					ConsulServerCert:  "server-cert",
-					ConsulServerKey:   "server-key",
-					BBSCACert:         "cacert",
-					BBSServerCert:     "clientcert",
-					BBSServerKey:      "clientkey",
+					SystemDomain:              "service.cf.domain.com",
+					AZs:                       []string{"eastprod-1"},
+					StemcellName:              "cool-ubuntu-animal",
+					NetworkName:               "foundry-net",
+					AllowSSHAccess:            true,
+					ConsulEncryptKeys:         []string{"encyption-key"},
+					ConsulCaCert:              "ca-cert",
+					ConsulAgentCert:           "agent-cert",
+					ConsulAgentKey:            "agent-key",
+					ConsulServerCert:          "server-cert",
+					ConsulServerKey:           "server-key",
+					BBSCACert:                 "cacert",
+					BBSServerCert:             "clientcert",
+					BBSServerKey:              "clientkey",
+					DiegoDBIPs:                []string{"10.0.0.39", "10.0.0.40"},
+					DiegoDBVMType:             "dbvmtype",
+					DiegoDBPersistentDiskType: "dbdisktype",
+					DiegoDBPassphrase:         "random-db-encrytionkey",
+					EtcdServerCert:            "blah-cert",
+					EtcdServerKey:             "blah-key",
+					EtcdClientCert:            "bleh-cert",
+					EtcdClientKey:             "bleh-key",
+					EtcdPeerCert:              "blee-cert",
+					EtcdPeerKey:               "blee-key",
+					BBSClientCert:             "clientcert",
+					BBSClientKey:              "clientkey",
+					ConsulIPs:                 []string{"1.0.0.1", "1.0.0.2"},
+					MetronSecret:              "metronsecret",
+					MetronZone:                "metronzoneguid",
+					SyslogAddress:             "syslog-server",
+					SyslogPort:                10601,
+					SyslogTransport:           "tcp",
+					EtcdMachines:              []string{"1.0.0.7", "1.0.0.8"},
 				}
-				grouper = NewDiegoDatabasePartition(c, config)
+				grouper = NewDiegoDatabasePartition(config)
 				instanceGroup = grouper.ToInstanceGroup()
 			})
 
