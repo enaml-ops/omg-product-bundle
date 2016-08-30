@@ -25,7 +25,7 @@ func NewEtcdPartition(c *cli.Context, config *Config) (igf InstanceGrouper) {
 		NetworkIPs:         c.StringSlice("etcd-machine-ip"),
 		VMTypeName:         c.String("etcd-vm-type"),
 		PersistentDiskType: c.String("etcd-disk-type"),
-		Metron:             NewMetron(c),
+		Metron:             NewMetron(config),
 		StatsdInjector:     NewStatsdInjector(c),
 	}
 	return

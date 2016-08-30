@@ -85,7 +85,7 @@ func NewDiegoBrainPartition(c *cli.Context, config *Config) InstanceGrouper {
 		CCExternalPort:            c.Int("cc-external-port"),
 		TrafficControllerURL:      c.String("traffic-controller-url"),
 		ConsulAgent:               NewConsulAgent(c, []string{}, config),
-		Metron:                    NewMetron(c),
+		Metron:                    NewMetron(config),
 		Statsd:                    NewStatsdInjector(c),
 	}
 }
@@ -159,8 +159,7 @@ func (d *diegoBrain) HasValidValues() bool {
 		d.BBSClientKey != "" &&
 		d.CCInternalAPIUser != "" &&
 		d.CCInternalAPIPassword != "" &&
-		d.ConsulAgent.HasValidValues() &&
-		d.Metron.HasValidValues()
+		d.ConsulAgent.HasValidValues()
 }
 
 func (d *diegoBrain) newAuctioneer() *enaml.InstanceJob {

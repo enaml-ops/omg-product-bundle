@@ -41,7 +41,7 @@ func NewCloudControllerWorkerPartition(c *cli.Context, config *Config) InstanceG
 		Config:                config,
 		Instances:             c.Int("cc-worker-instances"),
 		VMTypeName:            c.String("cc-worker-vm-type"),
-		Metron:                NewMetron(c),
+		Metron:                NewMetron(config),
 		ConsulAgent:           NewConsulAgent(c, []string{}, config),
 		NFSMounter:            NewNFSMounter(c),
 		StatsdInjector:        NewStatsdInjector(c),
@@ -198,16 +198,7 @@ func (s *CloudControllerWorkerPartition) HasValidValues() bool {
 		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
 	}
 
-	if s.Metron.Zone == "" {
-		lo.G.Debugf("could not find a valid metron zone '%v'", s.Metron.Zone)
-	}
-
-	if s.Metron.Secret == "" {
-		lo.G.Debugf("could not find a valid metron secret '%v'", s.Metron.Secret)
-	}
 	return (s.VMTypeName != "" &&
-		s.Metron.Zone != "" &&
-		s.Metron.Secret != "" &&
 		s.NFSMounter.hasValidValues() &&
 		s.ConsulAgent.HasValidValues())
 }

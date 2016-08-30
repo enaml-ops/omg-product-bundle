@@ -33,7 +33,7 @@ func NewDopplerPartition(c *cli.Context, config *Config) InstanceGrouper {
 		Config:         config,
 		NetworkIPs:     c.StringSlice("doppler-ip"),
 		VMTypeName:     c.String("doppler-vm-type"),
-		Metron:         NewMetron(c),
+		Metron:         NewMetron(config),
 		StatsdInjector: NewStatsdInjector(c),
 		Zone:           c.String("doppler-zone"),
 		MessageDrainBufferSize: c.Int("doppler-drain-buffer-size"),
@@ -143,6 +143,5 @@ func (s *Doppler) HasValidValues() bool {
 		s.SharedSecret != "" &&
 		s.CCBuilkAPIPassword != "" &&
 		len(s.EtcdMachines) > 0 &&
-		s.Metron.HasValidValues() &&
 		s.StatsdInjector.HasValidValues())
 }

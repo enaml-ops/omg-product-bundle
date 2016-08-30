@@ -26,7 +26,7 @@ func NewNFSPartition(c *cli.Context, config *Config) (igf InstanceGrouper) {
 		VMTypeName:           c.String("nfs-vm-type"),
 		PersistentDiskType:   c.String("nfs-disk-type"),
 		AllowFromNetworkCIDR: c.StringSlice("nfs-allow-from-network-cidr"),
-		Metron:               NewMetron(c),
+		Metron:               NewMetron(config),
 		StatsdInjector:       NewStatsdInjector(c),
 	}
 	return

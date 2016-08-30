@@ -19,22 +19,6 @@ import (
 )
 
 var _ = Describe("given a Diego Brain Partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		var ig InstanceGrouper
-		BeforeEach(func() {
-			cf := new(Plugin)
-			c := cf.GetContext([]string{
-				"cloudfoundry",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-			})
-			ig = NewDiegoBrainPartition(c, &Config{})
-		})
-
-		It("then it should not validate", func() {
-			Ω(ig.HasValidValues()).Should(BeFalse())
-		})
-	})
 
 	Context("when initialized with a complete set of arguments", func() {
 		var deploymentManifest *enaml.DeploymentManifest
@@ -91,6 +75,9 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				NATSPassword:      "natspass",
 				NATSPort:          1234,
 				NATSMachines:      []string{"10.0.0.11", "10.0.0.12"},
+				MetronZone:        "metronzoneguid",
+				MetronSecret:      "metronsecret",
+				EtcdMachines:      []string{"1.0.0.7", "1.0.0.8"},
 			}
 			grouper = NewDiegoBrainPartition(c, config)
 			deploymentManifest = new(enaml.DeploymentManifest)

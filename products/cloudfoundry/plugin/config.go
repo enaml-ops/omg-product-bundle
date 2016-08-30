@@ -40,6 +40,15 @@ type Config struct {
 	ErrandVMType       string
 	SmokeTestsPassword string
 	UAALoginProtocol   string
+	LoggregratorIPs    []string
+	LoggregratorVMType string
+	DopplerSecret      string
+	EtcdMachines       []string
+	MetronZone         string
+	MetronSecret       string
+	SyslogAddress      string
+	SyslogPort         int
+	SyslogTransport    string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -71,6 +80,17 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		ErrandVMType:       c.String("errand-vm-type"),
 		SmokeTestsPassword: c.String("smoke-tests-password"),
 		UAALoginProtocol:   c.String("uaa-login-protocol"),
+
+		LoggregratorIPs:    c.StringSlice("loggregator-traffic-controller-ip"),
+		LoggregratorVMType: c.String("loggregator-traffic-controller-vmtype"),
+		DopplerSecret:      c.String("doppler-client-secret"),
+		EtcdMachines:       c.StringSlice("etcd-machine-ip"),
+
+		MetronZone:      c.String("metron-zone"),
+		MetronSecret:    c.String("metron-secret"),
+		SyslogAddress:   c.String("syslog-address"),
+		SyslogPort:      c.Int("syslog-port"),
+		SyslogTransport: c.String("syslog-transport"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err

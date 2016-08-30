@@ -33,7 +33,7 @@ func NewClockGlobalPartition(c *cli.Context, config *Config) InstanceGrouper {
 	cg := &clockGlobal{
 		Config:     config,
 		VMTypeName: c.String("clock-global-vm-type"),
-		Metron:     NewMetron(c),
+		Metron:     NewMetron(config),
 		Statsd:     NewStatsdInjector(c),
 		NFS:        NewNFSMounter(c),
 
@@ -175,7 +175,6 @@ func (c *clockGlobal) HasValidValues() bool {
 	lo.G.Debugf("checking '%s' for valid flags", "clock global")
 
 	return c.VMTypeName != "" &&
-		c.Metron.HasValidValues() &&
 		c.Statsd.HasValidValues() &&
 		c.NFS.hasValidValues() &&
 		c.CloudController.HasValidValues()

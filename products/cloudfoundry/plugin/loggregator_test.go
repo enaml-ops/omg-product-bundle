@@ -12,59 +12,30 @@ import (
 
 var _ = Describe("given the loggregator traffic controller partition", func() {
 
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		var grouper InstanceGrouper
-		BeforeEach(func() {
-			cf := new(Plugin)
-			c := cf.GetContext([]string{
-				"cloudfoundry",
-			})
-			grouper = NewLoggregatorTrafficController(c, &Config{})
-		})
-
-		It("should not have valid values", func() {
-			Ω(grouper.HasValidValues()).Should(BeFalse())
-		})
-
-		It("should have the loggregator traffic controller job", func() {
-			group := grouper.ToInstanceGroup()
-			job := group.GetJobByName("loggregator_trafficcontroller")
-			Ω(job).ShouldNot(BeNil())
-		})
-	})
-
 	Context("when initialized with a complete set of arguments", func() {
-		var grouper InstanceGrouper
+		var grouper InstanceGroupCreator
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
-			cf := new(Plugin)
-			c := cf.GetContext([]string{
-				"cloudfoundry",
-				"--loggregator-traffic-controller-ip", "10.0.0.39",
-				"--loggregator-traffic-controller-ip", "10.0.0.40",
-				"--loggregator-traffic-controller-vmtype", "vmtype",
-				"--etcd-machine-ip", "10.0.1.2",
-				"--etcd-machine-ip", "10.0.1.3",
-				"--etcd-machine-ip", "10.0.1.4",
-				"--doppler-client-secret", "dopplersecret",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-			})
+
 			config := &Config{
-				AZs:               []string{"eastprod-1"},
-				StemcellName:      "cool-ubuntu-animal",
-				NetworkName:       "foundry-net",
-				SystemDomain:      "sys.yourdomain.com",
-				SkipSSLCertVerify: false,
-				NATSUser:          "natsuser",
-				NATSPassword:      "natspass",
-				NATSPort:          4333,
-				NATSMachines:      []string{"10.0.0.4"},
+				AZs:                []string{"eastprod-1"},
+				StemcellName:       "cool-ubuntu-animal",
+				NetworkName:        "foundry-net",
+				SystemDomain:       "sys.yourdomain.com",
+				SkipSSLCertVerify:  false,
+				NATSUser:           "natsuser",
+				NATSPassword:       "natspass",
+				NATSPort:           4222,
+				NATSMachines:       []string{"10.0.0.10", "10.0.0.11"},
+				LoggregratorIPs:    []string{"10.0.0.39", "10.0.0.40"},
+				LoggregratorVMType: "vmtype",
+				EtcdMachines:       []string{"10.0.1.2", "10.0.1.3", "10.0.1.4"},
+				DopplerSecret:      "dopplersecret",
+				MetronSecret:       "metronsecret",
+				MetronZone:         "metronzoneguid",
 			}
-			grouper = NewLoggregatorTrafficController(c, config)
+			grouper = NewLoggregatorTrafficController(config)
+
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(grouper.ToInstanceGroup())
 		})
@@ -157,8 +128,8 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 			Ω(props.Nats).ShouldNot(BeNil())
 			Ω(props.Nats.User).Should(Equal("natsuser"))
 			Ω(props.Nats.Password).Should(Equal("natspass"))
-			Ω(props.Nats.Port).Should(Equal(4333))
-			Ω(props.Nats.Machines).Should(ConsistOf("10.0.0.4"))
+			Ω(props.Nats.Port).Should(Equal(4222))
+			Ω(props.Nats.Machines).Should(ConsistOf("10.0.0.10", "10.0.0.11"))
 		})
 
 		It("then it should have the statsd-injector job", func() {

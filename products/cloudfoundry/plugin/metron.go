@@ -1,28 +1,19 @@
 package cloudfoundry
 
 import (
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
-	"github.com/xchapter7x/lo"
 )
 
+//Metron -
+type Metron struct {
+	Config *Config
+}
+
 //NewMetron -
-func NewMetron(c *cli.Context) (metron *Metron) {
+func NewMetron(config *Config) (metron *Metron) {
 	metron = &Metron{
-		Zone:            c.String("metron-zone"),
-		Secret:          c.String("metron-secret"),
-		SyslogAddress:   c.String("syslog-address"),
-		SyslogPort:      c.Int("syslog-port"),
-		SyslogTransport: c.String("syslog-transport"),
-		Loggregator: metron_agent.Loggregator{
-			Etcd: &metron_agent.Etcd{
-				Machines: c.StringSlice("etcd-machine-ip"),
-			},
-		},
-	}
-	if metron.SyslogTransport == "" {
-		metron.SyslogTransport = "tcp"
+		Config: config,
 	}
 	return
 }
@@ -34,30 +25,22 @@ func (s *Metron) CreateJob() enaml.InstanceJob {
 		Release: "cf",
 		Properties: &metron_agent.MetronAgentJob{
 			SyslogDaemonConfig: &metron_agent.SyslogDaemonConfig{
-				Transport: s.SyslogTransport,
-				Address:   s.SyslogAddress,
-				Port:      s.SyslogPort,
+				Transport: s.Config.SyslogTransport,
+				Address:   s.Config.SyslogAddress,
+				Port:      s.Config.SyslogPort,
 			},
 			MetronAgent: &metron_agent.MetronAgent{
-				Zone:       s.Zone,
+				Zone:       s.Config.MetronZone,
 				Deployment: DeploymentName,
 			},
 			MetronEndpoint: &metron_agent.MetronEndpoint{
-				SharedSecret: s.Secret,
+				SharedSecret: s.Config.MetronSecret,
 			},
-			Loggregator: &s.Loggregator,
+			Loggregator: &metron_agent.Loggregator{
+				Etcd: &metron_agent.Etcd{
+					Machines: s.Config.EtcdMachines,
+				},
+			},
 		},
 	}
-}
-
-//HasValidValues -
-func (s *Metron) HasValidValues() bool {
-	lo.G.Debugf("checking '%s' for valid flags", "metron")
-	if s.Zone == "" {
-		lo.G.Debugf("could not find a valid Zone '%v'", s.Zone)
-	}
-	if s.Secret == "" {
-		lo.G.Debugf("could not find a valid Secret '%v'", s.Secret)
-	}
-	return (s.Zone != "" && s.Secret != "")
 }

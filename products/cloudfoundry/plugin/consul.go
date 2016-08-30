@@ -23,7 +23,7 @@ func NewConsulPartition(c *cli.Context, config *Config) InstanceGrouper {
 		NetworkIPs:     c.StringSlice("consul-ip"),
 		VMTypeName:     c.String("consul-vm-type"),
 		ConsulAgent:    NewConsulAgentServer(c, config),
-		Metron:         NewMetron(c),
+		Metron:         NewMetron(config),
 		StatsdInjector: NewStatsdInjector(c),
 	}
 }

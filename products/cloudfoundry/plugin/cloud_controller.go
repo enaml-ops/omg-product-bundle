@@ -49,7 +49,7 @@ func NewCloudControllerPartition(c *cli.Context, config *Config) InstanceGrouper
 		Config:                   config,
 		Instances:                c.Int("cc-instances"),
 		VMTypeName:               c.String("cc-vm-type"),
-		Metron:                   NewMetron(c),
+		Metron:                   NewMetron(config),
 		ConsulAgent:              NewConsulAgent(c, []string{}, config),
 		NFSMounter:               NewNFSMounter(c),
 		StatsdInjector:           NewStatsdInjector(c),
@@ -347,21 +347,11 @@ func (s *CloudControllerPartition) HasValidValues() bool {
 		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
 	}
 
-	if s.Metron.Zone == "" {
-		lo.G.Debugf("could not find a valid metron zone '%v'", s.Metron.Zone)
-	}
-
-	if s.Metron.Secret == "" {
-		lo.G.Debugf("could not find a valid metron secret '%v'", s.Metron.Secret)
-	}
-
 	if s.MySQLProxyIP == "" {
 		lo.G.Debug("missing mysql proxy IP")
 	}
 
 	return (s.VMTypeName != "" &&
-		s.Metron.Zone != "" &&
-		s.Metron.Secret != "" &&
 		s.NFSMounter.hasValidValues() &&
 		s.ConsulAgent.HasValidValues()) &&
 		s.MySQLProxyIP != ""

@@ -30,7 +30,7 @@ func init() {
 	RegisterInstanceGrouperConfigFactory(NewDiegoBrainPartition)
 	RegisterInstanceGrouperConfigFactory(NewDiegoCellPartition)
 	RegisterInstanceGrouperConfigFactory(NewDopplerPartition)
-	RegisterInstanceGrouperConfigFactory(NewLoggregatorTrafficController)
+	RegisterInstanceGrouperFactory(NewLoggregatorTrafficController)
 
 	//errands
 	RegisterInstanceGrouperFactory(NewSmokeErrand)

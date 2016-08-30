@@ -29,7 +29,7 @@ func NewDiegoCellPartition(c *cli.Context, config *Config) InstanceGrouper {
 		PersistentDiskType: c.String("diego-cell-disk-type"),
 		NetworkIPs:         c.StringSlice("diego-cell-ip"),
 		ConsulAgent:        NewConsulAgent(c, []string{}, config),
-		Metron:             NewMetron(c),
+		Metron:             NewMetron(config),
 		StatsdInjector:     NewStatsdInjector(c),
 		DiegoBrain:         NewDiegoBrainPartition(c, config).(*diegoBrain),
 	}
@@ -126,7 +126,7 @@ func (s *diegoCell) newRDiego() (rdiego *rep.RepJob) {
 				PreloadedRootfses: []string{
 					"cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs",
 				},
-				Zone: s.Metron.Zone,
+				Zone: s.Config.MetronZone,
 			},
 		},
 	}

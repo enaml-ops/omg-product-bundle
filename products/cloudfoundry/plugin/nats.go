@@ -20,7 +20,7 @@ func NewNatsPartition(c *cli.Context, config *Config) (igf InstanceGrouper) {
 	igf = &NatsPartition{
 		Config:         config,
 		VMTypeName:     c.String("nats-vm-type"),
-		Metron:         NewMetron(c),
+		Metron:         NewMetron(config),
 		StatsdInjector: NewStatsdInjector(c),
 	}
 	return
@@ -70,14 +70,6 @@ func (s *NatsPartition) HasValidValues() bool {
 	if s.VMTypeName == "" {
 		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
 	}
-	if s.Metron.Zone == "" {
-		lo.G.Debugf("could not find a valid Metron.Zone '%v'", s.Metron.Zone)
-	}
-	if s.Metron.Secret == "" {
-		lo.G.Debugf("could not find a valid Metron.Secret '%v'", s.Metron.Secret)
-	}
 
-	return (s.VMTypeName != "" &&
-		s.Metron.Zone != "" &&
-		s.Metron.Secret != "")
+	return (s.VMTypeName != "")
 }

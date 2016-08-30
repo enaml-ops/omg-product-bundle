@@ -1,20 +1,8 @@
 package cloudfoundry
 
-import "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
-
 //VaultRotater an interface for rotating vault hashes values
 type VaultRotater interface {
 	RotateSecrets(hash string, secrets interface{}) error
-}
-
-//Metron -
-type Metron struct {
-	Zone            string
-	Secret          string
-	SyslogAddress   string
-	SyslogPort      int
-	SyslogTransport string
-	Loggregator     metron_agent.Loggregator
 }
 
 //StatsdInjector -

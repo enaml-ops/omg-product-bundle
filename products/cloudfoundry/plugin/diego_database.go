@@ -97,7 +97,7 @@ func NewDiegoDatabasePartition(c *cli.Context, config *Config) InstanceGrouper {
 		EtcdPeerCert:       etcdPeerCert,
 		EtcdPeerKey:        etcdPeerKey,
 		ConsulAgent:        NewConsulAgent(c, []string{"bbs", "etcd"}, config),
-		Metron:             NewMetron(c),
+		Metron:             NewMetron(config),
 		StatsdInjector:     NewStatsdInjector(c),
 		DiegoBrain:         NewDiegoBrainPartition(c, config).(*diegoBrain),
 	}

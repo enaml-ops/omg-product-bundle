@@ -1,55 +1,21 @@
 package cloudfoundry
 
 import (
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	ltc "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/loggregator_trafficcontroller"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
-	"github.com/xchapter7x/lo"
 )
 
 type loggregatorTrafficController struct {
-	Config        *Config
-	VMTypeName    string
-	NetworkIPs    []string
-	EtcdMachines  []string
-	DopplerSecret string
-	Metron        *Metron
+	Config *Config
+	Metron *Metron
 }
 
-func NewLoggregatorTrafficController(c *cli.Context, config *Config) InstanceGrouper {
+func NewLoggregatorTrafficController(config *Config) InstanceGroupCreator {
 	return &loggregatorTrafficController{
-		Config:        config,
-		NetworkIPs:    c.StringSlice("loggregator-traffic-controller-ip"),
-		VMTypeName:    c.String("loggregator-traffic-controller-vmtype"),
-		DopplerSecret: c.String("doppler-client-secret"),
-		EtcdMachines:  c.StringSlice("etcd-machine-ip"),
-		Metron:        NewMetron(c),
+		Config: config,
+		Metron: NewMetron(config),
 	}
-}
-
-func (l *loggregatorTrafficController) HasValidValues() bool {
-
-	lo.G.Debugf("checking '%s' for valid flags", "loggregator")
-
-	if len(l.NetworkIPs) <= 0 {
-		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(l.NetworkIPs), l.NetworkIPs)
-	}
-	if len(l.EtcdMachines) <= 0 {
-		lo.G.Debugf("could not find the correct number of EtcdMachines configured '%v' : '%v'", len(l.EtcdMachines), l.EtcdMachines)
-	}
-	if l.VMTypeName == "" {
-		lo.G.Debugf("could not find a valid vmtypename '%v'", l.VMTypeName)
-	}
-	if l.DopplerSecret == "" {
-		lo.G.Debugf("could not find a valid DopplerSecret '%v'", l.DopplerSecret)
-	}
-
-	return len(l.NetworkIPs) > 0 &&
-		l.VMTypeName != "" &&
-		len(l.EtcdMachines) > 0 &&
-		l.DopplerSecret != "" &&
-		l.Metron.HasValidValues()
 }
 
 func (l *loggregatorTrafficController) ToInstanceGroup() *enaml.InstanceGroup {
@@ -57,13 +23,13 @@ func (l *loggregatorTrafficController) ToInstanceGroup() *enaml.InstanceGroup {
 		Name:      "loggregator_trafficcontroller-partition",
 		AZs:       l.Config.AZs,
 		Stemcell:  l.Config.StemcellName,
-		VMType:    l.VMTypeName,
-		Instances: len(l.NetworkIPs),
+		VMType:    l.Config.LoggregratorVMType,
+		Instances: len(l.Config.LoggregratorIPs),
 
 		Networks: []enaml.Network{
 			{
 				Name:      l.Config.NetworkName,
-				StaticIPs: l.NetworkIPs,
+				StaticIPs: l.Config.LoggregratorIPs,
 			},
 		},
 		Update: enaml.Update{
@@ -91,20 +57,20 @@ func (l *loggregatorTrafficController) createLoggregatorTrafficControllerJob() e
 				SkipCertVerify: l.Config.SkipSSLCertVerify,
 			},
 			TrafficController: &ltc.TrafficController{
-				Zone: l.Metron.Zone,
+				Zone: l.Config.MetronZone,
 			},
 			Doppler: &ltc.Doppler{
 				UaaClientId: "doppler",
 			},
 			Loggregator: &ltc.Loggregator{
 				Etcd: &ltc.Etcd{
-					Machines: l.EtcdMachines,
+					Machines: l.Config.EtcdMachines,
 				},
 			},
 			Uaa: &ltc.Uaa{
 				Clients: &ltc.Clients{
 					Doppler: &ltc.ClientsDoppler{
-						Secret: l.DopplerSecret,
+						Secret: l.Config.DopplerSecret,
 					},
 				},
 			},
