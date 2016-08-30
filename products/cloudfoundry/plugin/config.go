@@ -37,8 +37,7 @@ type Config struct {
 	ConsulServerCert         string
 	ConsulServerKey          string
 
-	AcceptanceTestsVMType string
-	BootstrapVMType       string
+	ErrandVMType string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -67,8 +66,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		AllowSSHAccess:    c.Bool("allow-app-ssh-access"),
 		SkipSSLCertVerify: c.BoolT("skip-cert-verify"),
 
-		AcceptanceTestsVMType: c.String("acceptance-tests-vm-type"),
-		BootstrapVMType:       c.String("bootstrap-vm-type"),
+		ErrandVMType: c.String("errand-vm-type"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err

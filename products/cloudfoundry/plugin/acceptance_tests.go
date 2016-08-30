@@ -25,7 +25,7 @@ func (a *acceptanceTests) ToInstanceGroup() *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
 		Name:      instanceGroupName,
 		Instances: 1,
-		VMType:    a.Config.AcceptanceTestsVMType,
+		VMType:    a.Config.ErrandVMType,
 		Lifecycle: "errand",
 		AZs:       a.Config.AZs,
 		Stemcell:  a.Config.StemcellName,

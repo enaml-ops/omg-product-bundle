@@ -22,7 +22,7 @@ var _ = Describe("given a bootstrap partition", func() {
 				MySQLIPs:               []string{"10.0.0.26", "10.0.0.27", "10.0.0.28"},
 				MySQLBootstrapUser:     "user",
 				MySQLBootstrapPassword: "pass",
-				BootstrapVMType:        "foo",
+				ErrandVMType:           "foo",
 			})
 
 			dm = new(enaml.DeploymentManifest)

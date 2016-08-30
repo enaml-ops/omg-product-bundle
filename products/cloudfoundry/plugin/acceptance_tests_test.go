@@ -34,14 +34,14 @@ var _ = Describe("given the acceptance-tests partition", func() {
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
 			config := &Config{
-				SystemDomain:          "sys.yourdomain.com",
-				AppDomains:            []string{"apps.yourdomain.com"},
-				AZs:                   []string{"z1"},
-				StemcellName:          "cool-ubuntu-animal",
-				NetworkName:           "foundry-net",
-				SkipSSLCertVerify:     true,
-				AdminPassword:         "adminpass",
-				AcceptanceTestsVMType: "foo",
+				SystemDomain:      "sys.yourdomain.com",
+				AppDomains:        []string{"apps.yourdomain.com"},
+				AZs:               []string{"z1"},
+				StemcellName:      "cool-ubuntu-animal",
+				NetworkName:       "foundry-net",
+				SkipSSLCertVerify: true,
+				AdminPassword:     "adminpass",
+				ErrandVMType:      "foo",
 			}
 			ig = NewAcceptanceTestsPartition(includeInternetDependent, config)
 			dm = new(enaml.DeploymentManifest)

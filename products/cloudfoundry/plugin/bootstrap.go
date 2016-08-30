@@ -19,7 +19,7 @@ func (b *bootstrap) ToInstanceGroup() *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
 		Name:      "bootstrap",
 		Instances: 1,
-		VMType:    b.Config.BootstrapVMType,
+		VMType:    b.Config.ErrandVMType,
 		Lifecycle: "errand",
 		AZs:       b.Config.AZs,
 		Stemcell:  b.Config.StemcellName,
