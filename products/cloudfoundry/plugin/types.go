@@ -28,18 +28,6 @@ type InstanceGrouperFactory func(*cli.Context) InstanceGrouper
 
 type InstanceGrouperConfigFactory func(*cli.Context, *Config) InstanceGrouper
 
-type acceptanceTests struct {
-	AZs                      []string
-	StemcellName             string
-	NetworkName              string
-	AppsDomain               []string
-	SystemDomain             string
-	AdminPassword            string
-	VMType                   string
-	SkipCertVerify           bool
-	IncludeInternetDependent bool
-}
-
 type bootstrap struct {
 	Config *Config
 	VMType string

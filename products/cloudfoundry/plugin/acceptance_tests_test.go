@@ -14,7 +14,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 		BeforeEach(func() {
 			p := new(Plugin)
 			c := p.GetContext([]string{"cloudfoundry"})
-			ig = NewAcceptanceTestsPartition(c, true)
+			ig = NewAcceptanceTestsPartition(c, true, &Config{})
 		})
 
 		It("should not be nil", func() {
@@ -36,16 +36,17 @@ var _ = Describe("given the acceptance-tests partition", func() {
 			p := new(Plugin)
 			c := p.GetContext([]string{
 				"cloudfoundry",
-				"--system-domain", "sys.yourdomain.com",
-				"--app-domain", "apps.yourdomain.com",
-				"--az", "z1",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--network", "foundry-net",
 				"--admin-password", "adminpass",
 			})
-
-			withInternet := NewAcceptanceTestsPartition(c, true).ToInstanceGroup()
-			withoutInternet := NewAcceptanceTestsPartition(c, false).ToInstanceGroup()
+			config := &Config{
+				SystemDomain: "sys.yourdomain.com",
+				AppDomains:   []string{"apps.yourdomain.com"},
+				AZs:          []string{"z1"},
+				StemcellName: "cool-ubuntu-animal",
+				NetworkName:  "foundry-net",
+			}
+			withInternet := NewAcceptanceTestsPartition(c, true, config).ToInstanceGroup()
+			withoutInternet := NewAcceptanceTestsPartition(c, false, config).ToInstanceGroup()
 			Ω(withInternet.Name).ShouldNot(Equal(withoutInternet.Name))
 			Ω(withInternet.Jobs[0].Name).Should(Equal(withoutInternet.Jobs[0].Name))
 		})
@@ -59,15 +60,18 @@ var _ = Describe("given the acceptance-tests partition", func() {
 			p := new(Plugin)
 			c := p.GetContext([]string{
 				"cloudfoundry",
-				"--system-domain", "sys.yourdomain.com",
-				"--app-domain", "apps.yourdomain.com",
-				"--az", "z1",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--network", "foundry-net",
 				"--admin-password", "adminpass",
 				"--acceptance-tests-vm-type", "foo",
 			})
-			ig = NewAcceptanceTestsPartition(c, includeInternetDependent)
+			config := &Config{
+				SystemDomain:      "sys.yourdomain.com",
+				AppDomains:        []string{"apps.yourdomain.com"},
+				AZs:               []string{"z1"},
+				StemcellName:      "cool-ubuntu-animal",
+				NetworkName:       "foundry-net",
+				SkipSSLCertVerify: true,
+			}
+			ig = NewAcceptanceTestsPartition(c, includeInternetDependent, config)
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())
 		})
@@ -139,14 +143,17 @@ var _ = Describe("given the acceptance-tests partition", func() {
 			p := new(Plugin)
 			c := p.GetContext([]string{
 				"cloudfoundry",
-				"--system-domain", "sys.yourdomain.com",
-				"--app-domain", "apps.yourdomain.com",
-				"--az", "z1",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--network", "foundry-net",
 				"--admin-password", "adminpass",
 			})
-			ig = NewAcceptanceTestsPartition(c, includeInternetDependent)
+			config := &Config{
+				SystemDomain:      "sys.yourdomain.com",
+				AppDomains:        []string{"apps.yourdomain.com"},
+				AZs:               []string{"z1"},
+				StemcellName:      "cool-ubuntu-animal",
+				NetworkName:       "foundry-net",
+				SkipSSLCertVerify: true,
+			}
+			ig = NewAcceptanceTestsPartition(c, includeInternetDependent, config)
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())
 		})
