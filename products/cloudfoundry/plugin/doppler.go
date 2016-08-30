@@ -10,22 +10,35 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
+//Doppler -
+type Doppler struct {
+	Config                 *Config
+	AZs                    []string
+	StemcellName           string
+	VMTypeName             string
+	NetworkName            string
+	NetworkIPs             []string
+	Metron                 *Metron
+	StatsdInjector         *StatsdInjector
+	Zone                   string
+	MessageDrainBufferSize int
+	SharedSecret           string
+	CCBuilkAPIPassword     string
+	EtcdMachines           []string
+}
+
 //NewDopplerPartition -
-func NewDopplerPartition(c *cli.Context) InstanceGrouper {
+func NewDopplerPartition(c *cli.Context, config *Config) InstanceGrouper {
 	return &Doppler{
-		AZs:            c.StringSlice("az"),
-		StemcellName:   c.String("stemcell-name"),
+		Config:         config,
 		NetworkIPs:     c.StringSlice("doppler-ip"),
-		NetworkName:    c.String("network"),
 		VMTypeName:     c.String("doppler-vm-type"),
 		Metron:         NewMetron(c),
 		StatsdInjector: NewStatsdInjector(c),
 		Zone:           c.String("doppler-zone"),
 		MessageDrainBufferSize: c.Int("doppler-drain-buffer-size"),
 		SharedSecret:           c.String("doppler-shared-secret"),
-		SystemDomain:           c.String("system-domain"),
 		CCBuilkAPIPassword:     c.String("cc-bulk-api-password"),
-		SkipSSLCertify:         c.BoolT("skip-cert-verify"),
 		EtcdMachines:           c.StringSlice("etcd-machine-ip"),
 	}
 }
@@ -36,8 +49,8 @@ func (s *Doppler) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 		Name:      "doppler-partition",
 		Instances: len(s.NetworkIPs),
 		VMType:    s.VMTypeName,
-		AZs:       s.AZs,
-		Stemcell:  s.StemcellName,
+		AZs:       s.Config.AZs,
+		Stemcell:  s.Config.StemcellName,
 		Jobs: []enaml.InstanceJob{
 			s.createDopplerJob(),
 			s.Metron.CreateJob(),
@@ -45,7 +58,7 @@ func (s *Doppler) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 			s.StatsdInjector.CreateJob(),
 		},
 		Networks: []enaml.Network{
-			enaml.Network{Name: s.NetworkName, StaticIPs: s.NetworkIPs},
+			enaml.Network{Name: s.Config.NetworkName, StaticIPs: s.NetworkIPs},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -81,12 +94,12 @@ func (s *Doppler) createSyslogDrainBinderJob() enaml.InstanceJob {
 		Release: "cf",
 		Properties: &syslog_drain_binder.SyslogDrainBinderJob{
 			Ssl: &syslog_drain_binder.Ssl{
-				SkipCertVerify: s.SkipSSLCertify,
+				SkipCertVerify: s.Config.SkipSSLCertVerify,
 			},
-			SystemDomain: s.SystemDomain,
+			SystemDomain: s.Config.SystemDomain,
 			Cc: &syslog_drain_binder.Cc{
 				BulkApiPassword: s.CCBuilkAPIPassword,
-				SrvApiUri:       fmt.Sprintf("https://api.%s", s.SystemDomain),
+				SrvApiUri:       fmt.Sprintf("https://api.%s", s.Config.SystemDomain),
 			},
 			Loggregator: &syslog_drain_binder.Loggregator{
 				Etcd: &syslog_drain_binder.Etcd{
@@ -102,23 +115,14 @@ func (s *Doppler) HasValidValues() bool {
 
 	lo.G.Debugf("checking '%s' for valid flags", "doppler")
 
-	if len(s.AZs) <= 0 {
-		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
-	}
 	if len(s.NetworkIPs) <= 0 {
 		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
 	}
 	if len(s.EtcdMachines) <= 0 {
 		lo.G.Debugf("could not find the correct number of EtcdMachines configured '%v' : '%v'", len(s.EtcdMachines), s.EtcdMachines)
 	}
-	if s.StemcellName == "" {
-		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
-	}
 	if s.VMTypeName == "" {
 		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
-	}
-	if s.NetworkName == "" {
-		lo.G.Debugf("could not find a valid networkname '%v'", s.NetworkName)
 	}
 	if s.Zone == "" {
 		lo.G.Debugf("could not find a valid zone '%v'", s.Zone)
@@ -132,18 +136,11 @@ func (s *Doppler) HasValidValues() bool {
 	if s.CCBuilkAPIPassword == "" {
 		lo.G.Debugf("could not find a valid CCBuilkAPIPassword '%v'", s.CCBuilkAPIPassword)
 	}
-	if s.SystemDomain == "" {
-		lo.G.Debugf("could not find a valid SystemDomain '%v'", s.SystemDomain)
-	}
-	return (len(s.AZs) > 0 &&
-		s.StemcellName != "" &&
-		s.VMTypeName != "" &&
-		s.NetworkName != "" &&
+	return (s.VMTypeName != "" &&
 		len(s.NetworkIPs) > 0 &&
 		s.Zone != "" &&
 		s.MessageDrainBufferSize > 0 &&
 		s.SharedSecret != "" &&
-		s.SystemDomain != "" &&
 		s.CCBuilkAPIPassword != "" &&
 		len(s.EtcdMachines) > 0 &&
 		s.Metron.HasValidValues() &&

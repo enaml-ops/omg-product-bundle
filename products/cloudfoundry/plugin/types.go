@@ -145,24 +145,6 @@ type MySQLProxy struct {
 	SyslogAggregator *mysqlproxylib.SyslogAggregator
 }
 
-//Doppler -
-type Doppler struct {
-	AZs                    []string
-	StemcellName           string
-	VMTypeName             string
-	NetworkName            string
-	NetworkIPs             []string
-	Metron                 *Metron
-	StatsdInjector         *StatsdInjector
-	Zone                   string
-	MessageDrainBufferSize int
-	SharedSecret           string
-	SystemDomain           string
-	CCBuilkAPIPassword     string
-	SkipSSLCertify         bool
-	EtcdMachines           []string
-}
-
 //UAAClient - Structure to represent map of client priviledges
 type UAAClient struct {
 	ID                   string      `yaml:"id,omitempty"`

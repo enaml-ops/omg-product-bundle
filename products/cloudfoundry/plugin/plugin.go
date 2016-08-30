@@ -29,7 +29,7 @@ func init() {
 	RegisterInstanceGrouperConfigFactory(NewUAAPartition)
 	RegisterInstanceGrouperConfigFactory(NewDiegoBrainPartition)
 	RegisterInstanceGrouperConfigFactory(NewDiegoCellPartition)
-	RegisterInstanceGrouperFactory(NewDopplerPartition)
+	RegisterInstanceGrouperConfigFactory(NewDopplerPartition)
 	RegisterInstanceGrouperConfigFactory(NewLoggregatorTrafficController)
 
 	//errands

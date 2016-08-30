@@ -14,7 +14,6 @@ var _ = Describe("Doppler Partition", func() {
 			plugin := new(Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
-				"--network", "foundry-net",
 				"--metron-secret", "metronsecret",
 				"--metron-zone", "metronzoneguid",
 				"--syslog-address", "syslog-server",
@@ -23,7 +22,7 @@ var _ = Describe("Doppler Partition", func() {
 				"--etcd-machine-ip", "1.0.0.7",
 				"--etcd-machine-ip", "1.0.0.8",
 			})
-			dopplerPartition := NewDopplerPartition(c)
+			dopplerPartition := NewDopplerPartition(c, &Config{})
 			Ω(dopplerPartition.HasValidValues()).Should(BeFalse())
 		})
 	})
@@ -33,8 +32,6 @@ var _ = Describe("Doppler Partition", func() {
 			plugin := new(Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--az", "eastprod-1",
 				"--doppler-ip", "1.0.11.1",
 				"--doppler-ip", "1.0.11.2",
 				"--network", "foundry-net",
@@ -49,10 +46,16 @@ var _ = Describe("Doppler Partition", func() {
 				"--doppler-zone", "dopplerzone",
 				"--doppler-drain-buffer-size", "100",
 				"--doppler-shared-secret", "secret",
-				"--system-domain", "sys.test.com",
 				"--cc-bulk-api-password", "bulk-pwd",
 			})
-			dopplerPartition = NewDopplerPartition(c)
+			config := &Config{
+				NetworkName:       "foundry-net",
+				StemcellName:      "cool-ubuntu-animal",
+				AZs:               []string{"eastprod-1"},
+				SystemDomain:      "sys.test.com",
+				SkipSSLCertVerify: true,
+			}
+			dopplerPartition = NewDopplerPartition(c, config)
 		})
 		It("then HasValidValues should be true", func() {
 			Ω(dopplerPartition.HasValidValues()).Should(Equal(true))
