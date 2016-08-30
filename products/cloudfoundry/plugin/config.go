@@ -9,11 +9,12 @@ import (
 )
 
 type Config struct {
-	AZs          []string
-	StemcellName string
-	NetworkName  string
-	SystemDomain string
-	AppDomains   []string
+	AZs           []string
+	StemcellName  string
+	NetworkName   string
+	SystemDomain  string
+	AppDomains    []string
+	AdminPassword string
 
 	MySQLIPs               []string
 	MySQLBootstrapUser     string
@@ -35,6 +36,8 @@ type Config struct {
 	ConsulAgentKey           string
 	ConsulServerCert         string
 	ConsulServerKey          string
+
+	AcceptanceTestsVMType string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -49,6 +52,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		NetworkName:            c.String("network"),
 		SystemDomain:           c.String("system-domain"),
 		AppDomains:             c.StringSlice("app-domain"),
+		AdminPassword:          c.String("admin-password"),
 		NATSUser:               c.String("nats-user"),
 		NATSPassword:           c.String("nats-pass"),
 		NATSPort:               c.Int("nats-port"),
@@ -61,6 +65,8 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		//boolean flags
 		AllowSSHAccess:    c.Bool("allow-app-ssh-access"),
 		SkipSSLCertVerify: c.BoolT("skip-cert-verify"),
+
+		AcceptanceTestsVMType: c.String("acceptance-tests-vm-type"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err

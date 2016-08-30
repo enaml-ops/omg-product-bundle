@@ -9,44 +9,20 @@ import (
 )
 
 var _ = Describe("given the acceptance-tests partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		var ig InstanceGrouper
-		BeforeEach(func() {
-			p := new(Plugin)
-			c := p.GetContext([]string{"cloudfoundry"})
-			ig = NewAcceptanceTestsPartition(c, true, &Config{})
-		})
 
-		It("should not be nil", func() {
-			Ω(ig).ShouldNot(BeNil())
-		})
-
-		It("should contain an acceptance-tests job", func() {
-			group := ig.ToInstanceGroup()
-			Ω(group.GetJobByName("acceptance-tests")).ShouldNot(BeNil())
-		})
-
-		It("should not have valid values", func() {
-			Ω(ig.HasValidValues()).Should(BeFalse())
-		})
-	})
-
-	Context("when initialized with valid flags", func() {
+	Context("when initialized with valid config", func() {
 		It("generates different instance group names for internet-less tests", func() {
-			p := new(Plugin)
-			c := p.GetContext([]string{
-				"cloudfoundry",
-				"--admin-password", "adminpass",
-			})
+
 			config := &Config{
-				SystemDomain: "sys.yourdomain.com",
-				AppDomains:   []string{"apps.yourdomain.com"},
-				AZs:          []string{"z1"},
-				StemcellName: "cool-ubuntu-animal",
-				NetworkName:  "foundry-net",
+				SystemDomain:  "sys.yourdomain.com",
+				AppDomains:    []string{"apps.yourdomain.com"},
+				AZs:           []string{"z1"},
+				StemcellName:  "cool-ubuntu-animal",
+				NetworkName:   "foundry-net",
+				AdminPassword: "adminpass",
 			}
-			withInternet := NewAcceptanceTestsPartition(c, true, config).ToInstanceGroup()
-			withoutInternet := NewAcceptanceTestsPartition(c, false, config).ToInstanceGroup()
+			withInternet := NewAcceptanceTestsPartition(true, config).ToInstanceGroup()
+			withoutInternet := NewAcceptanceTestsPartition(false, config).ToInstanceGroup()
 			Ω(withInternet.Name).ShouldNot(Equal(withoutInternet.Name))
 			Ω(withInternet.Jobs[0].Name).Should(Equal(withoutInternet.Jobs[0].Name))
 		})
@@ -54,30 +30,22 @@ var _ = Describe("given the acceptance-tests partition", func() {
 
 	Context("when initialized with a complete set of arguments", func() {
 		const includeInternetDependent = true
-		var ig InstanceGrouper
+		var ig InstanceGroupCreator
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
-			p := new(Plugin)
-			c := p.GetContext([]string{
-				"cloudfoundry",
-				"--admin-password", "adminpass",
-				"--acceptance-tests-vm-type", "foo",
-			})
 			config := &Config{
-				SystemDomain:      "sys.yourdomain.com",
-				AppDomains:        []string{"apps.yourdomain.com"},
-				AZs:               []string{"z1"},
-				StemcellName:      "cool-ubuntu-animal",
-				NetworkName:       "foundry-net",
-				SkipSSLCertVerify: true,
+				SystemDomain:          "sys.yourdomain.com",
+				AppDomains:            []string{"apps.yourdomain.com"},
+				AZs:                   []string{"z1"},
+				StemcellName:          "cool-ubuntu-animal",
+				NetworkName:           "foundry-net",
+				SkipSSLCertVerify:     true,
+				AdminPassword:         "adminpass",
+				AcceptanceTestsVMType: "foo",
 			}
-			ig = NewAcceptanceTestsPartition(c, includeInternetDependent, config)
+			ig = NewAcceptanceTestsPartition(includeInternetDependent, config)
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())
-		})
-
-		It("should have valid values", func() {
-			Ω(ig.HasValidValues()).Should(BeTrue())
 		})
 
 		It("should have the correct VM type and lifecycle", func() {
@@ -137,14 +105,9 @@ var _ = Describe("given the acceptance-tests partition", func() {
 
 	Context("when initialized with a complete set of arguments in internetless mode", func() {
 		const includeInternetDependent = false
-		var ig InstanceGrouper
+		var ig InstanceGroupCreator
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
-			p := new(Plugin)
-			c := p.GetContext([]string{
-				"cloudfoundry",
-				"--admin-password", "adminpass",
-			})
 			config := &Config{
 				SystemDomain:      "sys.yourdomain.com",
 				AppDomains:        []string{"apps.yourdomain.com"},
@@ -152,8 +115,9 @@ var _ = Describe("given the acceptance-tests partition", func() {
 				StemcellName:      "cool-ubuntu-animal",
 				NetworkName:       "foundry-net",
 				SkipSSLCertVerify: true,
+				AdminPassword:     "adminpass",
 			}
-			ig = NewAcceptanceTestsPartition(c, includeInternetDependent, config)
+			ig = NewAcceptanceTestsPartition(includeInternetDependent, config)
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())
 		})

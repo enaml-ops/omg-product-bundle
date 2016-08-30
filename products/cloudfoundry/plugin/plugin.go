@@ -35,14 +35,14 @@ func init() {
 	//errands
 	RegisterInstanceGrouperConfigFactory(NewSmokeErrand)
 	RegisterInstanceGrouperConfigFactory(NewBootstrapPartition)
-	acceptanceTests := func(c *cli.Context, config *Config) InstanceGrouper {
-		return NewAcceptanceTestsPartition(c, true, config)
+	acceptanceTests := func(config *Config) InstanceGroupCreator {
+		return NewAcceptanceTestsPartition(true, config)
 	}
-	internetLessAcceptanceTests := func(c *cli.Context, config *Config) InstanceGrouper {
-		return NewAcceptanceTestsPartition(c, false, config)
+	internetLessAcceptanceTests := func(config *Config) InstanceGroupCreator {
+		return NewAcceptanceTestsPartition(false, config)
 	}
-	RegisterInstanceGrouperConfigFactory(acceptanceTests)
-	RegisterInstanceGrouperConfigFactory(internetLessAcceptanceTests)
+	RegisterInstanceGrouperFactory(acceptanceTests)
+	RegisterInstanceGrouperFactory(internetLessAcceptanceTests)
 }
 
 //GetFlags -
