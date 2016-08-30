@@ -37,7 +37,7 @@ func NewClockGlobalPartition(c *cli.Context, config *Config) InstanceGrouper {
 		Statsd:     NewStatsdInjector(c),
 		NFS:        NewNFSMounter(c),
 
-		CloudController:          NewCloudControllerPartition(c).(*CloudControllerPartition),
+		CloudController:          NewCloudControllerPartition(c, config).(*CloudControllerPartition),
 		CCDBAddress:              db,
 		JWTVerificationKey:       c.String("uaa-jwt-verification-key"),
 		CCServiceDashboardSecret: c.String("cc-service-dashboards-client-secret"),

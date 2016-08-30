@@ -22,7 +22,7 @@ func init() {
 	RegisterInstanceGrouperFactory(NewGoRouterPartition)
 	RegisterInstanceGrouperFactory(NewMySQLProxyPartition)
 	RegisterInstanceGrouperFactory(NewMySQLPartition)
-	RegisterInstanceGrouperFactory(NewCloudControllerPartition)
+	RegisterInstanceGrouperConfigFactory(NewCloudControllerPartition)
 	RegisterInstanceGrouperFactory(NewHaProxyPartition)
 	RegisterInstanceGrouperConfigFactory(NewClockGlobalPartition)
 	RegisterInstanceGrouperConfigFactory(NewCloudControllerWorkerPartition)

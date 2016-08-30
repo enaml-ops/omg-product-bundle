@@ -261,45 +261,6 @@ type MySQLProxy struct {
 	SyslogAggregator *mysqlproxylib.SyslogAggregator
 }
 
-//CloudControllerPartition - Cloud Controller Partition
-type CloudControllerPartition struct {
-	AZs                      []string
-	Instances                int
-	VMTypeName               string
-	StemcellName             string
-	NetworkName              string
-	SystemDomain             string
-	AppDomains               []string
-	AllowedCorsDomains       []string
-	AllowAppSSHAccess        bool
-	Metron                   *Metron
-	ConsulAgent              *ConsulAgent
-	StatsdInjector           *StatsdInjector
-	NFSMounter               *NFSMounter
-	StagingUploadUser        string
-	StagingUploadPassword    string
-	BulkAPIUser              string
-	BulkAPIPassword          string
-	DbEncryptionKey          string
-	InternalAPIUser          string
-	InternalAPIPassword      string
-	HostKeyFingerprint       string
-	SupportAddress           string
-	MinCliVersion            string
-	CCDBUsername             string
-	CCDBPassword             string
-	MySQLProxyIP             string
-	UAAJWTVerificationKey    string
-	CCServiceDashboardSecret string
-	CCUsernameLookupSecret   string
-	CCRoutingSecret          string
-	SkipSSLCertVerify        bool
-	NATSUser                 string
-	NATSPass                 string
-	NATSPort                 int
-	NATSMachines             []string
-}
-
 //Doppler -
 type Doppler struct {
 	AZs                    []string

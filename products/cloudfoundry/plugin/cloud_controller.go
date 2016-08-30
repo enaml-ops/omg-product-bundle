@@ -10,21 +10,45 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
-func NewCloudControllerPartition(c *cli.Context) InstanceGrouper {
+//CloudControllerPartition - Cloud Controller Partition
+type CloudControllerPartition struct {
+	Config                   *Config
+	Instances                int
+	VMTypeName               string
+	AllowedCorsDomains       []string
+	Metron                   *Metron
+	ConsulAgent              *ConsulAgent
+	StatsdInjector           *StatsdInjector
+	NFSMounter               *NFSMounter
+	StagingUploadUser        string
+	StagingUploadPassword    string
+	BulkAPIUser              string
+	BulkAPIPassword          string
+	DbEncryptionKey          string
+	InternalAPIUser          string
+	InternalAPIPassword      string
+	HostKeyFingerprint       string
+	SupportAddress           string
+	MinCliVersion            string
+	CCDBUsername             string
+	CCDBPassword             string
+	MySQLProxyIP             string
+	UAAJWTVerificationKey    string
+	CCServiceDashboardSecret string
+	CCUsernameLookupSecret   string
+	CCRoutingSecret          string
+}
+
+func NewCloudControllerPartition(c *cli.Context, config *Config) InstanceGrouper {
 	var proxyIP string
 	mysqlProxies := c.StringSlice("mysql-proxy-ip")
 	if len(mysqlProxies) > 0 {
 		proxyIP = mysqlProxies[0]
 	}
 	return &CloudControllerPartition{
-		AZs:                      c.StringSlice("az"),
+		Config:                   config,
 		Instances:                c.Int("cc-instances"),
 		VMTypeName:               c.String("cc-vm-type"),
-		StemcellName:             c.String("stemcell-name"),
-		NetworkName:              c.String("network"),
-		SystemDomain:             c.String("system-domain"),
-		AppDomains:               c.StringSlice("app-domain"),
-		AllowAppSSHAccess:        c.Bool("allow-app-ssh-access"),
 		Metron:                   NewMetron(c),
 		ConsulAgent:              NewConsulAgent(c, []string{}),
 		NFSMounter:               NewNFSMounter(c),
@@ -46,11 +70,6 @@ func NewCloudControllerPartition(c *cli.Context) InstanceGrouper {
 		CCServiceDashboardSecret: c.String("cc-service-dashboards-client-secret"),
 		CCUsernameLookupSecret:   c.String("cloud-controller-username-lookup-client-secret"),
 		CCRoutingSecret:          c.String("cc-routing-client-secret"),
-		SkipSSLCertVerify:        c.BoolT("skip-cert-verify"),
-		NATSUser:                 c.String("nats-user"),
-		NATSPass:                 c.String("nats-pass"),
-		NATSPort:                 c.Int("nats-port"),
-		NATSMachines:             c.StringSlice("nats-machine-ip"),
 	}
 }
 
@@ -67,12 +86,12 @@ func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 
 	ig = &enaml.InstanceGroup{
 		Name:      "cloud_controller-partition",
-		AZs:       s.AZs,
+		AZs:       s.Config.AZs,
 		Instances: s.Instances,
 		VMType:    s.VMTypeName,
-		Stemcell:  s.StemcellName,
+		Stemcell:  s.Config.StemcellName,
 		Networks: []enaml.Network{
-			enaml.Network{Name: s.NetworkName},
+			enaml.Network{Name: s.Config.NetworkName},
 		},
 		Jobs: []enaml.InstanceJob{
 			newCloudControllerNgJob(s),
@@ -102,17 +121,17 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 			AppSsh: &ccnglib.AppSsh{
 				HostKeyFingerprint: c.HostKeyFingerprint,
 			},
-			Domain:                   c.SystemDomain,
-			SystemDomain:             c.SystemDomain,
-			AppDomains:               c.AppDomains,
+			Domain:                   c.Config.SystemDomain,
+			SystemDomain:             c.Config.SystemDomain,
+			AppDomains:               c.Config.AppDomains,
 			SystemDomainOrganization: "system",
 			SupportAddress:           c.SupportAddress,
 			Login: &ccnglib.Login{
-				Url: fmt.Sprintf("https://login.%s", c.SystemDomain),
+				Url: fmt.Sprintf("https://login.%s", c.Config.SystemDomain),
 			},
 			Cc: &ccnglib.Cc{
-				AllowedCorsDomains:    []string{fmt.Sprintf("https://login.%s", c.SystemDomain)},
-				AllowAppSshAccess:     c.AllowAppSSHAccess,
+				AllowedCorsDomains:    []string{fmt.Sprintf("https://login.%s", c.Config.SystemDomain)},
+				AllowAppSshAccess:     c.Config.AllowSSHAccess,
 				DefaultToDiegoBackend: true,
 				Buildpacks: &ccnglib.Buildpacks{
 					BlobstoreType: "fog",
@@ -251,7 +270,7 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				},
 			},
 			Uaa: &ccnglib.Uaa{
-				Url: fmt.Sprintf("https://uaa.%s", c.SystemDomain),
+				Url: fmt.Sprintf("https://uaa.%s", c.Config.SystemDomain),
 				Jwt: &ccnglib.Jwt{
 					VerificationKey: c.UAAJWTVerificationKey,
 				},
@@ -269,7 +288,7 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				},
 			},
 			Ssl: &ccnglib.Ssl{
-				SkipCertVerify: c.SkipSSLCertVerify,
+				SkipCertVerify: c.Config.SkipSSLCertVerify,
 			},
 			LoggerEndpoint: &ccnglib.LoggerEndpoint{
 				Port: 443,
@@ -282,10 +301,10 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				SharePath: "/var/vcap/nfs",
 			},
 			Nats: &ccnglib.Nats{
-				User:     c.NATSUser,
-				Password: c.NATSPass,
-				Port:     c.NATSPort,
-				Machines: c.NATSMachines,
+				User:     c.Config.NATSUser,
+				Password: c.Config.NATSPassword,
+				Port:     c.Config.NATSPort,
+				Machines: c.Config.NATSMachines,
 			},
 		},
 	}
@@ -305,15 +324,15 @@ func newRouteRegistrarJob(c *CloudControllerPartition) enaml.InstanceJob {
 						"tags": map[string]interface{}{
 							"component": "CloudController",
 						},
-						"uris": []string{fmt.Sprintf("api.%s", c.SystemDomain)},
+						"uris": []string{fmt.Sprintf("api.%s", c.Config.SystemDomain)},
 					},
 				},
 			},
 			Nats: &route_registrar.Nats{
-				User:     c.NATSUser,
-				Password: c.NATSPass,
-				Port:     c.NATSPort,
-				Machines: c.NATSMachines,
+				User:     c.Config.NATSUser,
+				Password: c.Config.NATSPassword,
+				Port:     c.Config.NATSPort,
+				Machines: c.Config.NATSMachines,
 			},
 		},
 	}
@@ -323,26 +342,6 @@ func newRouteRegistrarJob(c *CloudControllerPartition) enaml.InstanceJob {
 func (s *CloudControllerPartition) HasValidValues() bool {
 
 	lo.G.Debugf("checking '%s' for valid flags", "cloud controller")
-
-	if len(s.AZs) <= 0 {
-		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
-	}
-
-	if s.StemcellName == "" {
-		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
-	}
-
-	if s.NetworkName == "" {
-		lo.G.Debugf("could not find a valid networkname '%v'", s.NetworkName)
-	}
-
-	if len(s.AppDomains) <= 0 {
-		lo.G.Debugf("could not find the correct number of app domains configured '%v' : '%v'", len(s.AppDomains), s.AppDomains)
-	}
-
-	if s.SystemDomain == "" {
-		lo.G.Debugf("could not find a valid system domain '%v'", s.SystemDomain)
-	}
 
 	if s.VMTypeName == "" {
 		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
@@ -360,14 +359,9 @@ func (s *CloudControllerPartition) HasValidValues() bool {
 		lo.G.Debug("missing mysql proxy IP")
 	}
 
-	return (len(s.AZs) > 0 &&
-		s.StemcellName != "" &&
-		s.VMTypeName != "" &&
+	return (s.VMTypeName != "" &&
 		s.Metron.Zone != "" &&
 		s.Metron.Secret != "" &&
-		s.NetworkName != "" &&
-		s.SystemDomain != "" &&
-		len(s.AppDomains) > 0 &&
 		s.NFSMounter.hasValidValues() &&
 		s.ConsulAgent.HasValidValues()) &&
 		s.MySQLProxyIP != ""
