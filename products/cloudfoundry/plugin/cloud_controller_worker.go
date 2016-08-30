@@ -42,7 +42,7 @@ func NewCloudControllerWorkerPartition(c *cli.Context, config *Config) InstanceG
 		Instances:             c.Int("cc-worker-instances"),
 		VMTypeName:            c.String("cc-worker-vm-type"),
 		Metron:                NewMetron(c),
-		ConsulAgent:           NewConsulAgent(c, []string{}),
+		ConsulAgent:           NewConsulAgent(c, []string{}, config),
 		NFSMounter:            NewNFSMounter(c),
 		StatsdInjector:        NewStatsdInjector(c),
 		StagingUploadUser:     c.String("cc-staging-upload-user"),

@@ -15,7 +15,7 @@ var _ = Describe("UAA Partition", func() {
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
 			})
-			uaaPartition := NewUAAPartition(c)
+			uaaPartition := NewUAAPartition(c, &Config{})
 			Ω(uaaPartition.HasValidValues()).Should(BeFalse())
 		})
 	})
@@ -25,21 +25,10 @@ var _ = Describe("UAA Partition", func() {
 			plugin := new(Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
-				"--network", "foundry-net",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--az", "eastprod-1",
-				"--network", "foundry-net",
 				"--uaa-vm-type", "blah",
 				"--uaa-instances", "1",
-				"--system-domain", "sys.test.com",
 				"--consul-ip", "1.0.0.1",
 				"--consul-ip", "1.0.0.2",
-				"--consul-encryption-key", "consulencryptionkey",
-				"--consul-server-ca-cert", "consul-ca-cert",
-				"--consul-agent-cert", "consul-agent-cert",
-				"--consul-agent-key", "consul-agent-key",
-				"--consul-server-cert", "consulservercert",
-				"--consul-server-key", "consulserverkey",
 				"--metron-secret", "metronsecret",
 				"--metron-zone", "metronzoneguid",
 				"--syslog-address", "syslog-server",
@@ -47,10 +36,6 @@ var _ = Describe("UAA Partition", func() {
 				"--syslog-transport", "tcp",
 				"--etcd-machine-ip", "1.0.0.7",
 				"--etcd-machine-ip", "1.0.0.8",
-				"--nats-user", "nats",
-				"--nats-pass", "pass",
-				"--nats-machine-ip", "1.0.0.5",
-				"--nats-machine-ip", "1.0.0.6",
 				"--uaa-saml-service-provider-key", "saml-key",
 				"--uaa-saml-service-provider-cert", "saml-cert",
 				"--uaa-jwt-verification-key", "jwt-verificationkey",
@@ -91,7 +76,24 @@ var _ = Describe("UAA Partition", func() {
 				"--apps-metrics-client-secret", "apps-metrics-client-secret",
 				"--apps-metrics-processing-client-secret", "apps-metrics-processing-client-secret",
 			})
-			uaaPartition = NewUAAPartition(c)
+			config := &Config{
+				SystemDomain:      "sys.test.com",
+				AZs:               []string{"eastprod-1"},
+				StemcellName:      "cool-ubuntu-animal",
+				NetworkName:       "foundry-net",
+				AllowSSHAccess:    true,
+				ConsulEncryptKeys: []string{"encyption-key"},
+				ConsulCaCert:      "ca-cert",
+				ConsulAgentCert:   "agent-cert",
+				ConsulAgentKey:    "agent-key",
+				ConsulServerCert:  "server-cert",
+				ConsulServerKey:   "server-key",
+				NATSUser:          "nats",
+				NATSPassword:      "pass",
+				NATSPort:          4222,
+				NATSMachines:      []string{"1.0.0.5", "1.0.0.6"},
+			}
+			uaaPartition = NewUAAPartition(c, config)
 		})
 		It("then HasValidValues should return true", func() {
 			Ω(uaaPartition.HasValidValues()).Should(Equal(true))

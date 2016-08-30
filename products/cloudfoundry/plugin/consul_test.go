@@ -24,7 +24,8 @@ var _ = Describe("Consul Partition", func() {
 				"--etcd-machine-ip", "1.0.0.7",
 				"--etcd-machine-ip", "1.0.0.8",
 			})
-			consul := NewConsulPartition(c)
+			config := &Config{}
+			consul := NewConsulPartition(c, config)
 			Ω(consul.HasValidValues()).Should(BeFalse())
 		})
 	})
@@ -55,7 +56,18 @@ var _ = Describe("Consul Partition", func() {
 				"--etcd-machine-ip", "1.0.0.7",
 				"--etcd-machine-ip", "1.0.0.8",
 			})
-			consul = NewConsulPartition(c)
+			config := &Config{
+				StemcellName:      "cool-ubuntu-animal",
+				AZs:               []string{"eastprod-1"},
+				NetworkName:       "foundry-net",
+				ConsulEncryptKeys: []string{"encyption-key"},
+				ConsulCaCert:      "ca-cert",
+				ConsulAgentCert:   "agent-cert",
+				ConsulAgentKey:    "agent-key",
+				ConsulServerCert:  "server-cert",
+				ConsulServerKey:   "server-key",
+			}
+			consul = NewConsulPartition(c, config)
 		})
 		It("then it should not return an error", func() {
 			Ω(err).Should(BeNil())

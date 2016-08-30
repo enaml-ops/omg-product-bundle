@@ -9,7 +9,6 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
 	natslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/nats"
 	routereglib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
-	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/uaa"
 )
 
 //VaultRotater an interface for rotating vault hashes values
@@ -47,81 +46,6 @@ type gorouter struct {
 	MetronSecret string
 }
 
-type diegoDatabase struct {
-	context            *cli.Context
-	AZs                []string
-	Passphrase         string
-	SystemDomain       string
-	StemcellName       string
-	VMTypeName         string
-	PersistentDiskType string
-	NetworkName        string
-	NetworkIPs         []string
-	CACert             string
-	BBSServerCert      string
-	BBSServerKey       string
-	EtcdServerCert     string
-	EtcdServerKey      string
-	EtcdClientCert     string
-	EtcdClientKey      string
-	EtcdPeerCert       string
-	EtcdPeerKey        string
-	ConsulAgent        *ConsulAgent
-	StatsdInjector     *StatsdInjector
-	Metron             *Metron
-	DiegoBrain         *diegoBrain
-}
-
-type diegoCell struct {
-	context            *cli.Context
-	AZs                []string
-	StemcellName       string
-	VMTypeName         string
-	PersistentDiskType string
-	NetworkName        string
-	NetworkIPs         []string
-	ConsulAgent        *ConsulAgent
-	StatsdInjector     *StatsdInjector
-	Metron             *Metron
-	DiegoBrain         *diegoBrain
-}
-
-type diegoBrain struct {
-	AZs                       []string
-	StemcellName              string
-	VMTypeName                string
-	PersistentDiskType        string
-	NetworkName               string
-	NetworkIPs                []string
-	BBSCACert                 string
-	BBSClientCert             string
-	BBSClientKey              string
-	BBSRequireSSL             bool
-	SkipSSLCertVerify         bool
-	CCUploaderJobPollInterval int
-	CCInternalAPIUser         string
-	CCInternalAPIPassword     string
-	CCBulkBatchSize           int
-	CCFetchTimeout            int
-	SystemDomain              string
-	FSListenAddr              string
-	FSStaticDirectory         string
-	FSDebugAddr               string
-	FSLogLevel                string
-	MetronPort                int
-	NATSUser                  string
-	NATSPassword              string
-	NATSPort                  int
-	NATSMachines              []string
-	AllowSSHAccess            bool
-	SSHProxyClientSecret      string
-	CCExternalPort            int
-	TrafficControllerURL      string
-	ConsulAgent               *ConsulAgent
-	Metron                    *Metron
-	Statsd                    *StatsdInjector
-}
-
 type loggregatorTrafficController struct {
 	AZs               []string
 	StemcellName      string
@@ -134,31 +58,6 @@ type loggregatorTrafficController struct {
 	DopplerSecret     string
 	Metron            *Metron
 	Nats              *routereglib.Nats
-}
-
-// Consul -
-type Consul struct {
-	AZs            []string
-	StemcellName   string
-	VMTypeName     string
-	NetworkName    string
-	NetworkIPs     []string
-	ConsulAgent    *ConsulAgent
-	Metron         *Metron
-	StatsdInjector *StatsdInjector
-}
-
-//ConsulAgent -
-type ConsulAgent struct {
-	EncryptKeys []string
-	CaCert      string
-	AgentCert   string
-	AgentKey    string
-	ServerCert  string
-	ServerKey   string
-	NetworkIPs  []string
-	Mode        string
-	Services    []string
 }
 
 //Etcd -
@@ -279,53 +178,6 @@ type Doppler struct {
 	EtcdMachines           []string
 }
 
-//UAA -
-type UAA struct {
-	AZs                                       []string
-	StemcellName                              string
-	VMTypeName                                string
-	NetworkName                               string
-	Instances                                 int
-	SystemDomain                              string
-	RouterMachines                            []string
-	Metron                                    *Metron
-	StatsdInjector                            *StatsdInjector
-	ConsulAgent                               *ConsulAgent
-	Nats                                      *routereglib.Nats
-	Login                                     *uaa.Login
-	UAA                                       *uaa.Uaa
-	SAMLServiceProviderKey                    string
-	SAMLServiceProviderCertificate            string
-	JWTSigningKey                             string
-	JWTVerificationKey                        string
-	Protocol                                  string
-	AdminSecret                               string
-	MySQLProxyHost                            string
-	DBUserName                                string
-	DBPassword                                string
-	AdminPassword                             string
-	PushAppsManagerPassword                   string
-	SmokeTestsPassword                        string
-	SystemServicesPassword                    string
-	SystemVerificationPassword                string
-	OpentsdbFirehoseNozzleClientSecret        string
-	IdentityClientSecret                      string
-	LoginClientSecret                         string
-	PortalClientSecret                        string
-	AutoScalingServiceClientSecret            string
-	SystemPasswordsClientSecret               string
-	CCServiceDashboardsClientSecret           string
-	DopplerClientSecret                       string
-	GoRouterClientSecret                      string
-	NotificationsClientSecret                 string
-	NotificationsUIClientSecret               string
-	CloudControllerUsernameLookupClientSecret string
-	CCRoutingClientSecret                     string
-	SSHProxyClientSecret                      string
-	AppsMetricsClientSecret                   string
-	AppsMetricsProcessingClientSecret         string
-}
-
 //UAAClient - Structure to represent map of client priviledges
 type UAAClient struct {
 	ID                   string      `yaml:"id,omitempty"`
@@ -343,21 +195,6 @@ type UAAClient struct {
 	AppLaunchURL         string      `yaml:"app-launch-url,omitempty"`
 	ShowOnHomepage       bool        `yaml:"show-on-homepage,omitempty"`
 	AppIcon              string      `yaml:"app-icon,omitempty"`
-}
-
-// HAProxy -
-type HAProxy struct {
-	Skip           bool
-	AZs            []string
-	StemcellName   string
-	VMTypeName     string
-	NetworkName    string
-	NetworkIPs     []string
-	ConsulAgent    *ConsulAgent
-	Metron         *Metron
-	StatsdInjector *StatsdInjector
-	SSLPem         string
-	RouterMachines []string
 }
 
 type SmokeErrand struct {

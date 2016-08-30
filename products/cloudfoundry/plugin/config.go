@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/codegangsta/cli"
+	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 )
 
@@ -28,6 +29,12 @@ type Config struct {
 	CCDBPassword             string
 	JWTVerificationKey       string
 	CCServiceDashboardSecret string
+	ConsulCaCert             string
+	ConsulEncryptKeys        []string
+	ConsulAgentCert          string
+	ConsulAgentKey           string
+	ConsulServerCert         string
+	ConsulServerKey          string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -49,13 +56,48 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		MySQLIPs:               c.StringSlice("mysql-ip"),
 		MySQLBootstrapUser:     c.String("mysql-bootstrap-username"),
 		MySQLBootstrapPassword: c.String("mysql-bootstrap-password"),
+		ConsulEncryptKeys:      c.StringSlice("consul-encryption-key"),
 
 		//boolean flags
 		AllowSSHAccess:    c.Bool("allow-app-ssh-access"),
 		SkipSSLCertVerify: c.BoolT("skip-cert-verify"),
 	}
+	if err := config.loadSSL(c); err != nil {
+		return nil, err
+	}
 	return config, nil
 }
+
+func (ca *Config) loadSSL(c *cli.Context) error {
+	caCert, err := pluginutil.LoadResourceFromContext(c, "consul-server-ca-cert")
+	if err != nil {
+		return err
+	}
+	agentCert, err := pluginutil.LoadResourceFromContext(c, "consul-agent-cert")
+	if err != nil {
+		return err
+	}
+	agentKey, err := pluginutil.LoadResourceFromContext(c, "consul-agent-key")
+	if err != nil {
+		return err
+	}
+	serverCert, err := pluginutil.LoadResourceFromContext(c, "consul-server-cert")
+	if err != nil {
+		return err
+	}
+	serverKey, err := pluginutil.LoadResourceFromContext(c, "consul-server-key")
+	if err != nil {
+		return err
+	}
+
+	ca.ConsulCaCert = caCert
+	ca.ConsulAgentCert = agentCert
+	ca.ConsulServerCert = serverCert
+	ca.ConsulAgentKey = agentKey
+	ca.ConsulServerKey = serverKey
+	return nil
+}
+
 func checkRequired(c *cli.Context) error {
 	invalidNames := []string{}
 	invalidNames = append(invalidNames, checkRequiredStringFlags(c)...)

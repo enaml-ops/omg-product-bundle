@@ -22,10 +22,6 @@ var _ = Describe("given a Diego Database Partition", func() {
 				cf := new(Plugin)
 				c := cf.GetContext([]string{
 					"cloudfoundry",
-					"--az", "eastprod-1",
-					"--system-domain", "service.cf.domain.com",
-					"--stemcell-name", "cool-ubuntu-animal",
-					"--network", "foundry-net",
 					"--diego-db-ip", "10.0.0.39",
 					"--diego-db-ip", "10.0.0.40",
 					"--diego-db-vm-type", "dbvmtype",
@@ -45,12 +41,6 @@ var _ = Describe("given a Diego Database Partition", func() {
 					"--consul-ip", "1.0.0.1",
 					"--consul-ip", "1.0.0.2",
 					"--consul-vm-type", "blah",
-					"--consul-encryption-key", "encyption-key",
-					"--consul-server-ca-cert", "ca-cert",
-					"--consul-agent-cert", "agent-cert",
-					"--consul-agent-key", "agent-key",
-					"--consul-server-cert", "server-cert",
-					"--consul-server-key", "server-key",
 					"--metron-secret", "metronsecret",
 					"--metron-zone", "metronzoneguid",
 					"--syslog-address", "syslog-server",
@@ -59,7 +49,20 @@ var _ = Describe("given a Diego Database Partition", func() {
 					"--etcd-machine-ip", "1.0.0.7",
 					"--etcd-machine-ip", "1.0.0.8",
 				})
-				grouper = NewDiegoDatabasePartition(c)
+				config := &Config{
+					SystemDomain:      "service.cf.domain.com",
+					AZs:               []string{"eastprod-1"},
+					StemcellName:      "cool-ubuntu-animal",
+					NetworkName:       "foundry-net",
+					AllowSSHAccess:    true,
+					ConsulEncryptKeys: []string{"encyption-key"},
+					ConsulCaCert:      "ca-cert",
+					ConsulAgentCert:   "agent-cert",
+					ConsulAgentKey:    "agent-key",
+					ConsulServerCert:  "server-cert",
+					ConsulServerKey:   "server-key",
+				}
+				grouper = NewDiegoDatabasePartition(c, config)
 				instanceGroup = grouper.ToInstanceGroup()
 			})
 

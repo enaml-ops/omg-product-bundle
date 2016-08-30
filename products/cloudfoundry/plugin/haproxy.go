@@ -8,8 +8,21 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
+// HAProxy -
+type HAProxy struct {
+	Skip           bool
+	Config         *Config
+	VMTypeName     string
+	NetworkIPs     []string
+	ConsulAgent    *ConsulAgent
+	Metron         *Metron
+	StatsdInjector *StatsdInjector
+	SSLPem         string
+	RouterMachines []string
+}
+
 //NewHaProxyPartition -
-func NewHaProxyPartition(c *cli.Context) InstanceGrouper {
+func NewHaProxyPartition(c *cli.Context, config *Config) InstanceGrouper {
 	sslpem, err := pluginutil.LoadResourceFromContext(c, "haproxy-sslpem")
 	if err != nil {
 		lo.G.Error("couldn't load haproxy-sslpem:" + err.Error())
@@ -17,13 +30,11 @@ func NewHaProxyPartition(c *cli.Context) InstanceGrouper {
 	}
 
 	return &HAProxy{
+		Config:         config,
 		Skip:           c.BoolT("skip-haproxy"),
-		AZs:            c.StringSlice("az"),
-		StemcellName:   c.String("stemcell-name"),
 		NetworkIPs:     c.StringSlice("haproxy-ip"),
-		NetworkName:    c.String("network"),
 		VMTypeName:     c.String("haproxy-vm-type"),
-		ConsulAgent:    NewConsulAgent(c, []string{}),
+		ConsulAgent:    NewConsulAgent(c, []string{}, config),
 		Metron:         NewMetron(c),
 		StatsdInjector: NewStatsdInjector(c),
 		RouterMachines: c.StringSlice("router-ip"),
@@ -38,8 +49,8 @@ func (s *HAProxy) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 			Name:      "ha_proxy-partition",
 			Instances: len(s.NetworkIPs),
 			VMType:    s.VMTypeName,
-			AZs:       s.AZs,
-			Stemcell:  s.StemcellName,
+			AZs:       s.Config.AZs,
+			Stemcell:  s.Config.StemcellName,
 			Jobs: []enaml.InstanceJob{
 				s.createHAProxyJob(),
 				s.ConsulAgent.CreateJob(),
@@ -47,7 +58,7 @@ func (s *HAProxy) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 				s.StatsdInjector.CreateJob(),
 			},
 			Networks: []enaml.Network{
-				enaml.Network{Name: s.NetworkName, StaticIPs: s.NetworkIPs},
+				enaml.Network{Name: s.Config.NetworkName, StaticIPs: s.NetworkIPs},
 			},
 			Update: enaml.Update{
 				MaxInFlight: 1,
@@ -89,28 +100,16 @@ func (s *HAProxy) HasValidValues() bool {
 
 	lo.G.Debugf("checking '%s' for valid flags", "haproxy")
 
-	if len(s.AZs) <= 0 {
-		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
-	}
 	if len(s.NetworkIPs) <= 0 {
 		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
 	}
 	if len(s.RouterMachines) <= 0 {
 		lo.G.Debugf("could not find the correct number of RouterMachines configured '%v' : '%v'", len(s.RouterMachines), s.RouterMachines)
 	}
-	if s.StemcellName == "" {
-		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
-	}
 	if s.VMTypeName == "" {
 		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
 	}
-	if s.NetworkName == "" {
-		lo.G.Debugf("could not find a valid NetworkName '%v'", s.NetworkName)
-	}
-	return (len(s.AZs) > 0 &&
-		s.StemcellName != "" &&
-		s.VMTypeName != "" &&
-		s.NetworkName != "" &&
+	return (s.VMTypeName != "" &&
 		len(s.NetworkIPs) > 0 &&
 		len(s.RouterMachines) > 0 &&
 		s.SSLPem != "")

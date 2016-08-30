@@ -15,7 +15,7 @@ var _ = Describe("HaProxy Partition", func() {
 				"cloudfoundry",
 				"--skip-haproxy=false",
 			})
-			haproxyPartition := NewHaProxyPartition(c)
+			haproxyPartition := NewHaProxyPartition(c, &Config{})
 			Ω(haproxyPartition.HasValidValues()).Should(BeFalse())
 		})
 	})
@@ -25,19 +25,21 @@ var _ = Describe("HaProxy Partition", func() {
 			plugin := new(Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--az", "eastprod-1",
 				"--skip-haproxy=false",
 				"--haproxy-ip", "1.0.11.1",
 				"--haproxy-ip", "1.0.11.2",
 				"--haproxy-ip", "1.0.11.3",
-				"--network", "foundry-net",
 				"--haproxy-vm-type", "blah",
 				"--router-ip", "1.0.0.1",
 				"--router-ip", "1.0.0.2",
 				"--haproxy-sslpem", "blah",
 			})
-			haproxyPartition = NewHaProxyPartition(c)
+			config := &Config{
+				StemcellName: "cool-ubuntu-animal",
+				AZs:          []string{"eastprod-1"},
+				NetworkName:  "foundry-net",
+			}
+			haproxyPartition = NewHaProxyPartition(c, config)
 		})
 		It("then HasValidValues should be true", func() {
 			Ω(haproxyPartition.HasValidValues()).Should(BeTrue())

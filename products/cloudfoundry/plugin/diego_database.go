@@ -11,7 +11,29 @@ import (
 
 const diegoDatabaseIGName = "diego_database-partition"
 
-func NewDiegoDatabasePartition(c *cli.Context) InstanceGrouper {
+type diegoDatabase struct {
+	context            *cli.Context
+	Config             *Config
+	Passphrase         string
+	VMTypeName         string
+	PersistentDiskType string
+	NetworkIPs         []string
+	CACert             string
+	BBSServerCert      string
+	BBSServerKey       string
+	EtcdServerCert     string
+	EtcdServerKey      string
+	EtcdClientCert     string
+	EtcdClientKey      string
+	EtcdPeerCert       string
+	EtcdPeerKey        string
+	ConsulAgent        *ConsulAgent
+	StatsdInjector     *StatsdInjector
+	Metron             *Metron
+	DiegoBrain         *diegoBrain
+}
+
+func NewDiegoDatabasePartition(c *cli.Context, config *Config) InstanceGrouper {
 
 	caCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-ca-cert")
 	if err != nil {
@@ -60,13 +82,10 @@ func NewDiegoDatabasePartition(c *cli.Context) InstanceGrouper {
 
 	return &diegoDatabase{
 		context:            c,
-		AZs:                c.StringSlice("az"),
+		Config:             config,
 		CACert:             caCert,
-		SystemDomain:       c.String("system-domain"),
-		StemcellName:       c.String("stemcell-name"),
 		VMTypeName:         c.String("diego-db-vm-type"),
 		PersistentDiskType: c.String("diego-db-disk-type"),
-		NetworkName:        c.String("network"),
 		NetworkIPs:         c.StringSlice("diego-db-ip"),
 		Passphrase:         c.String("diego-db-passphrase"),
 		BBSServerCert:      bbsServerCert,
@@ -77,10 +96,10 @@ func NewDiegoDatabasePartition(c *cli.Context) InstanceGrouper {
 		EtcdClientKey:      etcdClientKey,
 		EtcdPeerCert:       etcdPeerCert,
 		EtcdPeerKey:        etcdPeerKey,
-		ConsulAgent:        NewConsulAgent(c, []string{"bbs", "etcd"}),
+		ConsulAgent:        NewConsulAgent(c, []string{"bbs", "etcd"}, config),
 		Metron:             NewMetron(c),
 		StatsdInjector:     NewStatsdInjector(c),
-		DiegoBrain:         NewDiegoBrainPartition(c).(*diegoBrain),
+		DiegoBrain:         NewDiegoBrainPartition(c, config).(*diegoBrain),
 	}
 }
 
@@ -90,11 +109,11 @@ func (s *diegoDatabase) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 		Lifecycle:          "service",
 		Instances:          len(s.NetworkIPs),
 		VMType:             s.VMTypeName,
-		AZs:                s.AZs,
+		AZs:                s.Config.AZs,
 		PersistentDiskType: s.PersistentDiskType,
-		Stemcell:           s.StemcellName,
+		Stemcell:           s.Config.StemcellName,
 		Networks: []enaml.Network{
-			{Name: s.NetworkName, StaticIPs: s.NetworkIPs},
+			{Name: s.Config.NetworkName, StaticIPs: s.NetworkIPs},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,

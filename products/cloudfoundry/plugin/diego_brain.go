@@ -20,7 +20,34 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
-func NewDiegoBrainPartition(c *cli.Context) InstanceGrouper {
+type diegoBrain struct {
+	Config                    *Config
+	VMTypeName                string
+	PersistentDiskType        string
+	NetworkIPs                []string
+	BBSCACert                 string
+	BBSClientCert             string
+	BBSClientKey              string
+	BBSRequireSSL             bool
+	CCUploaderJobPollInterval int
+	CCInternalAPIUser         string
+	CCInternalAPIPassword     string
+	CCBulkBatchSize           int
+	CCFetchTimeout            int
+	FSListenAddr              string
+	FSStaticDirectory         string
+	FSDebugAddr               string
+	FSLogLevel                string
+	MetronPort                int
+	SSHProxyClientSecret      string
+	CCExternalPort            int
+	TrafficControllerURL      string
+	ConsulAgent               *ConsulAgent
+	Metron                    *Metron
+	Statsd                    *StatsdInjector
+}
+
+func NewDiegoBrainPartition(c *cli.Context, config *Config) InstanceGrouper {
 	caCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-ca-cert")
 	if err != nil {
 		lo.G.Fatalf("bbs ca cert: %s\n", err.Error())
@@ -36,19 +63,15 @@ func NewDiegoBrainPartition(c *cli.Context) InstanceGrouper {
 		lo.G.Fatalf("bbs client key: %s\n", err.Error())
 	}
 	return &diegoBrain{
-		AZs:                       c.StringSlice("az"),
-		StemcellName:              c.String("stemcell-name"),
+		Config:                    config,
 		VMTypeName:                c.String("diego-brain-vm-type"),
 		PersistentDiskType:        c.String("diego-brain-disk-type"),
-		NetworkName:               c.String("network"),
 		NetworkIPs:                c.StringSlice("diego-brain-ip"),
 		BBSCACert:                 caCert,
 		BBSClientCert:             clientCert,
 		BBSClientKey:              clientKey,
 		BBSRequireSSL:             c.BoolT("bbs-require-ssl"),
-		SkipSSLCertVerify:         c.BoolT("skip-cert-verify"),
 		CCUploaderJobPollInterval: c.Int("cc-uploader-poll-interval"),
-		SystemDomain:              c.String("system-domain"),
 		CCInternalAPIUser:         c.String("cc-internal-api-user"),
 		CCInternalAPIPassword:     c.String("cc-internal-api-password"),
 		CCFetchTimeout:            c.Int("cc-fetch-timeout"),
@@ -58,15 +81,10 @@ func NewDiegoBrainPartition(c *cli.Context) InstanceGrouper {
 		FSDebugAddr:               c.String("fs-debug-addr"),
 		FSLogLevel:                c.String("fs-log-level"),
 		MetronPort:                c.Int("metron-port"),
-		NATSUser:                  c.String("nats-user"),
-		NATSPassword:              c.String("nats-pass"),
-		NATSPort:                  c.Int("nats-port"),
-		NATSMachines:              c.StringSlice("nats-machine-ip"),
-		AllowSSHAccess:            c.Bool("allow-app-ssh-access"),
 		SSHProxyClientSecret:      c.String("ssh-proxy-uaa-secret"),
 		CCExternalPort:            c.Int("cc-external-port"),
 		TrafficControllerURL:      c.String("traffic-controller-url"),
-		ConsulAgent:               NewConsulAgent(c, []string{}),
+		ConsulAgent:               NewConsulAgent(c, []string{}, config),
 		Metron:                    NewMetron(c),
 		Statsd:                    NewStatsdInjector(c),
 	}
@@ -77,11 +95,11 @@ func (d *diegoBrain) ToInstanceGroup() *enaml.InstanceGroup {
 		Name:               "diego_brain-partition",
 		Instances:          len(d.NetworkIPs),
 		VMType:             d.VMTypeName,
-		AZs:                d.AZs,
+		AZs:                d.Config.AZs,
 		PersistentDiskType: d.PersistentDiskType,
-		Stemcell:           d.StemcellName,
+		Stemcell:           d.Config.StemcellName,
 		Networks: []enaml.Network{
-			{Name: d.NetworkName, StaticIPs: d.NetworkIPs},
+			{Name: d.Config.NetworkName, StaticIPs: d.NetworkIPs},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -110,16 +128,8 @@ func (d *diegoBrain) HasValidValues() bool {
 
 	lo.G.Debugf("checking '%s' for valid flags", "diego brain")
 
-	if len(d.AZs) <= 0 {
-		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(d.AZs), d.AZs)
-	}
-
 	if len(d.NetworkIPs) <= 0 {
 		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(d.NetworkIPs), d.NetworkIPs)
-	}
-
-	if d.StemcellName == "" {
-		lo.G.Debugf("could not find a valid stemcellname '%v'", d.StemcellName)
 	}
 
 	if d.VMTypeName == "" {
@@ -127,9 +137,6 @@ func (d *diegoBrain) HasValidValues() bool {
 	}
 	if d.PersistentDiskType == "" {
 		lo.G.Debugf("could not find a valid PersistentDiskType '%v'", d.PersistentDiskType)
-	}
-	if d.NetworkName == "" {
-		lo.G.Debugf("could not find a valid networkname '%v'", d.NetworkName)
 	}
 	if d.BBSCACert == "" {
 		lo.G.Debugf("could not find a valid bbscacert '%v'", d.BBSCACert)
@@ -143,22 +150,15 @@ func (d *diegoBrain) HasValidValues() bool {
 	if d.CCInternalAPIPassword == "" {
 		lo.G.Debugf("could not find a valid CCInternalAPIPassword '%v'", d.CCInternalAPIPassword)
 	}
-	if d.SystemDomain == "" {
-		lo.G.Debugf("could not find a valid SystemDomain '%v'", d.SystemDomain)
-	}
 
-	return len(d.AZs) > 0 &&
-		d.StemcellName != "" &&
-		len(d.NetworkIPs) > 0 &&
+	return len(d.NetworkIPs) > 0 &&
 		d.VMTypeName != "" &&
 		d.PersistentDiskType != "" &&
-		d.NetworkName != "" &&
 		d.BBSCACert != "" &&
 		d.BBSClientCert != "" &&
 		d.BBSClientKey != "" &&
 		d.CCInternalAPIUser != "" &&
 		d.CCInternalAPIPassword != "" &&
-		d.SystemDomain != "" &&
 		d.ConsulAgent.HasValidValues() &&
 		d.Metron.HasValidValues()
 }
@@ -188,7 +188,7 @@ func (d *diegoBrain) newCCUploader() *enaml.InstanceJob {
 		Release: DiegoReleaseName,
 		Properties: &cc_uploader.CcUploaderJob{
 			Diego: &cc_uploader.Diego{
-				Ssl: &cc_uploader.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
+				Ssl: &cc_uploader.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
 				CcUploader: &cc_uploader.CcUploader{
 					Cc: &cc_uploader.Cc{
 						JobPollingIntervalInSeconds: d.CCUploaderJobPollInterval,
@@ -224,7 +224,7 @@ func (d *diegoBrain) newFileServer() *enaml.InstanceJob {
 		Release: DiegoReleaseName,
 		Properties: &file_server.FileServerJob{
 			Diego: &file_server.Diego{
-				Ssl: &file_server.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
+				Ssl: &file_server.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
 			},
 		},
 	}
@@ -236,10 +236,10 @@ func (d *diegoBrain) newNsync() *enaml.InstanceJob {
 		Release: DiegoReleaseName,
 		Properties: &nsync.NsyncJob{
 			Diego: &nsync.Diego{
-				Ssl: &nsync.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
+				Ssl: &nsync.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
 				Nsync: &nsync.Nsync{
 					Cc: &nsync.Cc{
-						BaseUrl:                  prefixSystemDomain(d.SystemDomain, "api"),
+						BaseUrl:                  prefixSystemDomain(d.Config.SystemDomain, "api"),
 						BasicAuthUsername:        d.CCInternalAPIUser,
 						BasicAuthPassword:        d.CCInternalAPIPassword,
 						BulkBatchSize:            d.CCBulkBatchSize,
@@ -273,10 +273,10 @@ func (d *diegoBrain) newRouteEmitter() *enaml.InstanceJob {
 						RequireSsl:  d.BBSRequireSSL,
 					},
 					Nats: &route_emitter.Nats{
-						User:     d.NATSUser,
-						Password: d.NATSPassword,
-						Port:     d.NATSPort,
-						Machines: d.NATSMachines,
+						User:     d.Config.NATSUser,
+						Password: d.Config.NATSPassword,
+						Port:     d.Config.NATSPort,
+						Machines: d.Config.NATSMachines,
 					},
 				},
 			},
@@ -296,7 +296,7 @@ func (d *diegoBrain) newSSHProxy() *enaml.InstanceJob {
 		Release: DiegoReleaseName,
 		Properties: &ssh_proxy.SshProxyJob{
 			Diego: &ssh_proxy.Diego{
-				Ssl: &ssh_proxy.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
+				Ssl: &ssh_proxy.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
 				SshProxy: &ssh_proxy.SshProxy{
 					Bbs: &ssh_proxy.Bbs{
 						ApiLocation: defaultBBSAPILocation,
@@ -308,10 +308,10 @@ func (d *diegoBrain) newSSHProxy() *enaml.InstanceJob {
 					Cc: &ssh_proxy.Cc{
 						ExternalPort: d.CCExternalPort,
 					},
-					EnableCfAuth:    d.AllowSSHAccess,
-					EnableDiegoAuth: d.AllowSSHAccess,
+					EnableCfAuth:    d.Config.AllowSSHAccess,
+					EnableDiegoAuth: d.Config.AllowSSHAccess,
 					UaaSecret:       d.SSHProxyClientSecret,
-					UaaTokenUrl:     prefixSystemDomain(d.SystemDomain, "uaa") + "/oauth/token",
+					UaaTokenUrl:     prefixSystemDomain(d.Config.SystemDomain, "uaa") + "/oauth/token",
 					HostKey:         privateKey,
 				},
 			},
@@ -325,7 +325,7 @@ func (d *diegoBrain) newStager() *enaml.InstanceJob {
 		Release: DiegoReleaseName,
 		Properties: &stager.StagerJob{
 			Diego: &stager.Diego{
-				Ssl: &stager.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
+				Ssl: &stager.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
 				Stager: &stager.Stager{
 					Bbs: &stager.Bbs{
 						ApiLocation: defaultBBSAPILocation,
@@ -352,7 +352,7 @@ func (d *diegoBrain) newTPS() *enaml.InstanceJob {
 		Properties: &tps.TpsJob{
 
 			Diego: &tps.Diego{
-				Ssl: &tps.Ssl{SkipCertVerify: d.SkipSSLCertVerify},
+				Ssl: &tps.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
 				Tps: &tps.Tps{
 					TrafficControllerUrl: d.TrafficControllerURL,
 					Bbs: &tps.Bbs{

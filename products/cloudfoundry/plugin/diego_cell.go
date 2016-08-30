@@ -8,20 +8,30 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
-func NewDiegoCellPartition(c *cli.Context) InstanceGrouper {
+type diegoCell struct {
+	Config             *Config
+	context            *cli.Context
+	VMTypeName         string
+	PersistentDiskType string
+	NetworkIPs         []string
+	ConsulAgent        *ConsulAgent
+	StatsdInjector     *StatsdInjector
+	Metron             *Metron
+	DiegoBrain         *diegoBrain
+}
+
+func NewDiegoCellPartition(c *cli.Context, config *Config) InstanceGrouper {
 
 	return &diegoCell{
 		context:            c,
-		AZs:                c.StringSlice("az"),
-		StemcellName:       c.String("stemcell-name"),
+		Config:             config,
 		VMTypeName:         c.String("diego-cell-vm-type"),
 		PersistentDiskType: c.String("diego-cell-disk-type"),
-		NetworkName:        c.String("network"),
 		NetworkIPs:         c.StringSlice("diego-cell-ip"),
-		ConsulAgent:        NewConsulAgent(c, []string{}),
+		ConsulAgent:        NewConsulAgent(c, []string{}, config),
 		Metron:             NewMetron(c),
 		StatsdInjector:     NewStatsdInjector(c),
-		DiegoBrain:         NewDiegoBrainPartition(c).(*diegoBrain),
+		DiegoBrain:         NewDiegoBrainPartition(c, config).(*diegoBrain),
 	}
 }
 
@@ -31,11 +41,11 @@ func (s *diegoCell) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 		Lifecycle:          "service",
 		Instances:          len(s.NetworkIPs),
 		VMType:             s.VMTypeName,
-		AZs:                s.AZs,
+		AZs:                s.Config.AZs,
 		PersistentDiskType: s.PersistentDiskType,
-		Stemcell:           s.StemcellName,
+		Stemcell:           s.Config.StemcellName,
 		Networks: []enaml.Network{
-			{Name: s.NetworkName, StaticIPs: s.NetworkIPs},
+			{Name: s.Config.NetworkName, StaticIPs: s.NetworkIPs},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,

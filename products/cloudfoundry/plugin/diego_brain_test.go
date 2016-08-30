@@ -28,7 +28,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				"--metron-secret", "metronsecret",
 				"--metron-zone", "metronzoneguid",
 			})
-			ig = NewDiegoBrainPartition(c)
+			ig = NewDiegoBrainPartition(c, &Config{})
 		})
 
 		It("then it should not validate", func() {
@@ -44,10 +44,6 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			cf := new(Plugin)
 			c := cf.GetContext([]string{
 				"cloudfoundry",
-				"--az", "eastprod-1",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--network", "foundry-net",
-				"--allow-app-ssh-access",
 				"--diego-brain-ip", "10.0.0.39",
 				"--diego-brain-ip", "10.0.0.40",
 				"--diego-brain-vm-type", "brainvmtype",
@@ -69,20 +65,9 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				"--fs-debug-addr", "10.0.1.2:22222",
 				"--fs-log-level", "debug",
 				"--metron-port", "3458",
-				"--nats-user", "nats",
-				"--nats-port", "1234",
-				"--nats-pass", "natspass",
-				"--nats-machine-ip", "10.0.0.11",
-				"--nats-machine-ip", "10.0.0.12",
 				"--ssh-proxy-uaa-secret", "secret",
 				"--traffic-controller-url", "wss://doppler.sys.yourdomain.com:443",
 				"--consul-vm-type", "blah",
-				"--consul-encryption-key", "encyption-key",
-				"--consul-server-ca-cert", "ca-cert",
-				"--consul-agent-cert", "agent-cert",
-				"--consul-agent-key", "agent-key",
-				"--consul-server-cert", "server-cert",
-				"--consul-server-key", "server-key",
 				"--consul-ip", "1.0.0.1",
 				"--consul-ip", "1.0.0.2",
 				"--metron-secret", "metronsecret",
@@ -90,7 +75,24 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				"--etcd-machine-ip", "1.0.0.7",
 				"--etcd-machine-ip", "1.0.0.8",
 			})
-			grouper = NewDiegoBrainPartition(c)
+			config := &Config{
+				SystemDomain:      "sys.test.com",
+				AZs:               []string{"eastprod-1"},
+				StemcellName:      "cool-ubuntu-animal",
+				NetworkName:       "foundry-net",
+				AllowSSHAccess:    true,
+				ConsulEncryptKeys: []string{"encyption-key"},
+				ConsulCaCert:      "ca-cert",
+				ConsulAgentCert:   "agent-cert",
+				ConsulAgentKey:    "agent-key",
+				ConsulServerCert:  "server-cert",
+				ConsulServerKey:   "server-key",
+				NATSUser:          "nats",
+				NATSPassword:      "natspass",
+				NATSPort:          1234,
+				NATSMachines:      []string{"10.0.0.11", "10.0.0.12"},
+			}
+			grouper = NewDiegoBrainPartition(c, config)
 			deploymentManifest = new(enaml.DeploymentManifest)
 			deploymentManifest.AddInstanceGroup(grouper.ToInstanceGroup())
 		})
