@@ -24,7 +24,7 @@ var _ = Describe("Etcd Partition", func() {
 				"--nats-machine-ip", "1.0.0.5",
 				"--nats-machine-ip", "1.0.0.6",
 			})
-			Ω(NewEtcdPartition(c).HasValidValues()).Should(Equal(false))
+			Ω(NewEtcdPartition(c, &Config{}).HasValidValues()).Should(Equal(false))
 		})
 	})
 	Context("when initialized WITH a complete set of arguments", func() {
@@ -33,11 +33,8 @@ var _ = Describe("Etcd Partition", func() {
 			plugin := new(Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--az", "eastprod-1",
 				"--etcd-machine-ip", "1.0.0.7",
 				"--etcd-machine-ip", "1.0.0.8",
-				"--network", "foundry-net",
 				"--etcd-vm-type", "blah",
 				"--etcd-disk-type", "blah-disk",
 				"--metron-secret", "metronsecret",
@@ -45,12 +42,17 @@ var _ = Describe("Etcd Partition", func() {
 				"--syslog-address", "syslog-server",
 				"--syslog-port", "10601",
 				"--syslog-transport", "tcp",
-				"--nats-user", "nats",
-				"--nats-pass", "pass",
-				"--nats-machine-ip", "1.0.0.5",
-				"--nats-machine-ip", "1.0.0.6",
 			})
-			etcdPartition = NewEtcdPartition(c)
+			config := &Config{
+				StemcellName: "cool-ubuntu-animal",
+				AZs:          []string{"eastprod-1"},
+				NetworkName:  "foundry-net",
+				NATSUser:     "nats",
+				NATSPassword: "pass",
+				NATSMachines: []string{"1.0.0.5", "1.0.0.6"},
+				NATSPort:     4222,
+			}
+			etcdPartition = NewEtcdPartition(c, config)
 		})
 		It("HasValidValues should return true", func() {
 			Ω(etcdPartition.HasValidValues()).Should(Equal(true))

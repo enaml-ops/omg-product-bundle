@@ -3,7 +3,6 @@ package cloudfoundry
 import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
-	etcdmetricslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd_metrics_server"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
 	natslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/nats"
 )
@@ -23,19 +22,6 @@ type InstanceGrouper interface {
 type InstanceGrouperFactory func(*cli.Context) InstanceGrouper
 
 type InstanceGrouperConfigFactory func(*cli.Context, *Config) InstanceGrouper
-
-//Etcd -
-type Etcd struct {
-	AZs                []string
-	StemcellName       string
-	VMTypeName         string
-	NetworkName        string
-	NetworkIPs         []string
-	PersistentDiskType string
-	Metron             *Metron
-	StatsdInjector     *StatsdInjector
-	Nats               *etcdmetricslib.Nats
-}
 
 //Metron -
 type Metron struct {
