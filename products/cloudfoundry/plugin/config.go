@@ -38,6 +38,7 @@ type Config struct {
 	ConsulServerKey          string
 
 	AcceptanceTestsVMType string
+	BootstrapVMType       string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -67,6 +68,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		SkipSSLCertVerify: c.BoolT("skip-cert-verify"),
 
 		AcceptanceTestsVMType: c.String("acceptance-tests-vm-type"),
+		BootstrapVMType:       c.String("bootstrap-vm-type"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err

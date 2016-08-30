@@ -1,21 +1,17 @@
 package cloudfoundry
 
 import (
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	bstraplib "github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/bootstrap"
-	"github.com/xchapter7x/lo"
 )
 
 type bootstrap struct {
 	Config *Config
-	VMType string
 }
 
-func NewBootstrapPartition(c *cli.Context, config *Config) InstanceGrouper {
+func NewBootstrapPartition(config *Config) InstanceGroupCreator {
 	return &bootstrap{
 		Config: config,
-		VMType: c.String("bootstrap-vm-type"),
 	}
 }
 
@@ -23,7 +19,7 @@ func (b *bootstrap) ToInstanceGroup() *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
 		Name:      "bootstrap",
 		Instances: 1,
-		VMType:    b.VMType,
+		VMType:    b.Config.BootstrapVMType,
 		Lifecycle: "errand",
 		AZs:       b.Config.AZs,
 		Stemcell:  b.Config.StemcellName,
@@ -48,11 +44,4 @@ func (b *bootstrap) ToInstanceGroup() *enaml.InstanceGroup {
 			},
 		},
 	}
-}
-
-func (b *bootstrap) HasValidValues() bool {
-
-	lo.G.Debugf("checking '%s' for valid flags", "bootstrap")
-
-	return b.VMType != ""
 }

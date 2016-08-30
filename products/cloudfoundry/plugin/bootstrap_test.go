@@ -9,52 +9,24 @@ import (
 )
 
 var _ = Describe("given a bootstrap partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		var ig InstanceGrouper
-		BeforeEach(func() {
-			p := new(Plugin)
-			c := p.GetContext([]string{"cloudfoundry"})
-			ig = NewBootstrapPartition(c, &Config{})
-		})
-
-		It("should not be nil", func() {
-			Ω(ig).ShouldNot(BeNil())
-		})
-
-		It("should contain a bootstrap job", func() {
-			group := ig.ToInstanceGroup()
-			Ω(group.GetJobByName("bootstrap")).ShouldNot(BeNil())
-		})
-
-		It("should not have valid values", func() {
-			Ω(ig.HasValidValues()).Should(BeFalse())
-		})
-	})
 
 	Context("when initialized with a complete set of arguments", func() {
-		var ig InstanceGrouper
+		var ig InstanceGroupCreator
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
-			p := new(Plugin)
-			c := p.GetContext([]string{
-				"cloudfoundry",
-				"--bootstrap-vm-type", "foo",
-			})
-			ig = NewBootstrapPartition(c, &Config{
+
+			ig = NewBootstrapPartition(&Config{
 				AZs:                    []string{"z1"},
 				StemcellName:           "cool-ubuntu-animal",
 				NetworkName:            "foundry-net",
 				MySQLIPs:               []string{"10.0.0.26", "10.0.0.27", "10.0.0.28"},
 				MySQLBootstrapUser:     "user",
 				MySQLBootstrapPassword: "pass",
+				BootstrapVMType:        "foo",
 			})
 
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())
-		})
-
-		It("should have valid values", func() {
-			Ω(ig.HasValidValues()).Should(BeTrue())
 		})
 
 		It("should have the correct VM type and lifecycle", func() {

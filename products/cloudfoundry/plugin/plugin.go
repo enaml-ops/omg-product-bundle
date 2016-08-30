@@ -34,7 +34,7 @@ func init() {
 
 	//errands
 	RegisterInstanceGrouperConfigFactory(NewSmokeErrand)
-	RegisterInstanceGrouperConfigFactory(NewBootstrapPartition)
+	RegisterInstanceGrouperFactory(NewBootstrapPartition)
 	acceptanceTests := func(config *Config) InstanceGroupCreator {
 		return NewAcceptanceTestsPartition(true, config)
 	}
