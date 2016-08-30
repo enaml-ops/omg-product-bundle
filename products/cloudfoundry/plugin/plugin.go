@@ -30,10 +30,10 @@ func init() {
 	RegisterInstanceGrouperConfigFactory(NewDiegoBrainPartition)
 	RegisterInstanceGrouperConfigFactory(NewDiegoCellPartition)
 	RegisterInstanceGrouperFactory(NewDopplerPartition)
-	RegisterInstanceGrouperFactory(NewLoggregatorTrafficController)
+	RegisterInstanceGrouperConfigFactory(NewLoggregatorTrafficController)
 
 	//errands
-	RegisterInstanceGrouperFactory(NewSmokeErrand)
+	RegisterInstanceGrouperConfigFactory(NewSmokeErrand)
 	RegisterInstanceGrouperConfigFactory(NewBootstrapPartition)
 	acceptanceTests := func(c *cli.Context, config *Config) InstanceGrouper {
 		return NewAcceptanceTestsPartition(c, true, config)

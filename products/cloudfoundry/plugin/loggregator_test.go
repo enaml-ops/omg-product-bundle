@@ -19,7 +19,7 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 			c := cf.GetContext([]string{
 				"cloudfoundry",
 			})
-			grouper = NewLoggregatorTrafficController(c)
+			grouper = NewLoggregatorTrafficController(c, &Config{})
 		})
 
 		It("should not have valid values", func() {
@@ -40,11 +40,6 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 			cf := new(Plugin)
 			c := cf.GetContext([]string{
 				"cloudfoundry",
-				"--az", "eastprod-1",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--network", "foundry-net",
-				"--system-domain", "sys.yourdomain.com",
-				"--skip-cert-verify=false",
 				"--loggregator-traffic-controller-ip", "10.0.0.39",
 				"--loggregator-traffic-controller-ip", "10.0.0.40",
 				"--loggregator-traffic-controller-vmtype", "vmtype",
@@ -57,12 +52,19 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 				"--syslog-address", "syslog-server",
 				"--syslog-port", "10601",
 				"--syslog-transport", "tcp",
-				"--nats-user", "natsuser",
-				"--nats-pass", "natspass",
-				"--nats-port", "4333",
-				"--nats-machine-ip", "10.0.0.4",
 			})
-			grouper = NewLoggregatorTrafficController(c)
+			config := &Config{
+				AZs:               []string{"eastprod-1"},
+				StemcellName:      "cool-ubuntu-animal",
+				NetworkName:       "foundry-net",
+				SystemDomain:      "sys.yourdomain.com",
+				SkipSSLCertVerify: false,
+				NATSUser:          "natsuser",
+				NATSPassword:      "natspass",
+				NATSPort:          4333,
+				NATSMachines:      []string{"10.0.0.4"},
+			}
+			grouper = NewLoggregatorTrafficController(c, config)
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(grouper.ToInstanceGroup())
 		})

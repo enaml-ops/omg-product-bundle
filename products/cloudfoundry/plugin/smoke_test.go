@@ -16,7 +16,7 @@ var _ = Describe("Smoke test errand", func() {
 				"--network", "foundry-net",
 				"--app-domain", "apps.test.com",
 			})
-			smoke := NewSmokeErrand(c)
+			smoke := NewSmokeErrand(c, &Config{})
 			Ω(smoke.HasValidValues()).Should(BeFalse())
 		})
 	})
@@ -35,7 +35,14 @@ var _ = Describe("Smoke test errand", func() {
 				"--system-domain", "sys.test.com",
 				"--app-domain", "apps.test.com",
 			})
-			smokeErrand = NewSmokeErrand(c)
+			config := &Config{
+				StemcellName: "cool-ubuntu-animal",
+				AZs:          []string{"eastprod-1"},
+				NetworkName:  "foundry-net",
+				SystemDomain: "sys.test.com",
+				AppDomains:   []string{"apps.test.com"},
+			}
+			smokeErrand = NewSmokeErrand(c, config)
 		})
 		It("then HasValidValues should be true", func() {
 			Ω(smokeErrand.HasValidValues()).Should(BeTrue())

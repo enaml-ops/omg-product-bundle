@@ -9,17 +9,21 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
+type SmokeErrand struct {
+	Config     *Config
+	VMTypeName string
+	Instances  int
+	Protocol   string
+	Password   string
+}
+
 //NewSmokeErrand - errand definition for smoke tests
-func NewSmokeErrand(c *cli.Context) InstanceGrouper {
+func NewSmokeErrand(c *cli.Context, config *Config) InstanceGrouper {
 	return &SmokeErrand{
-		AZs:          c.StringSlice("az"),
-		StemcellName: c.String("stemcell-name"),
-		NetworkName:  c.String("network"),
-		VMTypeName:   c.String("errand-vm-type"),
-		Protocol:     c.String("uaa-login-protocol"),
-		Password:     c.String("smoke-tests-password"),
-		SystemDomain: c.String("system-domain"),
-		AppsDomain:   c.StringSlice("app-domain")[0],
+		Config:     config,
+		VMTypeName: c.String("errand-vm-type"),
+		Protocol:   c.String("uaa-login-protocol"),
+		Password:   c.String("smoke-tests-password"),
 	}
 }
 
@@ -29,14 +33,14 @@ func (s *SmokeErrand) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 		Name:      "smoke-tests",
 		Instances: 1,
 		VMType:    s.VMTypeName,
-		AZs:       s.AZs,
-		Stemcell:  s.StemcellName,
+		AZs:       s.Config.AZs,
+		Stemcell:  s.Config.StemcellName,
 		Jobs: []enaml.InstanceJob{
 			s.createSmokeJob(),
 		},
 		Lifecycle: "errand",
 		Networks: []enaml.Network{
-			enaml.Network{Name: s.NetworkName},
+			enaml.Network{Name: s.Config.NetworkName},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -57,8 +61,8 @@ func (s *SmokeErrand) createSmokeJob() enaml.InstanceJob {
 				Org:              "CF_SMOKE_TEST_ORG",
 				Password:         s.Password,
 				User:             "smoke_tests",
-				Api:              fmt.Sprintf("%s://api.%s", s.Protocol, s.SystemDomain),
-				AppsDomain:       s.AppsDomain,
+				Api:              fmt.Sprintf("%s://api.%s", s.Protocol, s.Config.SystemDomain),
+				AppsDomain:       s.Config.AppDomains[0],
 			},
 		},
 	}
@@ -68,17 +72,8 @@ func (s *SmokeErrand) createSmokeJob() enaml.InstanceJob {
 func (s *SmokeErrand) HasValidValues() bool {
 	lo.G.Debugf("checking '%s' for valid flags", "smoke")
 
-	if len(s.AZs) <= 0 {
-		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
-	}
-	if s.StemcellName == "" {
-		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
-	}
 	if s.VMTypeName == "" {
 		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
-	}
-	if s.NetworkName == "" {
-		lo.G.Debugf("could not find a valid NetworkName '%v'", s.NetworkName)
 	}
 	if s.Protocol == "" {
 		lo.G.Debugf("could not find a valid Protocol '%v'", s.Protocol)
@@ -86,18 +81,7 @@ func (s *SmokeErrand) HasValidValues() bool {
 	if s.Password == "" {
 		lo.G.Debugf("could not find a valid Password '%v'", s.Password)
 	}
-	if s.SystemDomain == "" {
-		lo.G.Debugf("could not find a valid SystemDomain '%v'", s.SystemDomain)
-	}
-	if s.AppsDomain == "" {
-		lo.G.Debugf("could not find a valid AppsDomain '%v'", s.AppsDomain)
-	}
-	return (len(s.AZs) > 0 &&
-		s.StemcellName != "" &&
-		s.VMTypeName != "" &&
-		s.NetworkName != "" &&
+	return (s.VMTypeName != "" &&
 		s.Protocol != "" &&
-		s.Password != "" &&
-		s.SystemDomain != "" &&
-		s.AppsDomain != "")
+		s.Password != "")
 }

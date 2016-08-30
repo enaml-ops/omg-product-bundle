@@ -8,24 +8,23 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
-func NewLoggregatorTrafficController(c *cli.Context) InstanceGrouper {
+type loggregatorTrafficController struct {
+	Config        *Config
+	VMTypeName    string
+	NetworkIPs    []string
+	EtcdMachines  []string
+	DopplerSecret string
+	Metron        *Metron
+}
+
+func NewLoggregatorTrafficController(c *cli.Context, config *Config) InstanceGrouper {
 	return &loggregatorTrafficController{
-		AZs:               c.StringSlice("az"),
-		StemcellName:      c.String("stemcell-name"),
-		NetworkName:       c.String("network"),
-		NetworkIPs:        c.StringSlice("loggregator-traffic-controller-ip"),
-		VMTypeName:        c.String("loggregator-traffic-controller-vmtype"),
-		SystemDomain:      c.String("system-domain"),
-		DopplerSecret:     c.String("doppler-client-secret"),
-		SkipSSLCertVerify: c.BoolT("skip-cert-verify"),
-		EtcdMachines:      c.StringSlice("etcd-machine-ip"),
-		Metron:            NewMetron(c),
-		Nats: &route_registrar.Nats{
-			User:     c.String("nats-user"),
-			Password: c.String("nats-pass"),
-			Machines: c.StringSlice("nats-machine-ip"),
-			Port:     c.Int("nats-port"),
-		},
+		Config:        config,
+		NetworkIPs:    c.StringSlice("loggregator-traffic-controller-ip"),
+		VMTypeName:    c.String("loggregator-traffic-controller-vmtype"),
+		DopplerSecret: c.String("doppler-client-secret"),
+		EtcdMachines:  c.StringSlice("etcd-machine-ip"),
+		Metron:        NewMetron(c),
 	}
 }
 
@@ -33,37 +32,21 @@ func (l *loggregatorTrafficController) HasValidValues() bool {
 
 	lo.G.Debugf("checking '%s' for valid flags", "loggregator")
 
-	if len(l.AZs) <= 0 {
-		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(l.AZs), l.AZs)
-	}
 	if len(l.NetworkIPs) <= 0 {
 		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(l.NetworkIPs), l.NetworkIPs)
 	}
 	if len(l.EtcdMachines) <= 0 {
 		lo.G.Debugf("could not find the correct number of EtcdMachines configured '%v' : '%v'", len(l.EtcdMachines), l.EtcdMachines)
 	}
-	if l.StemcellName == "" {
-		lo.G.Debugf("could not find a valid stemcellname '%v'", l.StemcellName)
-	}
 	if l.VMTypeName == "" {
 		lo.G.Debugf("could not find a valid vmtypename '%v'", l.VMTypeName)
-	}
-	if l.NetworkName == "" {
-		lo.G.Debugf("could not find a valid NetworkName '%v'", l.NetworkName)
-	}
-	if l.SystemDomain == "" {
-		lo.G.Debugf("could not find a valid SystemDomain '%v'", l.SystemDomain)
 	}
 	if l.DopplerSecret == "" {
 		lo.G.Debugf("could not find a valid DopplerSecret '%v'", l.DopplerSecret)
 	}
 
-	return len(l.AZs) > 0 &&
-		l.StemcellName != "" &&
-		l.NetworkName != "" &&
-		len(l.NetworkIPs) > 0 &&
+	return len(l.NetworkIPs) > 0 &&
 		l.VMTypeName != "" &&
-		l.SystemDomain != "" &&
 		len(l.EtcdMachines) > 0 &&
 		l.DopplerSecret != "" &&
 		l.Metron.HasValidValues()
@@ -72,14 +55,14 @@ func (l *loggregatorTrafficController) HasValidValues() bool {
 func (l *loggregatorTrafficController) ToInstanceGroup() *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
 		Name:      "loggregator_trafficcontroller-partition",
-		AZs:       l.AZs,
-		Stemcell:  l.StemcellName,
+		AZs:       l.Config.AZs,
+		Stemcell:  l.Config.StemcellName,
 		VMType:    l.VMTypeName,
 		Instances: len(l.NetworkIPs),
 
 		Networks: []enaml.Network{
 			{
-				Name:      l.NetworkName,
+				Name:      l.Config.NetworkName,
 				StaticIPs: l.NetworkIPs,
 			},
 		},
@@ -100,12 +83,12 @@ func (l *loggregatorTrafficController) createLoggregatorTrafficControllerJob() e
 		Name:    "loggregator_trafficcontroller",
 		Release: CFReleaseName,
 		Properties: &ltc.LoggregatorTrafficcontrollerJob{
-			SystemDomain: l.SystemDomain,
+			SystemDomain: l.Config.SystemDomain,
 			Cc: &ltc.Cc{
-				SrvApiUri: prefixSystemDomain(l.SystemDomain, "api"),
+				SrvApiUri: prefixSystemDomain(l.Config.SystemDomain, "api"),
 			},
 			Ssl: &ltc.Ssl{
-				SkipCertVerify: l.SkipSSLCertVerify,
+				SkipCertVerify: l.Config.SkipSSLCertVerify,
 			},
 			TrafficController: &ltc.TrafficController{
 				Zone: l.Metron.Zone,
@@ -140,21 +123,21 @@ func (l *loggregatorTrafficController) createRouteRegistrarJob() enaml.InstanceJ
 						"name":                  "doppler",
 						"port":                  8081,
 						"registration_interval": "20s",
-						"uris":                  []string{"doppler." + l.SystemDomain},
+						"uris":                  []string{"doppler." + l.Config.SystemDomain},
 					},
 					map[string]interface{}{
 						"name":                  "loggregator",
 						"port":                  8080,
 						"registration_interval": "20s",
-						"uris":                  []string{"loggregator." + l.SystemDomain},
+						"uris":                  []string{"loggregator." + l.Config.SystemDomain},
 					},
 				},
 			},
 			Nats: &route_registrar.Nats{
-				User:     l.Nats.User,
-				Password: l.Nats.Password,
-				Port:     l.Nats.Port,
-				Machines: l.Nats.Machines,
+				User:     l.Config.NATSUser,
+				Password: l.Config.NATSPassword,
+				Port:     l.Config.NATSPort,
+				Machines: l.Config.NATSMachines,
 			},
 		},
 	}

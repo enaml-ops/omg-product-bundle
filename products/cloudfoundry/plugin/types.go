@@ -8,7 +8,6 @@ import (
 	grtrlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/gorouter"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
 	natslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/nats"
-	routereglib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
 )
 
 //VaultRotater an interface for rotating vault hashes values
@@ -44,20 +43,6 @@ type gorouter struct {
 	RouterPass   string
 	MetronZone   string
 	MetronSecret string
-}
-
-type loggregatorTrafficController struct {
-	AZs               []string
-	StemcellName      string
-	VMTypeName        string
-	NetworkName       string
-	NetworkIPs        []string
-	SystemDomain      string
-	SkipSSLCertVerify bool
-	EtcdMachines      []string
-	DopplerSecret     string
-	Metron            *Metron
-	Nats              *routereglib.Nats
 }
 
 //Etcd -
@@ -195,18 +180,6 @@ type UAAClient struct {
 	AppLaunchURL         string      `yaml:"app-launch-url,omitempty"`
 	ShowOnHomepage       bool        `yaml:"show-on-homepage,omitempty"`
 	AppIcon              string      `yaml:"app-icon,omitempty"`
-}
-
-type SmokeErrand struct {
-	AZs          []string
-	StemcellName string
-	VMTypeName   string
-	NetworkName  string
-	Instances    int
-	Protocol     string
-	SystemDomain string
-	AppsDomain   string
-	Password     string
 }
 
 //Plugin -
