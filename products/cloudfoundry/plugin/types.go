@@ -1,26 +1,11 @@
 package cloudfoundry
 
-import (
-	"github.com/codegangsta/cli"
-	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
-)
+import "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
 
 //VaultRotater an interface for rotating vault hashes values
 type VaultRotater interface {
 	RotateSecrets(hash string, secrets interface{}) error
 }
-
-// InstanceGrouper creates and validates InstanceGroups.
-type InstanceGrouper interface {
-	ToInstanceGroup() (ig *enaml.InstanceGroup)
-	HasValidValues() bool
-}
-
-// InstanceGrouperFactory is a function that creates InstanceGroupers from CLI args.
-type InstanceGrouperFactory func(*cli.Context) InstanceGrouper
-
-type InstanceGrouperConfigFactory func(*cli.Context, *Config) InstanceGrouper
 
 //Metron -
 type Metron struct {

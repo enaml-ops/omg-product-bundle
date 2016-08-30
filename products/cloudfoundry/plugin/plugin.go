@@ -327,6 +327,21 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	}
 	VaultDecorate(args, flgs)
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
+	var dm *enaml.DeploymentManifest
+	var err error
+	var config *Config
+	if config, err = NewConfig(c); err == nil {
+		dm, err = s.getDeploymentManifest(c, config)
+		if err != nil {
+			lo.G.Fatalf("error creating manifest: %v", err.Error())
+		}
+	} else {
+		lo.G.Fatalf("error getting config: %v", err.Error())
+	}
+	return dm.Bytes()
+}
+
+func (s *Plugin) getDeploymentManifest(c *cli.Context, config *Config) (*enaml.DeploymentManifest, error) {
 	dm := enaml.NewDeploymentManifest([]byte(``))
 	dm.SetName(DeploymentName)
 
@@ -350,7 +365,15 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	dm.Update.UpdateWatchTime = "30000-300000"
 
 	for _, factory := range factories {
-		grouper := factory(c)
+		grouper := factory(config)
+		if ig := grouper.ToInstanceGroup(); ig != nil {
+			lo.G.Debug("instance-group: ", ig)
+			dm.AddInstanceGroup(ig)
+		}
+	}
+
+	for _, factory := range configFactories {
+		grouper := factory(c, config)
 
 		if grouper.HasValidValues() {
 			if ig := grouper.ToInstanceGroup(); ig != nil {
@@ -362,45 +385,18 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 			lo.G.Info("invalid values in instance group: ", string(b))
 			lo.G.Info("here is a list of flags not currently set by default or vault for you: ")
 
-			for _, fl := range flgs {
+			for _, fl := range s.GetFlags() {
 
 				if fl.Value == "" && os.Getenv(fl.EnvVar) == "" {
 					lo.G.Info(fl.Name)
 				}
 			}
 			lo.G.Fatal("incomplete flag set. please check --help and documentation or use debug output for more details")
-		}
-	}
-	if len(configFactories) > 0 {
-		if config, err := NewConfig(c); err == nil {
-			for _, factory := range configFactories {
-				grouper := factory(c, config)
 
-				if grouper.HasValidValues() {
-					if ig := grouper.ToInstanceGroup(); ig != nil {
-						lo.G.Debug("instance-group: ", ig)
-						dm.AddInstanceGroup(ig)
-					}
-				} else {
-					b, _ := yaml.Marshal(grouper)
-					lo.G.Info("invalid values in instance group: ", string(b))
-					lo.G.Info("here is a list of flags not currently set by default or vault for you: ")
-
-					for _, fl := range flgs {
-
-						if fl.Value == "" && os.Getenv(fl.EnvVar) == "" {
-							lo.G.Info(fl.Name)
-						}
-					}
-					lo.G.Fatal("incomplete flag set. please check --help and documentation or use debug output for more details")
-				}
-			}
-		} else {
-			lo.G.Fatal("incomplete flag set. please check --help and documentation or use debug output for more details", err)
 		}
 	}
 
-	return dm.Bytes()
+	return dm, nil
 }
 
 func InferFromCloudDecorate(inferFlagMap map[string][]string, cloudConfig []byte, args []string, flgs []pcli.Flag) {

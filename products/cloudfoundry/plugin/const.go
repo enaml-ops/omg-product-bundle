@@ -52,10 +52,6 @@ var (
 	ServiceBackupReleaseVersion = "1"
 )
 
-var factories []InstanceGrouperFactory
-
-var configFactories []InstanceGrouperConfigFactory
-
 var flagsToInferFromCloudConfig = map[string][]string{
 	"disktype": []string{
 		"mysql-disk-type",

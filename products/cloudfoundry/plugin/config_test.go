@@ -7,6 +7,23 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+func BuildConfigContext() *cli.Context {
+	plugin := new(Plugin)
+	c := plugin.GetContext([]string{
+		"cloudfoundry",
+		"--az", "z1",
+		"--network", "theNetwork",
+		"--system-domain", "sys.domain",
+		"--app-domain", "app.domain",
+		"--nats-machine-ip", "10.0.0.10",
+		"--nats-machine-ip", "10.0.0.11",
+		"--mysql-bootstrap-password", "mysqlbootstrappwd",
+		"--mysql-ip", "10.0.0.12",
+		"--mysql-ip", "10.0.0.13",
+	})
+	return c
+}
+
 var _ = Describe("Config", func() {
 	Context("when initialized WITHOUT a complete set of arguments", func() {
 		It("then should return error", func() {
@@ -25,19 +42,7 @@ var _ = Describe("Config", func() {
 		var err error
 		var c *cli.Context
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c = plugin.GetContext([]string{
-				"cloudfoundry",
-				"--az", "z1",
-				"--network", "theNetwork",
-				"--system-domain", "sys.domain",
-				"--app-domain", "app.domain",
-				"--nats-machine-ip", "10.0.0.10",
-				"--nats-machine-ip", "10.0.0.11",
-				"--mysql-bootstrap-password", "mysqlbootstrappwd",
-				"--mysql-ip", "10.0.0.12",
-				"--mysql-ip", "10.0.0.13",
-			})
+			c = BuildConfigContext()
 			config, err = NewConfig(c)
 			Ω(err).ShouldNot(HaveOccurred())
 			Ω(config).ShouldNot(BeNil())

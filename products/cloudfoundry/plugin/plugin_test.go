@@ -4,85 +4,17 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/codegangsta/cli"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/ghttp"
 	"github.com/xchapter7x/lo"
 	"github.com/xchapter7x/lo/lofakes"
 
-	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/util"
 )
 
-type nilGrouper struct{}
-
-func (n nilGrouper) ToInstanceGroup() *enaml.InstanceGroup { return nil }
-func (n nilGrouper) HasValidValues() bool                  { return true }
-
-func nilFactory(c *cli.Context) InstanceGrouper {
-	return nilGrouper{}
-}
-
-type dummyGrouper struct{}
-
-func (d dummyGrouper) ToInstanceGroup() *enaml.InstanceGroup {
-	return &enaml.InstanceGroup{
-		Name:      "dummy",
-		Instances: 1,
-	}
-}
-func (d dummyGrouper) HasValidValues() bool { return true }
-
-func dummyFactory(c *cli.Context) InstanceGrouper {
-	return dummyGrouper{}
-}
-
 var _ = Describe("Cloud Foundry Plugin", func() {
-
-	Context("when using groupers that generate nil instance groups", func() {
-		var oldFactories []InstanceGrouperFactory
-		var oldConfigFactories []InstanceGrouperConfigFactory
-		var dm *enaml.DeploymentManifest
-
-		BeforeEach(func() {
-			oldFactories = factories
-			oldConfigFactories = configFactories
-			factories = factories[:0]
-			configFactories = configFactories[:0]
-
-			// register two simple instance group factories that don't depend on CLI flags:
-			// one that always returns a nil instance group, and one that returns non-nil
-			RegisterInstanceGrouperFactory(nilFactory)
-			RegisterInstanceGrouperFactory(dummyFactory)
-
-			p := new(Plugin)
-			manifestBytes := p.GetProduct([]string{"cloudfoundry", "--vault-active=false"}, []byte(``))
-			dm = enaml.NewDeploymentManifest(manifestBytes)
-		})
-
-		AfterEach(func() {
-			// restore original set of registered instance groups
-			factories = oldFactories
-			configFactories = oldConfigFactories
-		})
-
-		It("should not include the nil instance groups in the manifest", func() {
-			Ω(dm.InstanceGroups).ShouldNot(BeNil())
-			for _, ig := range dm.InstanceGroups {
-				Ω(ig).ShouldNot(BeNil())
-			}
-		})
-
-		It("should set the update property of the manifest", func() {
-			Ω(dm.Update.MaxInFlight).Should(Equal(1))
-			Ω(dm.Update.Canaries).Should(Equal(1))
-			Ω(dm.Update.Serial).Should(BeFalse())
-			Ω(dm.Update.CanaryWatchTime).Should(Equal("30000-300000"))
-			Ω(dm.Update.UpdateWatchTime).Should(Equal("30000-300000"))
-		})
-	})
 
 	Describe("given InferFromCloudDecorate", func() {
 		Context("when infer-from-cloud is set to true", func() {
