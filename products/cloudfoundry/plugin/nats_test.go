@@ -19,7 +19,7 @@ var _ = Describe("Nats Partition", func() {
 				"--metron-secret", "metronsecret",
 				"--metron-zone", "metronzoneguid",
 			})
-			Ω(NewNatsPartition(c).HasValidValues()).Should(Equal(false))
+			Ω(NewNatsPartition(c, &Config{}).HasValidValues()).Should(Equal(false))
 		})
 	})
 
@@ -30,18 +30,20 @@ var _ = Describe("Nats Partition", func() {
 			plugin := new(Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
-				"--stemcell-name", "trusty",
-				"--az", "eastprod-1",
-				"--nats-machine-ip", "10.0.0.2",
-				"--nats-machine-ip", "10.0.0.3",
-				"--network", "foundry-net",
+
 				"--nats-vm-type", "blah",
 				"--metron-secret", "metronsecret",
 				"--metron-zone", "metronzoneguid",
 				"--etcd-machine-ip", "10.0.0.7",
 				"--etcd-machine-ip", "10.0.0.8",
 			})
-			natsPartition = NewNatsPartition(c)
+			config := &Config{
+				StemcellName: "trusty",
+				AZs:          []string{"eastprod-1"},
+				NetworkName:  "foundry-net",
+				NATSMachines: []string{"10.0.0.2", "10.0.0.3"},
+			}
+			natsPartition = NewNatsPartition(c, config)
 		})
 		It("HasValidValues should return true", func() {
 			Ω(natsPartition.HasValidValues()).Should(Equal(true))

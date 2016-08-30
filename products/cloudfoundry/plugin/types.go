@@ -4,7 +4,6 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
-	natslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/nats"
 )
 
 //VaultRotater an interface for rotating vault hashes values
@@ -41,18 +40,6 @@ type StatsdInjector struct {
 type NFSMounter struct {
 	NFSServerAddress string
 	SharePath        string
-}
-
-//NatsPartition -
-type NatsPartition struct {
-	AZs            []string
-	StemcellName   string
-	VMTypeName     string
-	NetworkName    string
-	NetworkIPs     []string
-	Nats           natslib.NatsJob
-	Metron         *Metron
-	StatsdInjector *StatsdInjector
 }
 
 //UAAClient - Structure to represent map of client priviledges
