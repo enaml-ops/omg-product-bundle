@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/auctioneer"
@@ -16,90 +15,37 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/ssh_proxy"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/stager"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/tps"
-	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 )
 
 type diegoBrain struct {
-	Config                    *Config
-	VMTypeName                string
-	PersistentDiskType        string
-	NetworkIPs                []string
-	BBSCACert                 string
-	BBSClientCert             string
-	BBSClientKey              string
-	BBSRequireSSL             bool
-	CCUploaderJobPollInterval int
-	CCInternalAPIUser         string
-	CCInternalAPIPassword     string
-	CCBulkBatchSize           int
-	CCFetchTimeout            int
-	FSListenAddr              string
-	FSStaticDirectory         string
-	FSDebugAddr               string
-	FSLogLevel                string
-	MetronPort                int
-	SSHProxyClientSecret      string
-	CCExternalPort            int
-	TrafficControllerURL      string
-	ConsulAgent               *ConsulAgent
-	Metron                    *Metron
-	Statsd                    *StatsdInjector
+	Config      *Config
+	ConsulAgent *ConsulAgent
+	Metron      *Metron
+	Statsd      *StatsdInjector
 }
 
-func NewDiegoBrainPartition(c *cli.Context, config *Config) InstanceGrouper {
-	caCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-ca-cert")
-	if err != nil {
-		lo.G.Fatalf("bbs ca cert: %s\n", err.Error())
-	}
+func NewDiegoBrainPartition(config *Config) InstanceGroupCreator {
 
-	clientCert, err := pluginutil.LoadResourceFromContext(c, "bbs-client-cert")
-	if err != nil {
-		lo.G.Fatalf("bbs client cert: %s\n", err.Error())
-	}
-
-	clientKey, err := pluginutil.LoadResourceFromContext(c, "bbs-client-key")
-	if err != nil {
-		lo.G.Fatalf("bbs client key: %s\n", err.Error())
-	}
 	return &diegoBrain{
-		Config:                    config,
-		VMTypeName:                c.String("diego-brain-vm-type"),
-		PersistentDiskType:        c.String("diego-brain-disk-type"),
-		NetworkIPs:                c.StringSlice("diego-brain-ip"),
-		BBSCACert:                 caCert,
-		BBSClientCert:             clientCert,
-		BBSClientKey:              clientKey,
-		BBSRequireSSL:             c.BoolT("bbs-require-ssl"),
-		CCUploaderJobPollInterval: c.Int("cc-uploader-poll-interval"),
-		CCInternalAPIUser:         c.String("cc-internal-api-user"),
-		CCInternalAPIPassword:     c.String("cc-internal-api-password"),
-		CCFetchTimeout:            c.Int("cc-fetch-timeout"),
-		CCBulkBatchSize:           c.Int("cc-bulk-batch-size"),
-		FSListenAddr:              c.String("fs-listen-addr"),
-		FSStaticDirectory:         c.String("fs-static-dir"),
-		FSDebugAddr:               c.String("fs-debug-addr"),
-		FSLogLevel:                c.String("fs-log-level"),
-		MetronPort:                c.Int("metron-port"),
-		SSHProxyClientSecret:      c.String("ssh-proxy-uaa-secret"),
-		CCExternalPort:            c.Int("cc-external-port"),
-		TrafficControllerURL:      c.String("traffic-controller-url"),
-		ConsulAgent:               NewConsulAgent([]string{}, config),
-		Metron:                    NewMetron(config),
-		Statsd:                    NewStatsdInjector(c),
+		Config: config,
+
+		ConsulAgent: NewConsulAgent([]string{}, config),
+		Metron:      NewMetron(config),
+		Statsd:      NewStatsdInjector(nil),
 	}
 }
 
 func (d *diegoBrain) ToInstanceGroup() *enaml.InstanceGroup {
 	ig := &enaml.InstanceGroup{
 		Name:               "diego_brain-partition",
-		Instances:          len(d.NetworkIPs),
-		VMType:             d.VMTypeName,
+		Instances:          len(d.Config.DiegoBrainIPs),
+		VMType:             d.Config.DiegoBrainVMType,
 		AZs:                d.Config.AZs,
-		PersistentDiskType: d.PersistentDiskType,
+		PersistentDiskType: d.Config.DiegoBrainPersistentDiskType,
 		Stemcell:           d.Config.StemcellName,
 		Networks: []enaml.Network{
-			{Name: d.Config.NetworkName, StaticIPs: d.NetworkIPs},
+			{Name: d.Config.NetworkName, StaticIPs: d.Config.DiegoBrainIPs},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -124,43 +70,6 @@ func (d *diegoBrain) ToInstanceGroup() *enaml.InstanceGroup {
 	return ig
 }
 
-func (d *diegoBrain) HasValidValues() bool {
-
-	lo.G.Debugf("checking '%s' for valid flags", "diego brain")
-
-	if len(d.NetworkIPs) <= 0 {
-		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(d.NetworkIPs), d.NetworkIPs)
-	}
-
-	if d.VMTypeName == "" {
-		lo.G.Debugf("could not find a valid vmtypename '%v'", d.VMTypeName)
-	}
-	if d.PersistentDiskType == "" {
-		lo.G.Debugf("could not find a valid PersistentDiskType '%v'", d.PersistentDiskType)
-	}
-	if d.BBSCACert == "" {
-		lo.G.Debugf("could not find a valid bbscacert '%v'", d.BBSCACert)
-	}
-	if d.BBSClientCert == "" {
-		lo.G.Debugf("could not find a valid bbsclientcert '%v'", d.BBSClientCert)
-	}
-	if d.CCInternalAPIUser == "" {
-		lo.G.Debugf("could not find a valid CCInternalAPIUser '%v'", d.CCInternalAPIUser)
-	}
-	if d.CCInternalAPIPassword == "" {
-		lo.G.Debugf("could not find a valid CCInternalAPIPassword '%v'", d.CCInternalAPIPassword)
-	}
-
-	return len(d.NetworkIPs) > 0 &&
-		d.VMTypeName != "" &&
-		d.PersistentDiskType != "" &&
-		d.BBSCACert != "" &&
-		d.BBSClientCert != "" &&
-		d.BBSClientKey != "" &&
-		d.CCInternalAPIUser != "" &&
-		d.CCInternalAPIPassword != ""
-}
-
 func (d *diegoBrain) newAuctioneer() *enaml.InstanceJob {
 	return &enaml.InstanceJob{
 		Name:    "auctioneer",
@@ -170,9 +79,9 @@ func (d *diegoBrain) newAuctioneer() *enaml.InstanceJob {
 				Auctioneer: &auctioneer.Auctioneer{
 					Bbs: &auctioneer.Bbs{
 						ApiLocation: defaultBBSAPILocation,
-						CaCert:      d.BBSCACert,
-						ClientCert:  d.BBSClientCert,
-						ClientKey:   d.BBSClientKey,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
 					},
 				},
 			},
@@ -189,7 +98,7 @@ func (d *diegoBrain) newCCUploader() *enaml.InstanceJob {
 				Ssl: &cc_uploader.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
 				CcUploader: &cc_uploader.CcUploader{
 					Cc: &cc_uploader.Cc{
-						JobPollingIntervalInSeconds: d.CCUploaderJobPollInterval,
+						JobPollingIntervalInSeconds: d.Config.CCUploaderJobPollInterval,
 					},
 				},
 			},
@@ -206,9 +115,9 @@ func (d *diegoBrain) newConverger() *enaml.InstanceJob {
 				Converger: &converger.Converger{
 					Bbs: &converger.Bbs{
 						ApiLocation: defaultBBSAPILocation,
-						CaCert:      d.BBSCACert,
-						ClientCert:  d.BBSClientCert,
-						ClientKey:   d.BBSClientKey,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
 					},
 				},
 			},
@@ -238,17 +147,17 @@ func (d *diegoBrain) newNsync() *enaml.InstanceJob {
 				Nsync: &nsync.Nsync{
 					Cc: &nsync.Cc{
 						BaseUrl:                  prefixSystemDomain(d.Config.SystemDomain, "api"),
-						BasicAuthUsername:        d.CCInternalAPIUser,
-						BasicAuthPassword:        d.CCInternalAPIPassword,
-						BulkBatchSize:            d.CCBulkBatchSize,
-						FetchTimeoutInSeconds:    d.CCFetchTimeout,
-						PollingIntervalInSeconds: d.CCUploaderJobPollInterval,
+						BasicAuthUsername:        d.Config.CCInternalAPIUser,
+						BasicAuthPassword:        d.Config.CCInternalAPIPassword,
+						BulkBatchSize:            d.Config.CCBulkBatchSize,
+						FetchTimeoutInSeconds:    d.Config.CCFetchTimeout,
+						PollingIntervalInSeconds: d.Config.CCUploaderJobPollInterval,
 					},
 					Bbs: &nsync.Bbs{
 						ApiLocation: defaultBBSAPILocation,
-						CaCert:      d.BBSCACert,
-						ClientCert:  d.BBSClientCert,
-						ClientKey:   d.BBSClientKey,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
 					},
 				},
 			},
@@ -265,10 +174,10 @@ func (d *diegoBrain) newRouteEmitter() *enaml.InstanceJob {
 				RouteEmitter: &route_emitter.RouteEmitter{
 					Bbs: &route_emitter.Bbs{
 						ApiLocation: defaultBBSAPILocation,
-						CaCert:      d.BBSCACert,
-						ClientCert:  d.BBSClientCert,
-						ClientKey:   d.BBSClientKey,
-						RequireSsl:  d.BBSRequireSSL,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
+						RequireSsl:  d.Config.BBSRequireSSL,
 					},
 					Nats: &route_emitter.Nats{
 						User:     d.Config.NATSUser,
@@ -298,17 +207,17 @@ func (d *diegoBrain) newSSHProxy() *enaml.InstanceJob {
 				SshProxy: &ssh_proxy.SshProxy{
 					Bbs: &ssh_proxy.Bbs{
 						ApiLocation: defaultBBSAPILocation,
-						CaCert:      d.BBSCACert,
-						ClientCert:  d.BBSClientCert,
-						ClientKey:   d.BBSClientKey,
-						RequireSsl:  d.BBSRequireSSL,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
+						RequireSsl:  d.Config.BBSRequireSSL,
 					},
 					Cc: &ssh_proxy.Cc{
-						ExternalPort: d.CCExternalPort,
+						ExternalPort: d.Config.CCExternalPort,
 					},
 					EnableCfAuth:    d.Config.AllowSSHAccess,
 					EnableDiegoAuth: d.Config.AllowSSHAccess,
-					UaaSecret:       d.SSHProxyClientSecret,
+					UaaSecret:       d.Config.SSHProxyClientSecret,
 					UaaTokenUrl:     prefixSystemDomain(d.Config.SystemDomain, "uaa") + "/oauth/token",
 					HostKey:         privateKey,
 				},
@@ -327,15 +236,15 @@ func (d *diegoBrain) newStager() *enaml.InstanceJob {
 				Stager: &stager.Stager{
 					Bbs: &stager.Bbs{
 						ApiLocation: defaultBBSAPILocation,
-						CaCert:      d.BBSCACert,
-						ClientCert:  d.BBSClientCert,
-						ClientKey:   d.BBSClientKey,
-						RequireSsl:  d.BBSRequireSSL,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
+						RequireSsl:  d.Config.BBSRequireSSL,
 					},
 					Cc: &stager.Cc{
-						BasicAuthUsername: d.CCInternalAPIUser,
-						BasicAuthPassword: d.CCInternalAPIPassword,
-						ExternalPort:      d.CCExternalPort,
+						BasicAuthUsername: d.Config.CCInternalAPIUser,
+						BasicAuthPassword: d.Config.CCInternalAPIPassword,
+						ExternalPort:      d.Config.CCExternalPort,
 					},
 				},
 			},
@@ -352,18 +261,18 @@ func (d *diegoBrain) newTPS() *enaml.InstanceJob {
 			Diego: &tps.Diego{
 				Ssl: &tps.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
 				Tps: &tps.Tps{
-					TrafficControllerUrl: d.TrafficControllerURL,
+					TrafficControllerUrl: d.Config.TrafficControllerURL,
 					Bbs: &tps.Bbs{
 						ApiLocation: defaultBBSAPILocation,
-						CaCert:      d.BBSCACert,
-						ClientCert:  d.BBSClientCert,
-						ClientKey:   d.BBSClientKey,
-						RequireSsl:  d.BBSRequireSSL,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
+						RequireSsl:  d.Config.BBSRequireSSL,
 					},
 					Cc: &tps.Cc{
-						BasicAuthUsername: d.CCInternalAPIUser,
-						BasicAuthPassword: d.CCInternalAPIPassword,
-						ExternalPort:      d.CCExternalPort,
+						BasicAuthUsername: d.Config.CCInternalAPIUser,
+						BasicAuthPassword: d.Config.CCInternalAPIPassword,
+						ExternalPort:      d.Config.CCExternalPort,
 					},
 				},
 			},

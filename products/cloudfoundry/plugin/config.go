@@ -62,6 +62,26 @@ type Config struct {
 	BBSCACert                     string
 	BBSClientCert                 string
 	BBSClientKey                  string
+	BBSServerCert                 string
+	BBSServerKey                  string
+
+	DiegoBrainVMType             string
+	DiegoBrainPersistentDiskType string
+	DiegoBrainIPs                []string
+	BBSRequireSSL                bool
+	CCUploaderJobPollInterval    int
+	CCInternalAPIUser            string
+	CCInternalAPIPassword        string
+	CCBulkBatchSize              int
+	CCFetchTimeout               int
+	FSListenAddr                 string
+	FSStaticDirectory            string
+	FSDebugAddr                  string
+	FSLogLevel                   string
+	MetronPort                   int
+	SSHProxyClientSecret         string
+	CCExternalPort               int
+	TrafficControllerURL         string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -117,6 +137,24 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		DiegoCellIPs:                  c.StringSlice("diego-cell-ip"),
 
 		ConsulIPs: c.StringSlice("consul-ip"),
+
+		DiegoBrainVMType:             c.String("diego-brain-vm-type"),
+		DiegoBrainPersistentDiskType: c.String("diego-brain-disk-type"),
+		DiegoBrainIPs:                c.StringSlice("diego-brain-ip"),
+		BBSRequireSSL:                c.BoolT("bbs-require-ssl"),
+		CCUploaderJobPollInterval:    c.Int("cc-uploader-poll-interval"),
+		CCInternalAPIUser:            c.String("cc-internal-api-user"),
+		CCInternalAPIPassword:        c.String("cc-internal-api-password"),
+		CCFetchTimeout:               c.Int("cc-fetch-timeout"),
+		CCBulkBatchSize:              c.Int("cc-bulk-batch-size"),
+		FSListenAddr:                 c.String("fs-listen-addr"),
+		FSStaticDirectory:            c.String("fs-static-dir"),
+		FSDebugAddr:                  c.String("fs-debug-addr"),
+		FSLogLevel:                   c.String("fs-log-level"),
+		MetronPort:                   c.Int("metron-port"),
+		SSHProxyClientSecret:         c.String("ssh-proxy-uaa-secret"),
+		CCExternalPort:               c.Int("cc-external-port"),
+		TrafficControllerURL:         c.String("traffic-controller-url"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err
@@ -160,6 +198,15 @@ func (ca *Config) loadSSL(c *cli.Context) error {
 		return err
 	}
 
+	bbsServerCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-cert")
+	if err != nil {
+		return err
+	}
+
+	bbsServerKey, err := pluginutil.LoadResourceFromContext(c, "bbs-server-key")
+	if err != nil {
+		return err
+	}
 	ca.ConsulCaCert = caCert
 	ca.ConsulAgentCert = agentCert
 	ca.ConsulServerCert = serverCert
@@ -168,6 +215,8 @@ func (ca *Config) loadSSL(c *cli.Context) error {
 	ca.BBSCACert = bbsCaCert
 	ca.BBSClientCert = bbsClientCert
 	ca.BBSClientKey = bbsClientKey
+	ca.BBSServerCert = bbsServerCert
+	ca.BBSServerKey = bbsServerKey
 	return nil
 }
 

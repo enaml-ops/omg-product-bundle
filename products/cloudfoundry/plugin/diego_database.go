@@ -18,9 +18,6 @@ type diegoDatabase struct {
 	VMTypeName         string
 	PersistentDiskType string
 	NetworkIPs         []string
-	CACert             string
-	BBSServerCert      string
-	BBSServerKey       string
 	EtcdServerCert     string
 	EtcdServerKey      string
 	EtcdClientCert     string
@@ -30,25 +27,9 @@ type diegoDatabase struct {
 	ConsulAgent        *ConsulAgent
 	StatsdInjector     *StatsdInjector
 	Metron             *Metron
-	DiegoBrain         *diegoBrain
 }
 
 func NewDiegoDatabasePartition(c *cli.Context, config *Config) InstanceGrouper {
-
-	caCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-ca-cert")
-	if err != nil {
-		lo.G.Fatalf("ca cert: %s\n", err.Error())
-	}
-
-	bbsServerCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-cert")
-	if err != nil {
-		lo.G.Fatalf("bbs server cert: %s\n", err.Error())
-	}
-
-	bbsServerKey, err := pluginutil.LoadResourceFromContext(c, "bbs-server-key")
-	if err != nil {
-		lo.G.Fatalf("bbs server key: %s\n", err.Error())
-	}
 
 	etcdServerCert, err := pluginutil.LoadResourceFromContext(c, "etcd-server-cert")
 	if err != nil {
@@ -83,13 +64,10 @@ func NewDiegoDatabasePartition(c *cli.Context, config *Config) InstanceGrouper {
 	return &diegoDatabase{
 		context:            c,
 		Config:             config,
-		CACert:             caCert,
 		VMTypeName:         c.String("diego-db-vm-type"),
 		PersistentDiskType: c.String("diego-db-disk-type"),
 		NetworkIPs:         c.StringSlice("diego-db-ip"),
 		Passphrase:         c.String("diego-db-passphrase"),
-		BBSServerCert:      bbsServerCert,
-		BBSServerKey:       bbsServerKey,
 		EtcdServerCert:     etcdServerCert,
 		EtcdServerKey:      etcdServerKey,
 		EtcdClientCert:     etcdClientCert,
@@ -99,7 +77,6 @@ func NewDiegoDatabasePartition(c *cli.Context, config *Config) InstanceGrouper {
 		ConsulAgent:        NewConsulAgent([]string{"bbs", "etcd"}, config),
 		Metron:             NewMetron(config),
 		StatsdInjector:     NewStatsdInjector(c),
-		DiegoBrain:         NewDiegoBrainPartition(c, config).(*diegoBrain),
 	}
 }
 
@@ -177,9 +154,9 @@ func (s *diegoDatabase) newBBS() (dbdiego *bbs.BbsJob) {
 		Diego: &bbs.Diego{
 			Bbs: &bbs.Bbs{
 				RequireSsl:     false,
-				CaCert:         s.DiegoBrain.BBSCACert,
-				ServerCert:     s.BBSServerCert,
-				ServerKey:      s.BBSServerKey,
+				CaCert:         s.Config.BBSCACert,
+				ServerCert:     s.Config.BBSServerCert,
+				ServerKey:      s.Config.BBSServerKey,
 				ActiveKeyLabel: keyname,
 				EncryptionKeys: []map[string]string{
 					{
@@ -199,12 +176,12 @@ func (s *diegoDatabase) newBBS() (dbdiego *bbs.BbsJob) {
 func (s *diegoDatabase) newEtcd() *etcd.EtcdJob {
 	return &etcd.EtcdJob{
 		Etcd: &etcd.Etcd{
-			CaCert:                 s.CACert,
+			CaCert:                 s.Config.BBSCACert,
 			ServerCert:             s.EtcdServerCert,
 			ServerKey:              s.EtcdServerKey,
 			ClientCert:             s.EtcdClientCert,
 			ClientKey:              s.EtcdClientKey,
-			PeerCaCert:             s.CACert,
+			PeerCaCert:             s.Config.BBSCACert,
 			PeerCert:               s.EtcdPeerCert,
 			PeerKey:                s.EtcdPeerKey,
 			AdvertiseUrlsDnsSuffix: "etcd.service.cf.internal",
@@ -221,7 +198,7 @@ func (s *diegoDatabase) newEtcd() *etcd.EtcdJob {
 
 func (s *diegoDatabase) newBBSEtcd() (dbetcd *bbs.Etcd) {
 	dbetcd = &bbs.Etcd{
-		CaCert:     s.CACert,
+		CaCert:     s.Config.BBSCACert,
 		ClientCert: s.EtcdClientCert,
 		ClientKey:  s.EtcdClientKey,
 		Machines:   []string{"etcd.service.cf.internal"},

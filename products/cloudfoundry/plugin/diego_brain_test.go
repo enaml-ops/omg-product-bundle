@@ -22,73 +22,57 @@ var _ = Describe("given a Diego Brain Partition", func() {
 
 	Context("when initialized with a complete set of arguments", func() {
 		var deploymentManifest *enaml.DeploymentManifest
-		var grouper InstanceGrouper
+		var grouper InstanceGroupCreator
 
 		BeforeEach(func() {
-			cf := new(Plugin)
-			c := cf.GetContext([]string{
-				"cloudfoundry",
-				"--diego-brain-ip", "10.0.0.39",
-				"--diego-brain-ip", "10.0.0.40",
-				"--diego-brain-vm-type", "brainvmtype",
-				"--diego-brain-disk-type", "braindisktype",
-				"--bbs-server-ca-cert", "cacert",
-				"--bbs-client-cert", "clientcert",
-				"--bbs-client-key", "clientkey",
-				"--bbs-require-ssl=false",
-				"--skip-cert-verify=false",
-				"--cc-uploader-poll-interval", "25",
-				"--cc-external-port", "9023",
-				"--system-domain", "sys.test.com",
-				"--cc-internal-api-user", "internaluser",
-				"--cc-internal-api-password", "internalpassword",
-				"--cc-bulk-batch-size", "5",
-				"--cc-fetch-timeout", "30",
-				"--fs-listen-addr", "0.0.0.0:12345",
-				"--fs-static-dir", "/foo/bar/baz",
-				"--fs-debug-addr", "10.0.1.2:22222",
-				"--fs-log-level", "debug",
-				"--metron-port", "3458",
-				"--ssh-proxy-uaa-secret", "secret",
-				"--traffic-controller-url", "wss://doppler.sys.yourdomain.com:443",
-				"--consul-vm-type", "blah",
-				"--consul-ip", "1.0.0.1",
-				"--consul-ip", "1.0.0.2",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--etcd-machine-ip", "1.0.0.7",
-				"--etcd-machine-ip", "1.0.0.8",
-			})
 			config := &Config{
-				SystemDomain:      "sys.test.com",
-				AZs:               []string{"eastprod-1"},
-				StemcellName:      "cool-ubuntu-animal",
-				NetworkName:       "foundry-net",
-				AllowSSHAccess:    true,
-				ConsulEncryptKeys: []string{"encyption-key"},
-				ConsulCaCert:      "ca-cert",
-				ConsulAgentCert:   "agent-cert",
-				ConsulAgentKey:    "agent-key",
-				ConsulServerCert:  "server-cert",
-				ConsulServerKey:   "server-key",
-				NATSUser:          "nats",
-				NATSPassword:      "natspass",
-				NATSPort:          1234,
-				NATSMachines:      []string{"10.0.0.11", "10.0.0.12"},
-				MetronZone:        "metronzoneguid",
-				MetronSecret:      "metronsecret",
-				EtcdMachines:      []string{"1.0.0.7", "1.0.0.8"},
-				ConsulIPs:         []string{"1.0.0.1", "1.0.0.2"},
+				SystemDomain:                 "sys.test.com",
+				AZs:                          []string{"eastprod-1"},
+				StemcellName:                 "cool-ubuntu-animal",
+				NetworkName:                  "foundry-net",
+				AllowSSHAccess:               true,
+				ConsulEncryptKeys:            []string{"encyption-key"},
+				ConsulCaCert:                 "ca-cert",
+				ConsulAgentCert:              "agent-cert",
+				ConsulAgentKey:               "agent-key",
+				ConsulServerCert:             "server-cert",
+				ConsulServerKey:              "server-key",
+				NATSUser:                     "nats",
+				NATSPassword:                 "natspass",
+				NATSPort:                     1234,
+				NATSMachines:                 []string{"10.0.0.11", "10.0.0.12"},
+				MetronZone:                   "metronzoneguid",
+				MetronSecret:                 "metronsecret",
+				EtcdMachines:                 []string{"1.0.0.7", "1.0.0.8"},
+				ConsulIPs:                    []string{"1.0.0.1", "1.0.0.2"},
+				DiegoBrainIPs:                []string{"10.0.0.39", "10.0.0.40"},
+				DiegoBrainVMType:             "brainvmtype",
+				DiegoBrainPersistentDiskType: "braindisktype",
+				BBSCACert:                    "cacert",
+				BBSClientCert:                "clientcert",
+				BBSClientKey:                 "clientkey",
+				BBSRequireSSL:                false,
+				SkipSSLCertVerify:            false,
+				CCUploaderJobPollInterval:    25,
+				CCExternalPort:               9023,
+				CCInternalAPIUser:            "internaluser",
+				CCInternalAPIPassword:        "internalpassword",
+				CCBulkBatchSize:              5,
+				CCFetchTimeout:               30,
+				FSListenAddr:                 "0.0.0.0:12345",
+				FSStaticDirectory:            "/foo/bar/baz",
+				FSDebugAddr:                  "10.0.1.2:22222",
+				FSLogLevel:                   "debug",
+				MetronPort:                   3458,
+				SSHProxyClientSecret:         "secret",
+				TrafficControllerURL:         "wss://doppler.sys.yourdomain.com:443",
 			}
-			grouper = NewDiegoBrainPartition(c, config)
+			grouper = NewDiegoBrainPartition(config)
 			deploymentManifest = new(enaml.DeploymentManifest)
 			deploymentManifest.AddInstanceGroup(grouper.ToInstanceGroup())
 		})
 
 		It("then it should configure the instance group correctly", func() {
-
-			By("having valid values")
-			Ω(grouper.HasValidValues()).Should(BeTrue())
 
 			ig := deploymentManifest.GetInstanceGroupByName("diego_brain-partition")
 

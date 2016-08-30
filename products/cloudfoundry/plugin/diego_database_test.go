@@ -61,6 +61,9 @@ var _ = Describe("given a Diego Database Partition", func() {
 					ConsulAgentKey:    "agent-key",
 					ConsulServerCert:  "server-cert",
 					ConsulServerKey:   "server-key",
+					BBSCACert:         "cacert",
+					BBSServerCert:     "clientcert",
+					BBSServerKey:      "clientkey",
 				}
 				grouper = NewDiegoDatabasePartition(c, config)
 				instanceGroup = grouper.ToInstanceGroup()
