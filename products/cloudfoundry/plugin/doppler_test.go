@@ -9,56 +9,31 @@ import (
 )
 
 var _ = Describe("Doppler Partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("then HasValidValues should be false", func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-				"--etcd-machine-ip", "1.0.0.7",
-				"--etcd-machine-ip", "1.0.0.8",
-			})
-			dopplerPartition := NewDopplerPartition(c, &Config{})
-			Ω(dopplerPartition.HasValidValues()).Should(BeFalse())
-		})
-	})
+
 	Context("when initialized WITH a complete set of arguments", func() {
-		var dopplerPartition InstanceGrouper
+		var dopplerPartition InstanceGroupCreator
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--doppler-ip", "1.0.11.1",
-				"--doppler-ip", "1.0.11.2",
-				"--network", "foundry-net",
-				"--doppler-vm-type", "blah",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-				"--etcd-machine-ip", "1.0.0.7",
-				"--etcd-machine-ip", "1.0.0.8",
-				"--doppler-zone", "dopplerzone",
-				"--doppler-drain-buffer-size", "100",
-				"--doppler-shared-secret", "secret",
-				"--cc-bulk-api-password", "bulk-pwd",
-			})
+
 			config := &Config{
-				NetworkName:       "foundry-net",
-				StemcellName:      "cool-ubuntu-animal",
-				AZs:               []string{"eastprod-1"},
-				SystemDomain:      "sys.test.com",
-				SkipSSLCertVerify: true,
+				NetworkName:                   "foundry-net",
+				StemcellName:                  "cool-ubuntu-animal",
+				AZs:                           []string{"eastprod-1"},
+				SystemDomain:                  "sys.test.com",
+				SkipSSLCertVerify:             true,
+				DopplerIPs:                    []string{"1.0.11.1", "1.0.11.2"},
+				DopplerVMType:                 "blah",
+				MetronSecret:                  "metronsecret",
+				MetronZone:                    "metronzoneguid",
+				SyslogAddress:                 "syslog-server",
+				SyslogPort:                    10601,
+				SyslogTransport:               "tcp",
+				EtcdMachines:                  []string{"1.0.0.7", "1.0.0.8"},
+				DopplerZone:                   "dopplerzone",
+				DopplerMessageDrainBufferSize: 100,
+				DopplerSharedSecret:           "secret",
+				CCBuilkAPIPassword:            "bulk-pwd",
 			}
-			dopplerPartition = NewDopplerPartition(c, config)
-		})
-		It("then HasValidValues should be true", func() {
-			Ω(dopplerPartition.HasValidValues()).Should(Equal(true))
+			dopplerPartition = NewDopplerPartition(config)
 		})
 		It("then it should allow the user to configure the doppler IPs", func() {
 			ig := dopplerPartition.ToInstanceGroup()

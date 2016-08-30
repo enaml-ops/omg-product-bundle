@@ -37,18 +37,24 @@ type Config struct {
 	ConsulServerCert         string
 	ConsulServerKey          string
 
-	ErrandVMType       string
-	SmokeTestsPassword string
-	UAALoginProtocol   string
-	LoggregratorIPs    []string
-	LoggregratorVMType string
-	DopplerSecret      string
-	EtcdMachines       []string
-	MetronZone         string
-	MetronSecret       string
-	SyslogAddress      string
-	SyslogPort         int
-	SyslogTransport    string
+	ErrandVMType                  string
+	SmokeTestsPassword            string
+	UAALoginProtocol              string
+	LoggregratorIPs               []string
+	LoggregratorVMType            string
+	DopplerSecret                 string
+	EtcdMachines                  []string
+	MetronZone                    string
+	MetronSecret                  string
+	SyslogAddress                 string
+	SyslogPort                    int
+	SyslogTransport               string
+	DopplerIPs                    []string
+	DopplerVMType                 string
+	DopplerZone                   string
+	DopplerMessageDrainBufferSize int
+	DopplerSharedSecret           string
+	CCBuilkAPIPassword            string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -83,14 +89,22 @@ func NewConfig(c *cli.Context) (*Config, error) {
 
 		LoggregratorIPs:    c.StringSlice("loggregator-traffic-controller-ip"),
 		LoggregratorVMType: c.String("loggregator-traffic-controller-vmtype"),
-		DopplerSecret:      c.String("doppler-client-secret"),
-		EtcdMachines:       c.StringSlice("etcd-machine-ip"),
+
+		EtcdMachines: c.StringSlice("etcd-machine-ip"),
 
 		MetronZone:      c.String("metron-zone"),
 		MetronSecret:    c.String("metron-secret"),
 		SyslogAddress:   c.String("syslog-address"),
 		SyslogPort:      c.Int("syslog-port"),
 		SyslogTransport: c.String("syslog-transport"),
+
+		DopplerIPs:                    c.StringSlice("doppler-ip"),
+		DopplerVMType:                 c.String("doppler-vm-type"),
+		DopplerSecret:                 c.String("doppler-client-secret"),
+		DopplerZone:                   c.String("doppler-zone"),
+		DopplerMessageDrainBufferSize: c.Int("doppler-drain-buffer-size"),
+		DopplerSharedSecret:           c.String("doppler-shared-secret"),
+		CCBuilkAPIPassword:            c.String("cc-bulk-api-password"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err
