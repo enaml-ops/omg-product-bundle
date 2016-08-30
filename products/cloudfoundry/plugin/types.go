@@ -28,11 +28,6 @@ type InstanceGrouperFactory func(*cli.Context) InstanceGrouper
 
 type InstanceGrouperConfigFactory func(*cli.Context, *Config) InstanceGrouper
 
-type bootstrap struct {
-	Config *Config
-	VMType string
-}
-
 type clockGlobal struct {
 	VMTypeName               string
 	Metron                   *Metron

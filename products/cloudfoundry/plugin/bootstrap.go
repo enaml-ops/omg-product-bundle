@@ -7,6 +7,11 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
+type bootstrap struct {
+	Config *Config
+	VMType string
+}
+
 func NewBootstrapPartition(c *cli.Context, config *Config) InstanceGrouper {
 	return &bootstrap{
 		Config: config,
