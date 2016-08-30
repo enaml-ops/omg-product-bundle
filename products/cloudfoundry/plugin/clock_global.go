@@ -10,6 +10,20 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
+type clockGlobal struct {
+	VMTypeName               string
+	Metron                   *Metron
+	Statsd                   *StatsdInjector
+	NFS                      *NFSMounter
+	CloudController          *CloudControllerPartition
+	CCDBAddress              string
+	CCDBUser                 string
+	CCDBPassword             string
+	JWTVerificationKey       string
+	CCServiceDashboardSecret string
+	Config                   *Config
+}
+
 func NewClockGlobalPartition(c *cli.Context, config *Config) InstanceGrouper {
 	var db string
 	mysqlProxies := c.StringSlice("mysql-proxy-ip")

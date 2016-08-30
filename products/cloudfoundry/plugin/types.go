@@ -28,20 +28,6 @@ type InstanceGrouperFactory func(*cli.Context) InstanceGrouper
 
 type InstanceGrouperConfigFactory func(*cli.Context, *Config) InstanceGrouper
 
-type clockGlobal struct {
-	VMTypeName               string
-	Metron                   *Metron
-	Statsd                   *StatsdInjector
-	NFS                      *NFSMounter
-	CloudController          *CloudControllerPartition
-	CCDBAddress              string
-	CCDBUser                 string
-	CCDBPassword             string
-	JWTVerificationKey       string
-	CCServiceDashboardSecret string
-	Config                   *Config
-}
-
 type gorouter struct {
 	Instances    int
 	AZs          []string
