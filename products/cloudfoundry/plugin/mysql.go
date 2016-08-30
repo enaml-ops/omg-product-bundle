@@ -9,18 +9,37 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
+//MySQL -
+type MySQL struct {
+	Config                 *Config
+	VMTypeName             string
+	NetworkIPs             []string
+	PersistentDiskType     string
+	AdminPassword          string
+	DatabaseStartupTimeout int
+	InnodbBufferPoolSize   int
+	MaxConnections         int
+	SyslogAddress          string
+	SyslogPort             int
+	SyslogTransport        string
+	MySQLSeededDatabases   []MySQLSeededDatabase
+}
+
+//MySQLSeededDatabase -
+type MySQLSeededDatabase struct {
+	Name     string `yaml:"name"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+}
+
 //NewMySQLPartition -
-func NewMySQLPartition(c *cli.Context) (igf InstanceGrouper) {
+func NewMySQLPartition(c *cli.Context, config *Config) (igf InstanceGrouper) {
 	igf = &MySQL{
-		AZs:                    c.StringSlice("az"),
-		StemcellName:           c.String("stemcell-name"),
+		Config:                 config,
 		NetworkIPs:             c.StringSlice("mysql-ip"),
-		NetworkName:            c.String("network"),
 		VMTypeName:             c.String("mysql-vm-type"),
 		PersistentDiskType:     c.String("mysql-disk-type"),
 		AdminPassword:          c.String("mysql-admin-password"),
-		BootstrapUsername:      c.String("mysql-bootstrap-username"),
-		BootstrapPassword:      c.String("mysql-bootstrap-password"),
 		DatabaseStartupTimeout: 1200,
 		InnodbBufferPoolSize:   2147483648,
 		MaxConnections:         1500,
@@ -94,14 +113,14 @@ func (s *MySQL) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 		Name:               "mysql-partition",
 		Instances:          len(s.NetworkIPs),
 		VMType:             s.VMTypeName,
-		AZs:                s.AZs,
-		Stemcell:           s.StemcellName,
+		AZs:                s.Config.AZs,
+		Stemcell:           s.Config.StemcellName,
 		PersistentDiskType: s.PersistentDiskType,
 		Jobs: []enaml.InstanceJob{
 			s.newMySQLJob(),
 		},
 		Networks: []enaml.Network{
-			enaml.Network{Name: s.NetworkName, StaticIPs: s.NetworkIPs},
+			enaml.Network{Name: s.Config.NetworkName, StaticIPs: s.NetworkIPs},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -121,8 +140,8 @@ func (s *MySQL) newMySQLJob() enaml.InstanceJob {
 			InnodbBufferPoolSize:   s.InnodbBufferPoolSize,
 			MaxConnections:         s.MaxConnections,
 			BootstrapEndpoint: &mysqllib.BootstrapEndpoint{
-				Username: s.BootstrapUsername,
-				Password: s.BootstrapPassword,
+				Username: s.Config.MySQLBootstrapUser,
+				Password: s.Config.MySQLBootstrapPassword,
 			},
 			SeededDatabases: s.MySQLSeededDatabases,
 			SyslogAggregator: &mysqllib.SyslogAggregator{
@@ -138,20 +157,11 @@ func (s *MySQL) newMySQLJob() enaml.InstanceJob {
 func (s *MySQL) HasValidValues() bool {
 	lo.G.Debugf("checking '%s' for valid flags", "mysql")
 
-	if len(s.AZs) <= 0 {
-		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
-	}
 	if len(s.NetworkIPs) <= 0 {
 		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
 	}
-	if s.StemcellName == "" {
-		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
-	}
 	if s.VMTypeName == "" {
 		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
-	}
-	if s.NetworkName == "" {
-		lo.G.Debugf("could not find a valid NetworkName '%v'", s.NetworkName)
 	}
 	if s.PersistentDiskType == "" {
 		lo.G.Debugf("could not find a valid PersistentDiskType '%v'", s.PersistentDiskType)
@@ -159,20 +169,9 @@ func (s *MySQL) HasValidValues() bool {
 	if s.AdminPassword == "" {
 		lo.G.Debugf("could not find a valid AdminPassword '%v'", s.AdminPassword)
 	}
-	if s.BootstrapUsername == "" {
-		lo.G.Debugf("could not find a valid BootstrapUsername '%v'", s.BootstrapUsername)
-	}
-	if s.BootstrapPassword == "" {
-		lo.G.Debugf("could not find a valid BootstrapPassword '%v'", s.BootstrapPassword)
-	}
 
-	return (len(s.AZs) > 0 &&
-		s.StemcellName != "" &&
-		s.VMTypeName != "" &&
-		s.NetworkName != "" &&
+	return (s.VMTypeName != "" &&
 		len(s.NetworkIPs) > 0 &&
 		s.PersistentDiskType != "" &&
-		s.AdminPassword != "" &&
-		s.BootstrapUsername != "" &&
-		s.BootstrapPassword != "")
+		s.AdminPassword != "")
 }

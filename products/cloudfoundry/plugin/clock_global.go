@@ -43,7 +43,7 @@ func NewClockGlobalPartition(c *cli.Context, config *Config) InstanceGrouper {
 		CCServiceDashboardSecret: c.String("cc-service-dashboards-client-secret"),
 	}
 
-	mysql := NewMySQLPartition(c).(*MySQL)
+	mysql := NewMySQLPartition(c, config).(*MySQL)
 	ccdb := mysql.GetSeededDBByName("ccdb")
 	if ccdb != nil {
 		cg.CCDBUser = ccdb.Username

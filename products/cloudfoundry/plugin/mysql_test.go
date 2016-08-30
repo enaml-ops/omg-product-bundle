@@ -15,7 +15,7 @@ var _ = Describe("MySQL Partition", func() {
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
 			})
-			Ω(NewMySQLPartition(c).HasValidValues()).Should(BeFalse())
+			Ω(NewMySQLPartition(c, &Config{}).HasValidValues()).Should(BeFalse())
 		})
 	})
 
@@ -26,23 +26,24 @@ var _ = Describe("MySQL Partition", func() {
 			plugin := new(Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--az", "eastprod-1",
 				"--mysql-ip", "1.0.10.1",
 				"--mysql-ip", "1.0.10.2",
-				"--network", "foundry-net",
 				"--mysql-vm-type", "blah1",
 				"--mysql-disk-type", "blah2",
 				"--mysql-admin-password", "mysqladmin",
-				"--mysql-bootstrap-username", "mysqlbootstrap",
-				"--mysql-bootstrap-password", "mysqlbootstrappwd",
 				"--syslog-address", "syslog-server",
 				"--syslog-port", "10601",
 				"--syslog-transport", "tcp",
 				"--db-uaa-password", "uaapassword",
 			})
-
-			mysqlPartition = NewMySQLPartition(c)
+			config := &Config{
+				StemcellName:           "cool-ubuntu-animal",
+				AZs:                    []string{"eastprod-1"},
+				NetworkName:            "foundry-net",
+				MySQLBootstrapUser:     "mysqlbootstrap",
+				MySQLBootstrapPassword: "mysqlbootstrappwd",
+			}
+			mysqlPartition = NewMySQLPartition(c, config)
 		})
 
 		It("then HasValidValues should be true", func() {

@@ -96,7 +96,7 @@ var _ = Describe("Vault helpers", func() {
 				VaultDecorate(args, flags)
 				c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
 				Ω(c.String("db-uaa-password")).ShouldNot(BeEmpty())
-				ig := NewMySQLPartition(c)
+				ig := NewMySQLPartition(c, &Config{})
 				mysql := ig.(*MySQL)
 				Ω(mysql.MySQLSeededDatabases).ShouldNot(BeEmpty())
 			})
