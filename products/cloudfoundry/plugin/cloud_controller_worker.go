@@ -7,8 +7,30 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
+//CloudControllerWorkerPartition - Cloud Controller Worker Partition
+type CloudControllerWorkerPartition struct {
+	Config                *Config
+	Instances             int
+	VMTypeName            string
+	AllowedCorsDomains    []string
+	Metron                *Metron
+	ConsulAgent           *ConsulAgent
+	StatsdInjector        *StatsdInjector
+	NFSMounter            *NFSMounter
+	StagingUploadUser     string
+	StagingUploadPassword string
+	BulkAPIUser           string
+	BulkAPIPassword       string
+	DbEncryptionKey       string
+	InternalAPIUser       string
+	InternalAPIPassword   string
+	CCDBUsername          string
+	CCDBPassword          string
+	MySQLProxyIP          string
+}
+
 //NewCloudControllerWorkerPartition - Creating a New Cloud Controller Partition
-func NewCloudControllerWorkerPartition(c *cli.Context) InstanceGrouper {
+func NewCloudControllerWorkerPartition(c *cli.Context, config *Config) InstanceGrouper {
 	var proxyIP string
 	mysqlProxies := c.StringSlice("mysql-proxy-ip")
 	if len(mysqlProxies) > 0 {
@@ -16,14 +38,9 @@ func NewCloudControllerWorkerPartition(c *cli.Context) InstanceGrouper {
 	}
 
 	return &CloudControllerWorkerPartition{
-		AZs:                   c.StringSlice("az"),
+		Config:                config,
 		Instances:             c.Int("cc-worker-instances"),
 		VMTypeName:            c.String("cc-worker-vm-type"),
-		StemcellName:          c.String("stemcell-name"),
-		NetworkName:           c.String("network"),
-		SystemDomain:          c.String("system-domain"),
-		AppDomains:            c.StringSlice("app-domain"),
-		AllowAppSSHAccess:     c.Bool("allow-app-ssh-access"),
 		Metron:                NewMetron(c),
 		ConsulAgent:           NewConsulAgent(c, []string{}),
 		NFSMounter:            NewNFSMounter(c),
@@ -38,10 +55,6 @@ func NewCloudControllerWorkerPartition(c *cli.Context) InstanceGrouper {
 		CCDBUsername:          c.String("db-ccdb-username"),
 		CCDBPassword:          c.String("db-ccdb-password"),
 		MySQLProxyIP:          proxyIP,
-		NATSUser:              c.String("nats-user"),
-		NATSPassword:          c.String("nats-pass"),
-		NATSPort:              c.Int("nats-port"),
-		NATSMachines:          c.StringSlice("nats-machine-ip"),
 	}
 }
 
@@ -49,12 +62,12 @@ func NewCloudControllerWorkerPartition(c *cli.Context) InstanceGrouper {
 func (s *CloudControllerWorkerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 	ig = &enaml.InstanceGroup{
 		Name:      "cloud_controller_worker-partition",
-		AZs:       s.AZs,
+		AZs:       s.Config.AZs,
 		Instances: s.Instances,
 		VMType:    s.VMTypeName,
-		Stemcell:  s.StemcellName,
+		Stemcell:  s.Config.StemcellName,
 		Networks: []enaml.Network{
-			enaml.Network{Name: s.NetworkName},
+			enaml.Network{Name: s.Config.NetworkName},
 		},
 		Jobs: []enaml.InstanceJob{
 			newCloudControllerWorkerJob(s),
@@ -76,12 +89,12 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 		Name:    "cloud_controller_worker",
 		Release: CFReleaseName,
 		Properties: &ccworkerlib.CloudControllerWorkerJob{
-			Domain:                   c.SystemDomain,
-			SystemDomain:             c.SystemDomain,
-			AppDomains:               c.AppDomains,
+			Domain:                   c.Config.SystemDomain,
+			SystemDomain:             c.Config.SystemDomain,
+			AppDomains:               c.Config.AppDomains,
 			SystemDomainOrganization: "system",
 			Cc: &ccworkerlib.Cc{
-				AllowAppSshAccess: c.AllowAppSSHAccess,
+				AllowAppSshAccess: c.Config.AllowSSHAccess,
 				Buildpacks: &ccworkerlib.Buildpacks{
 					BlobstoreType: "fog",
 					FogConnection: &ccworkerlib.DefaultFogConnection{
@@ -168,10 +181,10 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 				},
 			},
 			Nats: &ccworkerlib.Nats{
-				User:     c.NATSUser,
-				Port:     c.NATSPort,
-				Password: c.NATSPassword,
-				Machines: c.NATSMachines,
+				User:     c.Config.NATSUser,
+				Port:     c.Config.NATSPort,
+				Password: c.Config.NATSPassword,
+				Machines: c.Config.NATSMachines,
 			},
 		},
 	}
@@ -180,18 +193,6 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 //HasValidValues - Check if valid values has been populated
 func (s *CloudControllerWorkerPartition) HasValidValues() bool {
 	lo.G.Debugf("checking '%s' for valid flags", "cloud controller worker")
-
-	if len(s.AZs) <= 0 {
-		lo.G.Debugf("could not find the correct number of AZs configured '%v' : '%v'", len(s.AZs), s.AZs)
-	}
-
-	if s.StemcellName == "" {
-		lo.G.Debugf("could not find a valid stemcellname '%v'", s.StemcellName)
-	}
-
-	if s.NetworkName == "" {
-		lo.G.Debugf("could not find a valid networkname '%v'", s.NetworkName)
-	}
 
 	if s.VMTypeName == "" {
 		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
@@ -204,20 +205,9 @@ func (s *CloudControllerWorkerPartition) HasValidValues() bool {
 	if s.Metron.Secret == "" {
 		lo.G.Debugf("could not find a valid metron secret '%v'", s.Metron.Secret)
 	}
-	if len(s.NATSMachines) == 0 {
-		lo.G.Debug("missing NATS IPs")
-	}
-	if s.NATSPassword == "" {
-		lo.G.Debug("missing NATS password")
-	}
-	return (len(s.AZs) > 0 &&
-		s.StemcellName != "" &&
-		s.VMTypeName != "" &&
+	return (s.VMTypeName != "" &&
 		s.Metron.Zone != "" &&
 		s.Metron.Secret != "" &&
-		s.NetworkName != "" &&
 		s.NFSMounter.hasValidValues() &&
-		s.ConsulAgent.HasValidValues()) &&
-		len(s.NATSMachines) > 0 &&
-		s.NATSPassword != ""
+		s.ConsulAgent.HasValidValues())
 }

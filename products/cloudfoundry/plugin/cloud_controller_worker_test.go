@@ -52,8 +52,17 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 				"--nats-port", "4333",
 				"--nats-machine-ip", "10.0.0.4",
 			})
-
-			cloudControllerWorker = NewCloudControllerWorkerPartition(c)
+			config := &Config{
+				NATSMachines:   []string{"10.0.0.4"},
+				NATSUser:       "natsuser",
+				NATSPassword:   "natspass",
+				NATSPort:       4333,
+				SystemDomain:   "sys.yourdomain.com",
+				AppDomains:     []string{"apps.yourdomain.com"},
+				AllowSSHAccess: true,
+				NetworkName:    "foundry",
+			}
+			cloudControllerWorker = NewCloudControllerWorkerPartition(c, config)
 		})
 
 		It("then should not be nil", func() {
