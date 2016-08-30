@@ -65,35 +65,73 @@ type Config struct {
 	BBSServerCert                 string
 	BBSServerKey                  string
 
-	DiegoBrainVMType             string
-	DiegoBrainPersistentDiskType string
-	DiegoBrainIPs                []string
-	BBSRequireSSL                bool
-	CCUploaderJobPollInterval    int
-	CCInternalAPIUser            string
-	CCInternalAPIPassword        string
-	CCBulkBatchSize              int
-	CCFetchTimeout               int
-	FSListenAddr                 string
-	FSStaticDirectory            string
-	FSDebugAddr                  string
-	FSLogLevel                   string
-	MetronPort                   int
-	SSHProxyClientSecret         string
-	CCExternalPort               int
-	TrafficControllerURL         string
-
-	EtcdServerCert string
-	EtcdServerKey  string
-	EtcdClientCert string
-	EtcdClientKey  string
-	EtcdPeerCert   string
-	EtcdPeerKey    string
-
-	DiegoDBPassphrase         string
-	DiegoDBVMType             string
-	DiegoDBPersistentDiskType string
-	DiegoDBIPs                []string
+	DiegoBrainVMType                          string
+	DiegoBrainPersistentDiskType              string
+	DiegoBrainIPs                             []string
+	BBSRequireSSL                             bool
+	CCUploaderJobPollInterval                 int
+	CCInternalAPIUser                         string
+	CCInternalAPIPassword                     string
+	CCBulkBatchSize                           int
+	CCFetchTimeout                            int
+	FSListenAddr                              string
+	FSStaticDirectory                         string
+	FSDebugAddr                               string
+	FSLogLevel                                string
+	MetronPort                                int
+	SSHProxyClientSecret                      string
+	CCExternalPort                            int
+	TrafficControllerURL                      string
+	RouterMachines                            []string
+	EtcdServerCert                            string
+	EtcdServerKey                             string
+	EtcdClientCert                            string
+	EtcdClientKey                             string
+	EtcdPeerCert                              string
+	EtcdPeerKey                               string
+	MySQLProxyIPs                             []string
+	UAAVMType                                 string
+	UAAInstances                              int
+	DiegoDBPassphrase                         string
+	DiegoDBVMType                             string
+	DiegoDBPersistentDiskType                 string
+	DiegoDBIPs                                []string
+	SAMLServiceProviderKey                    string
+	SAMLServiceProviderCertificate            string
+	JWTSigningKey                             string
+	AdminSecret                               string
+	UAADBUserName                             string
+	UAADBPassword                             string
+	PushAppsManagerPassword                   string
+	SystemServicesPassword                    string
+	SystemVerificationPassword                string
+	OpentsdbFirehoseNozzleClientSecret        string
+	IdentityClientSecret                      string
+	LoginClientSecret                         string
+	PortalClientSecret                        string
+	AutoScalingServiceClientSecret            string
+	SystemPasswordsClientSecret               string
+	CCServiceDashboardsClientSecret           string
+	GoRouterClientSecret                      string
+	NotificationsClientSecret                 string
+	NotificationsUIClientSecret               string
+	CloudControllerUsernameLookupClientSecret string
+	CCRoutingClientSecret                     string
+	AppsMetricsClientSecret                   string
+	AppsMetricsProcessingClientSecret         string
+	SelfServiceLinksEnabled                   bool
+	SignupsEnabled                            bool
+	CompanyName                               string
+	ProductLogo                               string
+	SquareLogo                                string
+	FooterLegalText                           string
+	LDAPUrl                                   string
+	LDAPUserDN                                string
+	LDAPUserPassword                          string
+	LDAPSearchBase                            string
+	LDAPSearchFilter                          string
+	LDAPMailAttributeName                     string
+	LDAPEnabled                               bool
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -168,10 +206,51 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		CCExternalPort:               c.Int("cc-external-port"),
 		TrafficControllerURL:         c.String("traffic-controller-url"),
 
-		DiegoDBVMType:             c.String("diego-db-vm-type"),
-		DiegoDBPersistentDiskType: c.String("diego-db-disk-type"),
-		DiegoDBIPs:                c.StringSlice("diego-db-ip"),
-		DiegoDBPassphrase:         c.String("diego-db-passphrase"),
+		DiegoDBVMType:                             c.String("diego-db-vm-type"),
+		DiegoDBPersistentDiskType:                 c.String("diego-db-disk-type"),
+		DiegoDBIPs:                                c.StringSlice("diego-db-ip"),
+		DiegoDBPassphrase:                         c.String("diego-db-passphrase"),
+		MySQLProxyIPs:                             c.StringSlice("mysql-proxy-ip"),
+		UAAVMType:                                 c.String("uaa-vm-type"),
+		UAAInstances:                              c.Int("uaa-instances"),
+		SAMLServiceProviderKey:                    c.String("uaa-saml-service-provider-key"),
+		SAMLServiceProviderCertificate:            c.String("uaa-saml-service-provider-cert"),
+		JWTSigningKey:                             c.String("uaa-jwt-signing-key"),
+		JWTVerificationKey:                        c.String("uaa-jwt-verification-key"),
+		AdminSecret:                               c.String("uaa-admin-secret"),
+		RouterMachines:                            c.StringSlice("router-ip"),
+		UAADBUserName:                             c.String("db-uaa-username"),
+		UAADBPassword:                             c.String("db-uaa-password"),
+		PushAppsManagerPassword:                   c.String("push-apps-manager-password"),
+		SystemServicesPassword:                    c.String("system-services-password"),
+		SystemVerificationPassword:                c.String("system-verification-password"),
+		OpentsdbFirehoseNozzleClientSecret:        c.String("opentsdb-firehose-nozzle-client-secret"),
+		IdentityClientSecret:                      c.String("identity-client-secret"),
+		LoginClientSecret:                         c.String("login-client-secret"),
+		PortalClientSecret:                        c.String("portal-client-secret"),
+		AutoScalingServiceClientSecret:            c.String("autoscaling-service-client-secret"),
+		SystemPasswordsClientSecret:               c.String("system-passwords-client-secret"),
+		CCServiceDashboardsClientSecret:           c.String("cc-service-dashboards-client-secret"),
+		GoRouterClientSecret:                      c.String("gorouter-client-secret"),
+		NotificationsClientSecret:                 c.String("notifications-client-secret"),
+		NotificationsUIClientSecret:               c.String("notifications-ui-client-secret"),
+		CloudControllerUsernameLookupClientSecret: c.String("cloud-controller-username-lookup-client-secret"),
+		CCRoutingClientSecret:                     c.String("cc-routing-client-secret"),
+		AppsMetricsClientSecret:                   c.String("apps-metrics-client-secret"),
+		AppsMetricsProcessingClientSecret:         c.String("apps-metrics-processing-client-secret"),
+		SelfServiceLinksEnabled:                   c.BoolT("uaa-enable-selfservice-links"),
+		SignupsEnabled:                            c.BoolT("uaa-signups-enabled"),
+		CompanyName:                               c.String("uaa-company-name"),
+		ProductLogo:                               c.String("uaa-product-logo"),
+		SquareLogo:                                c.String("uaa-square-logo"),
+		FooterLegalText:                           c.String("uaa-footer-legal-txt"),
+		LDAPUrl:                                   c.String("uaa-ldap-url"),
+		LDAPUserDN:                                c.String("uaa-ldap-user-dn"),
+		LDAPUserPassword:                          c.String("uaa-ldap-user-password"),
+		LDAPSearchBase:                            c.String("uaa-ldap-search-base"),
+		LDAPSearchFilter:                          c.String("uaa-ldap-search-filter"),
+		LDAPMailAttributeName:                     c.String("uaa-ldap-mail-attributename"),
+		LDAPEnabled:                               c.BoolT("uaa-ldap-enabled"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err
@@ -307,4 +386,8 @@ func checkRequiredStringSliceFlags(c *cli.Context) []string {
 		}
 	}
 	return invalidNames
+}
+
+func (c *Config) MySQLProxyHost() string {
+	return c.MySQLProxyIPs[0]
 }

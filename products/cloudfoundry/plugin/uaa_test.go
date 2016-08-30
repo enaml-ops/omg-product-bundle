@@ -9,94 +9,77 @@ import (
 )
 
 var _ = Describe("UAA Partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("then HasValidValues returns false", func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-			})
-			uaaPartition := NewUAAPartition(c, &Config{})
-			Ω(uaaPartition.HasValidValues()).Should(BeFalse())
-		})
-	})
 	Context("when initialized WITH a complete set of arguments", func() {
-		var uaaPartition InstanceGrouper
+		var uaaPartition InstanceGroupCreator
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--uaa-vm-type", "blah",
-				"--uaa-instances", "1",
-				"--consul-ip", "1.0.0.1",
-				"--consul-ip", "1.0.0.2",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-				"--etcd-machine-ip", "1.0.0.7",
-				"--etcd-machine-ip", "1.0.0.8",
-				"--uaa-saml-service-provider-key", "saml-key",
-				"--uaa-saml-service-provider-cert", "saml-cert",
-				"--uaa-jwt-verification-key", "jwt-verificationkey",
-				"--uaa-jwt-signing-key", "jwt-signingkey",
-				"--uaa-ldap-enabled",
-				"--uaa-ldap-url", "ldap://ldap.test.com",
-				"--uaa-ldap-user-dn", "userdn",
-				"--uaa-ldap-user-password", "userpwd",
-				"--uaa-ldap-search-filter", "filter",
-				"--uaa-ldap-search-base", "base",
-				"--uaa-ldap-mail-attributename", "mail",
-				"--uaa-admin-secret", "adminclientsecret",
-				"--router-ip", "1.0.0.1",
-				"--router-ip", "1.0.0.2",
-				"--mysql-proxy-ip", "1.0.10.3",
-				"--mysql-proxy-ip", "1.0.10.4",
-				"--db-uaa-username", "uaa-db-user",
-				"--db-uaa-password", "uaa-db-pwd",
-				"--admin-password", "admin",
-				"--push-apps-manager-password", "appsman",
-				"--smoke-tests-password", "smoke",
-				"--system-services-password", "sysservices",
-				"--system-verification-password", "sysverification",
-				"--opentsdb-firehose-nozzle-client-secret", "opentsdb-firehose-nozzle-client-secret",
-				"--identity-client-secret", "identity-client-secret",
-				"--login-client-secret", "login-client-secret",
-				"--portal-client-secret", "portal-client-secret",
-				"--autoscaling-service-client-secret", "autoscaling-service-client-secret",
-				"--system-passwords-client-secret", "system-passwords-client-secret",
-				"--cc-service-dashboards-client-secret", "cc-service-dashboards-client-secret",
-				"--doppler-client-secret", "doppler-client-secret",
-				"--gorouter-client-secret", "gorouter-client-secret",
-				"--notifications-client-secret", "notifications-client-secret",
-				"--notifications-ui-client-secret", "notifications-ui-client-secret",
-				"--cloud-controller-username-lookup-client-secret", "cloud-controller-username-lookup-client-secret",
-				"--cc-routing-client-secret", "cc-routing-client-secret",
-				"--ssh-proxy-client-secret", "ssh-proxy-client-secret",
-				"--apps-metrics-client-secret", "apps-metrics-client-secret",
-				"--apps-metrics-processing-client-secret", "apps-metrics-processing-client-secret",
-			})
+
 			config := &Config{
-				SystemDomain:      "sys.test.com",
-				AZs:               []string{"eastprod-1"},
-				StemcellName:      "cool-ubuntu-animal",
-				NetworkName:       "foundry-net",
-				AllowSSHAccess:    true,
-				ConsulEncryptKeys: []string{"encyption-key"},
-				ConsulCaCert:      "ca-cert",
-				ConsulAgentCert:   "agent-cert",
-				ConsulAgentKey:    "agent-key",
-				ConsulServerCert:  "server-cert",
-				ConsulServerKey:   "server-key",
-				NATSUser:          "nats",
-				NATSPassword:      "pass",
-				NATSPort:          4222,
-				NATSMachines:      []string{"1.0.0.5", "1.0.0.6"},
+				SystemDomain:                              "sys.test.com",
+				AZs:                                       []string{"eastprod-1"},
+				StemcellName:                              "cool-ubuntu-animal",
+				NetworkName:                               "foundry-net",
+				AllowSSHAccess:                            true,
+				ConsulEncryptKeys:                         []string{"encyption-key"},
+				ConsulCaCert:                              "ca-cert",
+				ConsulAgentCert:                           "agent-cert",
+				ConsulAgentKey:                            "agent-key",
+				ConsulServerCert:                          "server-cert",
+				ConsulServerKey:                           "server-key",
+				NATSUser:                                  "nats",
+				NATSPassword:                              "pass",
+				NATSPort:                                  4222,
+				NATSMachines:                              []string{"1.0.0.5", "1.0.0.6"},
+				UAAVMType:                                 "blah",
+				UAAInstances:                              1,
+				ConsulIPs:                                 []string{"1.0.0.1", "1.0.0.2"},
+				MetronSecret:                              "metronsecret",
+				MetronZone:                                "metronzoneguid",
+				SyslogAddress:                             "syslog-server",
+				SyslogPort:                                10601,
+				SyslogTransport:                           "tcp",
+				EtcdMachines:                              []string{"1.0.0.7", "1.0.0.8"},
+				SAMLServiceProviderKey:                    "saml-key",
+				SAMLServiceProviderCertificate:            "saml-cert",
+				JWTVerificationKey:                        "jwt-verificationkey",
+				JWTSigningKey:                             "jwt-signingkey",
+				LDAPEnabled:                               true,
+				LDAPUrl:                                   "ldap://ldap.test.com",
+				LDAPUserDN:                                "userdn",
+				LDAPUserPassword:                          "userpwd",
+				LDAPSearchFilter:                          "filter",
+				LDAPSearchBase:                            "base",
+				LDAPMailAttributeName:                     "mail",
+				AdminSecret:                               "adminclientsecret",
+				RouterMachines:                            []string{"1.0.0.1", "1.0.0.2"},
+				MySQLProxyIPs:                             []string{"1.0.10.3", "1.0.10.4"},
+				UAADBUserName:                             "uaa-db-user",
+				UAADBPassword:                             "uaa-db-pwd",
+				AdminPassword:                             "admin",
+				PushAppsManagerPassword:                   "appsman",
+				SmokeTestsPassword:                        "smoke",
+				SystemServicesPassword:                    "sysservices",
+				SystemVerificationPassword:                "sysverification",
+				OpentsdbFirehoseNozzleClientSecret:        "opentsdb-firehose-nozzle-client-secret",
+				IdentityClientSecret:                      "identity-client-secret",
+				LoginClientSecret:                         "login-client-secret",
+				PortalClientSecret:                        "portal-client-secret",
+				AutoScalingServiceClientSecret:            "autoscaling-service-client-secret",
+				SystemPasswordsClientSecret:               "system-passwords-client-secret",
+				CCServiceDashboardSecret:                  "cc-service-dashboards-client-secret",
+				DopplerSecret:                             "doppler-client-secret",
+				GoRouterClientSecret:                      "gorouter-client-secret",
+				NotificationsClientSecret:                 "notifications-client-secret",
+				NotificationsUIClientSecret:               "notifications-ui-client-secret",
+				CloudControllerUsernameLookupClientSecret: "cloud-controller-username-lookup-client-secret",
+				CCRoutingClientSecret:                     "cc-routing-client-secret",
+				SSHProxyClientSecret:                      "ssh-proxy-client-secret",
+				AppsMetricsClientSecret:                   "apps-metrics-client-secret",
+				AppsMetricsProcessingClientSecret:         "apps-metrics-processing-client-secret",
+				UAALoginProtocol:                          "https",
+				SelfServiceLinksEnabled:                   true,
+				SignupsEnabled:                            true,
 			}
-			uaaPartition = NewUAAPartition(c, config)
-		})
-		It("then HasValidValues should return true", func() {
-			Ω(uaaPartition.HasValidValues()).Should(Equal(true))
+			uaaPartition = NewUAAPartition(config)
 		})
 		It("then it should not configure static ips for uaaPartition", func() {
 			ig := uaaPartition.ToInstanceGroup()
@@ -312,28 +295,6 @@ var _ = Describe("UAA Partition", func() {
 			Ω(route["port"]).Should(Equal(8080))
 			Ω(route["registration_interval"]).Should(Equal("40s"))
 			Ω(route["uris"]).Should(ConsistOf("uaa.sys.test.com", "*.uaa.sys.test.com", "login.sys.test.com", "*.login.sys.test.com"))
-		})
-	})
-	Context("when Creating Branding with flags", func() {
-		var branding *uaa.Branding
-		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--uaa-company-name", "company",
-				"--uaa-product-logo", "product-logo",
-				"--uaa-square-logo", "square-logo",
-				"--uaa-footer-legal-txt", "legal",
-			})
-			branding = CreateBranding(c)
-		})
-		It("branding should be initialized", func() {
-			Ω(branding).ShouldNot(BeNil())
-			Ω(branding.CompanyName).Should(Equal("company"))
-			Ω(branding.ProductLogo).Should(Equal("product-logo"))
-			Ω(branding.SquareLogo).Should(Equal("square-logo"))
-			Ω(branding.FooterLegalText).Should(Equal("legal"))
-			Ω(branding.FooterLinks).Should(BeNil())
 		})
 	})
 })
