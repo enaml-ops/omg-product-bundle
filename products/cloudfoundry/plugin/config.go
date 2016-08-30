@@ -37,7 +37,9 @@ type Config struct {
 	ConsulServerCert         string
 	ConsulServerKey          string
 
-	ErrandVMType string
+	ErrandVMType       string
+	SmokeTestsPassword string
+	UAALoginProtocol   string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -66,7 +68,9 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		AllowSSHAccess:    c.Bool("allow-app-ssh-access"),
 		SkipSSLCertVerify: c.BoolT("skip-cert-verify"),
 
-		ErrandVMType: c.String("errand-vm-type"),
+		ErrandVMType:       c.String("errand-vm-type"),
+		SmokeTestsPassword: c.String("smoke-tests-password"),
+		UAALoginProtocol:   c.String("uaa-login-protocol"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err

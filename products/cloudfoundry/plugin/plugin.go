@@ -33,7 +33,7 @@ func init() {
 	RegisterInstanceGrouperConfigFactory(NewLoggregatorTrafficController)
 
 	//errands
-	RegisterInstanceGrouperConfigFactory(NewSmokeErrand)
+	RegisterInstanceGrouperFactory(NewSmokeErrand)
 	RegisterInstanceGrouperFactory(NewBootstrapPartition)
 	acceptanceTests := func(config *Config) InstanceGroupCreator {
 		return NewAcceptanceTestsPartition(true, config)

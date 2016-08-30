@@ -8,44 +8,20 @@ import (
 )
 
 var _ = Describe("Smoke test errand", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("then HasValidValues should return false", func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--network", "foundry-net",
-				"--app-domain", "apps.test.com",
-			})
-			smoke := NewSmokeErrand(c, &Config{})
-			Ω(smoke.HasValidValues()).Should(BeFalse())
-		})
-	})
 	Context("when initialized WITH a complete set of arguments", func() {
-		var smokeErrand InstanceGrouper
+		var smokeErrand InstanceGroupCreator
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--az", "eastprod-1",
-				"--network", "foundry-net",
-				"--errand-vm-type", "blah",
-				"--uaa-login-protocol", "https",
-				"--smoke-tests-password", "password",
-				"--system-domain", "sys.test.com",
-				"--app-domain", "apps.test.com",
-			})
 			config := &Config{
-				StemcellName: "cool-ubuntu-animal",
-				AZs:          []string{"eastprod-1"},
-				NetworkName:  "foundry-net",
-				SystemDomain: "sys.test.com",
-				AppDomains:   []string{"apps.test.com"},
+				StemcellName:       "cool-ubuntu-animal",
+				AZs:                []string{"eastprod-1"},
+				NetworkName:        "foundry-net",
+				SystemDomain:       "sys.test.com",
+				AppDomains:         []string{"apps.test.com"},
+				SmokeTestsPassword: "password",
+				UAALoginProtocol:   "https",
+				ErrandVMType:       "blah",
 			}
-			smokeErrand = NewSmokeErrand(c, config)
-		})
-		It("then HasValidValues should be true", func() {
-			Ω(smokeErrand.HasValidValues()).Should(BeTrue())
+			smokeErrand = NewSmokeErrand(config)
 		})
 		It("then it should have 1 instances", func() {
 			ig := smokeErrand.ToInstanceGroup()
