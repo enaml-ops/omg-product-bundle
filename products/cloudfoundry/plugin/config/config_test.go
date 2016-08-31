@@ -133,7 +133,6 @@ func BuildConfigContext() *cli.Context {
 		"--nfs-share-path", "value",
 		"--doppler-zone", "value",
 		"--traffic-controller-url", "value",
-		"--mysql-proxy-external-host", "value",
 		"--cc-internal-api-user", "value",
 		"--nfs-allow-from-network-cidr", "value",
 	})

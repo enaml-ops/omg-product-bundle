@@ -59,6 +59,11 @@ func NewConfig(c *cli.Context) (*Config, error) {
 	config.Disk = NewDisk(c)
 	config.Secret = NewSecret(c)
 	config.User = NewUser(c)
+
+	if config.MySQLProxyExternalHost == "" {
+		config.MySQLProxyExternalHost = config.MySQLProxyIPs[0]
+	}
+
 	if certs, err := NewCerts(c); err != nil {
 		return nil, err
 	} else {
@@ -133,7 +138,6 @@ func RequiredStringFlags() []string {
 		"uaa-product-logo",
 		"uaa-square-logo",
 		"uaa-footer-legal-txt",
-		"mysql-proxy-external-host",
 	}
 }
 
