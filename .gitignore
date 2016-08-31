@@ -49,3 +49,4 @@ products/vault/cmd/vault/vault
 products/redis/cmd/redis/redis
 products/docker/cmd/docker/docker
 products/concourse/cmd/concourse-plugin/concourse-plugin
+cmd/p-mysql/p-mysql
