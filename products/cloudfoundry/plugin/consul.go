@@ -1,17 +1,20 @@
 package cloudfoundry
 
-import "github.com/enaml-ops/enaml"
+import (
+	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
+)
 
 // Consul -
 type Consul struct {
-	Config         *Config
+	Config         *config.Config
 	ConsulAgent    *ConsulAgent
 	Metron         *Metron
 	StatsdInjector *StatsdInjector
 }
 
 //NewConsulPartition -
-func NewConsulPartition(config *Config) InstanceGroupCreator {
+func NewConsulPartition(config *config.Config) InstanceGroupCreator {
 	return &Consul{
 		Config:         config,
 		ConsulAgent:    NewConsulAgentServer(config),

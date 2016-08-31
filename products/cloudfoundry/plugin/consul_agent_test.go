@@ -3,6 +3,7 @@ package cloudfoundry_test
 import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/consul_agent"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -10,9 +11,9 @@ import (
 var _ = Describe("Consul Agent", func() {
 	Context("when initialized WITH a complete set of arguments", func() {
 
-		var config *Config
+		var cfg *config.Config
 		BeforeEach(func() {
-			config = &Config{
+			cfg = &config.Config{
 				ConsulAgentCert:   "agent-cert",
 				ConsulAgentKey:    "agent-key",
 				ConsulServerCert:  "server-cert",
@@ -23,15 +24,15 @@ var _ = Describe("Consul Agent", func() {
 			}
 		})
 		It("then consul with server false", func() {
-			consulAgent := NewConsulAgent([]string{}, config)
+			consulAgent := NewConsulAgent([]string{}, cfg)
 			Ω(consulAgent.Mode).Should(Equal(""))
 		})
 		It("then consul with server true", func() {
-			consulAgent := NewConsulAgentServer(config)
+			consulAgent := NewConsulAgentServer(cfg)
 			Ω(consulAgent.Mode).Should(Equal("server"))
 		})
 		It("then job properties are set properly for server false", func() {
-			consulAgent := NewConsulAgent([]string{}, config)
+			consulAgent := NewConsulAgent([]string{}, cfg)
 			job := consulAgent.CreateJob()
 			Ω(job).ShouldNot(BeNil())
 			props := job.Properties.(*consul_agent.ConsulAgentJob)
@@ -45,7 +46,7 @@ var _ = Describe("Consul Agent", func() {
 			Ω(props.Consul.Agent.Mode).Should(BeNil())
 		})
 		It("then job properties are set properly etcd service", func() {
-			consulAgent := NewConsulAgent([]string{"etcd"}, config)
+			consulAgent := NewConsulAgent([]string{"etcd"}, cfg)
 			job := consulAgent.CreateJob()
 			Ω(job).ShouldNot(BeNil())
 			props := job.Properties.(*consul_agent.ConsulAgentJob)
@@ -54,7 +55,7 @@ var _ = Describe("Consul Agent", func() {
 			Ω(props.Consul.Agent.Services).Should(Equal(etcdMap))
 		})
 		It("then job properties are set properly etcd and uaa service", func() {
-			consulAgent := NewConsulAgent([]string{"etcd", "uaa"}, config)
+			consulAgent := NewConsulAgent([]string{"etcd", "uaa"}, cfg)
 			job := consulAgent.CreateJob()
 			Ω(job).ShouldNot(BeNil())
 			props := job.Properties.(*consul_agent.ConsulAgentJob)
@@ -64,7 +65,7 @@ var _ = Describe("Consul Agent", func() {
 			Ω(props.Consul.Agent.Services).Should(Equal(servicesMap))
 		})
 		It("then job properties are set properly for server true", func() {
-			consulAgent := NewConsulAgentServer(config)
+			consulAgent := NewConsulAgentServer(cfg)
 			job := consulAgent.CreateJob()
 			Ω(job).ShouldNot(BeNil())
 			props := job.Properties.(*consul_agent.ConsulAgentJob)

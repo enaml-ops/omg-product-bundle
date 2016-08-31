@@ -3,11 +3,12 @@ package cloudfoundry
 import (
 	"github.com/enaml-ops/enaml"
 	mysqllib "github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/mysql"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //MySQL -
 type MySQL struct {
-	Config                 *Config
+	Config                 *config.Config
 	DatabaseStartupTimeout int
 	InnodbBufferPoolSize   int
 	MaxConnections         int
@@ -22,7 +23,7 @@ type MySQLSeededDatabase struct {
 }
 
 //NewMySQLPartition -
-func NewMySQLPartition(config *Config) (igf InstanceGroupCreator) {
+func NewMySQLPartition(config *config.Config) (igf InstanceGroupCreator) {
 	igf = &MySQL{
 		Config:                 config,
 		DatabaseStartupTimeout: 1200,
@@ -33,7 +34,7 @@ func NewMySQLPartition(config *Config) (igf InstanceGroupCreator) {
 	return
 }
 
-func parseSeededDBs(config *Config) (dbs []MySQLSeededDatabase) {
+func parseSeededDBs(config *config.Config) (dbs []MySQLSeededDatabase) {
 	dbs = append(dbs, MySQLSeededDatabase{
 		Name:     "uaa",
 		Username: config.UAADBUserName,

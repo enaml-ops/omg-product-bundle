@@ -4,6 +4,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/acceptance-tests"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -13,7 +14,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 	Context("when initialized with valid config", func() {
 		It("generates different instance group names for internet-less tests", func() {
 
-			config := &Config{
+			config := &config.Config{
 				SystemDomain:  "sys.yourdomain.com",
 				AppDomains:    []string{"apps.yourdomain.com"},
 				AZs:           []string{"z1"},
@@ -33,7 +34,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 		var ig InstanceGroupCreator
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
-			config := &Config{
+			config := &config.Config{
 				SystemDomain:      "sys.yourdomain.com",
 				AppDomains:        []string{"apps.yourdomain.com"},
 				AZs:               []string{"z1"},
@@ -108,7 +109,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 		var ig InstanceGroupCreator
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
-			config := &Config{
+			config := &config.Config{
 				SystemDomain:      "sys.yourdomain.com",
 				AppDomains:        []string{"apps.yourdomain.com"},
 				AZs:               []string{"z1"},

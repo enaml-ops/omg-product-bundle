@@ -10,6 +10,7 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/consul_agent"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/rep"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -44,7 +45,7 @@ var _ = Describe("given a Diego Cell Partition", func() {
 					"--etcd-machine-ip", "1.0.0.7",
 					"--etcd-machine-ip", "1.0.0.8",
 				})*/
-				config := &Config{
+				config := &config.Config{
 					AZs:                         []string{"eastprod-1"},
 					StemcellName:                "cool-ubuntu-animal",
 					NetworkName:                 "foundry-net",

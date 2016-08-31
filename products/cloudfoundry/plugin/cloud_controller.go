@@ -6,17 +6,18 @@ import (
 	"github.com/enaml-ops/enaml"
 	ccnglib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_ng"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //CloudControllerPartition - Cloud Controller Partition
 type CloudControllerPartition struct {
-	Config         *Config
+	Config         *config.Config
 	Metron         *Metron
 	ConsulAgent    *ConsulAgent
 	StatsdInjector *StatsdInjector
 }
 
-func NewCloudControllerPartition(config *Config) InstanceGroupCreator {
+func NewCloudControllerPartition(config *config.Config) InstanceGroupCreator {
 
 	return &CloudControllerPartition{
 		Config:         config,

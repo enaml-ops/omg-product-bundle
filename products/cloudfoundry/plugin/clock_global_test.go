@@ -4,6 +4,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_clock"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"gopkg.in/yaml.v2"
@@ -16,7 +17,7 @@ var _ = Describe("given a clock_global partition", func() {
 
 		BeforeEach(func() {
 
-			ig = NewClockGlobalPartition(&Config{
+			ig = NewClockGlobalPartition(&config.Config{
 				AZs:                             []string{"eastprod-1"},
 				StemcellName:                    "cool-ubuntu-animal",
 				NetworkName:                     "foundry-net",

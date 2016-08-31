@@ -1,4 +1,4 @@
-package cloudfoundry
+package config
 
 type Config struct {
 	AZs                                       []string

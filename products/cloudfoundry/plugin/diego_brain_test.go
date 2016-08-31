@@ -14,6 +14,7 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/stager"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/tps"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -25,7 +26,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 		var grouper InstanceGroupCreator
 
 		BeforeEach(func() {
-			config := &Config{
+			config := &config.Config{
 				SystemDomain:                 "sys.test.com",
 				AZs:                          []string{"eastprod-1"},
 				StemcellName:                 "cool-ubuntu-animal",

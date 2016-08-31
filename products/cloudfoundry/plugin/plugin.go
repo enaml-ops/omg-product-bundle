@@ -5,6 +5,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/util"
@@ -33,10 +34,10 @@ func init() {
 	//errands
 	RegisterInstanceGrouperFactory(NewSmokeErrand)
 	RegisterInstanceGrouperFactory(NewBootstrapPartition)
-	acceptanceTests := func(config *Config) InstanceGroupCreator {
+	acceptanceTests := func(config *config.Config) InstanceGroupCreator {
 		return NewAcceptanceTestsPartition(true, config)
 	}
-	internetLessAcceptanceTests := func(config *Config) InstanceGroupCreator {
+	internetLessAcceptanceTests := func(config *config.Config) InstanceGroupCreator {
 		return NewAcceptanceTestsPartition(false, config)
 	}
 	RegisterInstanceGrouperFactory(acceptanceTests)
@@ -327,9 +328,9 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
 	var dm *enaml.DeploymentManifest
 	var err error
-	var config *Config
-	if config, err = NewConfig(c); err == nil {
-		dm, err = s.getDeploymentManifest(c, config)
+	var cfg *config.Config
+	if cfg, err = config.NewConfig(c); err == nil {
+		dm, err = s.getDeploymentManifest(c, cfg)
 		if err != nil {
 			lo.G.Fatalf("error creating manifest: %v", err.Error())
 		}
@@ -339,7 +340,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	return dm.Bytes()
 }
 
-func (s *Plugin) getDeploymentManifest(c *cli.Context, config *Config) (*enaml.DeploymentManifest, error) {
+func (s *Plugin) getDeploymentManifest(c *cli.Context, config *config.Config) (*enaml.DeploymentManifest, error) {
 	dm := enaml.NewDeploymentManifest([]byte(``))
 	dm.SetName(DeploymentName)
 

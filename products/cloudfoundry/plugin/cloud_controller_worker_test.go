@@ -5,6 +5,7 @@ import (
 
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_worker"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"gopkg.in/yaml.v2"
@@ -15,7 +16,7 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 		var cloudControllerWorker InstanceGroupCreator
 		BeforeEach(func() {
 
-			config := &Config{
+			config := &config.Config{
 				NATSMachines:                   []string{"10.0.0.4"},
 				NATSUser:                       "natsuser",
 				NATSPassword:                   "natspass",

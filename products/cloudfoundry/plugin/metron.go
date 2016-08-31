@@ -3,15 +3,16 @@ package cloudfoundry
 import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //Metron -
 type Metron struct {
-	Config *Config
+	Config *config.Config
 }
 
 //NewMetron -
-func NewMetron(config *Config) (metron *Metron) {
+func NewMetron(config *config.Config) (metron *Metron) {
 	metron = &Metron{
 		Config: config,
 	}

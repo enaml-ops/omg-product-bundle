@@ -6,6 +6,7 @@ import (
 	grtrlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/gorouter"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -15,7 +16,7 @@ var _ = Describe("Go-Router Partition", func() {
 		var deploymentManifest *enaml.DeploymentManifest
 		const controlSecret = "goroutersecret"
 		BeforeEach(func() {
-			config := &Config{
+			config := &config.Config{
 				StemcellName:         "cool-ubuntu-animal",
 				AZs:                  []string{"eastprod-1"},
 				NetworkName:          "foundry-net",
@@ -130,7 +131,7 @@ var _ = Describe("Go-Router Partition", func() {
 		Context("when the plugin is called by a operator with arguments for ssl cert/key strings", func() {
 			var deploymentManifest *enaml.DeploymentManifest
 			BeforeEach(func() {
-				gr := NewGoRouterPartition(&Config{
+				gr := NewGoRouterPartition(&config.Config{
 					RouterSSLCert: "blah",
 					RouterSSLKey:  "blahblah",
 				})
@@ -150,7 +151,7 @@ var _ = Describe("Go-Router Partition", func() {
 		Context("when the plugin is called by a operator with arguments for just ssl cert/key strings", func() {
 			var deploymentManifest *enaml.DeploymentManifest
 			BeforeEach(func() {
-				gr := NewGoRouterPartition(&Config{
+				gr := NewGoRouterPartition(&config.Config{
 					RouterSSLCert: "blah",
 					RouterSSLKey:  "blahblah",
 				})

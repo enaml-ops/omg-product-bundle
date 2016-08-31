@@ -4,17 +4,18 @@ import (
 	"github.com/enaml-ops/enaml"
 	etcdlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd"
 	etcdmetricslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd_metrics_server"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //Etcd -
 type Etcd struct {
-	Config         *Config
+	Config         *config.Config
 	Metron         *Metron
 	StatsdInjector *StatsdInjector
 }
 
 //NewEtcdPartition -
-func NewEtcdPartition(config *Config) (igf InstanceGroupCreator) {
+func NewEtcdPartition(config *config.Config) (igf InstanceGroupCreator) {
 	igf = &Etcd{
 		Config:         config,
 		Metron:         NewMetron(config),

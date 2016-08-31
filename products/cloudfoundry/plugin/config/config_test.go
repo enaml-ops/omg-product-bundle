@@ -1,15 +1,16 @@
-package cloudfoundry_test
+package config_test
 
 import (
 	"github.com/codegangsta/cli"
-	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/xchapter7x/lo"
 )
 
 func BuildConfigContext() *cli.Context {
-	plugin := new(Plugin)
+	plugin := new(cloudfoundry.Plugin)
 	c := plugin.GetContext([]string{
 		"cloudfoundry",
 		"--az", "z1",
@@ -49,7 +50,7 @@ func BuildConfig() *Config {
 var _ = Describe("Config", func() {
 	Context("when initialized WITHOUT a complete set of arguments", func() {
 		It("then should return error", func() {
-			plugin := new(Plugin)
+			plugin := new(cloudfoundry.Plugin)
 			c := plugin.GetContext([]string{
 				"cloudfoundry",
 				"--az", "z1",

@@ -3,17 +3,18 @@ package cloudfoundry
 import (
 	"github.com/enaml-ops/enaml"
 	nfslib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/debian_nfs_server"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //NFS -
 type NFS struct {
-	Config         *Config
+	Config         *config.Config
 	Metron         *Metron
 	StatsdInjector *StatsdInjector
 }
 
 //NewNFSPartition -
-func NewNFSPartition(config *Config) (igf InstanceGroupCreator) {
+func NewNFSPartition(config *config.Config) (igf InstanceGroupCreator) {
 	igf = &NFS{
 		Config:         config,
 		Metron:         NewMetron(config),

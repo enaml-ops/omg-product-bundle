@@ -4,14 +4,15 @@ import (
 	"github.com/enaml-ops/enaml"
 	ltc "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/loggregator_trafficcontroller"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 type loggregatorTrafficController struct {
-	Config *Config
+	Config *config.Config
 	Metron *Metron
 }
 
-func NewLoggregatorTrafficController(config *Config) InstanceGroupCreator {
+func NewLoggregatorTrafficController(config *config.Config) InstanceGroupCreator {
 	return &loggregatorTrafficController{
 		Config: config,
 		Metron: NewMetron(config),

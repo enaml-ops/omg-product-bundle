@@ -3,17 +3,18 @@ package cloudfoundry
 import (
 	"github.com/enaml-ops/enaml"
 	consullib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/consul_agent"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //ConsulAgent -
 type ConsulAgent struct {
-	Config   *Config
+	Config   *config.Config
 	Mode     string
 	Services []string
 }
 
 //NewConsulAgent -
-func NewConsulAgent(services []string, config *Config) *ConsulAgent {
+func NewConsulAgent(services []string, config *config.Config) *ConsulAgent {
 	ca := &ConsulAgent{
 		Config:   config,
 		Services: services,
@@ -22,7 +23,7 @@ func NewConsulAgent(services []string, config *Config) *ConsulAgent {
 }
 
 //NewConsulAgentServer -
-func NewConsulAgentServer(config *Config) *ConsulAgent {
+func NewConsulAgentServer(config *config.Config) *ConsulAgent {
 	ca := &ConsulAgent{
 		Config: config,
 		Mode:   "server",

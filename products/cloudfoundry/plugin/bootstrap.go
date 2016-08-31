@@ -3,13 +3,14 @@ package cloudfoundry
 import (
 	"github.com/enaml-ops/enaml"
 	bstraplib "github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/bootstrap"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 type bootstrap struct {
-	Config *Config
+	Config *config.Config
 }
 
-func NewBootstrapPartition(config *Config) InstanceGroupCreator {
+func NewBootstrapPartition(config *config.Config) InstanceGroupCreator {
 	return &bootstrap{
 		Config: config,
 	}

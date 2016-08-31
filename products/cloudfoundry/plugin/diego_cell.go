@@ -4,16 +4,17 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/garden"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/rep"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 type diegoCell struct {
-	Config         *Config
+	Config         *config.Config
 	ConsulAgent    *ConsulAgent
 	StatsdInjector *StatsdInjector
 	Metron         *Metron
 }
 
-func NewDiegoCellPartition(config *Config) InstanceGroupCreator {
+func NewDiegoCellPartition(config *config.Config) InstanceGroupCreator {
 
 	return &diegoCell{
 		Config:         config,

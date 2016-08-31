@@ -3,17 +3,18 @@ package cloudfoundry
 import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/nats"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //NatsPartition -
 type NatsPartition struct {
-	Config         *Config
+	Config         *config.Config
 	Metron         *Metron
 	StatsdInjector *StatsdInjector
 }
 
 //NewNatsPartition --
-func NewNatsPartition(config *Config) (igf InstanceGroupCreator) {
+func NewNatsPartition(config *config.Config) (igf InstanceGroupCreator) {
 	igf = &NatsPartition{
 		Config:         config,
 		Metron:         NewMetron(config),

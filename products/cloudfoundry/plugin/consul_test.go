@@ -3,6 +3,7 @@ package cloudfoundry_test
 import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/consul_agent"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -13,7 +14,7 @@ var _ = Describe("Consul Partition", func() {
 		var consul InstanceGroupCreator
 		BeforeEach(func() {
 
-			config := &Config{
+			config := &config.Config{
 				StemcellName:      "cool-ubuntu-animal",
 				AZs:               []string{"eastprod-1"},
 				NetworkName:       "foundry-net",

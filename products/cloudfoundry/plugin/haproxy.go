@@ -3,18 +3,19 @@ package cloudfoundry
 import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/haproxy"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 // HAProxy -
 type HAProxy struct {
-	Config         *Config
+	Config         *config.Config
 	ConsulAgent    *ConsulAgent
 	Metron         *Metron
 	StatsdInjector *StatsdInjector
 }
 
 //NewHaProxyPartition -
-func NewHaProxyPartition(config *Config) InstanceGroupCreator {
+func NewHaProxyPartition(config *config.Config) InstanceGroupCreator {
 	return &HAProxy{
 		Config:         config,
 		ConsulAgent:    NewConsulAgent([]string{}, config),

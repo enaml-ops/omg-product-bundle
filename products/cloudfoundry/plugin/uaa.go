@@ -6,11 +6,12 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/uaa"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //UAA -
 type UAA struct {
-	Config         *Config
+	Config         *config.Config
 	Metron         *Metron
 	StatsdInjector *StatsdInjector
 	ConsulAgent    *ConsulAgent
@@ -19,7 +20,7 @@ type UAA struct {
 }
 
 //NewUAAPartition -
-func NewUAAPartition(config *Config) InstanceGroupCreator {
+func NewUAAPartition(config *config.Config) InstanceGroupCreator {
 
 	UAA := &UAA{
 		Config:         config,

@@ -4,18 +4,19 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/bbs"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/etcd"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 const diegoDatabaseIGName = "diego_database-partition"
 
 type diegoDatabase struct {
-	Config         *Config
+	Config         *config.Config
 	ConsulAgent    *ConsulAgent
 	StatsdInjector *StatsdInjector
 	Metron         *Metron
 }
 
-func NewDiegoDatabasePartition(config *Config) InstanceGroupCreator {
+func NewDiegoDatabasePartition(config *config.Config) InstanceGroupCreator {
 
 	return &diegoDatabase{
 		Config:         config,

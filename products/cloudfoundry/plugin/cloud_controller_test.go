@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"gopkg.in/yaml.v2"
@@ -20,7 +21,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 
 		BeforeEach(func() {
 
-			config := &Config{
+			config := &config.Config{
 				NATSMachines:                              []string{"10.0.0.4"},
 				NATSUser:                                  "natsuser",
 				NATSPassword:                              "natspass",

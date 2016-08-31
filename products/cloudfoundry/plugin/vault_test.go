@@ -9,6 +9,7 @@ import (
 	"github.com/onsi/gomega/ghttp"
 
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/pluginfakes"
 	"github.com/enaml-ops/pluginlib/util"
 )
@@ -96,7 +97,7 @@ var _ = Describe("Vault helpers", func() {
 				VaultDecorate(args, flags)
 				c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
 				Ω(c.String("db-uaa-password")).ShouldNot(BeEmpty())
-				ig := NewMySQLPartition(&Config{})
+				ig := NewMySQLPartition(&config.Config{})
 				mysql := ig.(*MySQL)
 				Ω(mysql.MySQLSeededDatabases).ShouldNot(BeEmpty())
 			})

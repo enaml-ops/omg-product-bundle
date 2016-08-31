@@ -3,18 +3,19 @@ package cloudfoundry
 import (
 	"github.com/enaml-ops/enaml"
 	ccworkerlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_worker"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //CloudControllerWorkerPartition - Cloud Controller Worker Partition
 type CloudControllerWorkerPartition struct {
-	Config         *Config
+	Config         *config.Config
 	Metron         *Metron
 	ConsulAgent    *ConsulAgent
 	StatsdInjector *StatsdInjector
 }
 
 //NewCloudControllerWorkerPartition - Creating a New Cloud Controller Partition
-func NewCloudControllerWorkerPartition(config *Config) InstanceGroupCreator {
+func NewCloudControllerWorkerPartition(config *config.Config) InstanceGroupCreator {
 
 	return &CloudControllerWorkerPartition{
 		Config:         config,

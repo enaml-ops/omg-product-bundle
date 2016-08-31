@@ -6,6 +6,7 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -17,7 +18,7 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
 
-			config := &Config{
+			config := &config.Config{
 				AZs:                []string{"eastprod-1"},
 				StemcellName:       "cool-ubuntu-animal",
 				NetworkName:        "foundry-net",

@@ -3,6 +3,7 @@ package cloudfoundry_test
 import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/debian_nfs_server"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -11,7 +12,7 @@ var _ = Describe("NFS Partition", func() {
 	Context("when initialized WITH a complete set of arguments", func() {
 		var nfsPartition InstanceGroupCreator
 		BeforeEach(func() {
-			config := &Config{
+			config := &config.Config{
 				StemcellName:            "cool-ubuntu-animal",
 				AZs:                     []string{"eastprod-1"},
 				NetworkName:             "foundry-net",

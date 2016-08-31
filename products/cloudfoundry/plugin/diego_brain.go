@@ -15,17 +15,18 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/ssh_proxy"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/stager"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/tps"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	"github.com/xchapter7x/lo"
 )
 
 type diegoBrain struct {
-	Config      *Config
+	Config      *config.Config
 	ConsulAgent *ConsulAgent
 	Metron      *Metron
 	Statsd      *StatsdInjector
 }
 
-func NewDiegoBrainPartition(config *Config) InstanceGroupCreator {
+func NewDiegoBrainPartition(config *config.Config) InstanceGroupCreator {
 
 	return &diegoBrain{
 		Config: config,

@@ -6,15 +6,16 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_clock"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_ng"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 type clockGlobal struct {
 	Metron *Metron
 	Statsd *StatsdInjector
-	Config *Config
+	Config *config.Config
 }
 
-func NewClockGlobalPartition(config *Config) InstanceGroupCreator {
+func NewClockGlobalPartition(config *config.Config) InstanceGroupCreator {
 
 	cg := &clockGlobal{
 		Config: config,

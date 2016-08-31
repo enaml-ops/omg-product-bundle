@@ -1,6 +1,9 @@
 package cloudfoundry
 
-import "github.com/enaml-ops/enaml"
+import (
+	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
+)
 
 var (
 	factories []InstanceGrouperFactory
@@ -12,7 +15,7 @@ type InstanceGroupCreator interface {
 }
 
 // InstanceGrouperFactory is a function that creates InstanceGroupCreator from Config.
-type InstanceGrouperFactory func(*Config) InstanceGroupCreator
+type InstanceGrouperFactory func(*config.Config) InstanceGroupCreator
 
 // RegisterInstanceGrouperFactory registers an InstanceGrouperFactory.
 // InstanceGrouperFactories should generally be registered in their package's

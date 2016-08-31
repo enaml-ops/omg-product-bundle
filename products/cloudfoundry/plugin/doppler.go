@@ -6,17 +6,18 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/doppler"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/syslog_drain_binder"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //Doppler -
 type Doppler struct {
-	Config         *Config
+	Config         *config.Config
 	Metron         *Metron
 	StatsdInjector *StatsdInjector
 }
 
 //NewDopplerPartition -
-func NewDopplerPartition(config *Config) InstanceGroupCreator {
+func NewDopplerPartition(config *config.Config) InstanceGroupCreator {
 	return &Doppler{
 		Config:         config,
 		Metron:         NewMetron(config),

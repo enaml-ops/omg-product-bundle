@@ -5,14 +5,15 @@ import (
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/smoke-tests"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 type smokeErrand struct {
-	Config *Config
+	Config *config.Config
 }
 
 //NewSmokeErrand - errand definition for smoke tests
-func NewSmokeErrand(config *Config) InstanceGroupCreator {
+func NewSmokeErrand(config *config.Config) InstanceGroupCreator {
 	return &smokeErrand{
 		Config: config,
 	}

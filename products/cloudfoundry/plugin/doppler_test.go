@@ -4,6 +4,7 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/doppler"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/syslog_drain_binder"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -14,7 +15,7 @@ var _ = Describe("Doppler Partition", func() {
 		var dopplerPartition InstanceGroupCreator
 		BeforeEach(func() {
 
-			config := &Config{
+			config := &config.Config{
 				NetworkName:                   "foundry-net",
 				StemcellName:                  "cool-ubuntu-animal",
 				AZs:                           []string{"eastprod-1"},

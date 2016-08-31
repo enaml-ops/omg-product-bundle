@@ -2,6 +2,7 @@ package cloudfoundry_test
 
 import (
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	//"gopkg.in/yaml.v2"
@@ -14,7 +15,7 @@ var _ = Describe("Nats Partition", func() {
 		var natsPartition InstanceGroupCreator
 
 		BeforeEach(func() {
-			config := &Config{
+			config := &config.Config{
 				StemcellName: "trusty",
 				AZs:          []string{"eastprod-1"},
 				NetworkName:  "foundry-net",

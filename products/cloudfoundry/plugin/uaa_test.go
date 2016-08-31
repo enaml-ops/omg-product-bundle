@@ -4,6 +4,7 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/uaa"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -13,7 +14,7 @@ var _ = Describe("UAA Partition", func() {
 		var uaaPartition InstanceGroupCreator
 		BeforeEach(func() {
 
-			config := &Config{
+			config := &config.Config{
 				SystemDomain:                              "sys.test.com",
 				AZs:                                       []string{"eastprod-1"},
 				StemcellName:                              "cool-ubuntu-animal",

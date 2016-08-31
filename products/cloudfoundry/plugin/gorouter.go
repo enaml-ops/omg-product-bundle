@@ -4,14 +4,15 @@ import (
 	"github.com/enaml-ops/enaml"
 	grtrlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/gorouter"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/metron_agent"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 type gorouter struct {
-	Config *Config
+	Config *config.Config
 }
 
 //NewGoRouterPartition -
-func NewGoRouterPartition(config *Config) InstanceGroupCreator {
+func NewGoRouterPartition(config *config.Config) InstanceGroupCreator {
 
 	return &gorouter{
 		Config: config,

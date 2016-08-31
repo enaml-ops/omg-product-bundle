@@ -3,14 +3,15 @@ package cloudfoundry
 import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/acceptance-tests"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 type acceptanceTests struct {
-	Config                   *Config
+	Config                   *config.Config
 	IncludeInternetDependent bool
 }
 
-func NewAcceptanceTestsPartition(internet bool, config *Config) InstanceGroupCreator {
+func NewAcceptanceTestsPartition(internet bool, config *config.Config) InstanceGroupCreator {
 	return &acceptanceTests{
 		Config: config,
 		IncludeInternetDependent: internet,

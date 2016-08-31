@@ -3,15 +3,16 @@ package cloudfoundry
 import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/proxy"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
 
 //MySQLProxy -
 type MySQLProxy struct {
-	Config *Config
+	Config *config.Config
 }
 
 //NewMySQLProxyPartition -
-func NewMySQLProxyPartition(config *Config) InstanceGroupCreator {
+func NewMySQLProxyPartition(config *config.Config) InstanceGroupCreator {
 	return &MySQLProxy{
 		Config: config,
 	}

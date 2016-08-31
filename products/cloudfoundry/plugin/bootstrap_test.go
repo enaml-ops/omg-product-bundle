@@ -4,6 +4,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/bootstrap"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -15,7 +16,7 @@ var _ = Describe("given a bootstrap partition", func() {
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
 
-			ig = NewBootstrapPartition(&Config{
+			ig = NewBootstrapPartition(&config.Config{
 				AZs:                    []string{"z1"},
 				StemcellName:           "cool-ubuntu-animal",
 				NetworkName:            "foundry-net",
