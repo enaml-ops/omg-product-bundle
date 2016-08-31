@@ -38,7 +38,6 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				SkipSSLCertVerify:         false,
 				CCUploaderJobPollInterval: 25,
 				CCExternalPort:            9023,
-				MetronPort:                3458,
 				TrafficControllerURL:      "wss://doppler.sys.yourdomain.com:443",
 				Secret:                    config.Secret{},
 				User:                      config.User{},

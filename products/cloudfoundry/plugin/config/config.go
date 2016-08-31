@@ -35,7 +35,6 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		DopplerMessageDrainBufferSize: c.Int("doppler-drain-buffer-size"),
 		BBSRequireSSL:                 c.BoolT("bbs-require-ssl"),
 		CCUploaderJobPollInterval:     c.Int("cc-uploader-poll-interval"),
-		MetronPort:                    c.Int("metron-port"),
 		CCExternalPort:                c.Int("cc-external-port"),
 		TrafficControllerURL:          c.String("traffic-controller-url"),
 		SelfServiceLinksEnabled:       c.BoolT("uaa-enable-selfservice-links"),
@@ -86,7 +85,6 @@ type Config struct {
 	DopplerMessageDrainBufferSize int
 	BBSRequireSSL                 bool
 	CCUploaderJobPollInterval     int
-	MetronPort                    int
 	CCExternalPort                int
 	TrafficControllerURL          string
 	SelfServiceLinksEnabled       bool
@@ -152,7 +150,6 @@ func RequiredIntFlags() []string {
 		"nats-port",
 		"doppler-drain-buffer-size",
 		"cc-uploader-poll-interval",
-		"metron-port",
 		"cc-external-port",
 	}
 }

@@ -136,7 +136,6 @@ func BuildConfigContext() *cli.Context {
 		"--mysql-proxy-external-host", "value",
 		"--cc-internal-api-user", "value",
 		"--nfs-allow-from-network-cidr", "value",
-		"--metron-port", "1",
 	})
 	return c
 }
