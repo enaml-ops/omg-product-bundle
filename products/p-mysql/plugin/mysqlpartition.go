@@ -9,18 +9,6 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/p-mysql/enaml-gen/streaming-mysql-backup-tool"
 )
 
-const (
-	innodbBufferPoolSize       int = 2147483648
-	maxConnections             int = 1500
-	databaseStartupTimeout     int = 600
-	wsrepDebug                 int = 1
-	backupServerPort           int = 8081
-	seededDBUser                   = "repcanary"
-	seededDBName                   = "canary_db"
-	adminUsername                  = "root"
-	notificationClientUsername     = "mysql-monitoring"
-)
-
 func NewMysqlPartition(plgn *Plugin) *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
 		Name:               "mysql-partition",

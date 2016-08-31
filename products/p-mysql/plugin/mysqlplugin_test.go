@@ -100,15 +100,6 @@ var _ = Describe("given p-mysql Plugin", func() {
 			"proxy-partition",
 			"backup-prepare-partition",
 		}
-		var checkGroupExists = func(groups []*enaml.InstanceGroup, name string) bool {
-			for _, g := range groups {
-
-				if g.Name == name {
-					return true
-				}
-			}
-			return false
-		}
 
 		BeforeEach(func() {
 			cloudConfigBytes, _ := ioutil.ReadFile("./fixtures/sample-aws.yml")
