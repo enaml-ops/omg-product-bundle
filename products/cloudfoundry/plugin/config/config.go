@@ -129,8 +129,6 @@ func RequiredStringFlags() []string {
 		"nfs-share-path",
 		"uaa-login-protocol",
 		"metron-zone",
-		"syslog-address",
-		"syslog-transport",
 		"doppler-zone",
 		"traffic-controller-url",
 		"uaa-company-name",
@@ -152,7 +150,6 @@ func RequiredStringSliceFlags() []string {
 func RequiredIntFlags() []string {
 	return []string{
 		"nats-port",
-		"syslog-port",
 		"doppler-drain-buffer-size",
 		"cc-uploader-poll-interval",
 		"metron-port",
