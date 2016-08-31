@@ -166,6 +166,8 @@ type Config struct {
 	NFSIPs                         []string
 	NFSPersistentDiskType          string
 	NFSAllowFromNetworkCIDR        []string
+	EtcdVMType                     string
+	EtcdPersistentDiskType         string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -317,6 +319,8 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		NFSVMType:                                 c.String("nfs-vm-type"),
 		NFSPersistentDiskType:                     c.String("nfs-disk-type"),
 		NFSAllowFromNetworkCIDR:                   c.StringSlice("nfs-allow-from-network-cidr"),
+		EtcdVMType:                                c.String("etcd-vm-type"),
+		EtcdPersistentDiskType:                    c.String("etcd-disk-type"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err

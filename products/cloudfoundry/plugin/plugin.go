@@ -16,7 +16,7 @@ import (
 func init() {
 	RegisterInstanceGrouperConfigFactory(NewConsulPartition)
 	RegisterInstanceGrouperConfigFactory(NewNatsPartition)
-	RegisterInstanceGrouperConfigFactory(NewEtcdPartition)
+	RegisterInstanceGrouperFactory(NewEtcdPartition)
 	RegisterInstanceGrouperFactory(NewDiegoDatabasePartition)
 	RegisterInstanceGrouperFactory(NewNFSPartition)
 	RegisterInstanceGrouperFactory(NewGoRouterPartition)

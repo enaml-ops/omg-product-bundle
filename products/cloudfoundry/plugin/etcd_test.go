@@ -9,53 +9,27 @@ import (
 )
 
 var _ = Describe("Etcd Partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("HasValidValues should return false", func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-				"--nats-user", "nats",
-				"--nats-pass", "pass",
-				"--nats-machine-ip", "1.0.0.5",
-				"--nats-machine-ip", "1.0.0.6",
-			})
-			Ω(NewEtcdPartition(c, &Config{}).HasValidValues()).Should(Equal(false))
-		})
-	})
 	Context("when initialized WITH a complete set of arguments", func() {
-		var etcdPartition InstanceGrouper
+		var etcdPartition InstanceGroupCreator
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--etcd-machine-ip", "1.0.0.7",
-				"--etcd-machine-ip", "1.0.0.8",
-				"--etcd-vm-type", "blah",
-				"--etcd-disk-type", "blah-disk",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-			})
 			config := &Config{
-				StemcellName: "cool-ubuntu-animal",
-				AZs:          []string{"eastprod-1"},
-				NetworkName:  "foundry-net",
-				NATSUser:     "nats",
-				NATSPassword: "pass",
-				NATSMachines: []string{"1.0.0.5", "1.0.0.6"},
-				NATSPort:     4222,
+				StemcellName:           "cool-ubuntu-animal",
+				AZs:                    []string{"eastprod-1"},
+				NetworkName:            "foundry-net",
+				NATSUser:               "nats",
+				NATSPassword:           "pass",
+				NATSMachines:           []string{"1.0.0.5", "1.0.0.6"},
+				NATSPort:               4222,
+				EtcdMachines:           []string{"1.0.0.7", "1.0.0.8"},
+				EtcdVMType:             "blah",
+				EtcdPersistentDiskType: "blah-disk",
+				MetronSecret:           "metronsecret",
+				MetronZone:             "metronzoneguid",
+				SyslogAddress:          "syslog-server",
+				SyslogPort:             10601,
+				SyslogTransport:        "tcp",
 			}
-			etcdPartition = NewEtcdPartition(c, config)
-		})
-		It("HasValidValues should return true", func() {
-			Ω(etcdPartition.HasValidValues()).Should(Equal(true))
+			etcdPartition = NewEtcdPartition(config)
 		})
 		It("then it should allow the user to configure the etcd IPs", func() {
 			ig := etcdPartition.ToInstanceGroup()
