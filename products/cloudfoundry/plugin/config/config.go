@@ -59,6 +59,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 	config.Disk = NewDisk(c)
 	config.Secret = NewSecret(c)
 	config.User = NewUser(c)
+	config.InstanceCount = NewInstanceCount(c)
 
 	if config.MySQLProxyExternalHost == "" {
 		config.MySQLProxyExternalHost = config.MySQLProxyIPs[0]
