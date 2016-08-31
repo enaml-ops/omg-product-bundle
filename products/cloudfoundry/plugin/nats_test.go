@@ -16,15 +16,21 @@ var _ = Describe("Nats Partition", func() {
 
 		BeforeEach(func() {
 			config := &config.Config{
-				StemcellName: "trusty",
-				AZs:          []string{"eastprod-1"},
-				NetworkName:  "foundry-net",
-				NATSMachines: []string{"10.0.0.2", "10.0.0.3"},
-				NatsVMType:   "blah",
-				MetronSecret: "metronsecret",
-				MetronZone:   "metronzoneguid",
-				EtcdMachines: []string{"10.0.0.7", "10.0.0.8"},
+				StemcellName:  "trusty",
+				AZs:           []string{"eastprod-1"},
+				NetworkName:   "foundry-net",
+				MetronZone:    "metronzoneguid",
+				Secret:        config.Secret{},
+				User:          config.User{},
+				Certs:         &config.Certs{},
+				InstanceCount: config.InstanceCount{},
+				IP:            config.IP{},
 			}
+			config.EtcdMachines = []string{"10.0.0.7", "10.0.0.8"}
+			config.NATSMachines = []string{"10.0.0.2", "10.0.0.3"}
+			config.NatsVMType = "blah"
+			config.MetronSecret = "metronsecret"
+
 			natsPartition = NewNatsPartition(config)
 		})
 

@@ -15,71 +15,76 @@ var _ = Describe("UAA Partition", func() {
 		BeforeEach(func() {
 
 			config := &config.Config{
-				SystemDomain:                              "sys.test.com",
-				AZs:                                       []string{"eastprod-1"},
-				StemcellName:                              "cool-ubuntu-animal",
-				NetworkName:                               "foundry-net",
-				AllowSSHAccess:                            true,
-				ConsulEncryptKeys:                         []string{"encyption-key"},
-				ConsulCaCert:                              "ca-cert",
-				ConsulAgentCert:                           "agent-cert",
-				ConsulAgentKey:                            "agent-key",
-				ConsulServerCert:                          "server-cert",
-				ConsulServerKey:                           "server-key",
-				NATSUser:                                  "nats",
-				NATSPassword:                              "pass",
-				NATSPort:                                  4222,
-				NATSMachines:                              []string{"1.0.0.5", "1.0.0.6"},
-				UAAVMType:                                 "blah",
-				UAAInstances:                              1,
-				ConsulIPs:                                 []string{"1.0.0.1", "1.0.0.2"},
-				MetronSecret:                              "metronsecret",
-				MetronZone:                                "metronzoneguid",
-				SyslogAddress:                             "syslog-server",
-				SyslogPort:                                10601,
-				SyslogTransport:                           "tcp",
-				EtcdMachines:                              []string{"1.0.0.7", "1.0.0.8"},
-				SAMLServiceProviderKey:                    "saml-key",
-				SAMLServiceProviderCertificate:            "saml-cert",
-				JWTVerificationKey:                        "jwt-verificationkey",
-				JWTSigningKey:                             "jwt-signingkey",
-				LDAPEnabled:                               true,
-				LDAPUrl:                                   "ldap://ldap.test.com",
-				LDAPUserDN:                                "userdn",
-				LDAPUserPassword:                          "userpwd",
-				LDAPSearchFilter:                          "filter",
-				LDAPSearchBase:                            "base",
-				LDAPMailAttributeName:                     "mail",
-				AdminSecret:                               "adminclientsecret",
-				RouterMachines:                            []string{"1.0.0.1", "1.0.0.2"},
-				MySQLProxyIPs:                             []string{"1.0.10.3", "1.0.10.4"},
-				UAADBUserName:                             "uaa-db-user",
-				UAADBPassword:                             "uaa-db-pwd",
-				AdminPassword:                             "admin",
-				PushAppsManagerPassword:                   "appsman",
-				SmokeTestsPassword:                        "smoke",
-				SystemServicesPassword:                    "sysservices",
-				SystemVerificationPassword:                "sysverification",
-				OpentsdbFirehoseNozzleClientSecret:        "opentsdb-firehose-nozzle-client-secret",
-				IdentityClientSecret:                      "identity-client-secret",
-				LoginClientSecret:                         "login-client-secret",
-				PortalClientSecret:                        "portal-client-secret",
-				AutoScalingServiceClientSecret:            "autoscaling-service-client-secret",
-				SystemPasswordsClientSecret:               "system-passwords-client-secret",
-				CCServiceDashboardsClientSecret:           "cc-service-dashboards-client-secret",
-				DopplerSecret:                             "doppler-client-secret",
-				GoRouterClientSecret:                      "gorouter-client-secret",
-				NotificationsClientSecret:                 "notifications-client-secret",
-				NotificationsUIClientSecret:               "notifications-ui-client-secret",
-				CloudControllerUsernameLookupClientSecret: "cloud-controller-username-lookup-client-secret",
-				CCRoutingClientSecret:                     "cc-routing-client-secret",
-				SSHProxyClientSecret:                      "ssh-proxy-client-secret",
-				AppsMetricsClientSecret:                   "apps-metrics-client-secret",
-				AppsMetricsProcessingClientSecret:         "apps-metrics-processing-client-secret",
-				UAALoginProtocol:                          "https",
-				SelfServiceLinksEnabled:                   true,
-				SignupsEnabled:                            true,
+				SystemDomain:            "sys.test.com",
+				AZs:                     []string{"eastprod-1"},
+				StemcellName:            "cool-ubuntu-animal",
+				NetworkName:             "foundry-net",
+				AllowSSHAccess:          true,
+				NATSPort:                4222,
+				MetronZone:              "metronzoneguid",
+				SyslogAddress:           "syslog-server",
+				SyslogPort:              10601,
+				SyslogTransport:         "tcp",
+				LDAPEnabled:             true,
+				LDAPUrl:                 "ldap://ldap.test.com",
+				LDAPUserDN:              "userdn",
+				LDAPSearchFilter:        "filter",
+				LDAPSearchBase:          "base",
+				LDAPMailAttributeName:   "mail",
+				UAALoginProtocol:        "https",
+				SelfServiceLinksEnabled: true,
+				SignupsEnabled:          true,
+				Secret:                  config.Secret{},
+				User:                    config.User{},
+				Certs:                   &config.Certs{},
+				InstanceCount:           config.InstanceCount{},
+				IP:                      config.IP{},
 			}
+			config.LDAPUserPassword = "userpwd"
+			config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
+			config.SAMLServiceProviderKey = "saml-key"
+			config.SAMLServiceProviderCertificate = "saml-cert"
+			config.JWTVerificationKey = "jwt-verificationkey"
+			config.JWTSigningKey = "jwt-signingkey"
+			config.NATSMachines = []string{"1.0.0.5", "1.0.0.6"}
+			config.UAAVMType = "blah"
+			config.UAAInstances = 1
+			config.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
+			config.MetronSecret = "metronsecret"
+			config.AdminSecret = "adminclientsecret"
+			config.RouterMachines = []string{"1.0.0.1", "1.0.0.2"}
+			config.MySQLProxyIPs = []string{"1.0.10.3", "1.0.10.4"}
+			config.UAADBUserName = "uaa-db-user"
+			config.UAADBPassword = "uaa-db-pwd"
+			config.AdminPassword = "admin"
+			config.PushAppsManagerPassword = "appsman"
+			config.SmokeTestsPassword = "smoke"
+			config.SystemServicesPassword = "sysservices"
+			config.SystemVerificationPassword = "sysverification"
+			config.OpentsdbFirehoseNozzleClientSecret = "opentsdb-firehose-nozzle-client-secret"
+			config.IdentityClientSecret = "identity-client-secret"
+			config.LoginClientSecret = "login-client-secret"
+			config.PortalClientSecret = "portal-client-secret"
+			config.AutoScalingServiceClientSecret = "autoscaling-service-client-secret"
+			config.SystemPasswordsClientSecret = "system-passwords-client-secret"
+			config.CCServiceDashboardsClientSecret = "cc-service-dashboards-client-secret"
+			config.DopplerSecret = "doppler-client-secret"
+			config.GoRouterClientSecret = "gorouter-client-secret"
+			config.NotificationsClientSecret = "notifications-client-secret"
+			config.NotificationsUIClientSecret = "notifications-ui-client-secret"
+			config.CloudControllerUsernameLookupClientSecret = "cloud-controller-username-lookup-client-secret"
+			config.CCRoutingClientSecret = "cc-routing-client-secret"
+			config.SSHProxyClientSecret = "ssh-proxy-client-secret"
+			config.AppsMetricsClientSecret = "apps-metrics-client-secret"
+			config.AppsMetricsProcessingClientSecret = "apps-metrics-processing-client-secret"
+			config.ConsulEncryptKeys = []string{"encyption-key"}
+			config.ConsulCaCert = "ca-cert"
+			config.ConsulAgentCert = "agent-cert"
+			config.ConsulAgentKey = "agent-key"
+			config.ConsulServerCert = "server-cert"
+			config.ConsulServerKey = "server-key"
+			config.NATSUser = "nats"
+			config.NATSPassword = "pass"
 			uaaPartition = NewUAAPartition(config)
 		})
 		It("then it should not configure static ips for uaaPartition", func() {

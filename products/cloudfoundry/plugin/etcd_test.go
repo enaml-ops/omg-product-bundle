@@ -14,22 +14,28 @@ var _ = Describe("Etcd Partition", func() {
 		var etcdPartition InstanceGroupCreator
 		BeforeEach(func() {
 			config := &config.Config{
-				StemcellName:           "cool-ubuntu-animal",
-				AZs:                    []string{"eastprod-1"},
-				NetworkName:            "foundry-net",
-				NATSUser:               "nats",
-				NATSPassword:           "pass",
-				NATSMachines:           []string{"1.0.0.5", "1.0.0.6"},
-				NATSPort:               4222,
-				EtcdMachines:           []string{"1.0.0.7", "1.0.0.8"},
-				EtcdVMType:             "blah",
-				EtcdPersistentDiskType: "blah-disk",
-				MetronSecret:           "metronsecret",
-				MetronZone:             "metronzoneguid",
-				SyslogAddress:          "syslog-server",
-				SyslogPort:             10601,
-				SyslogTransport:        "tcp",
+				StemcellName:    "cool-ubuntu-animal",
+				AZs:             []string{"eastprod-1"},
+				NetworkName:     "foundry-net",
+				NATSPort:        4222,
+				MetronZone:      "metronzoneguid",
+				SyslogAddress:   "syslog-server",
+				SyslogPort:      10601,
+				SyslogTransport: "tcp",
+				Secret:          config.Secret{},
+				User:            config.User{},
+				Certs:           &config.Certs{},
+				InstanceCount:   config.InstanceCount{},
+				IP:              config.IP{},
 			}
+			config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
+			config.EtcdVMType = "blah"
+			config.EtcdPersistentDiskType = "blah-disk"
+			config.MetronSecret = "metronsecret"
+			config.NATSUser = "nats"
+			config.NATSPassword = "pass"
+			config.NATSMachines = []string{"1.0.0.5", "1.0.0.6"}
+
 			etcdPartition = NewEtcdPartition(config)
 		})
 		It("then it should allow the user to configure the etcd IPs", func() {

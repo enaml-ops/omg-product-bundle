@@ -13,24 +13,30 @@ var _ = Describe("Metron", func() {
 		var metron *Metron
 		BeforeEach(func() {
 			config := &config.Config{
-				StemcellName:      "cool-ubuntu-animal",
-				AZs:               []string{"eastprod-1"},
-				NetworkName:       "foundry-net",
-				ConsulEncryptKeys: []string{"encyption-key"},
-				ConsulCaCert:      "ca-cert",
-				ConsulAgentCert:   "agent-cert",
-				ConsulAgentKey:    "agent-key",
-				ConsulServerCert:  "server-cert",
-				ConsulServerKey:   "server-key",
-				ConsulIPs:         []string{"1.0.0.1", "1.0.0.2"},
-				ConsulVMType:      "blah",
-				MetronSecret:      "metronsecret",
-				MetronZone:        "metronzoneguid",
-				SyslogAddress:     "syslog-server",
-				SyslogPort:        10601,
-				SyslogTransport:   "tcp",
-				EtcdMachines:      []string{"10.0.1.2", "10.0.1.3", "10.0.1.4"},
+				StemcellName:    "cool-ubuntu-animal",
+				AZs:             []string{"eastprod-1"},
+				NetworkName:     "foundry-net",
+				MetronZone:      "metronzoneguid",
+				SyslogAddress:   "syslog-server",
+				SyslogPort:      10601,
+				SyslogTransport: "tcp",
+				Secret:          config.Secret{},
+				User:            config.User{},
+				Certs:           &config.Certs{},
+				InstanceCount:   config.InstanceCount{},
+				IP:              config.IP{},
 			}
+			config.EtcdMachines = []string{"10.0.1.2", "10.0.1.3", "10.0.1.4"}
+			config.ConsulEncryptKeys = []string{"encyption-key"}
+			config.ConsulCaCert = "ca-cert"
+			config.ConsulAgentCert = "agent-cert"
+			config.ConsulAgentKey = "agent-key"
+			config.ConsulServerCert = "server-cert"
+			config.ConsulServerKey = "server-key"
+			config.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
+			config.ConsulVMType = "blah"
+			config.MetronSecret = "metronsecret"
+
 			metron = NewMetron(config)
 		})
 		It("then it should allow the user to configure the metron agent", func() {

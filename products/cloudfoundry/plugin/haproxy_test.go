@@ -13,15 +13,20 @@ var _ = Describe("HaProxy Partition", func() {
 		var haproxyPartition InstanceGroupCreator
 		BeforeEach(func() {
 			config := &config.Config{
-				StemcellName:   "cool-ubuntu-animal",
-				AZs:            []string{"eastprod-1"},
-				NetworkName:    "foundry-net",
-				HAProxySkip:    false,
-				HAProxyIPs:     []string{"1.0.11.1", "1.0.11.2", "1.0.11.3"},
-				HAProxyVMType:  "blah",
-				RouterMachines: []string{"1.0.0.1", "1.0.0.2"},
-				HAProxySSLPem:  "blah",
+				StemcellName:  "cool-ubuntu-animal",
+				AZs:           []string{"eastprod-1"},
+				NetworkName:   "foundry-net",
+				HAProxySkip:   false,
+				Secret:        config.Secret{},
+				User:          config.User{},
+				Certs:         &config.Certs{},
+				InstanceCount: config.InstanceCount{},
+				IP:            config.IP{},
 			}
+			config.HAProxyIPs = []string{"1.0.11.1", "1.0.11.2", "1.0.11.3"}
+			config.HAProxyVMType = "blah"
+			config.RouterMachines = []string{"1.0.0.1", "1.0.0.2"}
+			config.HAProxySSLPem = "blah"
 			haproxyPartition = NewHaProxyPartition(config)
 		})
 		It("then it should allow the user to configure the haproxy IPs", func() {

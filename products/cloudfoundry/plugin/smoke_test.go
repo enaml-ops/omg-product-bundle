@@ -13,15 +13,20 @@ var _ = Describe("Smoke test errand", func() {
 		var smokeErrand InstanceGroupCreator
 		BeforeEach(func() {
 			config := &config.Config{
-				StemcellName:       "cool-ubuntu-animal",
-				AZs:                []string{"eastprod-1"},
-				NetworkName:        "foundry-net",
-				SystemDomain:       "sys.test.com",
-				AppDomains:         []string{"apps.test.com"},
-				SmokeTestsPassword: "password",
-				UAALoginProtocol:   "https",
-				ErrandVMType:       "blah",
+				StemcellName:     "cool-ubuntu-animal",
+				AZs:              []string{"eastprod-1"},
+				NetworkName:      "foundry-net",
+				SystemDomain:     "sys.test.com",
+				AppDomains:       []string{"apps.test.com"},
+				UAALoginProtocol: "https",
+				Secret:           config.Secret{},
+				User:             config.User{},
+				Certs:            &config.Certs{},
+				InstanceCount:    config.InstanceCount{},
+				IP:               config.IP{},
 			}
+			config.ErrandVMType = "blah"
+			config.SmokeTestsPassword = "password"
 			smokeErrand = NewSmokeErrand(config)
 		})
 		It("then it should have 1 instances", func() {

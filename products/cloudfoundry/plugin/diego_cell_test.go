@@ -24,55 +24,35 @@ var _ = Describe("given a Diego Cell Partition", func() {
 		Context("when ToInstanceGroup is called", func() {
 
 			BeforeEach(func() {
-				/*cf := new(Plugin)
-				c := cf.GetContext([]string{
-					"cloudfoundry",
-					"--diego-cell-ip", "10.0.0.39",
-					"--diego-cell-ip", "10.0.0.40",
-					"--diego-cell-vm-type", "cellvmtype",
-					"--diego-cell-disk-type", "celldisktype",
-					"--bbs-server-ca-cert", "cacert",
-					"--bbs-client-cert", "clientcert",
-					"--bbs-client-key", "clientkey",
-					"--consul-ip", "1.0.0.1",
-					"--consul-ip", "1.0.0.2",
-					"--consul-vm-type", "blah",
-					"--metron-secret", "metronsecret",
-					"--metron-zone", "metronzoneguid",
-					"--syslog-address", "syslog-server",
-					"--syslog-port", "10601",
-					"--syslog-transport", "tcp",
-					"--etcd-machine-ip", "1.0.0.7",
-					"--etcd-machine-ip", "1.0.0.8",
-				})*/
 				config := &config.Config{
-					AZs:                         []string{"eastprod-1"},
-					StemcellName:                "cool-ubuntu-animal",
-					NetworkName:                 "foundry-net",
-					AllowSSHAccess:              true,
-					ConsulEncryptKeys:           []string{"encyption-key"},
-					ConsulCaCert:                "ca-cert",
-					ConsulAgentCert:             "agent-cert",
-					ConsulAgentKey:              "agent-key",
-					ConsulServerCert:            "server-cert",
-					ConsulServerKey:             "server-key",
-					DiegoCellIPs:                []string{"10.0.0.39", "10.0.0.40"},
-					DiegoCellVMType:             "cellvmtype",
-					DiegoCellPersistentDiskType: "celldisktype",
-					BBSCACert:                   "cacert",
-					BBSClientCert:               "clientcert",
-					BBSClientKey:                "clientkey",
-					MetronSecret:                "metronsecret",
-					MetronZone:                  "metronzoneguid",
-					SyslogAddress:               "syslog-server",
-					SyslogPort:                  10601,
-					SyslogTransport:             "tcp",
-					EtcdMachines:                []string{"1.0.0.7", "1.0.0.8"},
-					/*"--consul-ip", "1.0.0.1",
-					"--consul-ip", "1.0.0.2",
-					"--consul-vm-type", "blah",
-					*/
+					AZs:             []string{"eastprod-1"},
+					StemcellName:    "cool-ubuntu-animal",
+					NetworkName:     "foundry-net",
+					AllowSSHAccess:  true,
+					MetronZone:      "metronzoneguid",
+					SyslogAddress:   "syslog-server",
+					SyslogPort:      10601,
+					SyslogTransport: "tcp",
+					Secret:          config.Secret{},
+					User:            config.User{},
+					Certs:           &config.Certs{},
+					InstanceCount:   config.InstanceCount{},
+					IP:              config.IP{},
 				}
+				config.ConsulEncryptKeys = []string{"encyption-key"}
+				config.ConsulCaCert = "ca-cert"
+				config.ConsulAgentCert = "agent-cert"
+				config.ConsulAgentKey = "agent-key"
+				config.ConsulServerCert = "server-cert"
+				config.ConsulServerKey = "server-key"
+				config.DiegoCellIPs = []string{"10.0.0.39", "10.0.0.40"}
+				config.DiegoCellVMType = "cellvmtype"
+				config.DiegoCellPersistentDiskType = "celldisktype"
+				config.BBSCACert = "cacert"
+				config.BBSClientCert = "clientcert"
+				config.BBSClientKey = "clientkey"
+				config.MetronSecret = "metronsecret"
+				config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
 				grouper = NewDiegoCellPartition(config)
 				instanceGroup = grouper.ToInstanceGroup()
 			})

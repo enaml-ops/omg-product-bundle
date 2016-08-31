@@ -14,14 +14,19 @@ var _ = Describe("Consul Agent", func() {
 		var cfg *config.Config
 		BeforeEach(func() {
 			cfg = &config.Config{
-				ConsulAgentCert:   "agent-cert",
-				ConsulAgentKey:    "agent-key",
-				ConsulServerCert:  "server-cert",
-				ConsulEncryptKeys: []string{"encyption-key"},
-				ConsulServerKey:   "server-key",
-				ConsulCaCert:      "ca-cert",
-				ConsulIPs:         []string{"1.0.0.1", "1.0.0.2"},
+				Secret:        config.Secret{},
+				User:          config.User{},
+				Certs:         &config.Certs{},
+				InstanceCount: config.InstanceCount{},
+				IP:            config.IP{},
 			}
+			cfg.ConsulAgentCert = "agent-cert"
+			cfg.ConsulAgentKey = "agent-key"
+			cfg.ConsulServerCert = "server-cert"
+			cfg.ConsulEncryptKeys = []string{"encyption-key"}
+			cfg.ConsulServerKey = "server-key"
+			cfg.ConsulCaCert = "ca-cert"
+			cfg.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
 		})
 		It("then consul with server false", func() {
 			consulAgent := NewConsulAgent([]string{}, cfg)

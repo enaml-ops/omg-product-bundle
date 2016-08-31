@@ -16,20 +16,26 @@ var _ = Describe("MySQL Partition", func() {
 		BeforeEach(func() {
 
 			config := &config.Config{
-				StemcellName:            "cool-ubuntu-animal",
-				AZs:                     []string{"eastprod-1"},
-				NetworkName:             "foundry-net",
-				MySQLBootstrapUser:      "mysqlbootstrap",
-				MySQLBootstrapPassword:  "mysqlbootstrappwd",
-				MySQLIPs:                []string{"1.0.10.1", "1.0.10.2"},
-				MySQLVMType:             "blah1",
-				MySQLPersistentDiskType: "blah2",
-				MySQLAdminPassword:      "mysqladmin",
-				SyslogAddress:           "syslog-server",
-				SyslogPort:              10601,
-				SyslogTransport:         "tcp",
-				UAADBPassword:           "uaapassword",
+				StemcellName:    "cool-ubuntu-animal",
+				AZs:             []string{"eastprod-1"},
+				NetworkName:     "foundry-net",
+				SyslogAddress:   "syslog-server",
+				SyslogPort:      10601,
+				SyslogTransport: "tcp",
+				Secret:          config.Secret{},
+				User:            config.User{},
+				Certs:           &config.Certs{},
+				InstanceCount:   config.InstanceCount{},
+				IP:              config.IP{},
 			}
+			config.UAADBPassword = "uaapassword"
+			config.MySQLBootstrapUser = "mysqlbootstrap"
+			config.MySQLBootstrapPassword = "mysqlbootstrappwd"
+			config.MySQLIPs = []string{"1.0.10.1", "1.0.10.2"}
+			config.MySQLVMType = "blah1"
+			config.MySQLPersistentDiskType = "blah2"
+			config.MySQLAdminPassword = "mysqladmin"
+
 			mysqlPartition = NewMySQLPartition(config)
 		})
 		It("then it should allow the user to configure the mysql IPs", func() {

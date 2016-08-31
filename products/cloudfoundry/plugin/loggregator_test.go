@@ -19,22 +19,28 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 		BeforeEach(func() {
 
 			config := &config.Config{
-				AZs:                []string{"eastprod-1"},
-				StemcellName:       "cool-ubuntu-animal",
-				NetworkName:        "foundry-net",
-				SystemDomain:       "sys.yourdomain.com",
-				SkipSSLCertVerify:  false,
-				NATSUser:           "natsuser",
-				NATSPassword:       "natspass",
-				NATSPort:           4222,
-				NATSMachines:       []string{"10.0.0.10", "10.0.0.11"},
-				LoggregratorIPs:    []string{"10.0.0.39", "10.0.0.40"},
-				LoggregratorVMType: "vmtype",
-				EtcdMachines:       []string{"10.0.1.2", "10.0.1.3", "10.0.1.4"},
-				DopplerSecret:      "dopplersecret",
-				MetronSecret:       "metronsecret",
-				MetronZone:         "metronzoneguid",
+				AZs:               []string{"eastprod-1"},
+				StemcellName:      "cool-ubuntu-animal",
+				NetworkName:       "foundry-net",
+				SystemDomain:      "sys.yourdomain.com",
+				SkipSSLCertVerify: false,
+				NATSPort:          4222,
+				MetronZone:        "metronzoneguid",
+				Secret:            config.Secret{},
+				User:              config.User{},
+				Certs:             &config.Certs{},
+				InstanceCount:     config.InstanceCount{},
+				IP:                config.IP{},
 			}
+			config.NATSUser = "natsuser"
+			config.NATSPassword = "natspass"
+			config.NATSMachines = []string{"10.0.0.10", "10.0.0.11"}
+			config.LoggregratorIPs = []string{"10.0.0.39", "10.0.0.40"}
+			config.LoggregratorVMType = "vmtype"
+			config.EtcdMachines = []string{"10.0.1.2", "10.0.1.3", "10.0.1.4"}
+			config.DopplerSecret = "dopplersecret"
+			config.MetronSecret = "metronsecret"
+
 			grouper = NewLoggregatorTrafficController(config)
 
 			dm = new(enaml.DeploymentManifest)

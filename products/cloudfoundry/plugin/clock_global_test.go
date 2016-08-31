@@ -16,45 +16,51 @@ var _ = Describe("given a clock_global partition", func() {
 		var deploymentManifest *enaml.DeploymentManifest
 
 		BeforeEach(func() {
+			config := &config.Config{
+				AZs:               []string{"eastprod-1"},
+				StemcellName:      "cool-ubuntu-animal",
+				NetworkName:       "foundry-net",
+				SkipSSLCertVerify: false,
+				AllowSSHAccess:    true,
+				SystemDomain:      "sys.test.com",
+				AppDomains:        []string{"apps.test.com"},
+				NATSPort:          4333,
+				CCInternalAPIUser: "internalapiuser",
+				MetronZone:        "metronzoneguid",
+				SharePath:         "/var/vcap/nfs",
+				Secret:            config.Secret{},
+				User:              config.User{},
+				Certs:             &config.Certs{},
+				InstanceCount:     config.InstanceCount{},
+				IP:                config.IP{},
+			}
+			config.NFSServerAddress = "10.0.0.19"
+			config.NATSUser = "nats"
+			config.NATSPassword = "pass"
+			config.NATSMachines = []string{"1.0.0.5", "1.0.0.6"}
+			config.ClockGlobalVMType = "vmtype"
+			config.CloudControllerVMType = "ccvmtype"
+			config.StagingUploadUser = "staginguser"
+			config.StagingUploadPassword = "stagingpassword"
+			config.CCBulkAPIUser = "bulkapiuser"
+			config.CCBulkAPIPassword = "bulkapipassword"
+			config.DbEncryptionKey = "dbencryptionkey"
+			config.CCInternalAPIPassword = "internalapipassword"
+			config.CCServiceDashboardsClientSecret = "ccsecret"
+			config.MetronSecret = "metronsecret"
+			config.ConsulCaCert = "consul-ca-cert"
+			config.ConsulAgentCert = "consul-agent-cert"
+			config.ConsulAgentKey = "consul-agent-key"
+			config.ConsulServerCert = "consulservercert"
+			config.ConsulServerKey = "consulserverkey"
+			config.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
+			config.ConsulEncryptKeys = []string{"consulencryptionkey"}
+			config.MySQLProxyIPs = []string{"1.0.10.3", "1.0.10.4"}
+			config.CCDBUsername = "ccdb-user"
+			config.CCDBPassword = "ccdb-password"
+			config.JWTVerificationKey = "jwt-verificationkey"
 
-			ig = NewClockGlobalPartition(&config.Config{
-				AZs:                             []string{"eastprod-1"},
-				StemcellName:                    "cool-ubuntu-animal",
-				NetworkName:                     "foundry-net",
-				SkipSSLCertVerify:               false,
-				AllowSSHAccess:                  true,
-				SystemDomain:                    "sys.test.com",
-				AppDomains:                      []string{"apps.test.com"},
-				NATSUser:                        "nats",
-				NATSPassword:                    "pass",
-				NATSMachines:                    []string{"1.0.0.5", "1.0.0.6"},
-				NATSPort:                        4333,
-				ClockGlobalVMType:               "vmtype",
-				CloudControllerVMType:           "ccvmtype",
-				StagingUploadUser:               "staginguser",
-				StagingUploadPassword:           "stagingpassword",
-				CCBulkAPIUser:                   "bulkapiuser",
-				CCBulkAPIPassword:               "bulkapipassword",
-				DbEncryptionKey:                 "dbencryptionkey",
-				CCInternalAPIUser:               "internalapiuser",
-				CCInternalAPIPassword:           "internalapipassword",
-				CCServiceDashboardsClientSecret: "ccsecret",
-				MetronSecret:                    "metronsecret",
-				MetronZone:                      "metronzoneguid",
-				NFSServerAddress:                "10.0.0.19",
-				SharePath:                       "/var/vcap/nfs",
-				ConsulCaCert:                    "consul-ca-cert",
-				ConsulAgentCert:                 "consul-agent-cert",
-				ConsulAgentKey:                  "consul-agent-key",
-				ConsulServerCert:                "consulservercert",
-				ConsulServerKey:                 "consulserverkey",
-				ConsulIPs:                       []string{"1.0.0.1", "1.0.0.2"},
-				ConsulEncryptKeys:               []string{"consulencryptionkey"},
-				MySQLProxyIPs:                   []string{"1.0.10.3", "1.0.10.4"},
-				CCDBUsername:                    "ccdb-user",
-				CCDBPassword:                    "ccdb-password",
-				JWTVerificationKey:              "jwt-verificationkey",
-			})
+			ig = NewClockGlobalPartition(config)
 			deploymentManifest = new(enaml.DeploymentManifest)
 			deploymentManifest.AddInstanceGroup(ig.ToInstanceGroup())
 		})

@@ -17,38 +17,44 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 		BeforeEach(func() {
 
 			config := &config.Config{
-				NATSMachines:                   []string{"10.0.0.4"},
-				NATSUser:                       "natsuser",
-				NATSPassword:                   "natspass",
-				NATSPort:                       4333,
-				SystemDomain:                   "sys.yourdomain.com",
-				AppDomains:                     []string{"apps.yourdomain.com"},
-				AllowSSHAccess:                 true,
-				NetworkName:                    "foundry",
-				ConsulIPs:                      []string{"1.0.0.1", "1.0.0.2"},
-				ConsulEncryptKeys:              []string{"consulencryptionkey"},
-				CloudControllerWorkerInstances: 2,
-				CloudControllerWorkerVMType:    "ccworkervmtype",
-				ConsulCaCert:                   "consul-ca-cert",
-				ConsulAgentCert:                "consul-agent-cert",
-				ConsulAgentKey:                 "consul-agent-key",
-				ConsulServerCert:               "consulservercert",
-				ConsulServerKey:                "consulserverkey",
-				StagingUploadUser:              "staginguser",
-				StagingUploadPassword:          "stagingpassword",
-				CCBulkAPIUser:                  "bulkapiuser",
-				CCBulkAPIPassword:              "bulkapipassword",
-				DbEncryptionKey:                "dbencryptionkey",
-				CCInternalAPIUser:              "internalapiuser",
-				CCInternalAPIPassword:          "internalapipassword",
-				NFSServerAddress:               "10.0.0.19",
-				SharePath:                      "/var/vcap/nfs",
-				MetronSecret:                   "metronsecret",
-				MetronZone:                     "metronzoneguid",
-				MySQLProxyIPs:                  []string{"10.0.0.3"},
-				CCDBUsername:                   "ccdbuser",
-				CCDBPassword:                   "ccdbpass",
+				NATSPort:       4333,
+				SystemDomain:   "sys.yourdomain.com",
+				AppDomains:     []string{"apps.yourdomain.com"},
+				AllowSSHAccess: true,
+				NetworkName:    "foundry",
+				SharePath:      "/var/vcap/nfs",
+				MetronZone:     "metronzoneguid",
+				Secret:         config.Secret{},
+				User:           config.User{},
+				Certs:          &config.Certs{},
+				InstanceCount:  config.InstanceCount{},
+				IP:             config.IP{},
 			}
+			config.MySQLProxyIPs = []string{"10.0.0.3"}
+			config.NATSMachines = []string{"10.0.0.4"}
+			config.NATSUser = "natsuser"
+			config.NATSPassword = "natspass"
+			config.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
+			config.ConsulEncryptKeys = []string{"consulencryptionkey"}
+			config.CloudControllerWorkerInstances = 2
+			config.CloudControllerWorkerVMType = "ccworkervmtype"
+			config.ConsulCaCert = "consul-ca-cert"
+			config.ConsulAgentCert = "consul-agent-cert"
+			config.ConsulAgentKey = "consul-agent-key"
+			config.ConsulServerCert = "consulservercert"
+			config.ConsulServerKey = "consulserverkey"
+			config.StagingUploadUser = "staginguser"
+			config.StagingUploadPassword = "stagingpassword"
+			config.CCBulkAPIUser = "bulkapiuser"
+			config.CCBulkAPIPassword = "bulkapipassword"
+			config.DbEncryptionKey = "dbencryptionkey"
+			config.CCInternalAPIUser = "internalapiuser"
+			config.CCInternalAPIPassword = "internalapipassword"
+			config.NFSServerAddress = "10.0.0.19"
+			config.MetronSecret = "metronsecret"
+			config.CCDBUsername = "ccdbuser"
+			config.CCDBPassword = "ccdbpass"
+
 			cloudControllerWorker = NewCloudControllerWorkerPartition(config)
 		})
 

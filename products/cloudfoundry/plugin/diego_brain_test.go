@@ -27,47 +27,53 @@ var _ = Describe("given a Diego Brain Partition", func() {
 
 		BeforeEach(func() {
 			config := &config.Config{
-				SystemDomain:                 "sys.test.com",
-				AZs:                          []string{"eastprod-1"},
-				StemcellName:                 "cool-ubuntu-animal",
-				NetworkName:                  "foundry-net",
-				AllowSSHAccess:               true,
-				ConsulEncryptKeys:            []string{"encyption-key"},
-				ConsulCaCert:                 "ca-cert",
-				ConsulAgentCert:              "agent-cert",
-				ConsulAgentKey:               "agent-key",
-				ConsulServerCert:             "server-cert",
-				ConsulServerKey:              "server-key",
-				NATSUser:                     "nats",
-				NATSPassword:                 "natspass",
-				NATSPort:                     1234,
-				NATSMachines:                 []string{"10.0.0.11", "10.0.0.12"},
-				MetronZone:                   "metronzoneguid",
-				MetronSecret:                 "metronsecret",
-				EtcdMachines:                 []string{"1.0.0.7", "1.0.0.8"},
-				ConsulIPs:                    []string{"1.0.0.1", "1.0.0.2"},
-				DiegoBrainIPs:                []string{"10.0.0.39", "10.0.0.40"},
-				DiegoBrainVMType:             "brainvmtype",
-				DiegoBrainPersistentDiskType: "braindisktype",
-				BBSCACert:                    "cacert",
-				BBSClientCert:                "clientcert",
-				BBSClientKey:                 "clientkey",
-				BBSRequireSSL:                false,
-				SkipSSLCertVerify:            false,
-				CCUploaderJobPollInterval:    25,
-				CCExternalPort:               9023,
-				CCInternalAPIUser:            "internaluser",
-				CCInternalAPIPassword:        "internalpassword",
-				CCBulkBatchSize:              5,
-				CCFetchTimeout:               30,
-				FSListenAddr:                 "0.0.0.0:12345",
-				FSStaticDirectory:            "/foo/bar/baz",
-				FSDebugAddr:                  "10.0.1.2:22222",
-				FSLogLevel:                   "debug",
-				MetronPort:                   3458,
-				SSHProxyClientSecret:         "secret",
-				TrafficControllerURL:         "wss://doppler.sys.yourdomain.com:443",
+				SystemDomain:              "sys.test.com",
+				AZs:                       []string{"eastprod-1"},
+				StemcellName:              "cool-ubuntu-animal",
+				NetworkName:               "foundry-net",
+				AllowSSHAccess:            true,
+				NATSPort:                  1234,
+				MetronZone:                "metronzoneguid",
+				BBSRequireSSL:             false,
+				SkipSSLCertVerify:         false,
+				CCUploaderJobPollInterval: 25,
+				CCExternalPort:            9023,
+				CCBulkBatchSize:           5,
+				CCFetchTimeout:            30,
+				FSListenAddr:              "0.0.0.0:12345",
+				FSStaticDirectory:         "/foo/bar/baz",
+				FSDebugAddr:               "10.0.1.2:22222",
+				FSLogLevel:                "debug",
+				MetronPort:                3458,
+				TrafficControllerURL:      "wss://doppler.sys.yourdomain.com:443",
+				Secret:                    config.Secret{},
+				User:                      config.User{},
+				Certs:                     &config.Certs{},
+				InstanceCount:             config.InstanceCount{},
+				IP:                        config.IP{},
 			}
+			config.NATSMachines = []string{"10.0.0.11", "10.0.0.12"}
+			config.MetronSecret = "metronsecret"
+			config.ConsulEncryptKeys = []string{"encyption-key"}
+			config.ConsulCaCert = "ca-cert"
+			config.ConsulAgentCert = "agent-cert"
+			config.ConsulAgentKey = "agent-key"
+			config.ConsulServerCert = "server-cert"
+			config.ConsulServerKey = "server-key"
+			config.NATSUser = "nats"
+			config.NATSPassword = "natspass"
+			config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
+			config.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
+			config.DiegoBrainIPs = []string{"10.0.0.39", "10.0.0.40"}
+			config.DiegoBrainVMType = "brainvmtype"
+			config.DiegoBrainPersistentDiskType = "braindisktype"
+			config.BBSCACert = "cacert"
+			config.BBSClientCert = "clientcert"
+			config.BBSClientKey = "clientkey"
+			config.SSHProxyClientSecret = "secret"
+			config.CCInternalAPIUser = "internaluser"
+			config.CCInternalAPIPassword = "internalpassword"
+
 			grouper = NewDiegoBrainPartition(config)
 			deploymentManifest = new(enaml.DeploymentManifest)
 			deploymentManifest.AddInstanceGroup(grouper.ToInstanceGroup())

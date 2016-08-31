@@ -16,17 +16,23 @@ var _ = Describe("NFS Partition", func() {
 				StemcellName:            "cool-ubuntu-animal",
 				AZs:                     []string{"eastprod-1"},
 				NetworkName:             "foundry-net",
-				NFSIPs:                  []string{"1.0.0.1"},
-				NFSVMType:               "blah",
-				NFSPersistentDiskType:   "blah-disk",
 				NFSAllowFromNetworkCIDR: []string{"1.0.0.0/22"},
-				MetronSecret:            "metronsecret",
-				MetronZone:              "metronzoneguid",
 				SyslogAddress:           "syslog-server",
 				SyslogPort:              10601,
 				SyslogTransport:         "tcp",
-				EtcdMachines:            []string{"1.0.0.7", "1.0.0.8"},
+				Secret:                  config.Secret{},
+				User:                    config.User{},
+				Certs:                   &config.Certs{},
+				InstanceCount:           config.InstanceCount{},
+				IP:                      config.IP{},
 			}
+			config.MetronSecret = "metronsecret"
+			config.NFSIPs = []string{"1.0.0.1"}
+			config.NFSVMType = "blah"
+			config.NFSPersistentDiskType = "blah-disk"
+			config.MetronZone = "metronzoneguid"
+			config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
+
 			nfsPartition = NewNFSPartition(config)
 		})
 

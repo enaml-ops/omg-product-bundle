@@ -15,16 +15,21 @@ var _ = Describe("given a bootstrap partition", func() {
 		var ig InstanceGroupCreator
 		var dm *enaml.DeploymentManifest
 		BeforeEach(func() {
-
-			ig = NewBootstrapPartition(&config.Config{
-				AZs:                    []string{"z1"},
-				StemcellName:           "cool-ubuntu-animal",
-				NetworkName:            "foundry-net",
-				MySQLIPs:               []string{"10.0.0.26", "10.0.0.27", "10.0.0.28"},
-				MySQLBootstrapUser:     "user",
-				MySQLBootstrapPassword: "pass",
-				ErrandVMType:           "foo",
-			})
+			config := &config.Config{
+				AZs:           []string{"z1"},
+				StemcellName:  "cool-ubuntu-animal",
+				NetworkName:   "foundry-net",
+				Secret:        config.Secret{},
+				User:          config.User{},
+				Certs:         &config.Certs{},
+				InstanceCount: config.InstanceCount{},
+				IP:            config.IP{},
+			}
+			config.MySQLIPs = []string{"10.0.0.26", "10.0.0.27", "10.0.0.28"}
+			config.MySQLBootstrapUser = "user"
+			config.MySQLBootstrapPassword = "pass"
+			config.ErrandVMType = "foo"
+			ig = NewBootstrapPartition(config)
 
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())

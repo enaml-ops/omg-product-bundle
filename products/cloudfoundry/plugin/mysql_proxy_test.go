@@ -16,20 +16,26 @@ var _ = Describe("MySQL Proxy Partition", func() {
 				StemcellName:           "cool-ubuntu-animal",
 				AZs:                    []string{"eastprod-1"},
 				NetworkName:            "foundry-net",
-				NATSUser:               "nats",
-				NATSPassword:           "pass",
-				NATSMachines:           []string{"1.0.0.5", "1.0.0.6"},
 				NATSPort:               4222,
-				MySQLIPs:               []string{"1.0.10.1", "1.0.10.2"},
-				MySQLProxyIPs:          []string{"1.0.10.3", "1.0.10.4"},
-				MySQLProxyVMType:       "blah",
 				MySQLProxyExternalHost: "mysqlhostname",
-				MySQLProxyAPIUsername:  "apiuser",
-				MySQLProxyAPIPassword:  "apipassword",
 				SyslogAddress:          "syslog-server",
 				SyslogPort:             10601,
 				SyslogTransport:        "tcp",
+				Secret:                 config.Secret{},
+				User:                   config.User{},
+				Certs:                  &config.Certs{},
+				InstanceCount:          config.InstanceCount{},
+				IP:                     config.IP{},
 			}
+			config.NATSUser = "nats"
+			config.NATSPassword = "pass"
+			config.NATSMachines = []string{"1.0.0.5", "1.0.0.6"}
+			config.MySQLIPs = []string{"1.0.10.1", "1.0.10.2"}
+			config.MySQLProxyIPs = []string{"1.0.10.3", "1.0.10.4"}
+			config.MySQLProxyVMType = "blah"
+			config.MySQLProxyAPIUsername = "apiuser"
+			config.MySQLProxyAPIPassword = "apipassword"
+
 			mysqlProxyPartition = NewMySQLProxyPartition(config)
 		})
 		It("then it should allow the user to configure the mysql proxy IPs", func() {

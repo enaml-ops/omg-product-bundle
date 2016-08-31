@@ -17,25 +17,31 @@ var _ = Describe("Go-Router Partition", func() {
 		const controlSecret = "goroutersecret"
 		BeforeEach(func() {
 			config := &config.Config{
-				StemcellName:         "cool-ubuntu-animal",
-				AZs:                  []string{"eastprod-1"},
-				NetworkName:          "foundry-net",
-				NATSUser:             "nats",
-				NATSPassword:         "pass",
-				NATSMachines:         []string{"1.0.0.5", "1.0.0.6"},
-				NATSPort:             4222,
-				RouterMachines:       []string{"1.0.0.1", "1.0.0.2"},
-				GoRouterClientSecret: controlSecret,
-				RouterVMType:         "blah",
-				RouterSSLCert:        "@fixtures/sample.cert",
-				RouterSSLKey:         "@fixtures/sample.key",
-				RouterPass:           "blabadebleblahblah",
-				MetronSecret:         "metronsecret",
-				MetronZone:           "metronzoneguid",
-				EtcdMachines:         []string{"1.0.0.7", "1.0.0.8"},
-				RouterEnableSSL:      true,
-				RouterUser:           "router_status",
+				StemcellName:    "cool-ubuntu-animal",
+				AZs:             []string{"eastprod-1"},
+				NetworkName:     "foundry-net",
+				NATSPort:        4222,
+				MetronZone:      "metronzoneguid",
+				RouterEnableSSL: true,
+				Secret:          config.Secret{},
+				User:            config.User{},
+				Certs:           &config.Certs{},
+				InstanceCount:   config.InstanceCount{},
+				IP:              config.IP{},
 			}
+			config.NATSUser = "nats"
+			config.NATSPassword = "pass"
+			config.NATSMachines = []string{"1.0.0.5", "1.0.0.6"}
+			config.RouterMachines = []string{"1.0.0.1", "1.0.0.2"}
+			config.GoRouterClientSecret = controlSecret
+			config.RouterVMType = "blah"
+			config.RouterSSLCert = "@fixtures/sample.cert"
+			config.RouterSSLKey = "@fixtures/sample.key"
+			config.RouterPass = "blabadebleblahblah"
+			config.MetronSecret = "metronsecret"
+			config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
+			config.RouterUser = "router_status"
+
 			gr := NewGoRouterPartition(config)
 			deploymentManifest = new(enaml.DeploymentManifest)
 			deploymentManifest.AddInstanceGroup(gr.ToInstanceGroup())
@@ -131,10 +137,16 @@ var _ = Describe("Go-Router Partition", func() {
 		Context("when the plugin is called by a operator with arguments for ssl cert/key strings", func() {
 			var deploymentManifest *enaml.DeploymentManifest
 			BeforeEach(func() {
-				gr := NewGoRouterPartition(&config.Config{
-					RouterSSLCert: "blah",
-					RouterSSLKey:  "blahblah",
-				})
+				config := &config.Config{
+					Secret:        config.Secret{},
+					User:          config.User{},
+					Certs:         &config.Certs{},
+					InstanceCount: config.InstanceCount{},
+					IP:            config.IP{},
+				}
+				config.RouterSSLCert = "blah"
+				config.RouterSSLKey = "blahblah"
+				gr := NewGoRouterPartition(config)
 				deploymentManifest = new(enaml.DeploymentManifest)
 				deploymentManifest.AddInstanceGroup(gr.ToInstanceGroup())
 			})
@@ -151,10 +163,16 @@ var _ = Describe("Go-Router Partition", func() {
 		Context("when the plugin is called by a operator with arguments for just ssl cert/key strings", func() {
 			var deploymentManifest *enaml.DeploymentManifest
 			BeforeEach(func() {
-				gr := NewGoRouterPartition(&config.Config{
-					RouterSSLCert: "blah",
-					RouterSSLKey:  "blahblah",
-				})
+				config := &config.Config{
+					Secret:        config.Secret{},
+					User:          config.User{},
+					Certs:         &config.Certs{},
+					InstanceCount: config.InstanceCount{},
+					IP:            config.IP{},
+				}
+				config.RouterSSLCert = "blah"
+				config.RouterSSLKey = "blahblah"
+				gr := NewGoRouterPartition(config)
 				deploymentManifest = new(enaml.DeploymentManifest)
 				deploymentManifest.AddInstanceGroup(gr.ToInstanceGroup())
 			})

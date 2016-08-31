@@ -22,40 +22,46 @@ var _ = Describe("given a Diego Database Partition", func() {
 			BeforeEach(func() {
 
 				config := &config.Config{
-					SystemDomain:              "service.cf.domain.com",
-					AZs:                       []string{"eastprod-1"},
-					StemcellName:              "cool-ubuntu-animal",
-					NetworkName:               "foundry-net",
-					AllowSSHAccess:            true,
-					ConsulEncryptKeys:         []string{"encyption-key"},
-					ConsulCaCert:              "ca-cert",
-					ConsulAgentCert:           "agent-cert",
-					ConsulAgentKey:            "agent-key",
-					ConsulServerCert:          "server-cert",
-					ConsulServerKey:           "server-key",
-					BBSCACert:                 "cacert",
-					BBSServerCert:             "clientcert",
-					BBSServerKey:              "clientkey",
-					DiegoDBIPs:                []string{"10.0.0.39", "10.0.0.40"},
-					DiegoDBVMType:             "dbvmtype",
-					DiegoDBPersistentDiskType: "dbdisktype",
-					DiegoDBPassphrase:         "random-db-encrytionkey",
-					EtcdServerCert:            "blah-cert",
-					EtcdServerKey:             "blah-key",
-					EtcdClientCert:            "bleh-cert",
-					EtcdClientKey:             "bleh-key",
-					EtcdPeerCert:              "blee-cert",
-					EtcdPeerKey:               "blee-key",
-					BBSClientCert:             "clientcert",
-					BBSClientKey:              "clientkey",
-					ConsulIPs:                 []string{"1.0.0.1", "1.0.0.2"},
-					MetronSecret:              "metronsecret",
-					MetronZone:                "metronzoneguid",
-					SyslogAddress:             "syslog-server",
-					SyslogPort:                10601,
-					SyslogTransport:           "tcp",
-					EtcdMachines:              []string{"1.0.0.7", "1.0.0.8"},
+					SystemDomain:    "service.cf.domain.com",
+					AZs:             []string{"eastprod-1"},
+					StemcellName:    "cool-ubuntu-animal",
+					NetworkName:     "foundry-net",
+					AllowSSHAccess:  true,
+					MetronZone:      "metronzoneguid",
+					SyslogAddress:   "syslog-server",
+					SyslogPort:      10601,
+					SyslogTransport: "tcp",
+					Secret:          config.Secret{},
+					User:            config.User{},
+					Certs:           &config.Certs{},
+					InstanceCount:   config.InstanceCount{},
+					IP:              config.IP{},
 				}
+				config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
+				config.ConsulEncryptKeys = []string{"encyption-key"}
+				config.ConsulCaCert = "ca-cert"
+				config.ConsulAgentCert = "agent-cert"
+				config.ConsulAgentKey = "agent-key"
+				config.ConsulServerCert = "server-cert"
+				config.ConsulServerKey = "server-key"
+				config.BBSCACert = "cacert"
+				config.BBSServerCert = "clientcert"
+				config.BBSServerKey = "clientkey"
+				config.DiegoDBIPs = []string{"10.0.0.39", "10.0.0.40"}
+				config.DiegoDBVMType = "dbvmtype"
+				config.DiegoDBPersistentDiskType = "dbdisktype"
+				config.DiegoDBPassphrase = "random-db-encrytionkey"
+				config.EtcdServerCert = "blah-cert"
+				config.EtcdServerKey = "blah-key"
+				config.EtcdClientCert = "bleh-cert"
+				config.EtcdClientKey = "bleh-key"
+				config.EtcdPeerCert = "blee-cert"
+				config.EtcdPeerKey = "blee-key"
+				config.BBSClientCert = "clientcert"
+				config.BBSClientKey = "clientkey"
+				config.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
+				config.MetronSecret = "metronsecret"
+
 				grouper = NewDiegoDatabasePartition(config)
 				instanceGroup = grouper.ToInstanceGroup()
 			})

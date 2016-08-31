@@ -21,19 +21,25 @@ var _ = Describe("Doppler Partition", func() {
 				AZs:                           []string{"eastprod-1"},
 				SystemDomain:                  "sys.test.com",
 				SkipSSLCertVerify:             true,
-				DopplerIPs:                    []string{"1.0.11.1", "1.0.11.2"},
-				DopplerVMType:                 "blah",
-				MetronSecret:                  "metronsecret",
 				MetronZone:                    "metronzoneguid",
 				SyslogAddress:                 "syslog-server",
 				SyslogPort:                    10601,
 				SyslogTransport:               "tcp",
-				EtcdMachines:                  []string{"1.0.0.7", "1.0.0.8"},
 				DopplerZone:                   "dopplerzone",
 				DopplerMessageDrainBufferSize: 100,
-				DopplerSharedSecret:           "secret",
-				CCBulkAPIPassword:             "bulk-pwd",
+				Secret:        config.Secret{},
+				User:          config.User{},
+				Certs:         &config.Certs{},
+				InstanceCount: config.InstanceCount{},
+				IP:            config.IP{},
 			}
+			config.DopplerSharedSecret = "secret"
+			config.CCBulkAPIPassword = "bulk-pwd"
+			config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
+			config.DopplerIPs = []string{"1.0.11.1", "1.0.11.2"}
+			config.DopplerVMType = "blah"
+			config.MetronSecret = "metronsecret"
+
 			dopplerPartition = NewDopplerPartition(config)
 		})
 		It("then it should allow the user to configure the doppler IPs", func() {

@@ -22,46 +22,51 @@ var _ = Describe("Cloud Controller Partition", func() {
 		BeforeEach(func() {
 
 			config := &config.Config{
-				NATSMachines:                              []string{"10.0.0.4"},
-				NATSUser:                                  "natsuser",
-				NATSPassword:                              "natspass",
-				NATSPort:                                  4333,
-				SystemDomain:                              "sys.yourdomain.com",
-				AppDomains:                                []string{"apps.yourdomain.com"},
-				AllowSSHAccess:                            true,
-				NetworkName:                               "foundry",
-				SkipSSLCertVerify:                         true,
-				ConsulIPs:                                 []string{"1.0.0.1", "1.0.0.2"},
-				ConsulEncryptKeys:                         []string{"consulencryptionkey"},
-				ConsulCaCert:                              "consul-ca-cert",
-				ConsulAgentCert:                           "consul-agent-cert",
-				ConsulAgentKey:                            "consul-agent-key",
-				ConsulServerCert:                          "consulservercert",
-				ConsulServerKey:                           "consulserverkey",
-				CloudControllerVMType:                     "ccvmtype",
-				CloudControllerInstances:                  1,
-				HostKeyFingerprint:                        "hostkeyfingerprint",
-				StagingUploadUser:                         "staginguser",
-				StagingUploadPassword:                     "stagingpassword",
-				CCBulkAPIUser:                             "bulkapiuser",
-				CCBulkAPIPassword:                         "bulkapipassword",
-				DbEncryptionKey:                           "dbencryptionkey",
-				CCInternalAPIUser:                         "internalapiuser",
-				CCInternalAPIPassword:                     "internalapipassword",
-				NFSServerAddress:                          "10.0.0.19",
-				SharePath:                                 "/var/vcap/nfs",
-				MetronSecret:                              "metronsecret",
-				MetronZone:                                "metronzoneguid",
-				SupportAddress:                            "http://support.pivotal.io",
-				MinCliVersion:                             "6.7.0",
-				MySQLProxyIPs:                             []string{"10.0.0.3"},
-				CCDBUsername:                              "ccdbuser",
-				CCDBPassword:                              "ccdbpass",
-				JWTVerificationKey:                        "uaajwtkey",
-				CCServiceDashboardsClientSecret:           "ccdashboardsecret",
-				CloudControllerUsernameLookupClientSecret: "usernamelookupsecret",
-				CCRoutingClientSecret:                     "ccroutingsecret",
+				NATSPort:           4333,
+				SystemDomain:       "sys.yourdomain.com",
+				AppDomains:         []string{"apps.yourdomain.com"},
+				AllowSSHAccess:     true,
+				NetworkName:        "foundry",
+				SkipSSLCertVerify:  true,
+				HostKeyFingerprint: "hostkeyfingerprint",
+				CCInternalAPIUser:  "internalapiuser",
+				SharePath:          "/var/vcap/nfs",
+				MetronZone:         "metronzoneguid",
+				SupportAddress:     "http://support.pivotal.io",
+				MinCliVersion:      "6.7.0",
+				Secret:             config.Secret{},
+				User:               config.User{},
+				Certs:              &config.Certs{},
+				InstanceCount:      config.InstanceCount{},
+				IP:                 config.IP{},
 			}
+			config.NATSMachines = []string{"10.0.0.4"}
+			config.NATSUser = "natsuser"
+			config.NATSPassword = "natspass"
+			config.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
+			config.ConsulEncryptKeys = []string{"consulencryptionkey"}
+			config.ConsulCaCert = "consul-ca-cert"
+			config.ConsulAgentCert = "consul-agent-cert"
+			config.ConsulAgentKey = "consul-agent-key"
+			config.ConsulServerCert = "consulservercert"
+			config.ConsulServerKey = "consulserverkey"
+			config.CloudControllerVMType = "ccvmtype"
+			config.CloudControllerInstances = 1
+			config.StagingUploadUser = "staginguser"
+			config.StagingUploadPassword = "stagingpassword"
+			config.CCBulkAPIUser = "bulkapiuser"
+			config.CCBulkAPIPassword = "bulkapipassword"
+			config.DbEncryptionKey = "dbencryptionkey"
+			config.CCInternalAPIPassword = "internalapipassword"
+			config.NFSServerAddress = "10.0.0.19"
+			config.MySQLProxyIPs = []string{"10.0.0.3"}
+			config.CCDBUsername = "ccdbuser"
+			config.CCDBPassword = "ccdbpass"
+			config.JWTVerificationKey = "uaajwtkey"
+			config.CCServiceDashboardsClientSecret = "ccdashboardsecret"
+			config.CloudControllerUsernameLookupClientSecret = "usernamelookupsecret"
+			config.CCRoutingClientSecret = "ccroutingsecret"
+			config.MetronSecret = "metronsecret"
 
 			cloudController = NewCloudControllerPartition(config)
 		})

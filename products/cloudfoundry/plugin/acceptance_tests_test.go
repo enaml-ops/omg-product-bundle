@@ -20,8 +20,14 @@ var _ = Describe("given the acceptance-tests partition", func() {
 				AZs:           []string{"z1"},
 				StemcellName:  "cool-ubuntu-animal",
 				NetworkName:   "foundry-net",
-				AdminPassword: "adminpass",
+				Secret:        config.Secret{},
+				User:          config.User{},
+				Certs:         &config.Certs{},
+				InstanceCount: config.InstanceCount{},
+				IP:            config.IP{},
 			}
+			config.AdminPassword = "adminpass"
+
 			withInternet := NewAcceptanceTestsPartition(true, config).ToInstanceGroup()
 			withoutInternet := NewAcceptanceTestsPartition(false, config).ToInstanceGroup()
 			Ω(withInternet.Name).ShouldNot(Equal(withoutInternet.Name))
@@ -41,9 +47,10 @@ var _ = Describe("given the acceptance-tests partition", func() {
 				StemcellName:      "cool-ubuntu-animal",
 				NetworkName:       "foundry-net",
 				SkipSSLCertVerify: true,
-				AdminPassword:     "adminpass",
-				ErrandVMType:      "foo",
 			}
+			config.AdminPassword = "adminpass"
+			config.ErrandVMType = "foo"
+
 			ig = NewAcceptanceTestsPartition(includeInternetDependent, config)
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())
@@ -116,8 +123,8 @@ var _ = Describe("given the acceptance-tests partition", func() {
 				StemcellName:      "cool-ubuntu-animal",
 				NetworkName:       "foundry-net",
 				SkipSSLCertVerify: true,
-				AdminPassword:     "adminpass",
 			}
+			config.AdminPassword = "adminpass"
 			ig = NewAcceptanceTestsPartition(includeInternetDependent, config)
 			dm = new(enaml.DeploymentManifest)
 			dm.AddInstanceGroup(ig.ToInstanceGroup())
