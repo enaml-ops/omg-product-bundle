@@ -124,8 +124,8 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 				StagingUploadPassword:        c.Config.StagingUploadPassword,
 				BulkApiUser:                  c.Config.CCBulkAPIUser,
 				BulkApiPassword:              c.Config.CCBulkAPIUser,
-				InternalApiUser:              c.Config.InternalAPIUser,
-				InternalApiPassword:          c.Config.InternalAPIPassword,
+				InternalApiUser:              c.Config.CCInternalAPIUser,
+				InternalApiPassword:          c.Config.CCInternalAPIPassword,
 				DbEncryptionKey:              c.Config.DbEncryptionKey,
 			},
 			Ccdb: &ccworkerlib.Ccdb{

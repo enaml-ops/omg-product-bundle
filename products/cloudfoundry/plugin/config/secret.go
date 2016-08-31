@@ -119,7 +119,6 @@ type Secret struct {
 	AppsMetricsProcessingClientSecret         string
 	LDAPUserPassword                          string
 	DbEncryptionKey                           string
-	InternalAPIPassword                       string
 	CCDBPassword                              string
 	StagingUploadPassword                     string
 	MySQLProxyAPIPassword                     string

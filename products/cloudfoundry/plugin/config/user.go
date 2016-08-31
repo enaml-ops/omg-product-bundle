@@ -38,7 +38,6 @@ type User struct {
 	NATSUser              string
 	CCBulkAPIUser         string
 	StagingUploadUser     string
-	InternalAPIUser       string
 	CCDBUsername          string
 	ConsoleDBUserName     string
 	MySQLProxyAPIUsername string
