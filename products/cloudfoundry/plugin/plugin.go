@@ -1,7 +1,6 @@
 package cloudfoundry
 
 import (
-	"os"
 	"strings"
 
 	"github.com/codegangsta/cli"
@@ -10,7 +9,6 @@ import (
 	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
-	"gopkg.in/yaml.v2"
 )
 
 func init() {
@@ -371,31 +369,6 @@ func (s *Plugin) getDeploymentManifest(c *cli.Context, config *Config) (*enaml.D
 			dm.AddInstanceGroup(ig)
 		}
 	}
-
-	for _, factory := range configFactories {
-		grouper := factory(c, config)
-
-		if grouper.HasValidValues() {
-			if ig := grouper.ToInstanceGroup(); ig != nil {
-				lo.G.Debug("instance-group: ", ig)
-				dm.AddInstanceGroup(ig)
-			}
-		} else {
-			b, _ := yaml.Marshal(grouper)
-			lo.G.Info("invalid values in instance group: ", string(b))
-			lo.G.Info("here is a list of flags not currently set by default or vault for you: ")
-
-			for _, fl := range s.GetFlags() {
-
-				if fl.Value == "" && os.Getenv(fl.EnvVar) == "" {
-					lo.G.Info(fl.Name)
-				}
-			}
-			lo.G.Fatal("incomplete flag set. please check --help and documentation or use debug output for more details")
-
-		}
-	}
-
 	return dm, nil
 }
 
