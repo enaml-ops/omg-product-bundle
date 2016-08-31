@@ -51,11 +51,13 @@ func (s *NatsPartition) newNatsJob() enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "nats",
 		Release: "cf",
-		Properties: &nats.Nats{
-			User:     s.Config.NATSUser,
-			Password: s.Config.NATSPassword,
-			Machines: s.Config.NATSMachines,
-			Port:     s.Config.NATSPort,
+		Properties: &nats.NatsJob{
+			Nats: &nats.Nats{
+				User:     s.Config.NATSUser,
+				Password: s.Config.NATSPassword,
+				Machines: s.Config.NATSMachines,
+				Port:     s.Config.NATSPort,
+			},
 		},
 	}
 }
