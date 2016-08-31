@@ -152,6 +152,10 @@ type Config struct {
 	HAProxySkip                    bool
 	HAProxyVMType                  string
 	HAProxyIPs                     []string
+	MySQLProxyVMType               string
+	MySQLProxyAPIUsername          string
+	MySQLProxyAPIPassword          string
+	MySQLProxyExternalHost         string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -291,6 +295,10 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		HAProxySkip:                               c.BoolT("skip-haproxy"),
 		HAProxyIPs:                                c.StringSlice("haproxy-ip"),
 		HAProxyVMType:                             c.String("haproxy-vm-type"),
+		MySQLProxyVMType:                          c.String("mysql-proxy-vm-type"),
+		MySQLProxyAPIUsername:                     c.String("mysql-proxy-api-username"),
+		MySQLProxyAPIPassword:                     c.String("mysql-proxy-api-password"),
+		MySQLProxyExternalHost:                    c.String("mysql-proxy-external-host"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err

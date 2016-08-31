@@ -8,48 +8,28 @@ import (
 )
 
 var _ = Describe("MySQL Proxy Partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("then it should return the error and exit", func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-			})
-			mySQLProxy := NewMySQLProxyPartition(c, &Config{})
-			Ω(mySQLProxy).ShouldNot(BeNil())
-			Ω(mySQLProxy.HasValidValues()).Should(BeFalse())
-		})
-	})
 	Context("when initialized WITH a complete set of arguments", func() {
-		var mysqlProxyPartition InstanceGrouper
+		var mysqlProxyPartition InstanceGroupCreator
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--mysql-ip", "1.0.10.1",
-				"--mysql-ip", "1.0.10.2",
-				"--mysql-proxy-ip", "1.0.10.3",
-				"--mysql-proxy-ip", "1.0.10.4",
-				"--mysql-proxy-vm-type", "blah",
-				"--mysql-proxy-external-host", "mysqlhostname",
-				"--mysql-proxy-api-username", "apiuser",
-				"--mysql-proxy-api-password", "apipassword",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-			})
 			config := &Config{
-				StemcellName: "cool-ubuntu-animal",
-				AZs:          []string{"eastprod-1"},
-				NetworkName:  "foundry-net",
-				NATSUser:     "nats",
-				NATSPassword: "pass",
-				NATSMachines: []string{"1.0.0.5", "1.0.0.6"},
-				NATSPort:     4222,
+				StemcellName:           "cool-ubuntu-animal",
+				AZs:                    []string{"eastprod-1"},
+				NetworkName:            "foundry-net",
+				NATSUser:               "nats",
+				NATSPassword:           "pass",
+				NATSMachines:           []string{"1.0.0.5", "1.0.0.6"},
+				NATSPort:               4222,
+				MySQLIPs:               []string{"1.0.10.1", "1.0.10.2"},
+				MySQLProxyIPs:          []string{"1.0.10.3", "1.0.10.4"},
+				MySQLProxyVMType:       "blah",
+				MySQLProxyExternalHost: "mysqlhostname",
+				MySQLProxyAPIUsername:  "apiuser",
+				MySQLProxyAPIPassword:  "apipassword",
+				SyslogAddress:          "syslog-server",
+				SyslogPort:             10601,
+				SyslogTransport:        "tcp",
 			}
-			mysqlProxyPartition = NewMySQLProxyPartition(c, config)
-		})
-		It("then it should have all valid values", func() {
-			Ω(mysqlProxyPartition.HasValidValues()).Should(BeTrue())
+			mysqlProxyPartition = NewMySQLProxyPartition(config)
 		})
 		It("then it should allow the user to configure the mysql proxy IPs", func() {
 			ig := mysqlProxyPartition.ToInstanceGroup()
