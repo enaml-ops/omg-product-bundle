@@ -6,6 +6,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/p-mysql/enaml-gen/mysql"
 	"github.com/enaml-ops/omg-product-bundle/products/p-mysql/enaml-gen/send-email"
+	"github.com/enaml-ops/omg-product-bundle/products/p-mysql/enaml-gen/streaming-mysql-backup-tool"
 )
 
 const (
@@ -13,6 +14,7 @@ const (
 	maxConnections             int = 1500
 	databaseStartupTimeout     int = 600
 	wsrepDebug                 int = 1
+	backupServerPort           int = 8081
 	seededDBUser                   = "repcanary"
 	seededDBName                   = "canary_db"
 	adminUsername                  = "root"
@@ -34,7 +36,11 @@ func NewMysqlPartition(plgn *Plugin) *enaml.InstanceGroup {
 			newStreamingMysqlBackupToolJob(plgn),
 		},
 		Networks: []enaml.Network{
-			enaml.Network{Name: plgn.NetworkName, StaticIPs: plgn.IPs},
+			enaml.Network{
+				Name:      plgn.NetworkName,
+				StaticIPs: plgn.IPs,
+				Default:   []interface{}{"dns", "gateway"},
+			},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -69,6 +75,23 @@ func newStreamingMysqlBackupToolJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "streaming-mysql-backup-tool",
 		Release: "mysql-backup",
+		Properties: &streaming_mysql_backup_tool.StreamingMysqlBackupToolJob{
+			CfMysqlBackup: &streaming_mysql_backup_tool.CfMysqlBackup{
+				BackupServer: &streaming_mysql_backup_tool.BackupServer{
+					Port: backupServerPort,
+				},
+				EndpointCredentials: &streaming_mysql_backup_tool.EndpointCredentials{
+					Username: plgn.BackupEndpointUser,
+					Password: plgn.BackupEndpointPassword,
+				},
+			},
+			CfMysql: &streaming_mysql_backup_tool.CfMysql{
+				Mysql: &streaming_mysql_backup_tool.Mysql{
+					AdminUsername: adminUsername,
+					AdminPassword: plgn.AdminPassword,
+				},
+			},
+		},
 	}
 }
 

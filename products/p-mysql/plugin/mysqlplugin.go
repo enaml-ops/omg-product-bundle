@@ -53,6 +53,8 @@ type Plugin struct {
 	NotificationClientSecret    string
 	UaaAdminClientSecret        string
 	NotificationRecipientEmail  string
+	BackupEndpointUser          string
+	BackupEndpointPassword      string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -86,6 +88,8 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "uaa-admin-client-secret", Usage: "uaa client secret for monitoring notifications"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "notification-recipient-email", Usage: "email to send monitoring notifications to"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "base-domain", Usage: "the base domain you wish to associate your mysql routes with"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-user", Usage: "the user to access the backup rest endpoint"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-password", Usage: "the password to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-domain", Usage: "the location of your vault server (ie. http://10.0.0.1:8200)"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-password", Usage: "the hashname of your secret (ie. secret/p-mysql-1-passwords"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-token", Usage: "the token to make connections to your vault"},
@@ -144,6 +148,8 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.NotificationRecipientEmail = c.String("notification-recipient-email")
 	s.NotificationClientSecret = c.String("notification-client-secret")
 	s.UaaAdminClientSecret = c.String("uaa-admin-client-secret")
+	s.BackupEndpointUser = c.String("backup-endpoint-user")
+	s.BackupEndpointPassword = c.String("backup-endpoint-password")
 
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)

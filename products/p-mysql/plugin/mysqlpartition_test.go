@@ -40,7 +40,7 @@ var _ = Describe("given NewMysqlPartition func", func() {
 			})
 		})
 
-		XDescribe("given a mysql-backup release w/ instancejob streaming-mysql-backup-tool", func() {
+		Describe("given a mysql-backup release w/ instancejob streaming-mysql-backup-tool", func() {
 			var ig *enaml.InstanceGroup
 			var jobProperties *streaming_mysql_backup_tool.StreamingMysqlBackupToolJob
 
@@ -50,8 +50,39 @@ var _ = Describe("given NewMysqlPartition func", func() {
 					Ω(len(ig.Jobs)).Should(BeNumerically(">=", 1))
 					jobProperties = ig.GetJobByName("streaming-mysql-backup-tool").Properties.(*streaming_mysql_backup_tool.StreamingMysqlBackupToolJob)
 				})
-				It("then it should contain a valid ssl definition", func() {
-					Ω(true).Should(BeFalse())
+				It("then it should contain a valid job definition", func() {
+					Ω(*jobProperties.CfMysqlBackup).ShouldNot(Equal(streaming_mysql_backup_tool.CfMysqlBackup{}), "cfmysql-backup should be properly populated")
+					Ω(*jobProperties.CfMysql).ShouldNot(Equal(streaming_mysql_backup_tool.CfMysql{}), "cfmysql should be properly populated")
+				})
+			})
+			Context("when we have a properly configured cf-mysql block", func() {
+				var controlAdminPass = "admin-pass"
+
+				BeforeEach(func() {
+					plgn.AdminPassword = controlAdminPass
+					ig = NewMysqlPartition(plgn)
+					Ω(len(ig.Jobs)).Should(BeNumerically(">=", 1))
+					jobProperties = ig.GetJobByName("streaming-mysql-backup-tool").Properties.(*streaming_mysql_backup_tool.StreamingMysqlBackupToolJob)
+				})
+				It("then it should contain valid mysql creds", func() {
+					Ω(jobProperties.CfMysql.Mysql.AdminPassword).Should(Equal(controlAdminPass))
+				})
+			})
+
+			Context("when we have a properly configured cf-mysql-backup block", func() {
+				var controlBackupPass = "bu-pass"
+				var controlBackupUser = "bu-user"
+
+				BeforeEach(func() {
+					plgn.BackupEndpointUser = controlBackupUser
+					plgn.BackupEndpointPassword = controlBackupPass
+					ig = NewMysqlPartition(plgn)
+					Ω(len(ig.Jobs)).Should(BeNumerically(">=", 1))
+					jobProperties = ig.GetJobByName("streaming-mysql-backup-tool").Properties.(*streaming_mysql_backup_tool.StreamingMysqlBackupToolJob)
+				})
+				It("then it should contain endpoint credentials", func() {
+					Ω(jobProperties.CfMysqlBackup.EndpointCredentials.Username).Should(Equal(controlBackupUser), "we should set via a flag to the plugin a backup rest endpoint user")
+					Ω(jobProperties.CfMysqlBackup.EndpointCredentials.Password).Should(Equal(controlBackupPass), "we should set via a flag to the plugin a backup rest endpoint password")
 				})
 			})
 		})
@@ -73,7 +104,7 @@ var _ = Describe("given NewMysqlPartition func", func() {
 					Ω(jobProperties.Ssl.SkipCertVerify).Should(BeTrue(), "we should be setting ssl cert verify to true")
 					Ω(jobProperties.Domain).Should(Equal(controlDomain), "we should have a valid constructed sys domain")
 					Ω(jobProperties.MysqlMonitoring).ShouldNot(BeNil(), "mysql monitoring should def not be nil")
-					Ω(jobProperties.MysqlMonitoring).ShouldNot(Equal(new(send_email.MysqlMonitoring)), "mysql monitoring should def not be nil")
+					Ω(*jobProperties.MysqlMonitoring).ShouldNot(Equal(send_email.MysqlMonitoring{}), "mysql monitoring should def not be nil")
 				})
 			})
 
