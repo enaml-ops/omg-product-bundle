@@ -1,27 +1,23 @@
 package cloudfoundry
 
 import (
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/nats"
-	"github.com/xchapter7x/lo"
 )
 
 //NatsPartition -
 type NatsPartition struct {
 	Config         *Config
-	VMTypeName     string
 	Metron         *Metron
 	StatsdInjector *StatsdInjector
 }
 
 //NewNatsPartition --
-func NewNatsPartition(c *cli.Context, config *Config) (igf InstanceGrouper) {
+func NewNatsPartition(config *Config) (igf InstanceGroupCreator) {
 	igf = &NatsPartition{
 		Config:         config,
-		VMTypeName:     c.String("nats-vm-type"),
 		Metron:         NewMetron(config),
-		StatsdInjector: NewStatsdInjector(c),
+		StatsdInjector: NewStatsdInjector(nil),
 	}
 	return
 }
@@ -31,7 +27,7 @@ func (s *NatsPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 	ig = &enaml.InstanceGroup{
 		Name:      "nats-partition",
 		Instances: len(s.Config.NATSMachines),
-		VMType:    s.VMTypeName,
+		VMType:    s.Config.NatsVMType,
 		AZs:       s.Config.AZs,
 		Stemcell:  s.Config.StemcellName,
 		Jobs: []enaml.InstanceJob{
@@ -61,15 +57,4 @@ func (s *NatsPartition) newNatsJob() enaml.InstanceJob {
 			Port:     s.Config.NATSPort,
 		},
 	}
-}
-
-//HasValidValues - Checks that fields in NatsPartition are valid
-func (s *NatsPartition) HasValidValues() bool {
-	lo.G.Debugf("checking '%s' for valid flags", "nats")
-
-	if s.VMTypeName == "" {
-		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
-	}
-
-	return (s.VMTypeName != "")
 }

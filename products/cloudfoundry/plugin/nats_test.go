@@ -10,44 +10,23 @@ import (
 
 var _ = Describe("Nats Partition", func() {
 
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("HasValidValues should return false", func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--az", "eastprod-1",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-			})
-			Ω(NewNatsPartition(c, &Config{}).HasValidValues()).Should(Equal(false))
-		})
-	})
-
 	Context("when initialized WITH a complete set of arguments", func() {
-		var natsPartition InstanceGrouper
+		var natsPartition InstanceGroupCreator
 
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-
-				"--nats-vm-type", "blah",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--etcd-machine-ip", "10.0.0.7",
-				"--etcd-machine-ip", "10.0.0.8",
-			})
 			config := &Config{
 				StemcellName: "trusty",
 				AZs:          []string{"eastprod-1"},
 				NetworkName:  "foundry-net",
 				NATSMachines: []string{"10.0.0.2", "10.0.0.3"},
+				NatsVMType:   "blah",
+				MetronSecret: "metronsecret",
+				MetronZone:   "metronzoneguid",
+				EtcdMachines: []string{"10.0.0.7", "10.0.0.8"},
 			}
-			natsPartition = NewNatsPartition(c, config)
+			natsPartition = NewNatsPartition(config)
 		})
-		It("HasValidValues should return true", func() {
-			Ω(natsPartition.HasValidValues()).Should(Equal(true))
-		})
+
 		It("should have 2 instances ", func() {
 			igf := natsPartition.ToInstanceGroup()
 			Ω(igf.Instances).Should(Equal(2))
