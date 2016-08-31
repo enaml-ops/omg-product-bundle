@@ -79,7 +79,7 @@ func (s *Doppler) createSyslogDrainBinderJob() enaml.InstanceJob {
 			},
 			SystemDomain: s.Config.SystemDomain,
 			Cc: &syslog_drain_binder.Cc{
-				BulkApiPassword: s.Config.CCBuilkAPIPassword,
+				BulkApiPassword: s.Config.CCBulkAPIPassword,
 				SrvApiUri:       fmt.Sprintf("https://api.%s", s.Config.SystemDomain),
 			},
 			Loggregator: &syslog_drain_binder.Loggregator{

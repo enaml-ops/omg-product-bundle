@@ -9,12 +9,6 @@ type VaultRotater interface {
 type StatsdInjector struct {
 }
 
-//NFSMounter -
-type NFSMounter struct {
-	NFSServerAddress string
-	SharePath        string
-}
-
 //UAAClient - Structure to represent map of client priviledges
 type UAAClient struct {
 	ID                   string      `yaml:"id,omitempty"`

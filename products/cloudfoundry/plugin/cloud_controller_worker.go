@@ -1,60 +1,26 @@
 package cloudfoundry
 
 import (
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	ccworkerlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_worker"
-	"github.com/xchapter7x/lo"
 )
 
 //CloudControllerWorkerPartition - Cloud Controller Worker Partition
 type CloudControllerWorkerPartition struct {
-	Config                *Config
-	Instances             int
-	VMTypeName            string
-	AllowedCorsDomains    []string
-	Metron                *Metron
-	ConsulAgent           *ConsulAgent
-	StatsdInjector        *StatsdInjector
-	NFSMounter            *NFSMounter
-	StagingUploadUser     string
-	StagingUploadPassword string
-	BulkAPIUser           string
-	BulkAPIPassword       string
-	DbEncryptionKey       string
-	InternalAPIUser       string
-	InternalAPIPassword   string
-	CCDBUsername          string
-	CCDBPassword          string
-	MySQLProxyIP          string
+	Config         *Config
+	Metron         *Metron
+	ConsulAgent    *ConsulAgent
+	StatsdInjector *StatsdInjector
 }
 
 //NewCloudControllerWorkerPartition - Creating a New Cloud Controller Partition
-func NewCloudControllerWorkerPartition(c *cli.Context, config *Config) InstanceGrouper {
-	var proxyIP string
-	mysqlProxies := c.StringSlice("mysql-proxy-ip")
-	if len(mysqlProxies) > 0 {
-		proxyIP = mysqlProxies[0]
-	}
+func NewCloudControllerWorkerPartition(config *Config) InstanceGroupCreator {
 
 	return &CloudControllerWorkerPartition{
-		Config:                config,
-		Instances:             c.Int("cc-worker-instances"),
-		VMTypeName:            c.String("cc-worker-vm-type"),
-		Metron:                NewMetron(config),
-		ConsulAgent:           NewConsulAgent([]string{}, config),
-		NFSMounter:            NewNFSMounter(c),
-		StatsdInjector:        NewStatsdInjector(c),
-		StagingUploadUser:     c.String("cc-staging-upload-user"),
-		StagingUploadPassword: c.String("cc-staging-upload-password"),
-		BulkAPIUser:           c.String("cc-bulk-api-user"),
-		BulkAPIPassword:       c.String("cc-bulk-api-password"),
-		InternalAPIUser:       c.String("cc-internal-api-user"),
-		InternalAPIPassword:   c.String("cc-internal-api-password"),
-		DbEncryptionKey:       c.String("cc-db-encryption-key"),
-		CCDBUsername:          c.String("db-ccdb-username"),
-		CCDBPassword:          c.String("db-ccdb-password"),
-		MySQLProxyIP:          proxyIP,
+		Config:         config,
+		Metron:         NewMetron(config),
+		ConsulAgent:    NewConsulAgent([]string{}, config),
+		StatsdInjector: NewStatsdInjector(nil),
 	}
 }
 
@@ -63,8 +29,8 @@ func (s *CloudControllerWorkerPartition) ToInstanceGroup() (ig *enaml.InstanceGr
 	ig = &enaml.InstanceGroup{
 		Name:      "cloud_controller_worker-partition",
 		AZs:       s.Config.AZs,
-		Instances: s.Instances,
-		VMType:    s.VMTypeName,
+		Instances: s.Config.CloudControllerWorkerInstances,
+		VMType:    s.Config.CloudControllerWorkerVMType,
 		Stemcell:  s.Config.StemcellName,
 		Networks: []enaml.Network{
 			enaml.Network{Name: s.Config.NetworkName},
@@ -72,7 +38,7 @@ func (s *CloudControllerWorkerPartition) ToInstanceGroup() (ig *enaml.InstanceGr
 		Jobs: []enaml.InstanceJob{
 			newCloudControllerWorkerJob(s),
 			s.ConsulAgent.CreateJob(),
-			s.NFSMounter.CreateJob(),
+			CreateNFSMounterJob(s.Config),
 			s.Metron.CreateJob(),
 			s.StatsdInjector.CreateJob(),
 		},
@@ -153,16 +119,16 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 				DefaultStagingSecurityGroups: []string{"all_open"},
 				LoggingLevel:                 "debug",
 				MaximumHealthCheckTimeout:    "600",
-				StagingUploadUser:            c.StagingUploadUser,
-				StagingUploadPassword:        c.StagingUploadPassword,
-				BulkApiUser:                  c.BulkAPIUser,
-				BulkApiPassword:              c.BulkAPIPassword,
-				InternalApiUser:              c.InternalAPIUser,
-				InternalApiPassword:          c.InternalAPIPassword,
-				DbEncryptionKey:              c.DbEncryptionKey,
+				StagingUploadUser:            c.Config.StagingUploadUser,
+				StagingUploadPassword:        c.Config.StagingUploadPassword,
+				BulkApiUser:                  c.Config.CCBulkAPIUser,
+				BulkApiPassword:              c.Config.CCBulkAPIUser,
+				InternalApiUser:              c.Config.InternalAPIUser,
+				InternalApiPassword:          c.Config.InternalAPIPassword,
+				DbEncryptionKey:              c.Config.DbEncryptionKey,
 			},
 			Ccdb: &ccworkerlib.Ccdb{
-				Address: c.MySQLProxyIP,
+				Address: c.Config.MySQLProxyHost(),
 				Databases: []map[string]interface{}{
 					map[string]interface{}{
 						"citext": true,
@@ -174,8 +140,8 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 				Port:     3306,
 				Roles: []map[string]interface{}{
 					{
-						"name":     c.CCDBUsername,
-						"password": c.CCDBPassword,
+						"name":     c.Config.CCDBUsername,
+						"password": c.Config.CCDBPassword,
 						"tag":      "admin",
 					},
 				},
@@ -188,16 +154,4 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 			},
 		},
 	}
-}
-
-//HasValidValues - Check if valid values has been populated
-func (s *CloudControllerWorkerPartition) HasValidValues() bool {
-	lo.G.Debugf("checking '%s' for valid flags", "cloud controller worker")
-
-	if s.VMTypeName == "" {
-		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
-	}
-
-	return (s.VMTypeName != "" &&
-		s.NFSMounter.hasValidValues())
 }

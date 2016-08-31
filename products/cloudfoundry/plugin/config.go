@@ -20,22 +20,19 @@ type Config struct {
 	MySQLBootstrapUser     string
 	MySQLBootstrapPassword string
 
-	AllowSSHAccess           bool
-	SkipSSLCertVerify        bool
-	NATSUser                 string
-	NATSPassword             string
-	NATSPort                 int
-	NATSMachines             []string
-	CCDBUser                 string
-	CCDBPassword             string
-	JWTVerificationKey       string
-	CCServiceDashboardSecret string
-	ConsulCaCert             string
-	ConsulEncryptKeys        []string
-	ConsulAgentCert          string
-	ConsulAgentKey           string
-	ConsulServerCert         string
-	ConsulServerKey          string
+	AllowSSHAccess     bool
+	SkipSSLCertVerify  bool
+	NATSUser           string
+	NATSPassword       string
+	NATSPort           int
+	NATSMachines       []string
+	JWTVerificationKey string
+	ConsulCaCert       string
+	ConsulEncryptKeys  []string
+	ConsulAgentCert    string
+	ConsulAgentKey     string
+	ConsulServerCert   string
+	ConsulServerKey    string
 
 	ErrandVMType                  string
 	SmokeTestsPassword            string
@@ -54,7 +51,8 @@ type Config struct {
 	DopplerZone                   string
 	DopplerMessageDrainBufferSize int
 	DopplerSharedSecret           string
-	CCBuilkAPIPassword            string
+	CCBulkAPIPassword             string
+	CCBulkAPIUser                 string
 	DiegoCellVMType               string
 	DiegoCellPersistentDiskType   string
 	DiegoCellIPs                  []string
@@ -132,6 +130,24 @@ type Config struct {
 	LDAPSearchFilter                          string
 	LDAPMailAttributeName                     string
 	LDAPEnabled                               bool
+
+	CloudControllerWorkerInstances int
+	CloudControllerWorkerVMType    string
+	NFSServerAddress               string
+	SharePath                      string
+	StagingUploadUser              string
+	StagingUploadPassword          string
+	DbEncryptionKey                string
+	InternalAPIUser                string
+	InternalAPIPassword            string
+	CCDBUsername                   string
+	CCDBPassword                   string
+	CloudControllerInstances       int
+	CloudControllerVMType          string
+	HostKeyFingerprint             string
+	SupportAddress                 string
+	MinCliVersion                  string
+	ClockGlobalVMType              string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -156,6 +172,14 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		MySQLBootstrapPassword: c.String("mysql-bootstrap-password"),
 		ConsulEncryptKeys:      c.StringSlice("consul-encryption-key"),
 
+		HostKeyFingerprint: c.String("host-key-fingerprint"),
+		SupportAddress:     c.String("support-address"),
+		MinCliVersion:      c.String("min-cli-version"),
+
+		CloudControllerWorkerInstances: c.Int("cc-worker-instances"),
+		CloudControllerWorkerVMType:    c.String("cc-worker-vm-type"),
+		NFSServerAddress:               c.String("nfs-server-address"),
+		SharePath:                      c.String("nfs-share-path"),
 		//boolean flags
 		AllowSSHAccess:    c.Bool("allow-app-ssh-access"),
 		SkipSSLCertVerify: c.BoolT("skip-cert-verify"),
@@ -181,7 +205,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		DopplerZone:                   c.String("doppler-zone"),
 		DopplerMessageDrainBufferSize: c.Int("doppler-drain-buffer-size"),
 		DopplerSharedSecret:           c.String("doppler-shared-secret"),
-		CCBuilkAPIPassword:            c.String("cc-bulk-api-password"),
+		CCBulkAPIPassword:             c.String("cc-bulk-api-password"),
 		DiegoCellVMType:               c.String("diego-cell-vm-type"),
 		DiegoCellPersistentDiskType:   c.String("diego-cell-disk-type"),
 		DiegoCellIPs:                  c.StringSlice("diego-cell-ip"),
@@ -205,6 +229,14 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		SSHProxyClientSecret:         c.String("ssh-proxy-uaa-secret"),
 		CCExternalPort:               c.Int("cc-external-port"),
 		TrafficControllerURL:         c.String("traffic-controller-url"),
+		StagingUploadUser:            c.String("cc-staging-upload-user"),
+		StagingUploadPassword:        c.String("cc-staging-upload-password"),
+		CCBulkAPIUser:                c.String("cc-bulk-api-user"),
+		DbEncryptionKey:              c.String("cc-db-encryption-key"),
+		CCDBUsername:                 c.String("db-ccdb-username"),
+		CCDBPassword:                 c.String("db-ccdb-password"),
+		CloudControllerInstances:     c.Int("cc-instances"),
+		CloudControllerVMType:        c.String("cc-vm-type"),
 
 		DiegoDBVMType:                             c.String("diego-db-vm-type"),
 		DiegoDBPersistentDiskType:                 c.String("diego-db-disk-type"),
@@ -251,6 +283,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		LDAPSearchFilter:                          c.String("uaa-ldap-search-filter"),
 		LDAPMailAttributeName:                     c.String("uaa-ldap-mail-attributename"),
 		LDAPEnabled:                               c.BoolT("uaa-ldap-enabled"),
+		ClockGlobalVMType:                         c.String("clock-global-vm-type"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err

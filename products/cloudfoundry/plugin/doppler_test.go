@@ -31,7 +31,7 @@ var _ = Describe("Doppler Partition", func() {
 				DopplerZone:                   "dopplerzone",
 				DopplerMessageDrainBufferSize: 100,
 				DopplerSharedSecret:           "secret",
-				CCBuilkAPIPassword:            "bulk-pwd",
+				CCBulkAPIPassword:             "bulk-pwd",
 			}
 			dopplerPartition = NewDopplerPartition(config)
 		})

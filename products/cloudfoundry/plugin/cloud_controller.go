@@ -3,73 +3,26 @@ package cloudfoundry
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	ccnglib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_ng"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
-	"github.com/xchapter7x/lo"
 )
 
 //CloudControllerPartition - Cloud Controller Partition
 type CloudControllerPartition struct {
-	Config                   *Config
-	Instances                int
-	VMTypeName               string
-	AllowedCorsDomains       []string
-	Metron                   *Metron
-	ConsulAgent              *ConsulAgent
-	StatsdInjector           *StatsdInjector
-	NFSMounter               *NFSMounter
-	StagingUploadUser        string
-	StagingUploadPassword    string
-	BulkAPIUser              string
-	BulkAPIPassword          string
-	DbEncryptionKey          string
-	InternalAPIUser          string
-	InternalAPIPassword      string
-	HostKeyFingerprint       string
-	SupportAddress           string
-	MinCliVersion            string
-	CCDBUsername             string
-	CCDBPassword             string
-	MySQLProxyIP             string
-	UAAJWTVerificationKey    string
-	CCServiceDashboardSecret string
-	CCUsernameLookupSecret   string
-	CCRoutingSecret          string
+	Config         *Config
+	Metron         *Metron
+	ConsulAgent    *ConsulAgent
+	StatsdInjector *StatsdInjector
 }
 
-func NewCloudControllerPartition(c *cli.Context, config *Config) InstanceGrouper {
-	var proxyIP string
-	mysqlProxies := c.StringSlice("mysql-proxy-ip")
-	if len(mysqlProxies) > 0 {
-		proxyIP = mysqlProxies[0]
-	}
+func NewCloudControllerPartition(config *Config) InstanceGroupCreator {
+
 	return &CloudControllerPartition{
-		Config:                   config,
-		Instances:                c.Int("cc-instances"),
-		VMTypeName:               c.String("cc-vm-type"),
-		Metron:                   NewMetron(config),
-		ConsulAgent:              NewConsulAgent([]string{}, config),
-		NFSMounter:               NewNFSMounter(c),
-		StatsdInjector:           NewStatsdInjector(c),
-		StagingUploadUser:        c.String("cc-staging-upload-user"),
-		StagingUploadPassword:    c.String("cc-staging-upload-password"),
-		BulkAPIUser:              c.String("cc-bulk-api-user"),
-		BulkAPIPassword:          c.String("cc-bulk-api-password"),
-		InternalAPIUser:          c.String("cc-internal-api-user"),
-		InternalAPIPassword:      c.String("cc-internal-api-password"),
-		DbEncryptionKey:          c.String("cc-db-encryption-key"),
-		HostKeyFingerprint:       c.String("host-key-fingerprint"),
-		SupportAddress:           c.String("support-address"),
-		MinCliVersion:            c.String("min-cli-version"),
-		CCDBUsername:             c.String("db-ccdb-username"),
-		CCDBPassword:             c.String("db-ccdb-password"),
-		MySQLProxyIP:             proxyIP,
-		UAAJWTVerificationKey:    c.String("uaa-jwt-verification-key"),
-		CCServiceDashboardSecret: c.String("cc-service-dashboards-client-secret"),
-		CCUsernameLookupSecret:   c.String("cloud-controller-username-lookup-client-secret"),
-		CCRoutingSecret:          c.String("cc-routing-client-secret"),
+		Config:         config,
+		Metron:         NewMetron(config),
+		ConsulAgent:    NewConsulAgent([]string{}, config),
+		StatsdInjector: NewStatsdInjector(nil),
 	}
 }
 
@@ -87,8 +40,8 @@ func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 	ig = &enaml.InstanceGroup{
 		Name:      "cloud_controller-partition",
 		AZs:       s.Config.AZs,
-		Instances: s.Instances,
-		VMType:    s.VMTypeName,
+		Instances: s.Config.CloudControllerInstances,
+		VMType:    s.Config.CloudControllerVMType,
 		Stemcell:  s.Config.StemcellName,
 		Networks: []enaml.Network{
 			enaml.Network{Name: s.Config.NetworkName},
@@ -96,7 +49,7 @@ func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 		Jobs: []enaml.InstanceJob{
 			newCloudControllerNgJob(s),
 			s.ConsulAgent.CreateJob(),
-			s.NFSMounter.CreateJob(),
+			CreateNFSMounterJob(s.Config),
 			s.Metron.CreateJob(),
 			s.StatsdInjector.CreateJob(),
 			newRouteRegistrarJob(s),
@@ -119,13 +72,13 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 		Release: CFReleaseName,
 		Properties: &ccnglib.CloudControllerNgJob{
 			AppSsh: &ccnglib.AppSsh{
-				HostKeyFingerprint: c.HostKeyFingerprint,
+				HostKeyFingerprint: c.Config.HostKeyFingerprint,
 			},
 			Domain:                   c.Config.SystemDomain,
 			SystemDomain:             c.Config.SystemDomain,
 			AppDomains:               c.Config.AppDomains,
 			SystemDomainOrganization: "system",
-			SupportAddress:           c.SupportAddress,
+			SupportAddress:           c.Config.SupportAddress,
 			Login: &ccnglib.Login{
 				Url: fmt.Sprintf("https://login.%s", c.Config.SystemDomain),
 			},
@@ -165,13 +118,13 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				ExternalProtocol:             "https",
 				LoggingLevel:                 "debug",
 				MaximumHealthCheckTimeout:    600,
-				StagingUploadUser:            c.StagingUploadUser,
-				StagingUploadPassword:        c.StagingUploadPassword,
-				BulkApiUser:                  c.BulkAPIUser,
-				BulkApiPassword:              c.BulkAPIPassword,
-				InternalApiUser:              c.InternalAPIUser,
-				InternalApiPassword:          c.InternalAPIPassword,
-				DbEncryptionKey:              c.DbEncryptionKey,
+				StagingUploadUser:            c.Config.StagingUploadUser,
+				StagingUploadPassword:        c.Config.StagingUploadPassword,
+				BulkApiUser:                  c.Config.CCBulkAPIUser,
+				BulkApiPassword:              c.Config.CCBulkAPIPassword,
+				InternalApiUser:              c.Config.CCInternalAPIUser,
+				InternalApiPassword:          c.Config.CCInternalAPIPassword,
+				DbEncryptionKey:              c.Config.DbEncryptionKey,
 				DefaultRunningSecurityGroups: []string{"all_open"},
 				DefaultStagingSecurityGroups: []string{"all_open"},
 				DisableCustomBuildpacks:      false,
@@ -247,18 +200,18 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 					},
 				},
 				UaaResourceId:            "cloud_controller,cloud_controller_service_permissions",
-				MinCliVersion:            c.MinCliVersion,
-				MinRecommendedCliVersion: c.MinCliVersion,
+				MinCliVersion:            c.Config.MinCliVersion,
+				MinRecommendedCliVersion: c.Config.MinCliVersion,
 			},
 			Ccdb: &ccnglib.Ccdb{
-				Address:  c.MySQLProxyIP,
+				Address:  c.Config.MySQLProxyHost(),
 				Port:     3306,
 				DbScheme: "mysql",
 				Roles: []map[string]interface{}{
 					map[string]interface{}{
 						"tag":      "admin",
-						"name":     c.CCDBUsername,
-						"password": c.CCDBPassword,
+						"name":     c.Config.CCDBUsername,
+						"password": c.Config.CCDBPassword,
 					},
 				},
 				Databases: []map[string]interface{}{
@@ -272,18 +225,18 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 			Uaa: &ccnglib.Uaa{
 				Url: fmt.Sprintf("https://uaa.%s", c.Config.SystemDomain),
 				Jwt: &ccnglib.Jwt{
-					VerificationKey: c.UAAJWTVerificationKey,
+					VerificationKey: c.Config.JWTVerificationKey,
 				},
 				Clients: &ccnglib.Clients{
 					CcServiceDashboards: &ccnglib.CcServiceDashboards{
 						Scope:  "cloud_controller.write,openid,cloud_controller.read,cloud_controller_service_permissions.read",
-						Secret: c.CCServiceDashboardSecret,
+						Secret: c.Config.CCServiceDashboardsClientSecret,
 					},
 					CloudControllerUsernameLookup: &ccnglib.CloudControllerUsernameLookup{
-						Secret: c.CCUsernameLookupSecret,
+						Secret: c.Config.CloudControllerUsernameLookupClientSecret,
 					},
 					CcRouting: &ccnglib.CcRouting{
-						Secret: c.CCRoutingSecret,
+						Secret: c.Config.CCRoutingClientSecret,
 					},
 				},
 			},
@@ -297,7 +250,7 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				Port: 443,
 			},
 			NfsServer: &ccnglib.NfsServer{
-				Address:   c.NFSMounter.NFSServerAddress,
+				Address:   c.Config.NFSServerAddress,
 				SharePath: "/var/vcap/nfs",
 			},
 			Nats: &ccnglib.Nats{
@@ -336,22 +289,4 @@ func newRouteRegistrarJob(c *CloudControllerPartition) enaml.InstanceJob {
 			},
 		},
 	}
-}
-
-//HasValidValues - Check if valid values has been populated
-func (s *CloudControllerPartition) HasValidValues() bool {
-
-	lo.G.Debugf("checking '%s' for valid flags", "cloud controller")
-
-	if s.VMTypeName == "" {
-		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
-	}
-
-	if s.MySQLProxyIP == "" {
-		lo.G.Debug("missing mysql proxy IP")
-	}
-
-	return (s.VMTypeName != "" &&
-		s.NFSMounter.hasValidValues() &&
-		s.MySQLProxyIP != "")
 }

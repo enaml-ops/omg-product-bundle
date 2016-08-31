@@ -16,75 +16,57 @@ import (
 
 var _ = Describe("Cloud Controller Partition", func() {
 	Context("When initialized with a complete set of arguments", func() {
-		var cloudController InstanceGrouper
+		var cloudController InstanceGroupCreator
 
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--consul-ip", "1.0.0.1",
-				"--consul-ip", "1.0.0.2",
-				"--az", "az",
-				"--stemcell-name", "stemcell",
-				"--consul-encryption-key", "consulencryptionkey",
-				"--consul-server-ca-cert", "consul-ca-cert",
-				"--consul-agent-cert", "consul-agent-cert",
-				"--consul-agent-key", "consul-agent-key",
-				"--consul-server-cert", "consulservercert",
-				"--consul-server-key", "consulserverkey",
-				"--cc-vm-type", "ccvmtype",
-				"--network", "foundry",
-				"--host-key-fingerprint", "hostkeyfingerprint",
-				"--cc-staging-upload-user", "staginguser",
-				"--cc-staging-upload-password", "stagingpassword",
-				"--cc-bulk-api-user", "bulkapiuser",
-				"--cc-bulk-api-password", "bulkapipassword",
-				"--cc-db-encryption-key", "dbencryptionkey",
-				"--cc-internal-api-user", "internalapiuser",
-				"--cc-internal-api-password", "internalapipassword",
-				"--system-domain", "sys.yourdomain.com",
-				"--app-domain", "apps.yourdomain.com",
-				"--allow-app-ssh-access",
-				"--nfs-server-address", "10.0.0.19",
-				"--nfs-share-path", "/var/vcap/nfs",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--host-key-fingerprint", "hostkeyfingerprint",
-				"--support-address", "http://support.pivotal.io",
-				"--min-cli-version", "6.7.0",
-				"--mysql-proxy-ip", "10.0.0.3",
-				"--db-ccdb-username", "ccdbuser",
-				"--db-ccdb-password", "ccdbpass",
-				"--uaa-jwt-verification-key", "uaajwtkey",
-				"--cc-service-dashboards-client-secret", "ccdashboardsecret",
-				"--cloud-controller-username-lookup-client-secret", "usernamelookupsecret",
-				"--cc-routing-client-secret", "ccroutingsecret",
-				"--nats-user", "natsuser",
-				"--nats-pass", "natspass",
-				"--nats-port", "4333",
-				"--nats-machine-ip", "10.0.0.4",
-			})
+
 			config := &Config{
-				NATSMachines:      []string{"10.0.0.4"},
-				NATSUser:          "natsuser",
-				NATSPassword:      "natspass",
-				NATSPort:          4333,
-				SystemDomain:      "sys.yourdomain.com",
-				AppDomains:        []string{"apps.yourdomain.com"},
-				AllowSSHAccess:    true,
-				NetworkName:       "foundry",
-				SkipSSLCertVerify: true,
+				NATSMachines:                              []string{"10.0.0.4"},
+				NATSUser:                                  "natsuser",
+				NATSPassword:                              "natspass",
+				NATSPort:                                  4333,
+				SystemDomain:                              "sys.yourdomain.com",
+				AppDomains:                                []string{"apps.yourdomain.com"},
+				AllowSSHAccess:                            true,
+				NetworkName:                               "foundry",
+				SkipSSLCertVerify:                         true,
+				ConsulIPs:                                 []string{"1.0.0.1", "1.0.0.2"},
+				ConsulEncryptKeys:                         []string{"consulencryptionkey"},
+				ConsulCaCert:                              "consul-ca-cert",
+				ConsulAgentCert:                           "consul-agent-cert",
+				ConsulAgentKey:                            "consul-agent-key",
+				ConsulServerCert:                          "consulservercert",
+				ConsulServerKey:                           "consulserverkey",
+				CloudControllerVMType:                     "ccvmtype",
+				CloudControllerInstances:                  1,
+				HostKeyFingerprint:                        "hostkeyfingerprint",
+				StagingUploadUser:                         "staginguser",
+				StagingUploadPassword:                     "stagingpassword",
+				CCBulkAPIUser:                             "bulkapiuser",
+				CCBulkAPIPassword:                         "bulkapipassword",
+				DbEncryptionKey:                           "dbencryptionkey",
+				CCInternalAPIUser:                         "internalapiuser",
+				CCInternalAPIPassword:                     "internalapipassword",
+				NFSServerAddress:                          "10.0.0.19",
+				SharePath:                                 "/var/vcap/nfs",
+				MetronSecret:                              "metronsecret",
+				MetronZone:                                "metronzoneguid",
+				SupportAddress:                            "http://support.pivotal.io",
+				MinCliVersion:                             "6.7.0",
+				MySQLProxyIPs:                             []string{"10.0.0.3"},
+				CCDBUsername:                              "ccdbuser",
+				CCDBPassword:                              "ccdbpass",
+				JWTVerificationKey:                        "uaajwtkey",
+				CCServiceDashboardsClientSecret:           "ccdashboardsecret",
+				CloudControllerUsernameLookupClientSecret: "usernamelookupsecret",
+				CCRoutingClientSecret:                     "ccroutingsecret",
 			}
 
-			cloudController = NewCloudControllerPartition(c, config)
+			cloudController = NewCloudControllerPartition(config)
 		})
 
 		It("then should not be nil", func() {
 			Ω(cloudController).ShouldNot(BeNil())
-		})
-
-		It("should have valid values", func() {
-			Ω(cloudController.HasValidValues()).Should(BeTrue())
 		})
 
 		It("then it should configure 1 instance by default", func() {

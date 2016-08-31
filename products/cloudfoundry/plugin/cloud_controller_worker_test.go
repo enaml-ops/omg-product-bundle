@@ -12,57 +12,43 @@ import (
 
 var _ = Describe("Cloud Controller Worker Partition", func() {
 	Context("When initialized with a complete set of arguments", func() {
-		var cloudControllerWorker InstanceGrouper
+		var cloudControllerWorker InstanceGroupCreator
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--consul-ip", "1.0.0.1",
-				"--consul-ip", "1.0.0.2",
-				"--az", "az",
-				"--stemcell-name", "stemcell",
-				"--consul-encryption-key", "consulencryptionkey",
-				"--consul-server-ca-cert", "consul-ca-cert",
-				"--consul-agent-cert", "consul-agent-cert",
-				"--consul-agent-key", "consul-agent-key",
-				"--consul-server-cert", "consulservercert",
-				"--consul-server-key", "consulserverkey",
-				"--cc-worker-vm-type", "ccworkervmtype",
-				"--network", "foundry",
-				"--cc-worker-instances", "2",
-				"--cc-staging-upload-user", "staginguser",
-				"--cc-staging-upload-password", "stagingpassword",
-				"--cc-bulk-api-user", "bulkapiuser",
-				"--cc-bulk-api-password", "bulkapipassword",
-				"--cc-db-encryption-key", "dbencryptionkey",
-				"--cc-internal-api-user", "internalapiuser",
-				"--cc-internal-api-password", "internalapipassword",
-				"--system-domain", "sys.yourdomain.com",
-				"--app-domain", "apps.yourdomain.com",
-				"--allow-app-ssh-access",
-				"--nfs-server-address", "10.0.0.19",
-				"--nfs-share-path", "/var/vcap/nfs",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--mysql-proxy-ip", "10.0.0.3",
-				"--db-ccdb-username", "ccdbuser",
-				"--db-ccdb-password", "ccdbpass",
-				"--nats-user", "natsuser",
-				"--nats-pass", "natspass",
-				"--nats-port", "4333",
-				"--nats-machine-ip", "10.0.0.4",
-			})
+
 			config := &Config{
-				NATSMachines:   []string{"10.0.0.4"},
-				NATSUser:       "natsuser",
-				NATSPassword:   "natspass",
-				NATSPort:       4333,
-				SystemDomain:   "sys.yourdomain.com",
-				AppDomains:     []string{"apps.yourdomain.com"},
-				AllowSSHAccess: true,
-				NetworkName:    "foundry",
+				NATSMachines:                   []string{"10.0.0.4"},
+				NATSUser:                       "natsuser",
+				NATSPassword:                   "natspass",
+				NATSPort:                       4333,
+				SystemDomain:                   "sys.yourdomain.com",
+				AppDomains:                     []string{"apps.yourdomain.com"},
+				AllowSSHAccess:                 true,
+				NetworkName:                    "foundry",
+				ConsulIPs:                      []string{"1.0.0.1", "1.0.0.2"},
+				ConsulEncryptKeys:              []string{"consulencryptionkey"},
+				CloudControllerWorkerInstances: 2,
+				CloudControllerWorkerVMType:    "ccworkervmtype",
+				ConsulCaCert:                   "consul-ca-cert",
+				ConsulAgentCert:                "consul-agent-cert",
+				ConsulAgentKey:                 "consul-agent-key",
+				ConsulServerCert:               "consulservercert",
+				ConsulServerKey:                "consulserverkey",
+				StagingUploadUser:              "staginguser",
+				StagingUploadPassword:          "stagingpassword",
+				CCBulkAPIUser:                  "bulkapiuser",
+				CCBulkAPIPassword:              "bulkapipassword",
+				DbEncryptionKey:                "dbencryptionkey",
+				CCInternalAPIUser:              "internalapiuser",
+				CCInternalAPIPassword:          "internalapipassword",
+				NFSServerAddress:               "10.0.0.19",
+				SharePath:                      "/var/vcap/nfs",
+				MetronSecret:                   "metronsecret",
+				MetronZone:                     "metronzoneguid",
+				MySQLProxyIPs:                  []string{"10.0.0.3"},
+				CCDBUsername:                   "ccdbuser",
+				CCDBPassword:                   "ccdbpass",
 			}
-			cloudControllerWorker = NewCloudControllerWorkerPartition(c, config)
+			cloudControllerWorker = NewCloudControllerWorkerPartition(config)
 		})
 
 		It("then should not be nil", func() {
@@ -72,10 +58,6 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 		It("then it should allow the user to configure the number of instances", func() {
 			ig := cloudControllerWorker.ToInstanceGroup()
 			Ω(ig.Instances).Should(Equal(2))
-		})
-
-		It("should have valid values", func() {
-			Ω(cloudControllerWorker.HasValidValues()).Should(BeTrue())
 		})
 
 		It("should have the name of the Network correctly set", func() {

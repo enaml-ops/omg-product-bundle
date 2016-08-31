@@ -3,53 +3,24 @@ package cloudfoundry
 import (
 	"gopkg.in/yaml.v2"
 
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_clock"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_ng"
-	"github.com/xchapter7x/lo"
 )
 
 type clockGlobal struct {
-	VMTypeName               string
-	Metron                   *Metron
-	Statsd                   *StatsdInjector
-	NFS                      *NFSMounter
-	CloudController          *CloudControllerPartition
-	CCDBAddress              string
-	CCDBUser                 string
-	CCDBPassword             string
-	JWTVerificationKey       string
-	CCServiceDashboardSecret string
-	Config                   *Config
+	Metron *Metron
+	Statsd *StatsdInjector
+	Config *Config
 }
 
-func NewClockGlobalPartition(c *cli.Context, config *Config) InstanceGrouper {
-	var db string
-	mysqlProxies := c.StringSlice("mysql-proxy-ip")
-	if len(mysqlProxies) > 0 {
-		db = mysqlProxies[0]
-	}
+func NewClockGlobalPartition(config *Config) InstanceGroupCreator {
+
 	cg := &clockGlobal{
-		Config:     config,
-		VMTypeName: c.String("clock-global-vm-type"),
-		Metron:     NewMetron(config),
-		Statsd:     NewStatsdInjector(c),
-		NFS:        NewNFSMounter(c),
-
-		CloudController:          NewCloudControllerPartition(c, config).(*CloudControllerPartition),
-		CCDBAddress:              db,
-		JWTVerificationKey:       c.String("uaa-jwt-verification-key"),
-		CCServiceDashboardSecret: c.String("cc-service-dashboards-client-secret"),
+		Config: config,
+		Metron: NewMetron(config),
+		Statsd: NewStatsdInjector(nil),
 	}
-
-	mysql := NewMySQLPartition(c, config).(*MySQL)
-	ccdb := mysql.GetSeededDBByName("ccdb")
-	if ccdb != nil {
-		cg.CCDBUser = ccdb.Username
-		cg.CCDBPassword = ccdb.Password
-	}
-
 	return cg
 }
 
@@ -57,7 +28,7 @@ func (c *clockGlobal) ToInstanceGroup() *enaml.InstanceGroup {
 	ig := &enaml.InstanceGroup{
 		Name:      "clock_global-partition",
 		Instances: 1,
-		VMType:    c.VMTypeName,
+		VMType:    c.Config.ClockGlobalVMType,
 		AZs:       c.Config.AZs,
 		Stemcell:  c.Config.StemcellName,
 		Networks: []enaml.Network{
@@ -69,10 +40,10 @@ func (c *clockGlobal) ToInstanceGroup() *enaml.InstanceGroup {
 	}
 
 	metronJob := c.Metron.CreateJob()
-	nfsJob := c.NFS.CreateJob()
+	nfsJob := CreateNFSMounterJob(c.Config)
 	statsdJob := c.Statsd.CreateJob()
 
-	ccw := newCloudControllerNgJob(c.CloudController)
+	ccw := newCloudControllerNgJob(NewCloudControllerPartition(c.Config).(*CloudControllerPartition))
 	props := ccw.Properties.(*cloud_controller_ng.CloudControllerNgJob)
 
 	ig.AddJob(c.newCloudControllerClockJob(props))
@@ -90,13 +61,13 @@ func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.Cloud
 		AppDomains:               c.Config.AppDomains,
 		Cc:                       &cloud_controller_clock.Cc{},
 		Ccdb: &cloud_controller_clock.Ccdb{
-			Address:  c.CCDBAddress,
+			Address:  c.Config.MySQLProxyHost(),
 			Port:     3306,
 			DbScheme: "mysql",
 			Roles: []map[string]interface{}{
 				{
-					"name":     c.CCDBUser,
-					"password": c.CCDBPassword,
+					"name":     c.Config.CCDBUsername,
+					"password": c.Config.CCDBPassword,
 					"tag":      "admin",
 				},
 			},
@@ -111,11 +82,11 @@ func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.Cloud
 		Uaa: &cloud_controller_clock.Uaa{
 			Url: prefixSystemDomain(c.Config.SystemDomain, "uaa"),
 			Jwt: &cloud_controller_clock.Jwt{
-				VerificationKey: c.JWTVerificationKey,
+				VerificationKey: c.Config.JWTVerificationKey,
 			},
 			Clients: &cloud_controller_clock.Clients{
 				CcServiceDashboards: &cloud_controller_clock.CcServiceDashboards{
-					Secret: c.CCServiceDashboardSecret,
+					Secret: c.Config.CCServiceDashboardsClientSecret,
 				},
 			},
 		},
@@ -168,14 +139,4 @@ func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.Cloud
 		},
 	}
 	return job
-}
-
-func (c *clockGlobal) HasValidValues() bool {
-
-	lo.G.Debugf("checking '%s' for valid flags", "clock global")
-
-	return c.VMTypeName != "" &&
-		c.Statsd.HasValidValues() &&
-		c.NFS.hasValidValues() &&
-		c.CloudController.HasValidValues()
 }

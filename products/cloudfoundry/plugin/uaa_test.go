@@ -65,7 +65,7 @@ var _ = Describe("UAA Partition", func() {
 				PortalClientSecret:                        "portal-client-secret",
 				AutoScalingServiceClientSecret:            "autoscaling-service-client-secret",
 				SystemPasswordsClientSecret:               "system-passwords-client-secret",
-				CCServiceDashboardSecret:                  "cc-service-dashboards-client-secret",
+				CCServiceDashboardsClientSecret:           "cc-service-dashboards-client-secret",
 				DopplerSecret:                             "doppler-client-secret",
 				GoRouterClientSecret:                      "gorouter-client-secret",
 				NotificationsClientSecret:                 "notifications-client-secret",

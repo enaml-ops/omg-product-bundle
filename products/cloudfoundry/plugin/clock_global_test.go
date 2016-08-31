@@ -10,96 +10,52 @@ import (
 )
 
 var _ = Describe("given a clock_global partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		var ig InstanceGrouper
-		BeforeEach(func() {
-			cf := new(Plugin)
-			c := cf.GetContext([]string{
-				"cloudfoundry",
-			})
-			ig = NewClockGlobalPartition(c, &Config{})
-		})
-
-		It("should contain the appropriate jobs", func() {
-			group := ig.ToInstanceGroup()
-			Ω(group.GetJobByName("cloud_controller_clock")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("metron_agent")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("nfs_mounter")).ShouldNot(BeNil())
-			Ω(group.GetJobByName("statsd-injector")).ShouldNot(BeNil())
-		})
-
-		It("should not have valid values", func() {
-			Ω(ig.HasValidValues()).Should(BeFalse())
-		})
-	})
-
 	Context("when initialized with a complete set of arguments", func() {
-		var ig InstanceGrouper
+		var ig InstanceGroupCreator
 		var deploymentManifest *enaml.DeploymentManifest
 
 		BeforeEach(func() {
-			cf := new(Plugin)
-			c := cf.GetContext([]string{
-				"cloudfoundry",
-				"--clock-global-vm-type", "vmtype",
-				"--cc-vm-type", "ccvmtype",
-				"--cc-staging-upload-user", "staginguser",
-				"--cc-staging-upload-password", "stagingpassword",
-				"--cc-bulk-api-user", "bulkapiuser",
-				"--cc-bulk-api-password", "bulkapipassword",
-				"--cc-db-encryption-key", "dbencryptionkey",
-				"--cc-internal-api-user", "internalapiuser",
-				"--cc-internal-api-password", "internalapipassword",
-				"--cc-service-dashboards-client-secret", "ccsecret",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--nfs-server-address", "10.0.0.19",
-				"--nfs-share-path", "/var/vcap/nfs",
-				"--consul-server-ca-cert", "consul-ca-cert",
-				"--consul-agent-cert", "consul-agent-cert",
-				"--consul-agent-key", "consul-agent-key",
-				"--consul-server-cert", "consulservercert",
-				"--consul-server-key", "consulserverkey",
-				"--consul-ip", "1.0.0.1",
-				"--consul-ip", "1.0.0.2",
-				"--consul-encryption-key", "consulencryptionkey",
-				"--mysql-proxy-ip", "1.0.10.3",
-				"--mysql-proxy-ip", "1.0.10.4",
-				"--db-ccdb-username", "ccdb-user",
-				"--db-ccdb-password", "ccdb-password",
-				"--uaa-jwt-verification-key", "jwt-verificationkey",
-				"--nats-user", "nats",
-				"--nats-pass", "pass",
-				"--nats-machine-ip", "1.0.0.5",
-				"--nats-machine-ip", "1.0.0.6",
-				"--nats-port", "4333",
-				"--allow-app-ssh-access",
-				"--system-domain", "sys.test.com",
-				"--app-domain", "apps.test.com",
-				"--skip-cert-verify=false",
-				"--az", "eastprod-1",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--network", "foundry-net",
-			})
-			ig = NewClockGlobalPartition(c, &Config{
-				AZs:               []string{"eastprod-1"},
-				StemcellName:      "cool-ubuntu-animal",
-				NetworkName:       "foundry-net",
-				SkipSSLCertVerify: false,
-				AllowSSHAccess:    true,
-				SystemDomain:      "sys.test.com",
-				AppDomains:        []string{"apps.test.com"},
-				NATSUser:          "nats",
-				NATSPassword:      "pass",
-				NATSMachines:      []string{"1.0.0.5", "1.0.0.6"},
-				NATSPort:          4333,
+
+			ig = NewClockGlobalPartition(&Config{
+				AZs:                             []string{"eastprod-1"},
+				StemcellName:                    "cool-ubuntu-animal",
+				NetworkName:                     "foundry-net",
+				SkipSSLCertVerify:               false,
+				AllowSSHAccess:                  true,
+				SystemDomain:                    "sys.test.com",
+				AppDomains:                      []string{"apps.test.com"},
+				NATSUser:                        "nats",
+				NATSPassword:                    "pass",
+				NATSMachines:                    []string{"1.0.0.5", "1.0.0.6"},
+				NATSPort:                        4333,
+				ClockGlobalVMType:               "vmtype",
+				CloudControllerVMType:           "ccvmtype",
+				StagingUploadUser:               "staginguser",
+				StagingUploadPassword:           "stagingpassword",
+				CCBulkAPIUser:                   "bulkapiuser",
+				CCBulkAPIPassword:               "bulkapipassword",
+				DbEncryptionKey:                 "dbencryptionkey",
+				CCInternalAPIUser:               "internalapiuser",
+				CCInternalAPIPassword:           "internalapipassword",
+				CCServiceDashboardsClientSecret: "ccsecret",
+				MetronSecret:                    "metronsecret",
+				MetronZone:                      "metronzoneguid",
+				NFSServerAddress:                "10.0.0.19",
+				SharePath:                       "/var/vcap/nfs",
+				ConsulCaCert:                    "consul-ca-cert",
+				ConsulAgentCert:                 "consul-agent-cert",
+				ConsulAgentKey:                  "consul-agent-key",
+				ConsulServerCert:                "consulservercert",
+				ConsulServerKey:                 "consulserverkey",
+				ConsulIPs:                       []string{"1.0.0.1", "1.0.0.2"},
+				ConsulEncryptKeys:               []string{"consulencryptionkey"},
+				MySQLProxyIPs:                   []string{"1.0.10.3", "1.0.10.4"},
+				CCDBUsername:                    "ccdb-user",
+				CCDBPassword:                    "ccdb-password",
+				JWTVerificationKey:              "jwt-verificationkey",
 			})
 			deploymentManifest = new(enaml.DeploymentManifest)
 			deploymentManifest.AddInstanceGroup(ig.ToInstanceGroup())
-		})
-
-		It("should have valid values", func() {
-			Ω(ig.HasValidValues()).Should(BeTrue())
 		})
 
 		It("then it should allow the user to configure the AZs", func() {
