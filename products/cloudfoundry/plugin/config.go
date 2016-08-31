@@ -162,6 +162,10 @@ type Config struct {
 	RouterEnableSSL                bool
 	RouterUser                     string
 	RouterPass                     string
+	NFSVMType                      string
+	NFSIPs                         []string
+	NFSPersistentDiskType          string
+	NFSAllowFromNetworkCIDR        []string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -309,6 +313,10 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		RouterVMType:                              c.String("router-vm-type"),
 		RouterUser:                                c.String("router-user"),
 		RouterPass:                                c.String("router-pass"),
+		NFSIPs:                                    c.StringSlice("nfs-ip"),
+		NFSVMType:                                 c.String("nfs-vm-type"),
+		NFSPersistentDiskType:                     c.String("nfs-disk-type"),
+		NFSAllowFromNetworkCIDR:                   c.StringSlice("nfs-allow-from-network-cidr"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err

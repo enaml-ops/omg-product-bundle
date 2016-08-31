@@ -8,50 +8,27 @@ import (
 )
 
 var _ = Describe("NFS Partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("HasValidValues should return false", func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-				"--etcd-machine-ip", "1.0.0.7",
-				"--etcd-machine-ip", "1.0.0.8",
-			})
-			Ω(NewNFSPartition(c, &Config{}).HasValidValues()).Should(Equal(false))
-		})
-	})
 	Context("when initialized WITH a complete set of arguments", func() {
-		var nfsPartition InstanceGrouper
+		var nfsPartition InstanceGroupCreator
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--nfs-ip", "1.0.0.1",
-				"--nfs-vm-type", "blah",
-				"--nfs-disk-type", "blah-disk",
-				"--nfs-allow-from-network-cidr", "1.0.0.0/22",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-				"--etcd-machine-ip", "1.0.0.7",
-				"--etcd-machine-ip", "1.0.0.8",
-			})
 			config := &Config{
-				StemcellName: "cool-ubuntu-animal",
-				AZs:          []string{"eastprod-1"},
-				NetworkName:  "foundry-net",
+				StemcellName:            "cool-ubuntu-animal",
+				AZs:                     []string{"eastprod-1"},
+				NetworkName:             "foundry-net",
+				NFSIPs:                  []string{"1.0.0.1"},
+				NFSVMType:               "blah",
+				NFSPersistentDiskType:   "blah-disk",
+				NFSAllowFromNetworkCIDR: []string{"1.0.0.0/22"},
+				MetronSecret:            "metronsecret",
+				MetronZone:              "metronzoneguid",
+				SyslogAddress:           "syslog-server",
+				SyslogPort:              10601,
+				SyslogTransport:         "tcp",
+				EtcdMachines:            []string{"1.0.0.7", "1.0.0.8"},
 			}
-			nfsPartition = NewNFSPartition(c, config)
+			nfsPartition = NewNFSPartition(config)
 		})
-		It("HasValidValues should return true", func() {
-			Ω(nfsPartition.HasValidValues()).Should(Equal(true))
-		})
+
 		It("then it should not return an error", func() {
 			Ω(nfsPartition.ToInstanceGroup().Name).Should(Equal("nfs_server-partition"))
 		})
