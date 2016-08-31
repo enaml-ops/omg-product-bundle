@@ -1,27 +1,16 @@
 package cloudfoundry
 
 import (
-	"strings"
-
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	mysqllib "github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/mysql"
-	"github.com/xchapter7x/lo"
 )
 
 //MySQL -
 type MySQL struct {
 	Config                 *Config
-	VMTypeName             string
-	NetworkIPs             []string
-	PersistentDiskType     string
-	AdminPassword          string
 	DatabaseStartupTimeout int
 	InnodbBufferPoolSize   int
 	MaxConnections         int
-	SyslogAddress          string
-	SyslogPort             int
-	SyslogTransport        string
 	MySQLSeededDatabases   []MySQLSeededDatabase
 }
 
@@ -33,66 +22,34 @@ type MySQLSeededDatabase struct {
 }
 
 //NewMySQLPartition -
-func NewMySQLPartition(c *cli.Context, config *Config) (igf InstanceGrouper) {
+func NewMySQLPartition(config *Config) (igf InstanceGroupCreator) {
 	igf = &MySQL{
 		Config:                 config,
-		NetworkIPs:             c.StringSlice("mysql-ip"),
-		VMTypeName:             c.String("mysql-vm-type"),
-		PersistentDiskType:     c.String("mysql-disk-type"),
-		AdminPassword:          c.String("mysql-admin-password"),
 		DatabaseStartupTimeout: 1200,
 		InnodbBufferPoolSize:   2147483648,
 		MaxConnections:         1500,
-		SyslogAddress:          c.String("syslog-address"),
-		SyslogPort:             c.Int("syslog-port"),
-		SyslogTransport:        c.String("syslog-transport"),
-		MySQLSeededDatabases:   parseSeededDBs(c),
+		MySQLSeededDatabases:   parseSeededDBs(config),
 	}
 	return
 }
 
-func parseSeededDBs(c *cli.Context) (dbs []MySQLSeededDatabase) {
-	//TODO GOT TO BE A BETTER WAY
-	var dbName string
-	dbMap := make(map[string]MySQLSeededDatabase)
-	for _, flag := range c.FlagNames() {
-		if strings.HasPrefix(flag, "db-") {
-			if c.String(flag) != "" {
-				baseName := strings.Replace(flag, "db-", "", 1)
-				if strings.HasSuffix(flag, "-password") {
-					dbName = strings.Replace(baseName, "-password", "", 1)
-					pwd := c.String(flag)
-					if seededDatabase, ok := dbMap[dbName]; ok {
-						seededDatabase.Password = pwd
-						dbMap[dbName] = seededDatabase
-					} else {
-						seededDatabase = MySQLSeededDatabase{
-							Name:     dbName,
-							Password: pwd,
-						}
-						dbMap[dbName] = seededDatabase
-					}
-				} else if strings.HasSuffix(flag, "-username") {
-					dbName = strings.Replace(baseName, "-username", "", 1)
-					userName := c.String(flag)
-					if seededDatabase, ok := dbMap[dbName]; ok {
-						seededDatabase.Username = userName
-						dbMap[dbName] = seededDatabase
-					} else {
-						seededDatabase = MySQLSeededDatabase{
-							Name:     dbName,
-							Username: userName,
-						}
-						dbMap[dbName] = seededDatabase
-					}
-				}
-			}
-		}
-	}
+func parseSeededDBs(config *Config) (dbs []MySQLSeededDatabase) {
+	dbs = append(dbs, MySQLSeededDatabase{
+		Name:     "uaa",
+		Username: config.UAADBUserName,
+		Password: config.UAADBPassword,
+	})
+	dbs = append(dbs, MySQLSeededDatabase{
+		Name:     "ccdb",
+		Username: config.CCDBUsername,
+		Password: config.CCDBPassword,
+	})
+	dbs = append(dbs, MySQLSeededDatabase{
+		Name:     "console",
+		Username: config.ConsoleDBUserName,
+		Password: config.ConsoleDBPassword,
+	})
 
-	for _, value := range dbMap {
-		dbs = append(dbs, value)
-	}
 	return
 }
 
@@ -111,16 +68,16 @@ func (s *MySQL) GetSeededDBByName(name string) *MySQLSeededDatabase {
 func (s *MySQL) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 	ig = &enaml.InstanceGroup{
 		Name:               "mysql-partition",
-		Instances:          len(s.NetworkIPs),
-		VMType:             s.VMTypeName,
+		Instances:          len(s.Config.MySQLIPs),
+		VMType:             s.Config.MySQLVMType,
 		AZs:                s.Config.AZs,
 		Stemcell:           s.Config.StemcellName,
-		PersistentDiskType: s.PersistentDiskType,
+		PersistentDiskType: s.Config.MySQLPersistentDiskType,
 		Jobs: []enaml.InstanceJob{
 			s.newMySQLJob(),
 		},
 		Networks: []enaml.Network{
-			enaml.Network{Name: s.Config.NetworkName, StaticIPs: s.NetworkIPs},
+			enaml.Network{Name: s.Config.NetworkName, StaticIPs: s.Config.MySQLIPs},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -134,8 +91,8 @@ func (s *MySQL) newMySQLJob() enaml.InstanceJob {
 		Name:    "mysql",
 		Release: "cf-mysql",
 		Properties: &mysqllib.MysqlJob{
-			AdminPassword:          s.AdminPassword,
-			ClusterIps:             s.NetworkIPs,
+			AdminPassword:          s.Config.MySQLAdminPassword,
+			ClusterIps:             s.Config.MySQLIPs,
 			DatabaseStartupTimeout: s.DatabaseStartupTimeout,
 			InnodbBufferPoolSize:   s.InnodbBufferPoolSize,
 			MaxConnections:         s.MaxConnections,
@@ -145,33 +102,10 @@ func (s *MySQL) newMySQLJob() enaml.InstanceJob {
 			},
 			SeededDatabases: s.MySQLSeededDatabases,
 			SyslogAggregator: &mysqllib.SyslogAggregator{
-				Address:   s.SyslogAddress,
-				Port:      s.SyslogPort,
-				Transport: s.SyslogTransport,
+				Address:   s.Config.SyslogAddress,
+				Port:      s.Config.SyslogPort,
+				Transport: s.Config.SyslogTransport,
 			},
 		},
 	}
-}
-
-//HasValidValues -
-func (s *MySQL) HasValidValues() bool {
-	lo.G.Debugf("checking '%s' for valid flags", "mysql")
-
-	if len(s.NetworkIPs) <= 0 {
-		lo.G.Debugf("could not find the correct number of network ips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
-	}
-	if s.VMTypeName == "" {
-		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
-	}
-	if s.PersistentDiskType == "" {
-		lo.G.Debugf("could not find a valid PersistentDiskType '%v'", s.PersistentDiskType)
-	}
-	if s.AdminPassword == "" {
-		lo.G.Debugf("could not find a valid AdminPassword '%v'", s.AdminPassword)
-	}
-
-	return (s.VMTypeName != "" &&
-		len(s.NetworkIPs) > 0 &&
-		s.PersistentDiskType != "" &&
-		s.AdminPassword != "")
 }

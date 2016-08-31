@@ -170,6 +170,11 @@ type Config struct {
 	EtcdPersistentDiskType         string
 	NatsVMType                     string
 	ConsulVMType                   string
+	MySQLVMType                    string
+	MySQLPersistentDiskType        string
+	MySQLAdminPassword             string
+	ConsoleDBUserName              string
+	ConsoleDBPassword              string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -325,6 +330,11 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		EtcdPersistentDiskType:                    c.String("etcd-disk-type"),
 		NatsVMType:                                c.String("nats-vm-type"),
 		ConsulVMType:                              c.String("consul-vm-type"),
+		MySQLVMType:                               c.String("mysql-vm-type"),
+		MySQLPersistentDiskType:                   c.String("mysql-disk-type"),
+		MySQLAdminPassword:                        c.String("mysql-admin-password"),
+		ConsoleDBUserName:                         c.String("db-console-username"),
+		ConsoleDBPassword:                         c.String("db-console-password"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err

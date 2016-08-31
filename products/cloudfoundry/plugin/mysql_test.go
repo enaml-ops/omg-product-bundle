@@ -9,47 +9,28 @@ import (
 
 var _ = Describe("MySQL Partition", func() {
 
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("then HasValidValues should be false", func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-			})
-			Ω(NewMySQLPartition(c, &Config{}).HasValidValues()).Should(BeFalse())
-		})
-	})
-
 	Context("when initialized WITH a complete set of arguments", func() {
-		var mysqlPartition InstanceGrouper
+		var mysqlPartition InstanceGroupCreator
 
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--mysql-ip", "1.0.10.1",
-				"--mysql-ip", "1.0.10.2",
-				"--mysql-vm-type", "blah1",
-				"--mysql-disk-type", "blah2",
-				"--mysql-admin-password", "mysqladmin",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-				"--db-uaa-password", "uaapassword",
-			})
+
 			config := &Config{
-				StemcellName:           "cool-ubuntu-animal",
-				AZs:                    []string{"eastprod-1"},
-				NetworkName:            "foundry-net",
-				MySQLBootstrapUser:     "mysqlbootstrap",
-				MySQLBootstrapPassword: "mysqlbootstrappwd",
+				StemcellName:            "cool-ubuntu-animal",
+				AZs:                     []string{"eastprod-1"},
+				NetworkName:             "foundry-net",
+				MySQLBootstrapUser:      "mysqlbootstrap",
+				MySQLBootstrapPassword:  "mysqlbootstrappwd",
+				MySQLIPs:                []string{"1.0.10.1", "1.0.10.2"},
+				MySQLVMType:             "blah1",
+				MySQLPersistentDiskType: "blah2",
+				MySQLAdminPassword:      "mysqladmin",
+				SyslogAddress:           "syslog-server",
+				SyslogPort:              10601,
+				SyslogTransport:         "tcp",
+				UAADBPassword:           "uaapassword",
 			}
-			mysqlPartition = NewMySQLPartition(c, config)
+			mysqlPartition = NewMySQLPartition(config)
 		})
-
-		It("then HasValidValues should be true", func() {
-			Ω(mysqlPartition.HasValidValues()).Should(Equal(true))
-		})
-
 		It("then it should allow the user to configure the mysql IPs", func() {
 			ig := mysqlPartition.ToInstanceGroup()
 			network := ig.Networks[0]
