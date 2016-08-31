@@ -1,5 +1,5 @@
 hash: 044c9fbc7a3fc24afd4f58549c2ef979d88d724055710a24107a5ca781075200
-updated: 2016-08-26T13:34:33.344778177-06:00
+updated: 2016-08-31T16:01:57.114784388-04:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -11,7 +11,7 @@ imports:
   - ui
   - ui/fmt
 - name: github.com/codegangsta/cli
-  version: 05fe449c81eb7305a34e9253c321c960a1c5e057
+  version: 33bb4c121333cd8eb7d8cc8d74474f4ec156f371
 - name: github.com/enaml-ops/enaml
   version: 55d585ffc06f5bedbc6e0baa9bc2a9ab9b1ae44b
   subpackages:
@@ -19,10 +19,72 @@ imports:
   - cloudproperties/aws
   - cloudproperties/azure
 - name: github.com/enaml-ops/omg-cli
-  version: ffff0e95971e85a7d0b4b46efdb004720043d70a
+  version: cdbf272d19f4369b303eba52945f43bd11422fbc
   subpackages:
   - utils
   - bosh
+- name: github.com/enaml-ops/omg-product-bundle
+  version: cf625a1ed8cbf67732c45b6bbe970b3c285c5b3f
+  subpackages:
+  - products/cloudfoundry/plugin
+  - products/cf-mysql/enaml-gen/bootstrap
+  - products/cf-mysql/enaml-gen/mysql
+  - products/cf-mysql/enaml-gen/proxy
+  - products/cloudfoundry/enaml-gen/acceptance-tests
+  - products/cloudfoundry/enaml-gen/auctioneer
+  - products/cloudfoundry/enaml-gen/bbs
+  - products/cloudfoundry/enaml-gen/cc_uploader
+  - products/cloudfoundry/enaml-gen/cloud_controller_clock
+  - products/cloudfoundry/enaml-gen/cloud_controller_ng
+  - products/cloudfoundry/enaml-gen/cloud_controller_worker
+  - products/cloudfoundry/enaml-gen/consul_agent
+  - products/cloudfoundry/enaml-gen/converger
+  - products/cloudfoundry/enaml-gen/debian_nfs_server
+  - products/cloudfoundry/enaml-gen/doppler
+  - products/cloudfoundry/enaml-gen/etcd
+  - products/cloudfoundry/enaml-gen/etcd_metrics_server
+  - products/cloudfoundry/enaml-gen/file_server
+  - products/cloudfoundry/enaml-gen/garden
+  - products/cloudfoundry/enaml-gen/gorouter
+  - products/cloudfoundry/enaml-gen/haproxy
+  - products/cloudfoundry/enaml-gen/loggregator_trafficcontroller
+  - products/cloudfoundry/enaml-gen/metron_agent
+  - products/cloudfoundry/enaml-gen/nats
+  - products/cloudfoundry/enaml-gen/nfs_mounter
+  - products/cloudfoundry/enaml-gen/nsync
+  - products/cloudfoundry/enaml-gen/rep
+  - products/cloudfoundry/enaml-gen/route_emitter
+  - products/cloudfoundry/enaml-gen/route_registrar
+  - products/cloudfoundry/enaml-gen/smoke-tests
+  - products/cloudfoundry/enaml-gen/ssh_proxy
+  - products/cloudfoundry/enaml-gen/stager
+  - products/cloudfoundry/enaml-gen/syslog_drain_binder
+  - products/cloudfoundry/enaml-gen/tps
+  - products/cloudfoundry/enaml-gen/uaa
+  - products/cloudfoundry/plugin/config
+  - products/concourse/enaml-gen/atc
+  - products/concourse/enaml-gen/baggageclaim
+  - products/concourse/enaml-gen/garden
+  - products/concourse/enaml-gen/groundcrew
+  - products/concourse/enaml-gen/postgresql
+  - products/concourse/enaml-gen/tsa
+  - products/concourse/plugin
+  - products/concourse
+  - products/docker/plugin
+  - products/docker/enaml-gen/containers
+  - products/dockerregistry/enaml-gen/proxy
+  - products/dockerregistry/enaml-gen/registry
+  - products/dockerregistry/plugin
+  - products/dockerregistry
+  - products/p-mysql/plugin
+  - products/p-mysql/enaml-gen/mysql
+  - products/p-mysql/enaml-gen/proxy
+  - products/p-mysql/enaml-gen/send-email
+  - products/p-mysql/enaml-gen/streaming-mysql-backup-tool
+  - products/redis/plugin
+  - products/vault/plugin
+  - products/vault/enaml-gen/consul
+  - products/vault/enaml-gen/vault
 - name: github.com/enaml-ops/pluginlib
   version: c9c21f74c42f8fc4c28751918423d991f63fc59b
   subpackages:
@@ -32,7 +94,7 @@ imports:
   - registry
   - cloudconfig
 - name: github.com/golang/protobuf
-  version: 888eb0692c857ec880338addf316bd662d5e630e
+  version: 1f49d83d9aa00e6ce4fc8258c71cc7786aec968a
   subpackages:
   - proto
 - name: github.com/hashicorp/go-plugin
@@ -43,36 +105,8 @@ imports:
   version: 2788f0dbd16903de03cb8186e5c7d97b69ad387b
 - name: github.com/onsi/ginkgo
   version: 43e2af1f01ace55adbb6d7d0f30416476db1baae
-  subpackages:
-  - config
-  - internal/codelocation
-  - internal/failer
-  - internal/remote
-  - internal/suite
-  - internal/testingtproxy
-  - internal/writer
-  - reporters
-  - reporters/stenographer
-  - types
-  - internal/containernode
-  - internal/leafnodes
-  - internal/spec
-  - internal/specrunner
 - name: github.com/onsi/gomega
   version: b48c9a8b2644326d0a44eaaacc8d83e35174a05d
-  subpackages:
-  - ghttp
-  - internal/assertion
-  - internal/asyncassertion
-  - internal/testingtsupport
-  - matchers
-  - types
-  - internal/oraclematcher
-  - format
-  - matchers/support/goraph/bipartitegraph
-  - matchers/support/goraph/edge
-  - matchers/support/goraph/node
-  - matchers/support/goraph/util
 - name: github.com/op/go-logging
   version: 970db520ece77730c7e4724c61121037378659d9
 - name: github.com/pivotal-golang/clock
@@ -91,14 +125,12 @@ imports:
   - pkix
 - name: github.com/xchapter7x/lo
   version: e33b245fc7a8186582208abc2458c2691bff681c
-  subpackages:
-  - lofakes
 - name: golang.org/x/net
-  version: 7394c112eae4dba7e96bfcfe738e6373d61772b4
+  version: 9bc2a3340c92c17a20edcd0080e93851ed58f5d5
   subpackages:
   - context
 - name: golang.org/x/oauth2
-  version: 54f42edba4a8f81d48dc8b2287b7c7421e673022
+  version: 4d549c893be7d4011bab739cc585d091a7188d27
   subpackages:
   - internal
 - name: google.golang.org/appengine
@@ -113,8 +145,4 @@ imports:
   - internal/remote_api
 - name: gopkg.in/yaml.v2
   version: e4d366fc3c7938e2958e662b4258c7a89e1f0e3e
-testImports:
-- name: golang.org/x/sys
-  version: a646d33e2ee3172a661fc09bca23bb4889a41bc8
-  subpackages:
-  - unix
+devImports: []
