@@ -62,7 +62,11 @@ func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 		},
 	}
 	for _, buildpack := range buildpacks {
-		ig.Jobs = append(ig.Jobs, enaml.InstanceJob{Name: buildpack, Release: CFReleaseName})
+		ig.Jobs = append(ig.Jobs, enaml.InstanceJob{
+			Name:       buildpack,
+			Release:    CFReleaseName,
+			Properties: make(map[interface{}]interface{}),
+		})
 	}
 	return
 }
