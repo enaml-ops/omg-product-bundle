@@ -1,8 +1,6 @@
 package cloudfoundry_test
 
 import (
-	"io/ioutil"
-
 	"github.com/enaml-ops/enaml"
 
 	grtrlib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/gorouter"
@@ -13,49 +11,31 @@ import (
 )
 
 var _ = Describe("Go-Router Partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("then it should return the error and exit", func() {
-			cf := new(Plugin)
-			c := cf.GetContext([]string{
-				"cloudfoundry",
-				"--router-ip", "1.0.0.1",
-				"--router-ip", "1.0.0.2",
-				"--network", "foundry-net",
-			})
-			gr := NewGoRouterPartition(c, &Config{})
-			Ω(gr.HasValidValues()).Should(BeFalse())
-		})
-	})
 	Context("when the plugin is called by a operator with a complete set of arguments", func() {
 		var deploymentManifest *enaml.DeploymentManifest
 		const controlSecret = "goroutersecret"
 		BeforeEach(func() {
-			cf := new(Plugin)
-			c := cf.GetContext([]string{
-				"cloudfoundry",
-				"--router-ip", "1.0.0.1",
-				"--router-ip", "1.0.0.2",
-				"--gorouter-client-secret", controlSecret,
-				"--router-vm-type", "blah",
-				"--router-ssl-cert", "@fixtures/sample.cert",
-				"--router-ssl-key", "@fixtures/sample.key",
-				"--router-pass", "blabadebleblahblah",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--etcd-machine-ip", "1.0.0.7",
-				"--etcd-machine-ip", "1.0.0.8",
-				"--router-enable-ssl",
-			})
 			config := &Config{
-				StemcellName: "cool-ubuntu-animal",
-				AZs:          []string{"eastprod-1"},
-				NetworkName:  "foundry-net",
-				NATSUser:     "nats",
-				NATSPassword: "pass",
-				NATSMachines: []string{"1.0.0.5", "1.0.0.6"},
-				NATSPort:     4222,
+				StemcellName:         "cool-ubuntu-animal",
+				AZs:                  []string{"eastprod-1"},
+				NetworkName:          "foundry-net",
+				NATSUser:             "nats",
+				NATSPassword:         "pass",
+				NATSMachines:         []string{"1.0.0.5", "1.0.0.6"},
+				NATSPort:             4222,
+				RouterMachines:       []string{"1.0.0.1", "1.0.0.2"},
+				GoRouterClientSecret: controlSecret,
+				RouterVMType:         "blah",
+				RouterSSLCert:        "@fixtures/sample.cert",
+				RouterSSLKey:         "@fixtures/sample.key",
+				RouterPass:           "blabadebleblahblah",
+				MetronSecret:         "metronsecret",
+				MetronZone:           "metronzoneguid",
+				EtcdMachines:         []string{"1.0.0.7", "1.0.0.8"},
+				RouterEnableSSL:      true,
+				RouterUser:           "router_status",
 			}
-			gr := NewGoRouterPartition(c, config)
+			gr := NewGoRouterPartition(config)
 			deploymentManifest = new(enaml.DeploymentManifest)
 			deploymentManifest.AddInstanceGroup(gr.ToInstanceGroup())
 		})
@@ -138,16 +118,6 @@ var _ = Describe("Go-Router Partition", func() {
 			Ω(properties.Router.Status.Password).Should(Equal("blabadebleblahblah"))
 		})
 
-		It("then it should allow the user to configure the cert & key used from a file", func() {
-			certBytes, _ := ioutil.ReadFile("fixtures/sample.cert")
-			keyBytes, _ := ioutil.ReadFile("fixtures/sample.key")
-			ig := deploymentManifest.GetInstanceGroupByName("router-partition")
-			job := ig.GetJobByName("gorouter")
-			properties := job.Properties.(*grtrlib.GorouterJob)
-			Ω(properties.Router.SslCert).Should(Equal(string(certBytes)))
-			Ω(properties.Router.SslKey).Should(Equal(string(keyBytes)))
-		})
-
 		It("then it should configure UAA", func() {
 			ig := deploymentManifest.GetInstanceGroupByName("router-partition")
 			job := ig.GetJobByName("gorouter")
@@ -160,13 +130,10 @@ var _ = Describe("Go-Router Partition", func() {
 		Context("when the plugin is called by a operator with arguments for ssl cert/key strings", func() {
 			var deploymentManifest *enaml.DeploymentManifest
 			BeforeEach(func() {
-				cf := new(Plugin)
-				c := cf.GetContext([]string{
-					"cloudfoundry",
-					"--router-ssl-cert", "blah",
-					"--router-ssl-key", "blahblah",
+				gr := NewGoRouterPartition(&Config{
+					RouterSSLCert: "blah",
+					RouterSSLKey:  "blahblah",
 				})
-				gr := NewGoRouterPartition(c, &Config{})
 				deploymentManifest = new(enaml.DeploymentManifest)
 				deploymentManifest.AddInstanceGroup(gr.ToInstanceGroup())
 			})
@@ -183,13 +150,10 @@ var _ = Describe("Go-Router Partition", func() {
 		Context("when the plugin is called by a operator with arguments for just ssl cert/key strings", func() {
 			var deploymentManifest *enaml.DeploymentManifest
 			BeforeEach(func() {
-				cf := new(Plugin)
-				c := cf.GetContext([]string{
-					"cloudfoundry",
-					"--router-ssl-cert", "blah",
-					"--router-ssl-key", "blahblah",
+				gr := NewGoRouterPartition(&Config{
+					RouterSSLCert: "blah",
+					RouterSSLKey:  "blahblah",
 				})
-				gr := NewGoRouterPartition(c, &Config{})
 				deploymentManifest = new(enaml.DeploymentManifest)
 				deploymentManifest.AddInstanceGroup(gr.ToInstanceGroup())
 			})

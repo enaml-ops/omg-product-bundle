@@ -156,6 +156,12 @@ type Config struct {
 	MySQLProxyAPIUsername          string
 	MySQLProxyAPIPassword          string
 	MySQLProxyExternalHost         string
+	RouterSSLCert                  string
+	RouterSSLKey                   string
+	RouterVMType                   string
+	RouterEnableSSL                bool
+	RouterUser                     string
+	RouterPass                     string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -299,6 +305,10 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		MySQLProxyAPIUsername:                     c.String("mysql-proxy-api-username"),
 		MySQLProxyAPIPassword:                     c.String("mysql-proxy-api-password"),
 		MySQLProxyExternalHost:                    c.String("mysql-proxy-external-host"),
+		RouterEnableSSL:                           c.Bool("router-enable-ssl"),
+		RouterVMType:                              c.String("router-vm-type"),
+		RouterUser:                                c.String("router-user"),
+		RouterPass:                                c.String("router-pass"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err
@@ -384,9 +394,19 @@ func (ca *Config) loadSSL(c *cli.Context) error {
 
 	sslpem, err := pluginutil.LoadResourceFromContext(c, "haproxy-sslpem")
 	if err != nil {
-		lo.G.Error("couldn't load haproxy-sslpem:" + err.Error())
-		return nil
+		return err
 	}
+
+	routerCert, err := pluginutil.LoadResourceFromContext(c, "router-ssl-cert")
+	if err != nil {
+		return err
+	}
+	routerKey, err := pluginutil.LoadResourceFromContext(c, "router-ssl-key")
+	if err != nil {
+		return err
+	}
+	ca.RouterSSLCert = routerCert
+	ca.RouterSSLKey = routerKey
 	ca.ConsulCaCert = caCert
 	ca.ConsulAgentCert = agentCert
 	ca.ConsulServerCert = serverCert
