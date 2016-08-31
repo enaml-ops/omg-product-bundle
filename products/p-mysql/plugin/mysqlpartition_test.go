@@ -19,14 +19,6 @@ var _ = Describe("given NewMysqlPartition func", func() {
 
 		Context("when creating the mysql-partition instancegroup", func() {
 			var ig *enaml.InstanceGroup
-			var checkJobExists = func(jobs []enaml.InstanceJob, name string) bool {
-				for _, j := range jobs {
-					if j.Name == name {
-						return true
-					}
-				}
-				return false
-			}
 
 			BeforeEach(func() {
 				ig = NewMysqlPartition(plgn)

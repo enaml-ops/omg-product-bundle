@@ -55,6 +55,11 @@ type Plugin struct {
 	NotificationRecipientEmail  string
 	BackupEndpointUser          string
 	BackupEndpointPassword      string
+	NatsPassword                string
+	NatsUser                    string
+	NatsPort                    string
+	ProxyAPIUser                string
+	ProxyAPIPass                string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -90,6 +95,11 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "base-domain", Usage: "the base domain you wish to associate your mysql routes with"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-user", Usage: "the user to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-password", Usage: "the password to access the backup rest endpoint"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-password", Usage: "the password to access the nats instance"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-username", Value: natsUser, Usage: "the user to access the nats instance"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-port", Value: natsPort, Usage: "the port to access the nats instance"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-username", Usage: "the api username for the proxy"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-password", Usage: "the api password for the proxy"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-domain", Usage: "the location of your vault server (ie. http://10.0.0.1:8200)"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-password", Usage: "the hashname of your secret (ie. secret/p-mysql-1-passwords"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-token", Usage: "the token to make connections to your vault"},
@@ -150,6 +160,11 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.UaaAdminClientSecret = c.String("uaa-admin-client-secret")
 	s.BackupEndpointUser = c.String("backup-endpoint-user")
 	s.BackupEndpointPassword = c.String("backup-endpoint-password")
+	s.NatsUser = c.String("nats-username")
+	s.NatsPassword = c.String("nats-password")
+	s.NatsPort = c.String("nats-port")
+	s.ProxyAPIUser = c.String("proxy-api-username")
+	s.ProxyAPIPass = c.String("proxy-api-password")
 
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)
@@ -169,8 +184,8 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	dm.AddRelease(enaml.Release{Name: MysqlMonitoringReleaseName, Version: c.String("mysql-monitoring-release-version")})
 	dm.AddRemoteStemcell(s.StemcellName, s.StemcellName, s.StemcellVersion, s.StemcellURL, s.StemcellSHA)
 	dm.AddInstanceGroup(NewMysqlPartition(s))
+	dm.AddInstanceGroup(NewProxyPartition(s))
 	//dm.AddInstanceGroup(NewBackupPreparePartition())
-	//dm.AddInstanceGroup(NewProxyPartition())
 	//dm.AddInstanceGroup(NewMonitoringPartition())
 	//dm.AddInstanceGroup(NewCfMysqlBrokerPartition())
 	//dm.AddInstanceGroup(NewBrokerRegistrar())
