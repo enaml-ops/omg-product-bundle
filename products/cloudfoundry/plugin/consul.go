@@ -1,30 +1,22 @@
 package cloudfoundry
 
-import (
-	"github.com/codegangsta/cli"
-	"github.com/enaml-ops/enaml"
-	"github.com/xchapter7x/lo"
-)
+import "github.com/enaml-ops/enaml"
 
 // Consul -
 type Consul struct {
 	Config         *Config
-	VMTypeName     string
-	NetworkIPs     []string
 	ConsulAgent    *ConsulAgent
 	Metron         *Metron
 	StatsdInjector *StatsdInjector
 }
 
 //NewConsulPartition -
-func NewConsulPartition(c *cli.Context, config *Config) InstanceGrouper {
+func NewConsulPartition(config *Config) InstanceGroupCreator {
 	return &Consul{
 		Config:         config,
-		NetworkIPs:     c.StringSlice("consul-ip"),
-		VMTypeName:     c.String("consul-vm-type"),
 		ConsulAgent:    NewConsulAgentServer(config),
 		Metron:         NewMetron(config),
-		StatsdInjector: NewStatsdInjector(c),
+		StatsdInjector: NewStatsdInjector(nil),
 	}
 }
 
@@ -32,8 +24,8 @@ func NewConsulPartition(c *cli.Context, config *Config) InstanceGrouper {
 func (s *Consul) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 	ig = &enaml.InstanceGroup{
 		Name:      "consul-partition",
-		Instances: len(s.NetworkIPs),
-		VMType:    s.VMTypeName,
+		Instances: len(s.Config.ConsulIPs),
+		VMType:    s.Config.ConsulVMType,
 		AZs:       s.Config.AZs,
 		Stemcell:  s.Config.StemcellName,
 		Jobs: []enaml.InstanceJob{
@@ -42,7 +34,7 @@ func (s *Consul) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 			s.StatsdInjector.CreateJob(),
 		},
 		Networks: []enaml.Network{
-			enaml.Network{Name: s.Config.NetworkName, StaticIPs: s.NetworkIPs},
+			enaml.Network{Name: s.Config.NetworkName, StaticIPs: s.Config.ConsulIPs},
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
@@ -50,21 +42,4 @@ func (s *Consul) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 		},
 	}
 	return
-}
-
-//HasValidValues - Check if the datastructure has valid fields
-func (s *Consul) HasValidValues() bool {
-
-	lo.G.Debugf("checking '%s' for valid flags", "consul")
-
-	if s.VMTypeName == "" {
-		lo.G.Debugf("could not find a valid vmtypename '%v'", s.VMTypeName)
-	}
-
-	if len(s.NetworkIPs) <= 0 {
-		lo.G.Debugf("could not find the correct number of networkips configured '%v' : '%v'", len(s.NetworkIPs), s.NetworkIPs)
-	}
-
-	return (s.VMTypeName != "" &&
-		len(s.NetworkIPs) > 0)
 }

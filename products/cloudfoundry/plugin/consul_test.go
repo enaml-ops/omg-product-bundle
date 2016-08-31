@@ -10,31 +10,9 @@ import (
 var _ = Describe("Consul Partition", func() {
 	Context("when initialized WITH a complete set of arguments", func() {
 		var err error
-		var consul InstanceGrouper
+		var consul InstanceGroupCreator
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--stemcell-name", "cool-ubuntu-animal",
-				"--az", "eastprod-1",
-				"--consul-ip", "1.0.0.1",
-				"--consul-ip", "1.0.0.2",
-				"--network", "foundry-net",
-				"--consul-vm-type", "blah",
-				"--consul-encryption-key", "encyption-key",
-				"--consul-server-ca-cert", "ca-cert",
-				"--consul-agent-cert", "agent-cert",
-				"--consul-agent-key", "agent-key",
-				"--consul-server-cert", "server-cert",
-				"--consul-server-key", "server-key",
-				"--metron-secret", "metronsecret",
-				"--metron-zone", "metronzoneguid",
-				"--syslog-address", "syslog-server",
-				"--syslog-port", "10601",
-				"--syslog-transport", "tcp",
-				"--etcd-machine-ip", "1.0.0.7",
-				"--etcd-machine-ip", "1.0.0.8",
-			})
+
 			config := &Config{
 				StemcellName:      "cool-ubuntu-animal",
 				AZs:               []string{"eastprod-1"},
@@ -46,8 +24,15 @@ var _ = Describe("Consul Partition", func() {
 				ConsulServerCert:  "server-cert",
 				ConsulServerKey:   "server-key",
 				ConsulIPs:         []string{"1.0.0.1", "1.0.0.2"},
+				ConsulVMType:      "blah",
+				MetronSecret:      "metronsecret",
+				MetronZone:        "metronzoneguid",
+				SyslogAddress:     "syslog-server",
+				SyslogPort:        10601,
+				SyslogTransport:   "tcp",
+				EtcdMachines:      []string{"1.0.0.7", "1.0.0.8"},
 			}
-			consul = NewConsulPartition(c, config)
+			consul = NewConsulPartition(config)
 		})
 		It("then it should not return an error", func() {
 			Ω(err).Should(BeNil())

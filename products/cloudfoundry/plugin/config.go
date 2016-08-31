@@ -169,6 +169,7 @@ type Config struct {
 	EtcdVMType                     string
 	EtcdPersistentDiskType         string
 	NatsVMType                     string
+	ConsulVMType                   string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -323,6 +324,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		EtcdVMType:                                c.String("etcd-vm-type"),
 		EtcdPersistentDiskType:                    c.String("etcd-disk-type"),
 		NatsVMType:                                c.String("nats-vm-type"),
+		ConsulVMType:                              c.String("consul-vm-type"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err
