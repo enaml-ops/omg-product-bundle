@@ -66,7 +66,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 			config.CCServiceDashboardsClientSecret = "ccdashboardsecret"
 			config.CloudControllerUsernameLookupClientSecret = "usernamelookupsecret"
 			config.CCRoutingClientSecret = "ccroutingsecret"
-			config.MetronSecret = "metronsecret"
+			config.DopplerSharedSecret = "metronsecret"
 
 			cloudController = NewCloudControllerPartition(config)
 		})

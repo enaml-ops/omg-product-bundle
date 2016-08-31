@@ -47,7 +47,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				IP:                        config.IP{},
 			}
 			config.NATSMachines = []string{"10.0.0.11", "10.0.0.12"}
-			config.MetronSecret = "metronsecret"
+			config.DopplerSharedSecret = "metronsecret"
 			config.ConsulEncryptKeys = []string{"encyption-key"}
 			config.ConsulCaCert = "ca-cert"
 			config.ConsulAgentCert = "agent-cert"

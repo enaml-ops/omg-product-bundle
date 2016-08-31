@@ -29,7 +29,7 @@ var _ = Describe("Nats Partition", func() {
 			config.EtcdMachines = []string{"10.0.0.7", "10.0.0.8"}
 			config.NATSMachines = []string{"10.0.0.2", "10.0.0.3"}
 			config.NatsVMType = "blah"
-			config.MetronSecret = "metronsecret"
+			config.DopplerSharedSecret = "metronsecret"
 
 			natsPartition = NewNatsPartition(config)
 		})

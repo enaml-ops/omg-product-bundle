@@ -38,7 +38,6 @@ var _ = Describe("Doppler Partition", func() {
 			config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
 			config.DopplerIPs = []string{"1.0.11.1", "1.0.11.2"}
 			config.DopplerVMType = "blah"
-			config.MetronSecret = "metronsecret"
 
 			dopplerPartition = NewDopplerPartition(config)
 		})

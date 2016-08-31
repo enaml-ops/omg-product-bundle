@@ -35,7 +35,7 @@ func (s *Metron) CreateJob() enaml.InstanceJob {
 				Deployment: DeploymentName,
 			},
 			MetronEndpoint: &metron_agent.MetronEndpoint{
-				SharedSecret: s.Config.MetronSecret,
+				SharedSecret: s.Config.DopplerSharedSecret,
 			},
 			Loggregator: &metron_agent.Loggregator{
 				Etcd: &metron_agent.Etcd{

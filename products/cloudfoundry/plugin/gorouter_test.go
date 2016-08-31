@@ -38,7 +38,7 @@ var _ = Describe("Go-Router Partition", func() {
 			config.RouterSSLCert = "@fixtures/sample.cert"
 			config.RouterSSLKey = "@fixtures/sample.key"
 			config.RouterPass = "blabadebleblahblah"
-			config.MetronSecret = "metronsecret"
+			config.DopplerSharedSecret = "metronsecret"
 			config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
 			config.RouterUser = "router_status"
 

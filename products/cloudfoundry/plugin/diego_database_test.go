@@ -60,7 +60,7 @@ var _ = Describe("given a Diego Database Partition", func() {
 				config.BBSClientCert = "clientcert"
 				config.BBSClientKey = "clientkey"
 				config.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
-				config.MetronSecret = "metronsecret"
+				config.DopplerSharedSecret = "metronsecret"
 
 				grouper = NewDiegoDatabasePartition(config)
 				instanceGroup = grouper.ToInstanceGroup()

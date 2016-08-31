@@ -39,7 +39,7 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 			config.LoggregratorVMType = "vmtype"
 			config.EtcdMachines = []string{"10.0.1.2", "10.0.1.3", "10.0.1.4"}
 			config.DopplerSecret = "dopplersecret"
-			config.MetronSecret = "metronsecret"
+			config.DopplerSharedSecret = "metronsecret"
 
 			grouper = NewLoggregatorTrafficController(config)
 

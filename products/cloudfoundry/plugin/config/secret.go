@@ -27,7 +27,6 @@ func RequiredSecretFlags() []string {
 		"mysql-bootstrap-password",
 		"consul-encryption-key",
 		"smoke-tests-password",
-		"metron-secret",
 		"doppler-shared-secret",
 		"doppler-client-secret",
 		"cc-bulk-api-password",
@@ -70,7 +69,6 @@ func NewSecret(c *cli.Context) Secret {
 		MySQLBootstrapPassword:                    c.String("mysql-bootstrap-password"),
 		ConsulEncryptKeys:                         c.StringSlice("consul-encryption-key"),
 		SmokeTestsPassword:                        c.String("smoke-tests-password"),
-		MetronSecret:                              c.String("metron-secret"),
 		DopplerSharedSecret:                       c.String("doppler-shared-secret"),
 		DopplerSecret:                             c.String("doppler-client-secret"),
 		CCBulkAPIPassword:                         c.String("cc-bulk-api-password"),
@@ -96,7 +94,6 @@ type Secret struct {
 	SmokeTestsPassword                        string
 	DopplerSecret                             string
 	DopplerSharedSecret                       string
-	MetronSecret                              string
 	CCBulkAPIPassword                         string
 	CCInternalAPIPassword                     string
 	SSHProxyClientSecret                      string

@@ -51,7 +51,7 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 			config.CCInternalAPIUser = "internalapiuser"
 			config.CCInternalAPIPassword = "internalapipassword"
 			config.NFSIP = "10.0.0.19"
-			config.MetronSecret = "metronsecret"
+			config.DopplerSharedSecret = "metronsecret"
 			config.CCDBUsername = "ccdbuser"
 			config.CCDBPassword = "ccdbpass"
 

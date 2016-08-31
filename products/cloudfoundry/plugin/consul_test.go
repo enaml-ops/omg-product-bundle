@@ -37,7 +37,7 @@ var _ = Describe("Consul Partition", func() {
 			config.ConsulServerKey = "server-key"
 			config.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
 			config.ConsulVMType = "blah"
-			config.MetronSecret = "metronsecret"
+			config.DopplerSharedSecret = "metronsecret"
 
 			consul = NewConsulPartition(config)
 		})
