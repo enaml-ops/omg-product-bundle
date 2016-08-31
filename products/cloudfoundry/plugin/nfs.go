@@ -27,7 +27,7 @@ func NewNFSPartition(config *config.Config) (igf InstanceGroupCreator) {
 func (s *NFS) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 	ig = &enaml.InstanceGroup{
 		Name:      "nfs_server-partition",
-		Instances: len(s.Config.NFSIPs),
+		Instances: 1,
 		VMType:    s.Config.NFSVMType,
 		AZs:       s.Config.AZs,
 		Stemcell:  s.Config.StemcellName,
@@ -37,7 +37,7 @@ func (s *NFS) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 			s.StatsdInjector.CreateJob(),
 		},
 		Networks: []enaml.Network{
-			enaml.Network{Name: s.Config.NetworkName, StaticIPs: s.Config.NFSIPs},
+			enaml.Network{Name: s.Config.NetworkName, StaticIPs: []string{s.Config.NFSIP}},
 		},
 		PersistentDiskType: s.Config.NFSPersistentDiskType,
 		Update: enaml.Update{

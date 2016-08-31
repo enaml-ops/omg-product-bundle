@@ -38,12 +38,6 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				SkipSSLCertVerify:         false,
 				CCUploaderJobPollInterval: 25,
 				CCExternalPort:            9023,
-				CCBulkBatchSize:           5,
-				CCFetchTimeout:            30,
-				FSListenAddr:              "0.0.0.0:12345",
-				FSStaticDirectory:         "/foo/bar/baz",
-				FSDebugAddr:               "10.0.1.2:22222",
-				FSLogLevel:                "debug",
 				MetronPort:                3458,
 				TrafficControllerURL:      "wss://doppler.sys.yourdomain.com:443",
 				Secret:                    config.Secret{},
@@ -153,8 +147,6 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(n.Diego.Nsync.Cc.BaseUrl).Should(Equal("https://api.sys.test.com"))
 			Ω(n.Diego.Nsync.Cc.BasicAuthUsername).Should(Equal("internaluser"))
 			Ω(n.Diego.Nsync.Cc.BasicAuthPassword).Should(Equal("internalpassword"))
-			Ω(n.Diego.Nsync.Cc.BulkBatchSize).Should(Equal(5))
-			Ω(n.Diego.Nsync.Cc.FetchTimeoutInSeconds).Should(Equal(30))
 			Ω(n.Diego.Nsync.Cc.PollingIntervalInSeconds).Should(Equal(25))
 
 			By("configuring the route emitter")

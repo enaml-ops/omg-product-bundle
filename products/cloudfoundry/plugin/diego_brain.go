@@ -150,8 +150,6 @@ func (d *diegoBrain) newNsync() *enaml.InstanceJob {
 						BaseUrl:                  prefixSystemDomain(d.Config.SystemDomain, "api"),
 						BasicAuthUsername:        d.Config.CCInternalAPIUser,
 						BasicAuthPassword:        d.Config.CCInternalAPIPassword,
-						BulkBatchSize:            d.Config.CCBulkBatchSize,
-						FetchTimeoutInSeconds:    d.Config.CCFetchTimeout,
 						PollingIntervalInSeconds: d.Config.CCUploaderJobPollInterval,
 					},
 					Bbs: &nsync.Bbs{

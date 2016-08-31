@@ -13,7 +13,7 @@ func CreateNFSMounterJob(config *config.Config) enaml.InstanceJob {
 		Release: "cf",
 		Properties: &nfsmounterlib.NfsMounterJob{
 			NfsServer: &nfsmounterlib.NfsServer{
-				Address: config.NFSServerAddress,
+				Address: config.NFSIP,
 				Share:   config.SharePath,
 			},
 		},

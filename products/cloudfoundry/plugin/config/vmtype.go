@@ -2,6 +2,28 @@ package config
 
 import "github.com/codegangsta/cli"
 
+func RequiredVMTypeFlags() []string {
+	return []string{
+		"mysql-proxy-vm-type",
+		"clock-global-vm-type",
+		"cc-vm-type",
+		"diego-brain-vm-type",
+		"diego-cell-vm-type",
+		"doppler-vm-type",
+		"loggregator-traffic-controller-vmtype",
+		"cc-worker-vm-type",
+		"errand-vm-type",
+		"etcd-vm-type",
+		"nats-vm-type",
+		"consul-vm-type",
+		"mysql-vm-type",
+		"diego-db-vm-type",
+		"uaa-vm-type",
+		"router-vm-type",
+		"nfs-vm-type",
+	}
+}
+
 func NewVMType(c *cli.Context) VMType {
 	return VMType{
 		HAProxyVMType:               c.String("haproxy-vm-type"),

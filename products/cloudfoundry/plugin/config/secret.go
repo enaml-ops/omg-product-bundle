@@ -2,6 +2,49 @@ package config
 
 import "github.com/codegangsta/cli"
 
+func RequiredSecretFlags() []string {
+	return []string{
+		"db-uaa-password",
+		"push-apps-manager-password",
+		"system-services-password",
+		"system-verification-password",
+		"opentsdb-firehose-nozzle-client-secret",
+		"identity-client-secret",
+		"login-client-secret",
+		"portal-client-secret",
+		"autoscaling-service-client-secret",
+		"system-passwords-client-secret",
+		"cc-service-dashboards-client-secret",
+		"gorouter-client-secret",
+		"notifications-client-secret",
+		"notifications-ui-client-secret",
+		"cloud-controller-username-lookup-client-secret",
+		"cc-routing-client-secret",
+		"apps-metrics-client-secret",
+		"apps-metrics-processing-client-secret",
+		"admin-password",
+		"nats-pass",
+		"mysql-bootstrap-password",
+		"consul-encryption-key",
+		"smoke-tests-password",
+		"metron-secret",
+		"doppler-shared-secret",
+		"doppler-client-secret",
+		"cc-bulk-api-password",
+		"cc-internal-api-password",
+		"ssh-proxy-uaa-secret",
+		"cc-db-encryption-key",
+		"db-ccdb-password",
+		"diego-db-passphrase",
+		"uaa-admin-secret",
+		"router-pass",
+		"mysql-proxy-api-password",
+		"mysql-admin-password",
+		"db-console-password",
+		"cc-staging-upload-password",
+	}
+}
+
 func NewSecret(c *cli.Context) Secret {
 	return Secret{
 		UAADBPassword:                             c.String("db-uaa-password"),

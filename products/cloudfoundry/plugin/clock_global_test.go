@@ -25,7 +25,6 @@ var _ = Describe("given a clock_global partition", func() {
 				SystemDomain:      "sys.test.com",
 				AppDomains:        []string{"apps.test.com"},
 				NATSPort:          4333,
-				CCInternalAPIUser: "internalapiuser",
 				MetronZone:        "metronzoneguid",
 				SharePath:         "/var/vcap/nfs",
 				Secret:            config.Secret{},
@@ -34,7 +33,8 @@ var _ = Describe("given a clock_global partition", func() {
 				InstanceCount:     config.InstanceCount{},
 				IP:                config.IP{},
 			}
-			config.NFSServerAddress = "10.0.0.19"
+			config.CCInternalAPIUser = "internalapiuser"
+			config.NFSIP = "10.0.0.19"
 			config.NATSUser = "nats"
 			config.NATSPassword = "pass"
 			config.NATSMachines = []string{"1.0.0.5", "1.0.0.6"}

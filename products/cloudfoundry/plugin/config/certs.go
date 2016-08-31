@@ -5,6 +5,15 @@ import (
 	"github.com/enaml-ops/pluginlib/util"
 )
 
+func RequiredCertFlags() []string {
+	return []string{"consul-server-ca-cert", "consul-agent-cert", "consul-agent-key", "consul-server-cert", "consul-server-key",
+		"bbs-server-ca-cert", "bbs-client-cert", "bbs-client-key", "bbs-server-cert", "bbs-server-key",
+		"etcd-server-cert", "etcd-server-key", "etcd-client-cert", "etcd-client-key", "etcd-peer-cert", "etcd-peer-key",
+		"uaa-saml-service-provider-key", "uaa-saml-service-provider-cert", "uaa-jwt-signing-key", "uaa-jwt-verification-key",
+		"router-ssl-cert", "router-ssl-key",
+	}
+}
+
 func NewCerts(c *cli.Context) (*Certs, error) {
 	certs := &Certs{}
 

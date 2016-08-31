@@ -29,7 +29,6 @@ var _ = Describe("Cloud Controller Partition", func() {
 				NetworkName:        "foundry",
 				SkipSSLCertVerify:  true,
 				HostKeyFingerprint: "hostkeyfingerprint",
-				CCInternalAPIUser:  "internalapiuser",
 				SharePath:          "/var/vcap/nfs",
 				MetronZone:         "metronzoneguid",
 				SupportAddress:     "http://support.pivotal.io",
@@ -40,6 +39,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 				InstanceCount:      config.InstanceCount{},
 				IP:                 config.IP{},
 			}
+			config.CCInternalAPIUser = "internalapiuser"
 			config.NATSMachines = []string{"10.0.0.4"}
 			config.NATSUser = "natsuser"
 			config.NATSPassword = "natspass"
@@ -58,7 +58,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 			config.CCBulkAPIPassword = "bulkapipassword"
 			config.DbEncryptionKey = "dbencryptionkey"
 			config.CCInternalAPIPassword = "internalapipassword"
-			config.NFSServerAddress = "10.0.0.19"
+			config.NFSIP = "10.0.0.19"
 			config.MySQLProxyIPs = []string{"10.0.0.3"}
 			config.CCDBUsername = "ccdbuser"
 			config.CCDBPassword = "ccdbpass"

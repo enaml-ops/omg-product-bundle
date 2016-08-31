@@ -251,7 +251,7 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				Port: 443,
 			},
 			NfsServer: &ccnglib.NfsServer{
-				Address:   c.Config.NFSServerAddress,
+				Address:   c.Config.NFSIP,
 				SharePath: "/var/vcap/nfs",
 			},
 			Nats: &ccnglib.Nats{

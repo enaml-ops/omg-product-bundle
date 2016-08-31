@@ -27,7 +27,7 @@ var _ = Describe("NFS Partition", func() {
 				IP:                      config.IP{},
 			}
 			config.MetronSecret = "metronsecret"
-			config.NFSIPs = []string{"1.0.0.1"}
+			config.NFSIP = "1.0.0.1"
 			config.NFSVMType = "blah"
 			config.NFSPersistentDiskType = "blah-disk"
 			config.MetronZone = "metronzoneguid"
