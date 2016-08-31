@@ -249,10 +249,10 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				SkipCertVerify: c.Config.SkipSSLCertVerify,
 			},
 			LoggerEndpoint: &ccnglib.LoggerEndpoint{
-				Port: 443,
+				Port: c.Config.LoggregatorPort,
 			},
 			Doppler: &ccnglib.Doppler{
-				Port: 443,
+				Port: c.Config.LoggregatorPort,
 			},
 			NfsServer: &ccnglib.NfsServer{
 				Address:   c.Config.NFSIP,

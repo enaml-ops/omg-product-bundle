@@ -38,7 +38,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				SkipSSLCertVerify:         false,
 				CCUploaderJobPollInterval: 25,
 				CCExternalPort:            9023,
-				TrafficControllerURL:      "wss://doppler.sys.yourdomain.com:443",
+				LoggregatorPort:           443,
 				Secret:                    config.Secret{},
 				User:                      config.User{},
 				Certs:                     &config.Certs{},
@@ -198,7 +198,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(job.Release).Should(Equal(DiegoReleaseName))
 			t := job.Properties.(*tps.TpsJob)
 			Ω(t.Diego.Ssl.SkipCertVerify).Should(BeFalse())
-			Ω(t.Diego.Tps.TrafficControllerUrl).Should(Equal("wss://doppler.sys.yourdomain.com:443"))
+			Ω(t.Diego.Tps.TrafficControllerUrl).Should(Equal("wss://doppler.sys.test.com:443"))
 			Ω(t.Diego.Tps.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
 			Ω(t.Diego.Tps.Bbs.CaCert).Should(Equal("cacert"))
 			Ω(t.Diego.Tps.Bbs.ClientCert).Should(Equal("clientcert"))

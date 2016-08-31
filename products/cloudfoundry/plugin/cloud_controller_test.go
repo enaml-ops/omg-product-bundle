@@ -38,6 +38,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 				Certs:              &config.Certs{},
 				InstanceCount:      config.InstanceCount{},
 				IP:                 config.IP{},
+				LoggregatorPort:    443,
 			}
 			config.CCInternalAPIUser = "internalapiuser"
 			config.NATSMachines = []string{"10.0.0.4"}

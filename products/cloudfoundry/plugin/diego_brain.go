@@ -260,7 +260,7 @@ func (d *diegoBrain) newTPS() *enaml.InstanceJob {
 			Diego: &tps.Diego{
 				Ssl: &tps.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
 				Tps: &tps.Tps{
-					TrafficControllerUrl: d.Config.TrafficControllerURL,
+					TrafficControllerUrl: fmt.Sprintf("wss://doppler.%s:%d", d.Config.SystemDomain, d.Config.LoggregatorPort),
 					Bbs: &tps.Bbs{
 						ApiLocation: defaultBBSAPILocation,
 						CaCert:      d.Config.BBSCACert,

@@ -36,7 +36,6 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		BBSRequireSSL:                 c.BoolT("bbs-require-ssl"),
 		CCUploaderJobPollInterval:     c.Int("cc-uploader-poll-interval"),
 		CCExternalPort:                c.Int("cc-external-port"),
-		TrafficControllerURL:          c.String("traffic-controller-url"),
 		SelfServiceLinksEnabled:       c.BoolT("uaa-enable-selfservice-links"),
 		SignupsEnabled:                c.BoolT("uaa-signups-enabled"),
 		CompanyName:                   c.String("uaa-company-name"),
@@ -53,6 +52,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		MySQLProxyExternalHost:        c.String("mysql-proxy-external-host"),
 		RouterEnableSSL:               c.Bool("router-enable-ssl"),
 		NFSAllowFromNetworkCIDR:       c.StringSlice("nfs-allow-from-network-cidr"),
+		LoggregatorPort:               c.Int("loggregator-port"),
 	}
 	config.IP = NewIP(c)
 	config.VMType = NewVMType(c)
@@ -91,7 +91,6 @@ type Config struct {
 	BBSRequireSSL                 bool
 	CCUploaderJobPollInterval     int
 	CCExternalPort                int
-	TrafficControllerURL          string
 	SelfServiceLinksEnabled       bool
 	SignupsEnabled                bool
 	CompanyName                   string
@@ -112,6 +111,7 @@ type Config struct {
 	MySQLProxyExternalHost        string
 	RouterEnableSSL               bool
 	NFSAllowFromNetworkCIDR       []string
+	LoggregatorPort               int
 	*Certs
 	IP
 	VMType
@@ -133,7 +133,6 @@ func RequiredStringFlags() []string {
 		"uaa-login-protocol",
 		"metron-zone",
 		"doppler-zone",
-		"traffic-controller-url",
 		"uaa-company-name",
 		"uaa-product-logo",
 		"uaa-square-logo",
@@ -155,6 +154,7 @@ func RequiredIntFlags() []string {
 		"doppler-drain-buffer-size",
 		"cc-uploader-poll-interval",
 		"cc-external-port",
+		"loggregator-port",
 	}
 }
 func (c *Config) MySQLProxyHost() string {

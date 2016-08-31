@@ -173,7 +173,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 
 		createIntFlag("cc-external-port", "external port of the Cloud Controller API", "9022"),
 		createStringFlag("ssh-proxy-uaa-secret", "the OAuth client secret used to authenticate the SSH proxy"),
-		createStringFlag("traffic-controller-url", "the URL of the traffic controller"),
+		createIntFlag("loggregator-port", "port for loggregator", "443"),
 		createStringFlag("clock-global-vm-type", "the name of the desired vm type for the clock global partition"),
 
 		//Doppler
