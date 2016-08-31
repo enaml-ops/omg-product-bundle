@@ -148,6 +148,10 @@ type Config struct {
 	SupportAddress                 string
 	MinCliVersion                  string
 	ClockGlobalVMType              string
+	HAProxySSLPem                  string
+	HAProxySkip                    bool
+	HAProxyVMType                  string
+	HAProxyIPs                     []string
 }
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -284,6 +288,9 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		LDAPMailAttributeName:                     c.String("uaa-ldap-mail-attributename"),
 		LDAPEnabled:                               c.BoolT("uaa-ldap-enabled"),
 		ClockGlobalVMType:                         c.String("clock-global-vm-type"),
+		HAProxySkip:                               c.BoolT("skip-haproxy"),
+		HAProxyIPs:                                c.StringSlice("haproxy-ip"),
+		HAProxyVMType:                             c.String("haproxy-vm-type"),
 	}
 	if err := config.loadSSL(c); err != nil {
 		return nil, err
@@ -366,6 +373,12 @@ func (ca *Config) loadSSL(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
+
+	sslpem, err := pluginutil.LoadResourceFromContext(c, "haproxy-sslpem")
+	if err != nil {
+		lo.G.Error("couldn't load haproxy-sslpem:" + err.Error())
+		return nil
+	}
 	ca.ConsulCaCert = caCert
 	ca.ConsulAgentCert = agentCert
 	ca.ConsulServerCert = serverCert
@@ -382,6 +395,7 @@ func (ca *Config) loadSSL(c *cli.Context) error {
 	ca.EtcdPeerKey = etcdPeerKey
 	ca.EtcdServerKey = etcdServerKey
 	ca.EtcdServerCert = etcdServerCert
+	ca.HAProxySSLPem = sslpem
 	return nil
 }
 

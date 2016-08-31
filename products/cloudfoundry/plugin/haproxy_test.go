@@ -8,41 +8,20 @@ import (
 )
 
 var _ = Describe("HaProxy Partition", func() {
-	Context("when initialized WITHOUT a complete set of arguments", func() {
-		It("then HasValidValues should return false", func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--skip-haproxy=false",
-			})
-			haproxyPartition := NewHaProxyPartition(c, &Config{})
-			Ω(haproxyPartition.HasValidValues()).Should(BeFalse())
-		})
-	})
 	Context("when initialized WITH a complete set of arguments", func() {
-		var haproxyPartition InstanceGrouper
+		var haproxyPartition InstanceGroupCreator
 		BeforeEach(func() {
-			plugin := new(Plugin)
-			c := plugin.GetContext([]string{
-				"cloudfoundry",
-				"--skip-haproxy=false",
-				"--haproxy-ip", "1.0.11.1",
-				"--haproxy-ip", "1.0.11.2",
-				"--haproxy-ip", "1.0.11.3",
-				"--haproxy-vm-type", "blah",
-				"--router-ip", "1.0.0.1",
-				"--router-ip", "1.0.0.2",
-				"--haproxy-sslpem", "blah",
-			})
 			config := &Config{
-				StemcellName: "cool-ubuntu-animal",
-				AZs:          []string{"eastprod-1"},
-				NetworkName:  "foundry-net",
+				StemcellName:   "cool-ubuntu-animal",
+				AZs:            []string{"eastprod-1"},
+				NetworkName:    "foundry-net",
+				HAProxySkip:    false,
+				HAProxyIPs:     []string{"1.0.11.1", "1.0.11.2", "1.0.11.3"},
+				HAProxyVMType:  "blah",
+				RouterMachines: []string{"1.0.0.1", "1.0.0.2"},
+				HAProxySSLPem:  "blah",
 			}
-			haproxyPartition = NewHaProxyPartition(c, config)
-		})
-		It("then HasValidValues should be true", func() {
-			Ω(haproxyPartition.HasValidValues()).Should(BeTrue())
+			haproxyPartition = NewHaProxyPartition(config)
 		})
 		It("then it should allow the user to configure the haproxy IPs", func() {
 			ig := haproxyPartition.ToInstanceGroup()
