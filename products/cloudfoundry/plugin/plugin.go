@@ -54,7 +54,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("etcd-release-version", "version for etcd bosh release", EtcdReleaseVersion),
 		createStringFlag("cf-mysql-release-version", "version for cf-mysql bosh release", CFMysqlReleaseVersion),
 		createStringFlag("cflinuxfs2-release-version", "version for cflinuxfs2 bosh release", CFLinuxReleaseVersion),
-		createStringFlag("stemcell-version", "version of stemcell", "latest"),
+		createStringFlag("stemcell-version", "version of stemcell", StemcellVersion),
 
 		// shared for all instance groups:
 		createBoolFlag("infer-from-cloud", "setting this flag will attempt to pull as many defaults from your targetted bosh's cloud config as it can (vmtype, network, disk, etc)."),
