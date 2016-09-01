@@ -18,7 +18,7 @@ var _ = Describe("Etcd Partition", func() {
 				AZs:             []string{"eastprod-1"},
 				NetworkName:     "foundry-net",
 				NATSPort:        4222,
-				MetronZone:      "metronzoneguid",
+				DopplerZone:      "DopplerZoneguid",
 				SyslogAddress:   "syslog-server",
 				SyslogPort:      10601,
 				SyslogTransport: "tcp",

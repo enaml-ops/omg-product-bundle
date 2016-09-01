@@ -27,7 +27,7 @@ var _ = Describe("given a Diego Database Partition", func() {
 					StemcellName:    "cool-ubuntu-animal",
 					NetworkName:     "foundry-net",
 					AllowSSHAccess:  true,
-					MetronZone:      "metronzoneguid",
+					DopplerZone:      "DopplerZoneguid",
 					SyslogAddress:   "syslog-server",
 					SyslogPort:      10601,
 					SyslogTransport: "tcp",

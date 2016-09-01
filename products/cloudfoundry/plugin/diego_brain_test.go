@@ -33,7 +33,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				NetworkName:               "foundry-net",
 				AllowSSHAccess:            true,
 				NATSPort:                  1234,
-				MetronZone:                "metronzoneguid",
+				DopplerZone:                "DopplerZoneguid",
 				BBSRequireSSL:             false,
 				SkipSSLCertVerify:         false,
 				CCUploaderJobPollInterval: 25,
@@ -222,7 +222,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			By("configuring the metron agent")
 			job = ig.GetJobByName("metron_agent")
 			m := job.Properties.(*metron_agent.MetronAgentJob)
-			Ω(m.MetronAgent.Zone).Should(Equal("metronzoneguid"))
+			Ω(m.MetronAgent.Zone).Should(Equal("DopplerZoneguid"))
 			Ω(m.MetronAgent.Deployment).Should(Equal("cf"))
 			Ω(m.MetronEndpoint.SharedSecret).Should(Equal("metronsecret"))
 			Ω(m.Loggregator.Etcd.Machines).Should(Equal([]string{"1.0.0.7", "1.0.0.8"}))

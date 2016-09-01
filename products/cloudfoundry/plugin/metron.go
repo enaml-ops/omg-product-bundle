@@ -31,7 +31,7 @@ func (s *Metron) CreateJob() enaml.InstanceJob {
 				Port:      s.Config.SyslogPort,
 			},
 			MetronAgent: &metron_agent.MetronAgent{
-				Zone:       s.Config.MetronZone,
+				Zone:       s.Config.DopplerZone,
 				Deployment: DeploymentName,
 			},
 			MetronEndpoint: &metron_agent.MetronEndpoint{

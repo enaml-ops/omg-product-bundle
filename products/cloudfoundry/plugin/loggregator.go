@@ -58,7 +58,7 @@ func (l *loggregatorTrafficController) createLoggregatorTrafficControllerJob() e
 				SkipCertVerify: l.Config.SkipSSLCertVerify,
 			},
 			TrafficController: &ltc.TrafficController{
-				Zone: l.Config.MetronZone,
+				Zone: l.Config.DopplerZone,
 			},
 			Doppler: &ltc.Doppler{
 				UaaClientId: "doppler",

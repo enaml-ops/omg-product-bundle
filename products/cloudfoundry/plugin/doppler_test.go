@@ -21,7 +21,6 @@ var _ = Describe("Doppler Partition", func() {
 				AZs:                           []string{"eastprod-1"},
 				SystemDomain:                  "sys.test.com",
 				SkipSSLCertVerify:             true,
-				MetronZone:                    "metronzoneguid",
 				SyslogAddress:                 "syslog-server",
 				SyslogPort:                    10601,
 				SyslogTransport:               "tcp",

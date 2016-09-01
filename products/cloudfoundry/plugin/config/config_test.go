@@ -22,7 +22,6 @@ func BuildConfigContext() *cli.Context {
 		"--mysql-bootstrap-password", "mysqlbootstrappwd",
 		"--mysql-ip", "10.0.0.12",
 		"--mysql-ip", "10.0.0.13",
-		"--metron-zone", "metronzoneguid",
 		"--syslog-address", "syslog-server",
 		"--syslog-port", "10601",
 		"--syslog-transport", "tcp",

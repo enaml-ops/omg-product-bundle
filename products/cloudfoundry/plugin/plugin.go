@@ -83,8 +83,6 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createIntFlag("nats-port", "the port for the NATS server to listen on", "4222"),
 		createStringSliceFlag("nats-machine-ip", "ip of a nats node vm"),
 
-		createStringFlag("metron-zone", "zone guid for the metron agent"),
-
 		createStringSliceFlag("consul-ip", "a list of the consul ips you wish to use"),
 		createStringFlag("consul-vm-type", "the name of your desired vm size for consul"),
 		createStringSliceFlag("consul-encryption-key", "encryption key for consul"),

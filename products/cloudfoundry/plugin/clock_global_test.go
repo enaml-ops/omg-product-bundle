@@ -25,7 +25,7 @@ var _ = Describe("given a clock_global partition", func() {
 				SystemDomain:      "sys.test.com",
 				AppDomains:        []string{"apps.test.com"},
 				NATSPort:          4333,
-				MetronZone:        "metronzoneguid",
+				DopplerZone:        "DopplerZoneguid",
 				SharePath:         "/var/vcap/nfs",
 				Secret:            config.Secret{},
 				User:              config.User{},

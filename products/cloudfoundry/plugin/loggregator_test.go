@@ -25,7 +25,7 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 				SystemDomain:      "sys.yourdomain.com",
 				SkipSSLCertVerify: false,
 				NATSPort:          4222,
-				MetronZone:        "metronzoneguid",
+				DopplerZone:        "DopplerZoneguid",
 				Secret:            config.Secret{},
 				User:              config.User{},
 				Certs:             &config.Certs{},
@@ -93,7 +93,7 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 			Ω(props.SystemDomain).Should(Equal("sys.yourdomain.com"))
 			Ω(props.Cc.SrvApiUri).Should(Equal("https://api.sys.yourdomain.com"))
 			Ω(props.Ssl.SkipCertVerify).Should(BeFalse())
-			Ω(props.TrafficController.Zone).Should(Equal("metronzoneguid"))
+			Ω(props.TrafficController.Zone).Should(Equal("DopplerZoneguid"))
 			Ω(props.Doppler.UaaClientId).Should(Equal("doppler"))
 			Ω(props.Uaa.Clients.Doppler.Secret).Should(Equal("dopplersecret"))
 			Ω(props.Loggregator.Etcd.Machines).Should(ConsistOf("10.0.1.2", "10.0.1.3", "10.0.1.4"))
@@ -106,7 +106,7 @@ var _ = Describe("given the loggregator traffic controller partition", func() {
 			Ω(job.Release).Should(Equal(CFReleaseName))
 
 			props := job.Properties.(*metron_agent.MetronAgentJob)
-			Ω(props.MetronAgent.Zone).Should(Equal("metronzoneguid"))
+			Ω(props.MetronAgent.Zone).Should(Equal("DopplerZoneguid"))
 			Ω(props.MetronAgent.Deployment).Should(Equal(CFReleaseName))
 			Ω(props.MetronEndpoint.SharedSecret).Should(Equal("metronsecret"))
 			Ω(props.Loggregator.Etcd.Machines).Should(ConsistOf("10.0.1.2", "10.0.1.3", "10.0.1.4"))

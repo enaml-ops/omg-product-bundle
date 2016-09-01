@@ -104,7 +104,7 @@ func (s *diegoCell) newRDiego() (rdiego *rep.RepJob) {
 				PreloadedRootfses: []string{
 					"cflinuxfs2:/var/vcap/packages/cflinuxfs2/rootfs",
 				},
-				Zone: s.Config.MetronZone,
+				Zone: s.Config.DopplerZone,
 			},
 		},
 	}

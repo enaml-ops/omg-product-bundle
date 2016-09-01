@@ -18,7 +18,7 @@ var _ = Describe("Consul Partition", func() {
 				StemcellName:    "cool-ubuntu-animal",
 				AZs:             []string{"eastprod-1"},
 				NetworkName:     "foundry-net",
-				MetronZone:      "metronzoneguid",
+				DopplerZone:      "DopplerZoneguid",
 				SyslogAddress:   "syslog-server",
 				SyslogPort:      10601,
 				SyslogTransport: "tcp",

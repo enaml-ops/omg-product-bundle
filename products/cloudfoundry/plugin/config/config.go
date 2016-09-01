@@ -27,7 +27,6 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		AllowSSHAccess:                c.Bool("allow-app-ssh-access"),
 		SkipSSLCertVerify:             c.BoolT("skip-cert-verify"),
 		UAALoginProtocol:              c.String("uaa-login-protocol"),
-		MetronZone:                    c.String("metron-zone"),
 		SyslogAddress:                 c.String("syslog-address"),
 		SyslogPort:                    c.Int("syslog-port"),
 		SyslogTransport:               c.String("syslog-transport"),
@@ -83,7 +82,6 @@ type Config struct {
 	SkipSSLCertVerify             bool
 	NATSPort                      int
 	UAALoginProtocol              string
-	MetronZone                    string
 	SyslogAddress                 string
 	SyslogPort                    int
 	SyslogTransport               string
@@ -132,7 +130,6 @@ func RequiredStringFlags() []string {
 		"min-cli-version",
 		"nfs-share-path",
 		"uaa-login-protocol",
-		"metron-zone",
 		"doppler-zone",
 		"uaa-company-name",
 		"uaa-product-logo",

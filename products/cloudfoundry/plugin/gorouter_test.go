@@ -21,7 +21,7 @@ var _ = Describe("Go-Router Partition", func() {
 				AZs:             []string{"eastprod-1"},
 				NetworkName:     "foundry-net",
 				NATSPort:        4222,
-				MetronZone:      "metronzoneguid",
+				DopplerZone:      "DopplerZoneguid",
 				RouterEnableSSL: true,
 				Secret:          config.Secret{},
 				User:            config.User{},
@@ -112,7 +112,7 @@ var _ = Describe("Go-Router Partition", func() {
 			ig := deploymentManifest.GetInstanceGroupByName("router-partition")
 			job := ig.GetJobByName("metron_agent")
 			properties := job.Properties.(*metron_agent.MetronAgentJob)
-			Ω(properties.MetronAgent.Zone).Should(Equal("metronzoneguid"))
+			Ω(properties.MetronAgent.Zone).Should(Equal("DopplerZoneguid"))
 			Ω(properties.MetronAgent.Deployment).Should(Equal(DeploymentName))
 			Ω(properties.MetronEndpoint.SharedSecret).Should(Equal("metronsecret"))
 		})

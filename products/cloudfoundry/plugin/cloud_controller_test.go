@@ -30,7 +30,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 				SkipSSLCertVerify:  true,
 				HostKeyFingerprint: "hostkeyfingerprint",
 				SharePath:          "/var/vcap/nfs",
-				MetronZone:         "metronzoneguid",
+				DopplerZone:         "DopplerZoneguid",
 				SupportAddress:     "http://support.pivotal.io",
 				MinCliVersion:      "6.7.0",
 				Secret:             config.Secret{},

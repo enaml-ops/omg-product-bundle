@@ -19,7 +19,7 @@ var _ = Describe("Nats Partition", func() {
 				StemcellName:  "trusty",
 				AZs:           []string{"eastprod-1"},
 				NetworkName:   "foundry-net",
-				MetronZone:    "metronzoneguid",
+				DopplerZone:    "DopplerZoneguid",
 				Secret:        config.Secret{},
 				User:          config.User{},
 				Certs:         &config.Certs{},

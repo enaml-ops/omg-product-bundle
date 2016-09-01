@@ -30,7 +30,7 @@ var _ = Describe("NFS Partition", func() {
 			config.NFSIP = "1.0.0.1"
 			config.NFSVMType = "blah"
 			config.NFSPersistentDiskType = "blah-disk"
-			config.MetronZone = "metronzoneguid"
+			config.DopplerZone = "DopplerZoneguid"
 			config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
 
 			nfsPartition = NewNFSPartition(config)

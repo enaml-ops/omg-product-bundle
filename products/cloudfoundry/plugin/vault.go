@@ -106,7 +106,6 @@ func getPasswordObject() []byte {
 		"doppler-shared-secret",
 		"ssh-proxy-uaa-secret",
 		"doppler-zone",
-		"metron-zone",
 		"uaa-admin-secret",
 		"opentsdb-firehose-nozzle-client-secret",
 		"identity-client-secret",

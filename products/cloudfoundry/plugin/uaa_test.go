@@ -21,7 +21,7 @@ var _ = Describe("UAA Partition", func() {
 				NetworkName:             "foundry-net",
 				AllowSSHAccess:          true,
 				NATSPort:                4222,
-				MetronZone:              "metronzoneguid",
+				DopplerZone:              "DopplerZoneguid",
 				SyslogAddress:           "syslog-server",
 				SyslogPort:              10601,
 				SyslogTransport:         "tcp",

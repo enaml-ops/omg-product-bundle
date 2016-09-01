@@ -16,7 +16,7 @@ var _ = Describe("Metron", func() {
 				StemcellName:    "cool-ubuntu-animal",
 				AZs:             []string{"eastprod-1"},
 				NetworkName:     "foundry-net",
-				MetronZone:      "metronzoneguid",
+				DopplerZone:      "DopplerZoneguid",
 				SyslogAddress:   "syslog-server",
 				SyslogPort:      10601,
 				SyslogTransport: "tcp",
@@ -43,7 +43,7 @@ var _ = Describe("Metron", func() {
 			job := metron.CreateJob()
 			Ω(job).ShouldNot(BeNil())
 			props, _ := job.Properties.(*metron_agent.MetronAgentJob)
-			Ω(props.MetronAgent.Zone).Should(Equal("metronzoneguid"))
+			Ω(props.MetronAgent.Zone).Should(Equal("DopplerZoneguid"))
 			Ω(props.SyslogDaemonConfig.Address).Should(Equal("syslog-server"))
 			Ω(props.SyslogDaemonConfig.Port).Should(Equal(10601))
 			Ω(props.SyslogDaemonConfig.Transport).Should(Equal("tcp"))

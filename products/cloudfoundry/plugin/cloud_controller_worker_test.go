@@ -23,7 +23,7 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 				AllowSSHAccess: true,
 				NetworkName:    "foundry",
 				SharePath:      "/var/vcap/nfs",
-				MetronZone:     "metronzoneguid",
+				DopplerZone:     "DopplerZoneguid",
 				Secret:         config.Secret{},
 				User:           config.User{},
 				Certs:          &config.Certs{},

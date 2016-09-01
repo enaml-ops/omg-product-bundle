@@ -98,7 +98,7 @@ func (s *gorouter) newMetronJob() enaml.InstanceJob {
 				Transport: "tcp",
 			},
 			MetronAgent: &metron_agent.MetronAgent{
-				Zone:       s.Config.MetronZone,
+				Zone:       s.Config.DopplerZone,
 				Deployment: DeploymentName,
 			},
 			MetronEndpoint: &metron_agent.MetronEndpoint{
