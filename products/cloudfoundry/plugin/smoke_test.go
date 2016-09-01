@@ -13,17 +13,18 @@ var _ = Describe("Smoke test errand", func() {
 		var smokeErrand InstanceGroupCreator
 		BeforeEach(func() {
 			config := &config.Config{
-				StemcellName:     "cool-ubuntu-animal",
-				AZs:              []string{"eastprod-1"},
-				NetworkName:      "foundry-net",
-				SystemDomain:     "sys.test.com",
-				AppDomains:       []string{"apps.test.com"},
-				UAALoginProtocol: "https",
-				Secret:           config.Secret{},
-				User:             config.User{},
-				Certs:            &config.Certs{},
-				InstanceCount:    config.InstanceCount{},
-				IP:               config.IP{},
+				StemcellName:      "cool-ubuntu-animal",
+				AZs:               []string{"eastprod-1"},
+				NetworkName:       "foundry-net",
+				SystemDomain:      "sys.test.com",
+				AppDomains:        []string{"apps.test.com"},
+				UAALoginProtocol:  "https",
+				SkipSSLCertVerify: true,
+				Secret:            config.Secret{},
+				User:              config.User{},
+				Certs:             &config.Certs{},
+				InstanceCount:     config.InstanceCount{},
+				IP:                config.IP{},
 			}
 			config.ErrandVMType = "blah"
 			config.SmokeTestsPassword = "password"
@@ -83,6 +84,7 @@ var _ = Describe("Smoke test errand", func() {
 			Ω(props.SmokeTests.Password).Should(Equal("password"))
 			Ω(props.SmokeTests.UseExistingOrg).Should(BeFalse())
 			Ω(props.SmokeTests.UseExistingSpace).Should(BeFalse())
+			Ω(props.SmokeTests.SkipSslValidation).Should(BeTrue())
 		})
 	})
 })

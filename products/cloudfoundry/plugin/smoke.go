@@ -47,14 +47,15 @@ func (s *smokeErrand) createSmokeJob() enaml.InstanceJob {
 		Release: "cf",
 		Properties: &smoke_tests.SmokeTestsJob{
 			SmokeTests: &smoke_tests.SmokeTests{
-				UseExistingOrg:   false,
-				UseExistingSpace: false,
-				Space:            "CF_SMOKE_TEST_SPACE",
-				Org:              "CF_SMOKE_TEST_ORG",
-				Password:         s.Config.SmokeTestsPassword,
-				User:             "smoke_tests",
-				Api:              fmt.Sprintf("%s://api.%s", s.Config.UAALoginProtocol, s.Config.SystemDomain),
-				AppsDomain:       s.Config.AppDomains[0],
+				SkipSslValidation: s.Config.SkipSSLCertVerify,
+				UseExistingOrg:    false,
+				UseExistingSpace:  false,
+				Space:             "CF_SMOKE_TEST_SPACE",
+				Org:               "CF_SMOKE_TEST_ORG",
+				Password:          s.Config.SmokeTestsPassword,
+				User:              "smoke_tests",
+				Api:               fmt.Sprintf("%s://api.%s", s.Config.UAALoginProtocol, s.Config.SystemDomain),
+				AppsDomain:        s.Config.AppDomains[0],
 			},
 		},
 	}
