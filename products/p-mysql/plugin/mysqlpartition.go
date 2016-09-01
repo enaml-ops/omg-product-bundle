@@ -111,8 +111,8 @@ func newCFMySQLJob(plgn *Plugin) enaml.InstanceJob {
 			WsrepDebug:             wsrepDebug,
 			SeededDatabases: []map[string]string{
 				map[string]string{
-					"name":     seededDBUser,
-					"username": seededDBName,
+					"name":     seededDBName,
+					"username": seededDBUser,
 					"password": plgn.SeededDBPassword,
 				},
 			},

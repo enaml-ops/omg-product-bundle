@@ -60,6 +60,12 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				var controlAddress = "address"
 				var controlPort = "port"
 				var controlTransport = "transport"
+				var controlEmail = "lkahslkdghasd@aol.com"
+				var controlUaaSecret = "lkjasdlfka"
+				var controlDBPass = "aslkhaoihsoiehbishdb"
+				var controlMonitoringSecret = "baklsjdhglakshdlkgsadg"
+				var controlAPIUser = "api-user"
+				var controlAPIPass = "api-pass"
 
 				BeforeEach(func() {
 					plgn.SyslogAddress = controlAddress
@@ -67,6 +73,14 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					plgn.SyslogTransport = controlTransport
 					plgn.MonitoringIPs = controlIPs
 					plgn.BaseDomain = controlBaseDomain
+					plgn.NotificationRecipientEmail = controlEmail
+					plgn.IPs = controlIPs
+					plgn.UaaAdminClientSecret = controlUaaSecret
+					plgn.SeededDBPassword = controlDBPass
+					plgn.NotificationClientSecret = controlMonitoringSecret
+					plgn.ProxyAPIUser = controlAPIUser
+					plgn.ProxyAPIPass = controlAPIPass
+
 					ig = NewMonitoringPartition(plgn)
 					Ω(len(ig.Jobs)).Should(BeNumerically(">=", 1))
 					jobProperties = ig.GetJobByName("replication-canary").Properties.(*replication_canary.ReplicationCanaryJob)
@@ -86,8 +100,20 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					Ω(jobProperties.SyslogAggregator.Transport).Should(Equal(controlTransport), "does not set a valid syslog transport")
 				})
 
-				XIt("then it should have a valid MysqlMonitoring property", func() {
-					Ω(jobProperties.MysqlMonitoring).Should(Equal(controlSysDomain))
+				It("then it should have a valid MysqlMonitoring property", func() {
+					Ω(jobProperties.MysqlMonitoring.RecipientEmail).Should(Equal(controlEmail), "the monitoring recipient email goes here")
+					Ω(jobProperties.MysqlMonitoring.NotifyOnly).Should(BeTrue(), "only notify value")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.PollFrequency).Should(Equal(30), "how frequently should we poll")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.WriteReadDelay).Should(Equal(20), "delay for write/read")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.SwitchboardCount).Should(Equal(2), "count of switchboards")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.ClusterIps).Should(Equal(controlIPs), "the cluster ip addresses")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.UaaAdminClientSecret).Should(Equal(controlUaaSecret), "uaa admin client secret")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.CanaryUsername).Should(Equal("repcanary"), "username for the canary")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.CanaryPassword).Should(Equal(controlDBPass), "password for the canary")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.NotificationsClientUsername).Should(Equal("mysql-monitoring"), "notifications client user")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.NotificationsClientSecret).Should(Equal(controlMonitoringSecret), "notifications client secret")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.SwitchboardUsername).Should(Equal(controlAPIUser), "switchboard user")
+					Ω(jobProperties.MysqlMonitoring.ReplicationCanary.SwitchboardPassword).Should(Equal(controlAPIPass), "swtichboard user's password")
 				})
 			})
 		})

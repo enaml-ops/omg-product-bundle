@@ -12,4 +12,7 @@ const (
 	notificationClientUsername     = "mysql-monitoring"
 	natsPort                       = "4222"
 	natsUser                       = "nats"
+	switchboardCount           int = 2
+	pollFrequency              int = 30
+	writeReadDelay             int = 20
 )
