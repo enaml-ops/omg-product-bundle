@@ -8,6 +8,7 @@ import (
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/consul_agent"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/garden"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/rep"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
@@ -29,7 +30,7 @@ var _ = Describe("given a Diego Cell Partition", func() {
 					StemcellName:    "cool-ubuntu-animal",
 					NetworkName:     "foundry-net",
 					AllowSSHAccess:  true,
-					DopplerZone:      "DopplerZoneguid",
+					DopplerZone:     "DopplerZoneguid",
 					SyslogAddress:   "syslog-server",
 					SyslogPort:      10601,
 					SyslogTransport: "tcp",
@@ -151,7 +152,14 @@ var _ = Describe("given a Diego Cell Partition", func() {
 
 					It("then it should populate my properties", func() {
 						Ω(job.Properties).ShouldNot(BeNil())
+						gardenJob := job.Properties.(*garden.GardenJob)
+						Ω(gardenJob.Garden.AllowHostAccess).Should(BeFalse())
+						Ω(gardenJob.Garden.PersistentImageList).Should(ConsistOf("/var/vcap/packages/cflinuxfs2/rootfs"))
+						Ω(gardenJob.Garden.DenyNetworks).Should(ConsistOf("0.0.0.0/0"))
+						Ω(gardenJob.Garden.NetworkPool).Should(Equal("10.254.0.0/22"))
+						Ω(gardenJob.Garden.NetworkMtu).Should(Equal(1454))
 					})
+
 				})
 			})
 

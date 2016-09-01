@@ -78,7 +78,7 @@ func (s *diegoCell) newGarden() (gardenLinux *garden.GardenJob) {
 	gardenLinux = &garden.GardenJob{
 		Garden: &garden.Garden{
 			AllowHostAccess:     false,
-			PersistentImageList: []string{"/var/vcap/packages/rootfs_cflinuxfs2/rootfs"},
+			PersistentImageList: []string{"/var/vcap/packages/cflinuxfs2/rootfs"},
 			NetworkPool:         "10.254.0.0/22",
 			DenyNetworks:        []string{"0.0.0.0/0"},
 			NetworkMtu:          1454,
