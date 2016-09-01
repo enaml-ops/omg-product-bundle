@@ -130,7 +130,6 @@ func BuildConfigContext() *cli.Context {
 		"--diego-db-ip", "127.0.0.2",
 		"--router-ip", "127.0.0.2",
 		"--host-key-fingerprint", "value",
-		"--nfs-share-path", "value",
 		"--doppler-zone", "value",
 		"--cc-internal-api-user", "value",
 		"--nfs-allow-from-network-cidr", "value",

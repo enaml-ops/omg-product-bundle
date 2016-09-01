@@ -47,6 +47,15 @@ func init() {
 //GetFlags -
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
+
+		createStringFlag("cf-release-version", "version for cf bosh release", CFReleaseVersion),
+		createStringFlag("garden-release-version", "version for garden bosh release", GardenReleaseVersion),
+		createStringFlag("diego-release-version", "version for diego bosh release", DiegoReleaseVersion),
+		createStringFlag("etcd-release-version", "version for etcd bosh release", EtcdReleaseVersion),
+		createStringFlag("cf-mysql-release-version", "version for cf-mysql bosh release", CFMysqlReleaseVersion),
+		createStringFlag("cflinuxfs2-release-version", "version for cflinuxfs2 bosh release", CFLinuxReleaseVersion),
+		createStringFlag("stemcell-version", "version of stemcell", "latest"),
+
 		// shared for all instance groups:
 		createBoolFlag("infer-from-cloud", "setting this flag will attempt to pull as many defaults from your targetted bosh's cloud config as it can (vmtype, network, disk, etc)."),
 		createStringFlag("stemcell-name", "the alias of your desired stemcell", StemcellAlias),
@@ -96,7 +105,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("nfs-ip", "a list of the nfs ips you wish to use"),
 		createStringFlag("nfs-vm-type", "the name of your desired vm size for nfs"),
 		createStringFlag("nfs-disk-type", "the name of your desired persistent disk type for nfs"),
-		createStringFlag("nfs-share-path", "NFS Share Path"),
+		createStringFlag("nfs-share-path", "NFS Share Path", "/var/vcap/store"),
 		createStringSliceFlag("nfs-allow-from-network-cidr", "the network cidr you wish to allow connections to nfs from"),
 
 		//Mysql Flags
@@ -291,17 +300,17 @@ func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "cloudfoundry",
 		Properties: map[string]interface{}{
-			"version":                  s.PluginVersion,
-			"cf-release":               strings.Join([]string{CFReleaseName, CFReleaseVersion}, " / "),
-			"cf-mysql-release":         strings.Join([]string{CFMysqlReleaseName, CFMysqlReleaseVersion}, " / "),
-			"diego-release":            strings.Join([]string{DiegoReleaseName, DiegoReleaseVersion}, " / "),
-			"garden-release":           strings.Join([]string{GardenReleaseName, GardenReleaseVersion}, " / "),
-			"cf-linux-release":         strings.Join([]string{CFLinuxReleaseName, CFLinuxReleaseVersion}, " / "),
-			"etcd-release":             strings.Join([]string{EtcdReleaseName, EtcdReleaseVersion}, " / "),
-			"pushapp-release":          strings.Join([]string{PushAppsReleaseName, PushAppsReleaseVersion}, " / "),
+			"version":          s.PluginVersion,
+			"cf-release":       strings.Join([]string{CFReleaseName, CFReleaseVersion}, " / "),
+			"cf-mysql-release": strings.Join([]string{CFMysqlReleaseName, CFMysqlReleaseVersion}, " / "),
+			"diego-release":    strings.Join([]string{DiegoReleaseName, DiegoReleaseVersion}, " / "),
+			"garden-release":   strings.Join([]string{GardenReleaseName, GardenReleaseVersion}, " / "),
+			"cf-linux-release": strings.Join([]string{CFLinuxReleaseName, CFLinuxReleaseVersion}, " / "),
+			"etcd-release":     strings.Join([]string{EtcdReleaseName, EtcdReleaseVersion}, " / "),
+			/*"pushapp-release":          strings.Join([]string{PushAppsReleaseName, PushAppsReleaseVersion}, " / "),
 			"notifications-release":    strings.Join([]string{NotificationsReleaseName, NotificationsReleaseVersion}, " / "),
 			"notifications-ui-release": strings.Join([]string{NotificationsUIReleaseName, NotificationsUIReleaseVersion}, " / "),
-			"cf-autoscaling-release":   strings.Join([]string{CFAutoscalingReleaseName, CFAutoscalingReleaseVersion}, " / "),
+			"cf-autoscaling-release":   strings.Join([]string{CFAutoscalingReleaseName, CFAutoscalingReleaseVersion}, " / "),*/
 		},
 	}
 }
@@ -334,18 +343,48 @@ func (s *Plugin) getDeploymentManifest(c *cli.Context, config *config.Config) (*
 	dm := enaml.NewDeploymentManifest([]byte(``))
 	dm.SetName(DeploymentName)
 
-	dm.AddRelease(enaml.Release{Name: CFReleaseName, Version: CFReleaseVersion})
-	dm.AddRelease(enaml.Release{Name: CFMysqlReleaseName, Version: CFMysqlReleaseVersion})
-	dm.AddRelease(enaml.Release{Name: DiegoReleaseName, Version: DiegoReleaseVersion})
-	dm.AddRelease(enaml.Release{Name: GardenReleaseName, Version: GardenReleaseVersion})
-	dm.AddRelease(enaml.Release{Name: CFLinuxReleaseName, Version: CFLinuxReleaseVersion})
-	dm.AddRelease(enaml.Release{Name: EtcdReleaseName, Version: EtcdReleaseVersion})
-	dm.AddRelease(enaml.Release{Name: PushAppsReleaseName, Version: PushAppsReleaseVersion})
+	dm.AddRelease(enaml.Release{
+		Name:    CFReleaseName,
+		Version: c.String("cf-release-version"),
+		URL:     c.String("cf-release-url"),
+		SHA1:    c.String("cf-release-sha"),
+	})
+	dm.AddRelease(enaml.Release{
+		Name:    CFMysqlReleaseName,
+		Version: c.String("cf-mysql-release-version"),
+		URL:     c.String("cf-mysql-release-url"),
+		SHA1:    c.String("cf-mysql-release-sha"),
+	})
+	dm.AddRelease(enaml.Release{
+		Name:    DiegoReleaseName,
+		Version: c.String("diego-release-version"),
+		URL:     c.String("diego-release-url"),
+		SHA1:    c.String("diego-release-sha"),
+	})
+	dm.AddRelease(enaml.Release{
+		Name:    GardenReleaseName,
+		Version: c.String("garden-release-version"),
+		URL:     c.String("garden-release-url"),
+		SHA1:    c.String("garden-release-sha"),
+	})
+	dm.AddRelease(enaml.Release{
+		Name:    CFLinuxReleaseName,
+		Version: c.String("cflinuxfs2-release-version"),
+		URL:     c.String("cflinuxfs2-release-url"),
+		SHA1:    c.String("cflinuxfs2-release-sha"),
+	})
+	dm.AddRelease(enaml.Release{
+		Name:    EtcdReleaseName,
+		Version: c.String("etcd-release-version"),
+		URL:     c.String("etcd-release-url"),
+		SHA1:    c.String("etcd-release-sha"),
+	})
+	/*dm.AddRelease(enaml.Release{Name: PushAppsReleaseName, Version: PushAppsReleaseVersion})
 	dm.AddRelease(enaml.Release{Name: NotificationsReleaseName, Version: NotificationsReleaseVersion})
 	dm.AddRelease(enaml.Release{Name: NotificationsUIReleaseName, Version: NotificationsUIReleaseVersion})
 	dm.AddRelease(enaml.Release{Name: CFAutoscalingReleaseName, Version: CFAutoscalingReleaseVersion})
-
-	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: StemcellVersion, Alias: StemcellAlias})
+	*/
+	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: c.String("stemcell-version"), Alias: StemcellAlias})
 
 	dm.Update.MaxInFlight = 1
 	dm.Update.Canaries = 1
