@@ -61,6 +61,7 @@ type Plugin struct {
 	ProxyAPIUser                string
 	ProxyAPIPass                string
 	MonitoringIPs               []string
+	BrokerIPs                   []string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -70,6 +71,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "ip", Usage: "multiple static ips for each mysql vm"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "proxy-ip", Usage: "multiple static ips for each mysql-proxy vm"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "monitoring-ip", Usage: "multiple static ips for each monitoring job vm"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "broker-ip", Usage: "multiple static ips for each broker job vm"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "az", Usage: "list of AZ names to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "network", Usage: "the name of the network to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vm-type", Usage: "name of your desired vm type"},
@@ -168,6 +170,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.ProxyAPIUser = c.String("proxy-api-username")
 	s.ProxyAPIPass = c.String("proxy-api-password")
 	s.MonitoringIPs = c.StringSlice("monitoring-ip")
+	s.BrokerIPs = c.StringSlice("broker-ip")
 
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)
