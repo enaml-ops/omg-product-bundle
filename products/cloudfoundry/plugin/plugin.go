@@ -113,8 +113,6 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("mysql-admin-password", "admin password for mysql"),
 		createStringFlag("mysql-bootstrap-username", "bootstrap username for mysql", "enamlmbu"),
 		createStringFlag("mysql-bootstrap-password", "bootstrap password for mysql"),
-		createStringFlag("bootstrap-vm-type", "vm type for bootstrap job"),
-		createStringFlag("acceptance-tests-vm-type", "vm type for acceptance tests"),
 
 		//MySQL proxy flags
 		createStringSliceFlag("mysql-proxy-ip", "a list of -mysql proxy ips you wish to use"),

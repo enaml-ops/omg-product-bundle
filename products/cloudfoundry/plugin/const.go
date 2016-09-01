@@ -80,8 +80,6 @@ var flagsToInferFromCloudConfig = map[string][]string{
 		"cc-worker-vm-type",
 		"cc-vm-type",
 		"loggregator-traffic-controller-vmtype",
-		"bootstrap-vm-type",
-		"acceptance-tests-vm-type",
 	},
 	"az":      []string{"az"},
 	"network": []string{"network"},
