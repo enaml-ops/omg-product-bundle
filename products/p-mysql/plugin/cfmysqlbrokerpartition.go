@@ -53,6 +53,12 @@ func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
 			CookieSecret:      plgn.BrokerCookieSecret,
 			AuthUsername:      plgn.BrokerAuthUsername,
 			AuthPassword:      plgn.BrokerAuthPassword,
+			Nats: &cf_mysql_broker.Nats{
+				Machines: plgn.ProxyIPs,
+				Password: plgn.NatsPassword,
+				User:     plgn.NatsUser,
+				Port:     plgn.NatsPort,
+			},
 		},
 	}
 }

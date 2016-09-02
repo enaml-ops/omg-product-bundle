@@ -62,6 +62,12 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				var controlAuthUser = "lkaslkdfhlaksdf"
 				var controlAuthPass = "lkaslkdalksdklklnasdgkn"
 				var controlCookieSecret = "lkaslkdghalsdgh"
+				var controlNatsPort = "4222"
+				var controlNatsUser = "nats-user"
+				var controlNatsPass = "nats-pass"
+				var controlProxyIPs = []string{
+					"1.0.0.5", "1.0.0.6",
+				}
 
 				BeforeEach(func() {
 					plgn.NetworkName = controlNetwork
@@ -70,6 +76,10 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					plgn.BrokerAuthUsername = controlAuthUser
 					plgn.BrokerAuthPassword = controlAuthPass
 					plgn.BrokerCookieSecret = controlCookieSecret
+					plgn.ProxyIPs = controlProxyIPs
+					plgn.NatsUser = controlNatsUser
+					plgn.NatsPassword = controlNatsPass
+					plgn.NatsPort = controlNatsPort
 					ig = NewCfMysqlBrokerPartition(plgn)
 					jobProperties = ig.GetJobByName("cf-mysql-broker").Properties.(*cf_mysql_broker.CfMysqlBrokerJob)
 				})
@@ -101,7 +111,12 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				It("then it should have a valid auth-password element", func() {
 					Ω(jobProperties.AuthPassword).Should(Equal(controlAuthPass))
 				})
-				XIt("then it should have a valid nats element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid nats element", func() {
+					Ω(jobProperties.Nats.Machines).Should(Equal(controlProxyIPs), "we should have a nats proxy ip list defined")
+					Ω(jobProperties.Nats.Password).Should(Equal(controlNatsPass), "we should have a nats password defined")
+					Ω(jobProperties.Nats.Port).Should(Equal(controlNatsPort), "we should have a nats port defined")
+					Ω(jobProperties.Nats.User).Should(Equal(controlNatsUser), "we should have a nats user defined")
+				})
 				XIt("then it should have a valid mysql-node element", func() { Ω(true).Should(BeFalse()) })
 				XIt("then it should have a valid syslog-aggregator element", func() { Ω(true).Should(BeFalse()) })
 				XIt("then it should have a valid services element", func() { Ω(true).Should(BeFalse()) })
