@@ -15,4 +15,5 @@ const (
 	switchboardCount           int = 2
 	pollFrequency              int = 30
 	writeReadDelay             int = 20
+	brokerQuotaPause           int = 30
 )

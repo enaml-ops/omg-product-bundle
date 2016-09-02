@@ -1,6 +1,9 @@
 package pmysql
 
-import "github.com/enaml-ops/enaml"
+import (
+	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-product-bundle/products/p-mysql/enaml-gen/cf-mysql-broker"
+)
 
 func NewCfMysqlBrokerPartition(plgn *Plugin) *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
@@ -29,8 +32,15 @@ func NewCfMysqlBrokerPartition(plgn *Plugin) *enaml.InstanceGroup {
 
 func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
-		Name:       "cf-mysql-broker",
-		Release:    "cf-mysql",
-		Properties: nil,
+		Name:    "cf-mysql-broker",
+		Release: "cf-mysql",
+		Properties: &cf_mysql_broker.CfMysqlBrokerJob{
+			Broker: &cf_mysql_broker.Broker{
+				QuotaEnforcer: &cf_mysql_broker.QuotaEnforcer{
+					Password: plgn.BrokerQuotaEnforcerPassword,
+					Pause:    brokerQuotaPause,
+				},
+			},
+		},
 	}
 }

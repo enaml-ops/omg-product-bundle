@@ -62,6 +62,7 @@ type Plugin struct {
 	ProxyAPIPass                string
 	MonitoringIPs               []string
 	BrokerIPs                   []string
+	BrokerQuotaEnforcerPassword string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -100,6 +101,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-user", Usage: "the user to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-password", Usage: "the password to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-password", Usage: "the password to access the nats instance"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-quota-enforcer-password", Usage: "the password to the broker quota enforcer"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-username", Value: natsUser, Usage: "the user to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-port", Value: natsPort, Usage: "the port to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-username", Usage: "the api username for the proxy"},
@@ -171,6 +173,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.ProxyAPIPass = c.String("proxy-api-password")
 	s.MonitoringIPs = c.StringSlice("monitoring-ip")
 	s.BrokerIPs = c.StringSlice("broker-ip")
+	s.BrokerQuotaEnforcerPassword = c.String("broker-quota-enforcer-password")
 
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)
