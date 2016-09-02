@@ -1,6 +1,8 @@
 package pmysql
 
 import (
+	"strings"
+
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/p-mysql/enaml-gen/cf-mysql-broker"
 )
@@ -46,6 +48,7 @@ func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
 			},
 			SslEnabled:        true,
 			SkipSslValidation: true,
+			ExternalHost:      strings.Join([]string{"p-mysql", "sys", plgn.BaseDomain}, "."),
 		},
 	}
 }
