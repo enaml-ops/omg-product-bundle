@@ -55,8 +55,10 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				var ig *enaml.InstanceGroup
 				var jobProperties *cf_mysql_broker.CfMysqlBrokerJob
 				var controlQuotaPass = "balkhaslkdhgasdg"
+				var controlNetwork = "default"
 
 				BeforeEach(func() {
+					plgn.NetworkName = controlNetwork
 					plgn.BrokerQuotaEnforcerPassword = controlQuotaPass
 					ig = NewCfMysqlBrokerPartition(plgn)
 					jobProperties = ig.GetJobByName("cf-mysql-broker").Properties.(*cf_mysql_broker.CfMysqlBrokerJob)
@@ -65,7 +67,9 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					Ω(jobProperties.Broker.QuotaEnforcer.Password).Should(Equal(controlQuotaPass))
 					Ω(jobProperties.Broker.QuotaEnforcer.Pause).Should(Equal(30))
 				})
-				XIt("then it should have a valid networks element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid networks element", func() {
+					Ω(jobProperties.Networks.BrokerNetwork).Should(Equal(controlNetwork))
+				})
 				XIt("then it should have a valid ssl-enabled element", func() { Ω(true).Should(BeFalse()) })
 				XIt("then it should have a valid skip-ssl-validation element", func() { Ω(true).Should(BeFalse()) })
 				XIt("then it should have a valid external-host element", func() { Ω(true).Should(BeFalse()) })

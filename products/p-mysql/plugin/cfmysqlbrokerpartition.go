@@ -41,6 +41,9 @@ func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
 					Pause:    brokerQuotaPause,
 				},
 			},
+			Networks: &cf_mysql_broker.Networks{
+				BrokerNetwork: plgn.NetworkName,
+			},
 		},
 	}
 }
