@@ -70,8 +70,12 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				It("then it should have a valid networks element", func() {
 					Ω(jobProperties.Networks.BrokerNetwork).Should(Equal(controlNetwork))
 				})
-				XIt("then it should have a valid ssl-enabled element", func() { Ω(true).Should(BeFalse()) })
-				XIt("then it should have a valid skip-ssl-validation element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid ssl-enabled element", func() {
+					Ω(jobProperties.SslEnabled).Should(BeTrue())
+				})
+				It("then it should have a valid skip-ssl-validation element", func() {
+					Ω(jobProperties.SkipSslValidation).Should(BeTrue())
+				})
 				XIt("then it should have a valid external-host element", func() { Ω(true).Should(BeFalse()) })
 				XIt("then it should have a valid nats element", func() { Ω(true).Should(BeFalse()) })
 				XIt("then it should have a valid cc-api-uri element", func() { Ω(true).Should(BeFalse()) })

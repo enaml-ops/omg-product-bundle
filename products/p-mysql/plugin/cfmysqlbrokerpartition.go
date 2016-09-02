@@ -44,6 +44,8 @@ func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
 			Networks: &cf_mysql_broker.Networks{
 				BrokerNetwork: plgn.NetworkName,
 			},
+			SslEnabled:        true,
+			SkipSslValidation: true,
 		},
 	}
 }
