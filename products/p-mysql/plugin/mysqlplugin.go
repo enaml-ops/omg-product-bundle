@@ -63,6 +63,9 @@ type Plugin struct {
 	MonitoringIPs               []string
 	BrokerIPs                   []string
 	BrokerQuotaEnforcerPassword string
+	BrokerAuthUsername          string
+	BrokerAuthPassword          string
+	BrokerCookieSecret          string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -106,6 +109,9 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-port", Value: natsPort, Usage: "the port to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-username", Usage: "the api username for the proxy"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-password", Usage: "the api password for the proxy"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-auth-username", Usage: "a basic auth user for mysql broker"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-auth-password", Usage: "a basic auth password for mysql broker"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-cookie-secret", Usage: "the broker cookie secret"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-domain", Usage: "the location of your vault server (ie. http://10.0.0.1:8200)"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-password", Usage: "the hashname of your secret (ie. secret/p-mysql-1-passwords"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-token", Usage: "the token to make connections to your vault"},
@@ -174,6 +180,9 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.MonitoringIPs = c.StringSlice("monitoring-ip")
 	s.BrokerIPs = c.StringSlice("broker-ip")
 	s.BrokerQuotaEnforcerPassword = c.String("broker-quota-enforcer-password")
+	s.BrokerAuthUsername = c.String("broker-auth-username")
+	s.BrokerAuthPassword = c.String("broker-auth-password")
+	s.BrokerCookieSecret = c.String("broker-cookie-secret")
 
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)

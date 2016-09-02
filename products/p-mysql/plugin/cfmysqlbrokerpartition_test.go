@@ -58,11 +58,18 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				var controlNetwork = "default"
 				var controlBaseDomain = "blah.com"
 				var controlHostDomain = "p-mysql.sys." + controlBaseDomain
+				var controlAPIDomain = "https://api.sys." + controlBaseDomain
+				var controlAuthUser = "lkaslkdfhlaksdf"
+				var controlAuthPass = "lkaslkdalksdklklnasdgkn"
+				var controlCookieSecret = "lkaslkdghalsdgh"
 
 				BeforeEach(func() {
 					plgn.NetworkName = controlNetwork
 					plgn.BrokerQuotaEnforcerPassword = controlQuotaPass
 					plgn.BaseDomain = controlBaseDomain
+					plgn.BrokerAuthUsername = controlAuthUser
+					plgn.BrokerAuthPassword = controlAuthPass
+					plgn.BrokerCookieSecret = controlCookieSecret
 					ig = NewCfMysqlBrokerPartition(plgn)
 					jobProperties = ig.GetJobByName("cf-mysql-broker").Properties.(*cf_mysql_broker.CfMysqlBrokerJob)
 				})
@@ -80,13 +87,21 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					Ω(jobProperties.SkipSslValidation).Should(BeTrue())
 				})
 				It("then it should have a valid external-host element", func() {
-					Ω(jobProperties.ExternalHost).Should(Equal(controlHostDomain))
+					Ω(jobProperties.ExternalHost).Should(Equal(controlHostDomain), "route to access mysql from external source")
+				})
+				It("then it should have a valid cc-api-uri element", func() {
+					Ω(jobProperties.CcApiUri).Should(Equal(controlAPIDomain), "cloud controller api endpoint for pcf installation")
+				})
+				It("then it should have a valid cookie-secret element", func() {
+					Ω(jobProperties.CookieSecret).Should(Equal(controlCookieSecret))
+				})
+				It("then it should have a valid auth-username element", func() {
+					Ω(jobProperties.AuthUsername).Should(Equal(controlAuthUser))
+				})
+				It("then it should have a valid auth-password element", func() {
+					Ω(jobProperties.AuthPassword).Should(Equal(controlAuthPass))
 				})
 				XIt("then it should have a valid nats element", func() { Ω(true).Should(BeFalse()) })
-				XIt("then it should have a valid cc-api-uri element", func() { Ω(true).Should(BeFalse()) })
-				XIt("then it should have a valid cookie-secret element", func() { Ω(true).Should(BeFalse()) })
-				XIt("then it should have a valid auth-username element", func() { Ω(true).Should(BeFalse()) })
-				XIt("then it should have a valid auth-password element", func() { Ω(true).Should(BeFalse()) })
 				XIt("then it should have a valid mysql-node element", func() { Ω(true).Should(BeFalse()) })
 				XIt("then it should have a valid syslog-aggregator element", func() { Ω(true).Should(BeFalse()) })
 				XIt("then it should have a valid services element", func() { Ω(true).Should(BeFalse()) })

@@ -49,6 +49,10 @@ func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
 			SslEnabled:        true,
 			SkipSslValidation: true,
 			ExternalHost:      strings.Join([]string{"p-mysql", "sys", plgn.BaseDomain}, "."),
+			CcApiUri:          strings.Join([]string{"https://api", "sys", plgn.BaseDomain}, "."),
+			CookieSecret:      plgn.BrokerCookieSecret,
+			AuthUsername:      plgn.BrokerAuthUsername,
+			AuthPassword:      plgn.BrokerAuthPassword,
 		},
 	}
 }
