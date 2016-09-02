@@ -72,6 +72,8 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				var controlPort = "port"
 				var controlTransport = "transport"
 				var controlAdminPass = "admin-pass-alksdgklahsg"
+				var controlServiceSecret = "asdga"
+				var controlRedirectURI = "https://p-mysql.sys." + controlBaseDomain
 
 				BeforeEach(func() {
 					plgn.NetworkName = controlNetwork
@@ -88,6 +90,7 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					plgn.SyslogPort = controlPort
 					plgn.SyslogTransport = controlTransport
 					plgn.AdminPassword = controlAdminPass
+					plgn.ServiceSecret = controlServiceSecret
 					ig = NewCfMysqlBrokerPartition(plgn)
 					jobProperties = ig.GetJobByName("cf-mysql-broker").Properties.(*cf_mysql_broker.CfMysqlBrokerJob)
 				})
@@ -135,7 +138,12 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					Ω(jobProperties.MysqlNode.AdminPassword).Should(Equal(controlAdminPass))
 					Ω(jobProperties.MysqlNode.PersistentDisk).Should(Equal(102400))
 				})
-				XIt("then it should have a valid services element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid services element", func() {
+					var services = jobProperties.Services.([]map[string]interface{})
+					Ω(len(services)).Should(BeNumerically(">", 0), "there should be at least one service defined")
+					Ω(services[0]["dashboard_client"].(map[string]string)["secret"]).Should(Equal(controlServiceSecret), "we should properly set a service secret in the default service plan")
+					Ω(services[0]["dashboard_client"].(map[string]string)["redirect_uri"]).Should(Equal(controlRedirectURI), "we should properly configure the redirect uri")
+				})
 			})
 		})
 	})
