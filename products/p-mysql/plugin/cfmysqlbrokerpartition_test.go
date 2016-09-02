@@ -68,6 +68,9 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				var controlProxyIPs = []string{
 					"1.0.0.5", "1.0.0.6",
 				}
+				var controlAddress = "address"
+				var controlPort = "port"
+				var controlTransport = "transport"
 
 				BeforeEach(func() {
 					plgn.NetworkName = controlNetwork
@@ -80,6 +83,9 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					plgn.NatsUser = controlNatsUser
 					plgn.NatsPassword = controlNatsPass
 					plgn.NatsPort = controlNatsPort
+					plgn.SyslogAddress = controlAddress
+					plgn.SyslogPort = controlPort
+					plgn.SyslogTransport = controlTransport
 					ig = NewCfMysqlBrokerPartition(plgn)
 					jobProperties = ig.GetJobByName("cf-mysql-broker").Properties.(*cf_mysql_broker.CfMysqlBrokerJob)
 				})
@@ -117,8 +123,12 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					Ω(jobProperties.Nats.Port).Should(Equal(controlNatsPort), "we should have a nats port defined")
 					Ω(jobProperties.Nats.User).Should(Equal(controlNatsUser), "we should have a nats user defined")
 				})
+				It("then it should have a valid syslog-aggregator element", func() {
+					Ω(jobProperties.SyslogAggregator.Address).Should(Equal(controlAddress), "does not set a valid syslog address")
+					Ω(jobProperties.SyslogAggregator.Port).Should(Equal(controlPort), "does not set a valid syslog port")
+					Ω(jobProperties.SyslogAggregator.Transport).Should(Equal(controlTransport), "does not set a valid syslog transport")
+				})
 				XIt("then it should have a valid mysql-node element", func() { Ω(true).Should(BeFalse()) })
-				XIt("then it should have a valid syslog-aggregator element", func() { Ω(true).Should(BeFalse()) })
 				XIt("then it should have a valid services element", func() { Ω(true).Should(BeFalse()) })
 			})
 		})

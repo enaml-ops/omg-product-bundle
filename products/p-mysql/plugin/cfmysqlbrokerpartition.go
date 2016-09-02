@@ -59,6 +59,11 @@ func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
 				User:     plgn.NatsUser,
 				Port:     plgn.NatsPort,
 			},
+			SyslogAggregator: &cf_mysql_broker.SyslogAggregator{
+				Address:   plgn.SyslogAddress,
+				Port:      plgn.SyslogPort,
+				Transport: plgn.SyslogTransport,
+			},
 		},
 	}
 }
