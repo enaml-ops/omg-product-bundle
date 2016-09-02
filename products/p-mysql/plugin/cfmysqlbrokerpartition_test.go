@@ -46,5 +46,28 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				Ω(checkJobExists(ig.Jobs, "cf-mysql-broker")).Should(BeTrue(), "there should be a job for broker partition release")
 			})
 		})
+
+		XDescribe("given a cf-mysql-broker job in the instance group", func() {
+			Context("when given all valid flags and initialized properly", func() {
+				var ig *enaml.InstanceGroup
+
+				BeforeEach(func() {
+					ig = NewCfMysqlBrokerPartition(plgn)
+				})
+				It("then it should have a valid broker element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid networks element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid ssl-enabled element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid skip-ssl-validation element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid external-host element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid nats element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid cc-api-uri element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid cookie-secret element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid auth-username element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid auth-password element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid mysql-node element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid syslog-aggregator element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid services element", func() { Ω(true).Should(BeFalse()) })
+			})
+		})
 	})
 })
