@@ -23,7 +23,7 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 				AllowSSHAccess: true,
 				NetworkName:    "foundry",
 				SharePath:      "/var/vcap/nfs",
-				DopplerZone:     "DopplerZoneguid",
+				DopplerZone:    "DopplerZoneguid",
 				Secret:         config.Secret{},
 				User:           config.User{},
 				Certs:          &config.Certs{},
@@ -45,7 +45,6 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 			config.ConsulServerKey = "consulserverkey"
 			config.StagingUploadUser = "staginguser"
 			config.StagingUploadPassword = "stagingpassword"
-			config.CCBulkAPIUser = "bulkapiuser"
 			config.CCBulkAPIPassword = "bulkapipassword"
 			config.DbEncryptionKey = "dbencryptionkey"
 			config.CCInternalAPIUser = "internalapiuser"

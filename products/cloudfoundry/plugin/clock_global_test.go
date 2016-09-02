@@ -25,7 +25,7 @@ var _ = Describe("given a clock_global partition", func() {
 				SystemDomain:      "sys.test.com",
 				AppDomains:        []string{"apps.test.com"},
 				NATSPort:          4333,
-				DopplerZone:        "DopplerZoneguid",
+				DopplerZone:       "DopplerZoneguid",
 				SharePath:         "/var/vcap/nfs",
 				Secret:            config.Secret{},
 				User:              config.User{},
@@ -42,7 +42,6 @@ var _ = Describe("given a clock_global partition", func() {
 			config.CloudControllerVMType = "ccvmtype"
 			config.StagingUploadUser = "staginguser"
 			config.StagingUploadPassword = "stagingpassword"
-			config.CCBulkAPIUser = "bulkapiuser"
 			config.CCBulkAPIPassword = "bulkapipassword"
 			config.DbEncryptionKey = "dbencryptionkey"
 			config.CCInternalAPIPassword = "internalapipassword"
@@ -127,7 +126,7 @@ var _ = Describe("given a clock_global partition", func() {
 			Ω(props.Cc.MaximumHealthCheckTimeout).Should(Equal(600))
 			Ω(props.Cc.StagingUploadUser).Should(Equal("staginguser"))
 			Ω(props.Cc.StagingUploadPassword).Should(Equal("stagingpassword"))
-			Ω(props.Cc.BulkApiUser).Should(Equal("bulkapiuser"))
+			Ω(props.Cc.BulkApiUser).Should(BeNil())
 			Ω(props.Cc.BulkApiPassword).Should(Equal("bulkapipassword"))
 			Ω(props.Cc.DbEncryptionKey).Should(Equal("dbencryptionkey"))
 			Ω(props.Cc.InternalApiUser).Should(Equal("internalapiuser"))

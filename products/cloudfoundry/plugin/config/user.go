@@ -7,7 +7,6 @@ func RequiredUserFlags() []string {
 		"nats-user",
 		"mysql-bootstrap-username",
 		"cc-staging-upload-user",
-		"cc-bulk-api-user",
 		"db-ccdb-username",
 		"db-uaa-username",
 		"mysql-proxy-api-username",
@@ -22,7 +21,6 @@ func NewUser(c *cli.Context) User {
 		NATSUser:              c.String("nats-user"),
 		MySQLBootstrapUser:    c.String("mysql-bootstrap-username"),
 		StagingUploadUser:     c.String("cc-staging-upload-user"),
-		CCBulkAPIUser:         c.String("cc-bulk-api-user"),
 		CCDBUsername:          c.String("db-ccdb-username"),
 		UAADBUserName:         c.String("db-uaa-username"),
 		MySQLProxyAPIUsername: c.String("mysql-proxy-api-username"),
@@ -36,7 +34,6 @@ type User struct {
 	CCInternalAPIUser     string
 	MySQLBootstrapUser    string
 	NATSUser              string
-	CCBulkAPIUser         string
 	StagingUploadUser     string
 	CCDBUsername          string
 	ConsoleDBUserName     string

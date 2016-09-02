@@ -125,7 +125,6 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				MaximumHealthCheckTimeout:    600,
 				StagingUploadUser:            c.Config.StagingUploadUser,
 				StagingUploadPassword:        c.Config.StagingUploadPassword,
-				BulkApiUser:                  c.Config.CCBulkAPIUser,
 				BulkApiPassword:              c.Config.CCBulkAPIPassword,
 				InternalApiUser:              c.Config.CCInternalAPIUser,
 				InternalApiPassword:          c.Config.CCInternalAPIPassword,

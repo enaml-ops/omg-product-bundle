@@ -94,7 +94,6 @@ func BuildConfigContext() *cli.Context {
 		"--mysql-admin-password", "secret",
 		"--db-console-password", "secret",
 		"--cc-staging-upload-password", "secret",
-		"--cc-bulk-api-user", "user",
 		"--mysql-proxy-vm-type", "vm-type",
 		"--clock-global-vm-type", "vm-type",
 		"--cc-vm-type", "vm-type",

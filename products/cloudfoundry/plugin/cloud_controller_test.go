@@ -30,7 +30,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 				SkipSSLCertVerify:  true,
 				HostKeyFingerprint: "hostkeyfingerprint",
 				SharePath:          "/var/vcap/nfs",
-				DopplerZone:         "DopplerZoneguid",
+				DopplerZone:        "DopplerZoneguid",
 				SupportAddress:     "http://support.pivotal.io",
 				MinCliVersion:      "6.7.0",
 				Secret:             config.Secret{},
@@ -55,7 +55,6 @@ var _ = Describe("Cloud Controller Partition", func() {
 			config.CloudControllerInstances = 1
 			config.StagingUploadUser = "staginguser"
 			config.StagingUploadPassword = "stagingpassword"
-			config.CCBulkAPIUser = "bulkapiuser"
 			config.CCBulkAPIPassword = "bulkapipassword"
 			config.DbEncryptionKey = "dbencryptionkey"
 			config.CCInternalAPIPassword = "internalapipassword"
@@ -160,7 +159,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(props.Cc.MaximumHealthCheckTimeout).Should(Equal(600))
 			Ω(props.Cc.StagingUploadUser).Should(Equal("staginguser"))
 			Ω(props.Cc.StagingUploadPassword).Should(Equal("stagingpassword"))
-			Ω(props.Cc.BulkApiUser).Should(Equal("bulkapiuser"))
+			Ω(props.Cc.BulkApiUser).Should(BeNil())
 			Ω(props.Cc.BulkApiPassword).Should(Equal("bulkapipassword"))
 			Ω(props.Cc.InternalApiUser).Should(Equal("internalapiuser"))
 			Ω(props.Cc.InternalApiPassword).Should(Equal("internalapipassword"))

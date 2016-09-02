@@ -126,7 +126,6 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("cc-worker-vm-type", "the name of the desired vm type for cc worker"),
 		createStringFlag("cc-staging-upload-user", "user name for staging upload", "staging_upload_user"),
 		createStringFlag("cc-staging-upload-password", "password for staging upload"),
-		createStringFlag("cc-bulk-api-user", "user name for bulk api calls"),
 		createStringFlag("cc-bulk-api-password", "password for bulk api calls"),
 		createStringFlag("cc-db-encryption-key", "Cloud Controller DB encryption key"),
 		createStringFlag("cc-internal-api-user", "user name for Internal API calls"),
