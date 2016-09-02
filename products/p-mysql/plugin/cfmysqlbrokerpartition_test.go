@@ -71,6 +71,7 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				var controlAddress = "address"
 				var controlPort = "port"
 				var controlTransport = "transport"
+				var controlAdminPass = "admin-pass-alksdgklahsg"
 
 				BeforeEach(func() {
 					plgn.NetworkName = controlNetwork
@@ -86,6 +87,7 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					plgn.SyslogAddress = controlAddress
 					plgn.SyslogPort = controlPort
 					plgn.SyslogTransport = controlTransport
+					plgn.AdminPassword = controlAdminPass
 					ig = NewCfMysqlBrokerPartition(plgn)
 					jobProperties = ig.GetJobByName("cf-mysql-broker").Properties.(*cf_mysql_broker.CfMysqlBrokerJob)
 				})
@@ -128,7 +130,11 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					Ω(jobProperties.SyslogAggregator.Port).Should(Equal(controlPort), "does not set a valid syslog port")
 					Ω(jobProperties.SyslogAggregator.Transport).Should(Equal(controlTransport), "does not set a valid syslog transport")
 				})
-				XIt("then it should have a valid mysql-node element", func() { Ω(true).Should(BeFalse()) })
+				It("then it should have a valid mysql-node element", func() {
+					Ω(jobProperties.MysqlNode.Host).Should(Equal(controlProxyIPs[0]), "should grab a proxy nodes ip (the first in the list by default)")
+					Ω(jobProperties.MysqlNode.AdminPassword).Should(Equal(controlAdminPass))
+					Ω(jobProperties.MysqlNode.PersistentDisk).Should(Equal(102400))
+				})
 				XIt("then it should have a valid services element", func() { Ω(true).Should(BeFalse()) })
 			})
 		})

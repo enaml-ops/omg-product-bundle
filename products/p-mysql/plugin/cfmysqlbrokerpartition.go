@@ -5,6 +5,7 @@ import (
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/p-mysql/enaml-gen/cf-mysql-broker"
+	"github.com/xchapter7x/lo"
 )
 
 func NewCfMysqlBrokerPartition(plgn *Plugin) *enaml.InstanceGroup {
@@ -33,6 +34,12 @@ func NewCfMysqlBrokerPartition(plgn *Plugin) *enaml.InstanceGroup {
 }
 
 func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
+	var hostValue string
+	if len(plgn.ProxyIPs) >= 1 {
+		hostValue = plgn.ProxyIPs[0]
+	} else {
+		lo.G.Error("could not find any proxy hosts defined")
+	}
 	return enaml.InstanceJob{
 		Name:    "cf-mysql-broker",
 		Release: "cf-mysql",
@@ -63,6 +70,11 @@ func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
 				Address:   plgn.SyslogAddress,
 				Port:      plgn.SyslogPort,
 				Transport: plgn.SyslogTransport,
+			},
+			MysqlNode: &cf_mysql_broker.MysqlNode{
+				Host:           hostValue,
+				AdminPassword:  plgn.AdminPassword,
+				PersistentDisk: brokerPersistentDisk,
 			},
 		},
 	}

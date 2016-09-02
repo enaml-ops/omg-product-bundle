@@ -16,4 +16,5 @@ const (
 	pollFrequency              int = 30
 	writeReadDelay             int = 20
 	brokerQuotaPause           int = 30
+	brokerPersistentDisk       int = 102400
 )
