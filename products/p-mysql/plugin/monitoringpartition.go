@@ -43,6 +43,23 @@ func newReplicationCanaryJob(plgn *Plugin) enaml.InstanceJob {
 				Port:      plgn.SyslogPort,
 				Transport: plgn.SyslogTransport,
 			},
+			MysqlMonitoring: &replication_canary.MysqlMonitoring{
+				RecipientEmail: plgn.NotificationRecipientEmail,
+				NotifyOnly:     true,
+				ReplicationCanary: &replication_canary.ReplicationCanary{
+					UaaAdminClientSecret:        plgn.UaaAdminClientSecret,
+					ClusterIps:                  plgn.IPs,
+					CanaryUsername:              seededDBUser,
+					CanaryPassword:              plgn.SeededDBPassword,
+					NotificationsClientUsername: notificationClientUsername,
+					NotificationsClientSecret:   plgn.NotificationClientSecret,
+					SwitchboardCount:            switchboardCount,
+					SwitchboardUsername:         plgn.ProxyAPIUser,
+					SwitchboardPassword:         plgn.ProxyAPIPass,
+					PollFrequency:               pollFrequency,
+					WriteReadDelay:              writeReadDelay,
+				},
+			},
 		},
 	}
 }

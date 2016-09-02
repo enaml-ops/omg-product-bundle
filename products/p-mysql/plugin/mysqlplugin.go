@@ -61,6 +61,8 @@ type Plugin struct {
 	ProxyAPIUser                string
 	ProxyAPIPass                string
 	MonitoringIPs               []string
+	BrokerIPs                   []string
+	BrokerQuotaEnforcerPassword string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -70,6 +72,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "ip", Usage: "multiple static ips for each mysql vm"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "proxy-ip", Usage: "multiple static ips for each mysql-proxy vm"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "monitoring-ip", Usage: "multiple static ips for each monitoring job vm"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "broker-ip", Usage: "multiple static ips for each broker job vm"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "az", Usage: "list of AZ names to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "network", Usage: "the name of the network to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vm-type", Usage: "name of your desired vm type"},
@@ -98,6 +101,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-user", Usage: "the user to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-password", Usage: "the password to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-password", Usage: "the password to access the nats instance"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-quota-enforcer-password", Usage: "the password to the broker quota enforcer"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-username", Value: natsUser, Usage: "the user to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-port", Value: natsPort, Usage: "the port to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-username", Usage: "the api username for the proxy"},
@@ -168,6 +172,8 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.ProxyAPIUser = c.String("proxy-api-username")
 	s.ProxyAPIPass = c.String("proxy-api-password")
 	s.MonitoringIPs = c.StringSlice("monitoring-ip")
+	s.BrokerIPs = c.StringSlice("broker-ip")
+	s.BrokerQuotaEnforcerPassword = c.String("broker-quota-enforcer-password")
 
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)
@@ -188,8 +194,8 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	dm.AddRemoteStemcell(s.StemcellName, s.StemcellName, s.StemcellVersion, s.StemcellURL, s.StemcellSHA)
 	dm.AddInstanceGroup(NewMysqlPartition(s))
 	dm.AddInstanceGroup(NewProxyPartition(s))
+	dm.AddInstanceGroup(NewMonitoringPartition(s))
 	//dm.AddInstanceGroup(NewBackupPreparePartition())
-	//dm.AddInstanceGroup(NewMonitoringPartition())
 	//dm.AddInstanceGroup(NewCfMysqlBrokerPartition())
 	//dm.AddInstanceGroup(NewBrokerRegistrar())
 	//dm.AddInstanceGroup(NewBrokerDeRegistrar())
