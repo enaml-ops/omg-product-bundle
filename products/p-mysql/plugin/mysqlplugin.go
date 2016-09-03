@@ -67,6 +67,7 @@ type Plugin struct {
 	BrokerAuthPassword          string
 	BrokerCookieSecret          string
 	ServiceSecret               string
+	CFAdminPassword             string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -114,6 +115,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-auth-password", Usage: "a basic auth password for mysql broker"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-cookie-secret", Usage: "the broker cookie secret"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "service-secret", Usage: "the broker service secret"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "cf-admin-password", Usage: "the cf admin user's password"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-domain", Usage: "the location of your vault server (ie. http://10.0.0.1:8200)"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-password", Usage: "the hashname of your secret (ie. secret/p-mysql-1-passwords"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-token", Usage: "the token to make connections to your vault"},
@@ -186,6 +188,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.BrokerAuthPassword = c.String("broker-auth-password")
 	s.BrokerCookieSecret = c.String("broker-cookie-secret")
 	s.ServiceSecret = c.String("service-secret")
+	s.CFAdminPassword = c.String("cf-admin-password")
 
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)
@@ -207,8 +210,8 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	dm.AddInstanceGroup(NewMysqlPartition(s))
 	dm.AddInstanceGroup(NewProxyPartition(s))
 	dm.AddInstanceGroup(NewMonitoringPartition(s))
+	dm.AddInstanceGroup(NewCfMysqlBrokerPartition(s))
 	//dm.AddInstanceGroup(NewBackupPreparePartition())
-	//dm.AddInstanceGroup(NewCfMysqlBrokerPartition())
 	//dm.AddInstanceGroup(NewBrokerRegistrar())
 	//dm.AddInstanceGroup(NewBrokerDeRegistrar())
 	//dm.AddInstanceGroup(NewRejoinUnsafe())

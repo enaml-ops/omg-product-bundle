@@ -17,4 +17,5 @@ const (
 	writeReadDelay             int = 20
 	brokerQuotaPause           int = 30
 	brokerPersistentDisk       int = 102400
+	registrarUser                  = "admin"
 )
