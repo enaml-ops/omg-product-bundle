@@ -212,9 +212,9 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	dm.AddInstanceGroup(NewMonitoringPartition(s))
 	dm.AddInstanceGroup(NewCfMysqlBrokerPartition(s))
 	//dm.AddInstanceGroup(NewBackupPreparePartition())
-	//dm.AddInstanceGroup(NewBrokerRegistrar())
-	//dm.AddInstanceGroup(NewBrokerDeRegistrar())
-	//dm.AddInstanceGroup(NewRejoinUnsafe())
+	dm.AddInstanceGroup(NewBrokerRegistrar(s))
+	dm.AddInstanceGroup(NewBrokerDeRegistrar(s))
+	dm.AddInstanceGroup(NewRejoinUnsafe(s))
 	//dm.AddInstanceGroup(NewAcceptanceTests())
 	dm.Update = enaml.Update{
 		MaxInFlight:     1,
