@@ -8,20 +8,18 @@ import (
 
 //CloudControllerWorkerPartition - Cloud Controller Worker Partition
 type CloudControllerWorkerPartition struct {
-	Config         *config.Config
-	Metron         *Metron
-	ConsulAgent    *ConsulAgent
-	StatsdInjector *StatsdInjector
+	Config      *config.Config
+	Metron      *Metron
+	ConsulAgent *ConsulAgent
 }
 
 //NewCloudControllerWorkerPartition - Creating a New Cloud Controller Partition
 func NewCloudControllerWorkerPartition(config *config.Config) InstanceGroupCreator {
 
 	return &CloudControllerWorkerPartition{
-		Config:         config,
-		Metron:         NewMetron(config),
-		ConsulAgent:    NewConsulAgent([]string{}, config),
-		StatsdInjector: NewStatsdInjector(nil),
+		Config:      config,
+		Metron:      NewMetron(config),
+		ConsulAgent: NewConsulAgent([]string{}, config),
 	}
 }
 
@@ -41,7 +39,6 @@ func (s *CloudControllerWorkerPartition) ToInstanceGroup() (ig *enaml.InstanceGr
 			s.ConsulAgent.CreateJob(),
 			CreateNFSMounterJob(s.Config),
 			s.Metron.CreateJob(),
-			s.StatsdInjector.CreateJob(),
 		},
 		Update: enaml.Update{
 			MaxInFlight: 1,
