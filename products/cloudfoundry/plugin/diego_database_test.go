@@ -27,7 +27,7 @@ var _ = Describe("given a Diego Database Partition", func() {
 					StemcellName:    "cool-ubuntu-animal",
 					NetworkName:     "foundry-net",
 					AllowSSHAccess:  true,
-					DopplerZone:      "DopplerZoneguid",
+					DopplerZone:     "DopplerZoneguid",
 					SyslogAddress:   "syslog-server",
 					SyslogPort:      10601,
 					SyslogTransport: "tcp",
@@ -99,7 +99,6 @@ var _ = Describe("given a Diego Database Partition", func() {
 						props := job.Properties.(*consul_agent.ConsulAgentJob)
 						Ω(props.Consul.Agent.Mode).Should(BeNil())
 						services := props.Consul.Agent.Services.(map[string]map[string]string)
-						Ω(services).Should(HaveKey("bbs"))
 						Ω(services).Should(HaveKey("etcd"))
 					})
 				})

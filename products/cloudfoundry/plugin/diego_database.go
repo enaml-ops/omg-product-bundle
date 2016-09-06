@@ -20,7 +20,7 @@ func NewDiegoDatabasePartition(config *config.Config) InstanceGroupCreator {
 
 	return &diegoDatabase{
 		Config:         config,
-		ConsulAgent:    NewConsulAgent([]string{"bbs", "etcd"}, config),
+		ConsulAgent:    NewConsulAgent([]string{"etcd"}, config),
 		Metron:         NewMetron(config),
 		StatsdInjector: NewStatsdInjector(nil),
 	}
@@ -77,7 +77,6 @@ func (s *diegoDatabase) newBBS() (dbdiego *bbs.BbsJob) {
 	return &bbs.BbsJob{
 		Diego: &bbs.Diego{
 			Bbs: &bbs.Bbs{
-				RequireSsl:     false,
 				CaCert:         s.Config.BBSCACert,
 				ServerCert:     s.Config.BBSServerCert,
 				ServerKey:      s.Config.BBSServerKey,
