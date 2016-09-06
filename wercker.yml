@@ -69,6 +69,8 @@ crosscompile:
           GOOS=linux go build -o docker-registry-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/dockerregistry/cmd/dockerregistry/main.go
           GOOS=darwin go build -o docker-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/docker/cmd/docker/main.go
           GOOS=linux go build -o docker-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/docker/cmd/docker/main.go
+          GOOS=darwin go build -o docker-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-mysql/cmd/p-mysql/main.go
+          GOOS=linux go build -o docker-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-mysql/cmd/p-mysql/main.go
 
     - script:
         name: add repo to artifact
