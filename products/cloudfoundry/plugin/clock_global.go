@@ -11,7 +11,6 @@ import (
 
 type clockGlobal struct {
 	Metron *Metron
-	Statsd *StatsdInjector
 	Config *config.Config
 }
 
@@ -20,7 +19,6 @@ func NewClockGlobalPartition(config *config.Config) InstanceGroupCreator {
 	cg := &clockGlobal{
 		Config: config,
 		Metron: NewMetron(config),
-		Statsd: NewStatsdInjector(nil),
 	}
 	return cg
 }
@@ -41,16 +39,12 @@ func (c *clockGlobal) ToInstanceGroup() *enaml.InstanceGroup {
 	}
 
 	metronJob := c.Metron.CreateJob()
-	nfsJob := CreateNFSMounterJob(c.Config)
-	statsdJob := c.Statsd.CreateJob()
 
 	ccw := newCloudControllerNgJob(NewCloudControllerPartition(c.Config).(*CloudControllerPartition))
 	props := ccw.Properties.(*cloud_controller_ng.CloudControllerNgJob)
 
 	ig.AddJob(c.newCloudControllerClockJob(props))
 	ig.AddJob(&metronJob)
-	ig.AddJob(&nfsJob)
-	ig.AddJob(&statsdJob)
 	return ig
 }
 
