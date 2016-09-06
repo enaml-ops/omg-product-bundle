@@ -69,8 +69,8 @@ crosscompile:
           GOOS=linux go build -o docker-registry-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/dockerregistry/cmd/dockerregistry/main.go
           GOOS=darwin go build -o docker-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/docker/cmd/docker/main.go
           GOOS=linux go build -o docker-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/docker/cmd/docker/main.go
-          GOOS=darwin go build -o docker-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-mysql/cmd/p-mysql/main.go
-          GOOS=linux go build -o docker-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-mysql/cmd/p-mysql/main.go
+          GOOS=darwin go build -o p-mysql-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-mysql/cmd/p-mysql/main.go
+          GOOS=linux go build -o p-mysql-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-mysql/cmd/p-mysql/main.go
 
     - script:
         name: add repo to artifact
@@ -178,6 +178,18 @@ deploy-pre-release:
     - github-upload-asset:
         token: $GITHUB_TOKEN
         file: docker-plugin-osx
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: p-mysql-plugin-linux
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: p-mysql-plugin-osx
         release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
         content-type: application/x-gzip
 
