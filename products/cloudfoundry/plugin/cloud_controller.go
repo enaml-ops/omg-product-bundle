@@ -121,7 +121,7 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 				},
 				ClientMaxBodySize:            "1024M",
 				ExternalProtocol:             "https",
-				LoggingLevel:                 "debug",
+				LoggingLevel:                 "info",
 				MaximumHealthCheckTimeout:    600,
 				StagingUploadUser:            c.Config.StagingUploadUser,
 				StagingUploadPassword:        c.Config.StagingUploadPassword,

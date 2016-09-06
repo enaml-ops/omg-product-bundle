@@ -122,7 +122,7 @@ var _ = Describe("given a clock_global partition", func() {
 			Ω(props.Cc.Packages.FogConnection).Should(HaveKeyWithValue("local_root", "/var/vcap/nfs/shared"))
 			Ω(props.Cc.ResourcePool.FogConnection).Should(HaveKeyWithValue("local_root", "/var/vcap/nfs/shared"))
 
-			Ω(props.Cc.LoggingLevel).Should(Equal("debug"))
+			Ω(props.Cc.LoggingLevel).Should(Equal("info"))
 			Ω(props.Cc.MaximumHealthCheckTimeout).Should(Equal(600))
 			Ω(props.Cc.StagingUploadUser).Should(Equal("staginguser"))
 			Ω(props.Cc.StagingUploadPassword).Should(Equal("stagingpassword"))

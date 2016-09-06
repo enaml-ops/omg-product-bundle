@@ -155,7 +155,7 @@ var _ = Describe("Cloud Controller Partition", func() {
 			Ω(props.Cc.DefaultToDiegoBackend).Should(BeTrue())
 			Ω(props.Cc.ClientMaxBodySize).Should(Equal("1024M"))
 			Ω(props.Cc.ExternalProtocol).Should(Equal("https"))
-			Ω(props.Cc.LoggingLevel).Should(Equal("debug"))
+			Ω(props.Cc.LoggingLevel).Should(Equal("info"))
 			Ω(props.Cc.MaximumHealthCheckTimeout).Should(Equal(600))
 			Ω(props.Cc.StagingUploadUser).Should(Equal("staginguser"))
 			Ω(props.Cc.StagingUploadPassword).Should(Equal("stagingpassword"))
