@@ -50,6 +50,9 @@ var (
 
 	MySQLBackupReleaseVersion   = "1"
 	ServiceBackupReleaseVersion = "1"
+
+	javaBuildpackName    = "java-offline-buildpack"
+	javaBuildpackPackage = "buildpack_java_offline"
 )
 
 var flagsToInferFromCloudConfig = map[string][]string{

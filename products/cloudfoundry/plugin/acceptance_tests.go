@@ -64,7 +64,7 @@ func (a *acceptanceTests) newAcceptanceTestsProperties(internet bool) *acceptanc
 			IncludeSecurityGroups:    true,
 			SkipSslValidation:        a.Config.SkipSSLCertVerify,
 			SkipRegex:                "lucid64",
-			JavaBuildpackName:        "java_buildpack_offline",
+			JavaBuildpackName:        javaBuildpackName,
 		},
 	}
 }

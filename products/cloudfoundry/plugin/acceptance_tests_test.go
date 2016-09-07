@@ -105,7 +105,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 			Ω(props.AcceptanceTests.IncludeSecurityGroups).Should(BeTrue())
 			Ω(props.AcceptanceTests.SkipSslValidation).Should(BeTrue())
 			Ω(props.AcceptanceTests.SkipRegex).Should(Equal("lucid64"))
-			Ω(props.AcceptanceTests.JavaBuildpackName).Should(Equal("java_buildpack_offline"))
+			Ω(props.AcceptanceTests.JavaBuildpackName).Should(Equal("java-offline-buildpack"))
 
 			Ω(props.AcceptanceTests.IncludeInternetDependent).Should(BeTrue())
 		})
@@ -145,7 +145,7 @@ var _ = Describe("given the acceptance-tests partition", func() {
 			Ω(props.AcceptanceTests.IncludeSecurityGroups).Should(BeTrue())
 			Ω(props.AcceptanceTests.SkipSslValidation).Should(BeTrue())
 			Ω(props.AcceptanceTests.SkipRegex).Should(Equal("lucid64"))
-			Ω(props.AcceptanceTests.JavaBuildpackName).Should(Equal("java_buildpack_offline"))
+			Ω(props.AcceptanceTests.JavaBuildpackName).Should(Equal("java-offline-buildpack"))
 
 			Ω(props.AcceptanceTests.IncludeInternetDependent).Should(BeFalse())
 		})

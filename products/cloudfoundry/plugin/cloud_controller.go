@@ -35,7 +35,7 @@ func (s *CloudControllerPartition) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 		"ruby-buildpack",
 		"php-buildpack",
 		"python-buildpack",
-		"java-offline-buildpack",
+		javaBuildpackName,
 		"staticfile-buildpack"}
 
 	ig = &enaml.InstanceGroup{
@@ -139,8 +139,8 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 						"package": "staticfile-buildpack",
 					},
 					map[string]interface{}{
-						"name":    "java_buildpack_offline",
-						"package": "java-offline-buildpack",
+						"name":    javaBuildpackName,
+						"package": javaBuildpackPackage,
 					},
 					map[string]interface{}{
 						"name":    "ruby_buildpack",
