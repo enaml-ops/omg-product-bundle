@@ -4,6 +4,8 @@ const (
 	CFReleaseName    = "cf"
 	CFReleaseVersion = "235.5.62"
 
+	PivotalERTVersion = "1.7.15"
+
 	StemcellName    = "ubuntu-trusty"
 	StemcellAlias   = "trusty"
 	StemcellVersion = "3232.17"
