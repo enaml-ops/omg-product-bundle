@@ -127,7 +127,7 @@ var _ = Describe("given a Diego Cell Partition", func() {
 					})
 
 					It("then it should use the correct release", func() {
-						Ω(job.Release).Should(Equal(CFLinuxFSReleaseName))
+						Ω(job.Release).Should(Equal(CFLinuxReleaseName))
 					})
 
 					It("then it should not generate null properties", func() {

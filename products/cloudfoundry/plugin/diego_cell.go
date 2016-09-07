@@ -15,7 +15,6 @@ type diegoCell struct {
 }
 
 func NewDiegoCellPartition(config *config.Config) InstanceGroupCreator {
-
 	return &diegoCell{
 		Config:         config,
 		ConsulAgent:    NewConsulAgent([]string{}, config),
@@ -53,7 +52,7 @@ func (s *diegoCell) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 	})
 	ig.AddJob(&enaml.InstanceJob{
 		Name:       "cflinuxfs2-rootfs-setup",
-		Release:    CFLinuxFSReleaseName,
+		Release:    CFLinuxReleaseName,
 		Properties: struct{}{},
 	})
 	ig.AddJob(&enaml.InstanceJob{

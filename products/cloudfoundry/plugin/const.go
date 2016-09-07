@@ -1,55 +1,48 @@
 package cloudfoundry
 
 const (
-	//CFReleaseName -
-	CFReleaseName = "cf"
-	//StemcellName -
-	StemcellName = "ubuntu-trusty"
-	//StemcellAlias -
-	StemcellAlias = "trusty"
-
-	//CFLinuxFSReleaseName -
-	CFLinuxFSReleaseName = "cflinuxfs2-rootfs"
-
-	//GardenReleaseName
-	GardenReleaseName = "garden-linux"
-
-	//DiegoReleaseName
-	DiegoReleaseName = "diego"
-
-	CFMysqlReleaseName         = "cf-mysql"
-	CFLinuxReleaseName         = "cflinuxfs2-rootfs"
-	EtcdReleaseName            = "etcd"
-	PushAppsReleaseName        = "push-apps-manager-release"
-	NotificationsReleaseName   = "notifications"
-	NotificationsUIReleaseName = "notifications-ui"
-	CFAutoscalingReleaseName   = "cf-autoscaling"
-
-	defaultBBSAPILocation = "bbs.service.cf.internal:8889"
-)
-
-var (
-	//DeploymentName -
-	DeploymentName = "cf"
-	//CFReleaseVersion -
+	CFReleaseName    = "cf"
 	CFReleaseVersion = "235.5.62"
-	//StemcellVersion -
+
+	StemcellName    = "ubuntu-trusty"
+	StemcellAlias   = "trusty"
 	StemcellVersion = "3232.17"
-	//DiegoReleaseVerion
+
+	CFLinuxReleaseName    = "cflinuxfs2-rootfs"
+	CFLinuxReleaseVersion = "1.26.0"
+
+	GardenReleaseName    = "garden-linux"
+	GardenReleaseVersion = "0.338.0"
+
+	DiegoReleaseName    = "diego"
 	DiegoReleaseVersion = "0.1467.29"
-	//CFMysqlReleaseVersion
+
+	CFMysqlReleaseName    = "cf-mysql"
 	CFMysqlReleaseVersion = "25.2"
 
-	GardenReleaseVersion          = "0.338.0"
-	CFLinuxReleaseVersion         = "1.26.0"
-	EtcdReleaseVersion            = "48"
-	PushAppsReleaseVersion        = "629.7"
-	NotificationsReleaseVersion   = "24"
+	EtcdReleaseName    = "etcd"
+	EtcdReleaseVersion = "48"
+
+	PushAppsReleaseName    = "push-apps-manager-release"
+	PushAppsReleaseVersion = "629.7"
+
+	NotificationsReleaseName    = "notifications"
+	NotificationsReleaseVersion = "24"
+
+	NotificationsUIReleaseName    = "notifications-ui"
 	NotificationsUIReleaseVersion = "17"
-	CFAutoscalingReleaseVersion   = "36"
+
+	CFAutoscalingReleaseName    = "cf-autoscaling"
+	CFAutoscalingReleaseVersion = "36"
 
 	MySQLBackupReleaseVersion   = "1"
 	ServiceBackupReleaseVersion = "1"
+)
+
+const (
+	DeploymentName = "cf"
+
+	defaultBBSAPILocation = "bbs.service.cf.internal:8889"
 
 	javaBuildpackName    = "java-offline-buildpack"
 	javaBuildpackPackage = "buildpack_java_offline"
