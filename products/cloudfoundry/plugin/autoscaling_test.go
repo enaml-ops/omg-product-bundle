@@ -61,7 +61,7 @@ var _ = Describe("autoscaling", func() {
 					},
 					SkipSSLCertVerify: true,
 				}
-				igc = NewDepoyAutoscaling(c)
+				igc = NewDeployAutoscaling(c)
 				dm = new(enaml.DeploymentManifest)
 				ig = igc.ToInstanceGroup()
 				dm.AddInstanceGroup(ig)

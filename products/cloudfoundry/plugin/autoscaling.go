@@ -20,7 +20,7 @@ type (
 	autoscalingTests        struct{ *config.Config }
 )
 
-func NewDepoyAutoscaling(c *config.Config) InstanceGroupCreator {
+func NewDeployAutoscaling(c *config.Config) InstanceGroupCreator {
 	return deployAutoscaling{c}
 }
 

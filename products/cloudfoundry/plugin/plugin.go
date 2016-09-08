@@ -42,6 +42,11 @@ func init() {
 	}
 	RegisterInstanceGrouperFactory(acceptanceTests)
 	RegisterInstanceGrouperFactory(internetLessAcceptanceTests)
+	RegisterInstanceGrouperFactory(NewPushAppsManager)
+	RegisterInstanceGrouperFactory(NewDeployAutoscaling)
+	RegisterInstanceGrouperFactory(NewAutoscaleRegisterBroker)
+	RegisterInstanceGrouperFactory(NewAutoscaleDestroyBroker)
+	RegisterInstanceGrouperFactory(NewAutoscalingTests)
 }
 
 //GetFlags -

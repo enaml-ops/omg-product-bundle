@@ -139,6 +139,5 @@ type Secret struct {
 	AppUsageDBPassword                        string
 	AppsManagerSecretToken                    string
 	AutoscaleBrokerPassword                   string
-	AutoscaleClientSecret                     string
 	AutoscaleDBPassword                       string
 }
