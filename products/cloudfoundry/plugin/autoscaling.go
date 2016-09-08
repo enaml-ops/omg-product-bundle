@@ -6,6 +6,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-cli/utils"
 	das "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/deploy-autoscaling"
+	rb "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/register-broker"
 
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
@@ -79,5 +80,43 @@ func NewAutoscaleRegisterBroker(c *config.Config) InstanceGroupCreator {
 }
 
 func (a registerAutoscaleBroker) ToInstanceGroup() *enaml.InstanceGroup {
-	return nil
+	return &enaml.InstanceGroup{
+		Name:      "autoscaling-register-broker",
+		Instances: 1,
+		VMType:    a.ErrandVMType,
+		Lifecycle: "errand",
+		AZs:       a.AZs,
+		Stemcell:  a.StemcellName,
+		Networks: []enaml.Network{
+			{Name: a.NetworkName},
+		},
+		Update: enaml.Update{
+			MaxInFlight: 1,
+		},
+		Jobs: []enaml.InstanceJob{
+			{
+				Name:    "register-broker",
+				Release: CFAutoscalingReleaseName,
+				Properties: &rb.RegisterBrokerJob{
+					AppDomains: a.AppDomains,
+					Autoscale: &rb.Autoscale{
+						Broker: &rb.Broker{
+							User:     a.AutoscaleBrokerUser,
+							Password: a.AutoscaleBrokerPassword,
+						},
+						Cf: &rb.Cf{
+							AdminUser:     "admin",
+							AdminPassword: a.AdminPassword,
+						},
+						Organization: "system",
+						Space:        "autoscaling",
+					},
+					Domain: a.SystemDomain,
+					Ssl: &rb.Ssl{
+						SkipCertVerify: a.SkipSSLCertVerify,
+					},
+				},
+			},
+		},
+	}
 }
