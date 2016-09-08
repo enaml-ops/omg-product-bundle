@@ -92,6 +92,7 @@ func getPasswordObject() []byte {
 		"cc-staging-upload-password",
 		"cc-bulk-api-password",
 		"cc-internal-api-password",
+		"db-autoscale-password",
 		"db-uaa-password",
 		"db-ccdb-password",
 		"db-console-password",

@@ -149,7 +149,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("db-console-username", "console db username", "enamlconsole"),
 		createStringFlag("db-console-password", "console db password"),
 		createStringFlag("db-app_usage-password", "app usage db password"),
-		createStringFlag("db-autoscale-username", "autoscale db user"),
+		createStringFlag("db-autoscale-username", "autoscale db user", "enamlautoscale"),
 		createStringFlag("db-autoscale-password", "autoscale db password"),
 
 		//Diego Database
