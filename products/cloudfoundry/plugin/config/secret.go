@@ -84,6 +84,8 @@ func NewSecret(c *cli.Context) Secret {
 		MySQLAdminPassword:                        c.String("mysql-admin-password"),
 		ConsoleDBPassword:                         c.String("db-console-password"),
 		StagingUploadPassword:                     c.String("cc-staging-upload-password"),
+		AppUsageDBPassword:                        c.String("db-app_usage-password"),
+		AppsManagerSecretToken:                    c.String("apps-manager-secret-token"),
 	}
 }
 
@@ -126,4 +128,6 @@ type Secret struct {
 	MySQLAdminPassword                        string
 	ConsoleDBPassword                         string
 	ConsulEncryptKeys                         []string
+	AppUsageDBPassword                        string
+	AppsManagerSecretToken                    string
 }

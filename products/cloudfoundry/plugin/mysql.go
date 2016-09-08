@@ -34,28 +34,33 @@ func NewMySQLPartition(config *config.Config) (igf InstanceGroupCreator) {
 	return
 }
 
-func parseSeededDBs(config *config.Config) (dbs []MySQLSeededDatabase) {
-	dbs = append(dbs, MySQLSeededDatabase{
-		Name:     "uaa",
-		Username: config.UAADBUserName,
-		Password: config.UAADBPassword,
-	})
-	dbs = append(dbs, MySQLSeededDatabase{
-		Name:     "ccdb",
-		Username: config.CCDBUsername,
-		Password: config.CCDBPassword,
-	})
-	dbs = append(dbs, MySQLSeededDatabase{
-		Name:     "console",
-		Username: config.ConsoleDBUserName,
-		Password: config.ConsoleDBPassword,
-	})
-
-	return
+func parseSeededDBs(config *config.Config) []MySQLSeededDatabase {
+	return []MySQLSeededDatabase{
+		{
+			Name:     "uaa",
+			Username: config.UAADBUserName,
+			Password: config.UAADBPassword,
+		},
+		{
+			Name:     "ccdb",
+			Username: config.CCDBUsername,
+			Password: config.CCDBPassword,
+		},
+		{
+			Name:     "console",
+			Username: config.ConsoleDBUserName,
+			Password: config.ConsoleDBPassword,
+		},
+		{
+			Name:     "app_usage_service",
+			Username: "app_usage",
+			Password: config.AppUsageDBPassword,
+		},
+	}
 }
 
 // GetSeededDBByName returns a pointer to the seeded database with a particular
-// name.  It returns null if no matching database is found.
+// name.  It returns nil if no matching database is found.
 func (s *MySQL) GetSeededDBByName(name string) *MySQLSeededDatabase {
 	for i := range s.MySQLSeededDatabases {
 		if s.MySQLSeededDatabases[i].Name == name {

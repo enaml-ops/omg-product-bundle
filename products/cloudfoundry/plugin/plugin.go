@@ -143,6 +143,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("db-ccdb-password", "ccdb db password"),
 		createStringFlag("db-console-username", "console db username", "enamlconsole"),
 		createStringFlag("db-console-password", "console db password"),
+		createStringFlag("db-app_usage-password", "app usage db password"),
 
 		//Diego Database
 		createStringSliceFlag("diego-db-ip", "a list of static IPs for the diego database partitions"),
@@ -242,6 +243,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 
 		createStringFlag("errand-vm-type", "vm type to be used for running errands"),
 		createStringFlag("haproxy-sslpem", "SSL pem for HAProxy"),
+		createStringFlag("apps-manager-secret-token", "apps manager secret token for signing cookies"),
 
 		//Vault stuff
 		createStringFlag("vault-domain", "the location of your vault server (ie. http://10.0.0.1:8200)"),
@@ -303,10 +305,10 @@ func (s *Plugin) GetMeta() product.Meta {
 			"garden-linux-release":      strings.Join([]string{GardenReleaseName, GardenReleaseVersion}, " / "),
 			"cflinuxfs2-rootfs-release": strings.Join([]string{CFLinuxReleaseName, CFLinuxReleaseVersion}, " / "),
 			"etcd-release":              strings.Join([]string{EtcdReleaseName, EtcdReleaseVersion}, " / "),
-			/*"pushapp-release":          strings.Join([]string{PushAppsReleaseName, PushAppsReleaseVersion}, " / "),
-			"notifications-release":    strings.Join([]string{NotificationsReleaseName, NotificationsReleaseVersion}, " / "),
-			"notifications-ui-release": strings.Join([]string{NotificationsUIReleaseName, NotificationsUIReleaseVersion}, " / "),
-			"cf-autoscaling-release":   strings.Join([]string{CFAutoscalingReleaseName, CFAutoscalingReleaseVersion}, " / "),*/
+			"pushapp-release":           strings.Join([]string{PushAppsReleaseName, PushAppsReleaseVersion}, " / "),
+			// "notifications-release":     strings.Join([]string{NotificationsReleaseName, NotificationsReleaseVersion}, " / "),
+			// "notifications-ui-release":  strings.Join([]string{NotificationsUIReleaseName, NotificationsUIReleaseVersion}, " / "),
+			// "cf-autoscaling-release":    strings.Join([]string{CFAutoscalingReleaseName, CFAutoscalingReleaseVersion}, " / "),
 		},
 	}
 }
@@ -375,11 +377,12 @@ func (s *Plugin) getDeploymentManifest(c *cli.Context, config *config.Config) (*
 		URL:     c.String("etcd-release-url"),
 		SHA1:    c.String("etcd-release-sha"),
 	})
-	/*dm.AddRelease(enaml.Release{Name: PushAppsReleaseName, Version: PushAppsReleaseVersion})
-	dm.AddRelease(enaml.Release{Name: NotificationsReleaseName, Version: NotificationsReleaseVersion})
-	dm.AddRelease(enaml.Release{Name: NotificationsUIReleaseName, Version: NotificationsUIReleaseVersion})
-	dm.AddRelease(enaml.Release{Name: CFAutoscalingReleaseName, Version: CFAutoscalingReleaseVersion})
-	*/
+
+	dm.AddRelease(enaml.Release{Name: PushAppsReleaseName, Version: PushAppsReleaseVersion})
+	// dm.AddRelease(enaml.Release{Name: NotificationsReleaseName, Version: NotificationsReleaseVersion})
+	// dm.AddRelease(enaml.Release{Name: NotificationsUIReleaseName, Version: NotificationsUIReleaseVersion})
+	// dm.AddRelease(enaml.Release{Name: CFAutoscalingReleaseName, Version: CFAutoscalingReleaseVersion})
+
 	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: c.String("stemcell-version"), Alias: StemcellAlias})
 
 	dm.Update.MaxInFlight = 1

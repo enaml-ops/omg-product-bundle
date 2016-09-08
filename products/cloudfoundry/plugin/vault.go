@@ -95,6 +95,7 @@ func getPasswordObject() []byte {
 		"db-uaa-password",
 		"db-ccdb-password",
 		"db-console-password",
+		"db-app_usage-password",
 		"diego-db-passphrase",
 		"uaa-ldap-user-password",
 		"admin-password",
@@ -125,6 +126,7 @@ func getPasswordObject() []byte {
 		"consul-encryption-key",
 		"cc-db-encryption-key",
 		"host-key-fingerprint",
+		"apps-manager-secret-token",
 	}
 	var passVault map[string]string = make(map[string]string)
 

@@ -10,6 +10,7 @@ import (
 	"github.com/xchapter7x/lo"
 	"github.com/xchapter7x/lo/lofakes"
 
+	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/util"
 )
@@ -140,6 +141,49 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 
 			It("then it exit and print an error", func() {
 				Ω(logfake.FatalCallCount()).Should(Equal(1))
+			})
+		})
+	})
+
+	Describe("given getDeploymentManifest", func() {
+		Context("when called without any instance groupers", func() {
+			var p *Plugin
+			var dm *enaml.DeploymentManifest
+			var err error
+			var oldfactories []InstanceGrouperFactory
+
+			BeforeEach(func() {
+				oldfactories = factories
+				factories = factories[:0]
+				p = new(Plugin)
+				ctx := pluginutil.NewContext([]string{"cloudfoundry"}, pluginutil.ToCliFlagArray(p.GetFlags()))
+				dm, err = p.getDeploymentManifest(ctx, nil)
+				Ω(err).ShouldNot(HaveOccurred())
+			})
+
+			AfterEach(func() {
+				factories = oldfactories
+			})
+
+			It("includes the correct releases", func() {
+				hasRelease := func(name string) bool {
+					for i := range dm.Releases {
+						if dm.Releases[i].Name == name {
+							return true
+						}
+					}
+					return false
+				}
+				Ω(hasRelease(CFReleaseName)).Should(BeTrue())
+				Ω(hasRelease(CFMysqlReleaseName)).Should(BeTrue())
+				Ω(hasRelease(DiegoReleaseName)).Should(BeTrue())
+				Ω(hasRelease(GardenReleaseName)).Should(BeTrue())
+				Ω(hasRelease(CFLinuxReleaseName)).Should(BeTrue())
+				Ω(hasRelease(EtcdReleaseName)).Should(BeTrue())
+				Ω(hasRelease(PushAppsReleaseName)).Should(BeTrue())
+				// Ω(hasRelease(NotificationsReleaseName)).Should(BeTrue())
+				// Ω(hasRelease(NotificationsUIReleaseName)).Should(BeTrue())
+				// Ω(hasRelease(CFAutoscalingReleaseName)).Should(BeTrue())
 			})
 		})
 	})

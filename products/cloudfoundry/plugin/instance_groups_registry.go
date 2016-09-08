@@ -9,7 +9,7 @@ var (
 	factories []InstanceGrouperFactory
 )
 
-//InstanceGroupCreator creates and validates InstanceGroups.
+// InstanceGroupCreator creates and validates InstanceGroups.
 type InstanceGroupCreator interface {
 	ToInstanceGroup() *enaml.InstanceGroup
 }
