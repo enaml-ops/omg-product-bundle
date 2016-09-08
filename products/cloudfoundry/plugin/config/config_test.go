@@ -133,6 +133,8 @@ func BuildConfigContext() *cli.Context {
 		"--nfs-allow-from-network-cidr", "value",
 		"--apps-manager-secret-token", "token",
 		"--db-app_usage-password", "appusagepasssword",
+		"--db-autoscale-password", "autoscaledbpassword",
+		"--db-autoscale-username", "usernameautoscale",
 	})
 	return c
 }
@@ -194,7 +196,7 @@ var _ = Describe("Config", func() {
 			Ω(config.MySQLIPs).Should(ConsistOf("10.0.0.12", "10.0.0.13"))
 		})
 
-		It("then apps domain should be set", func() {
+		It("then mysql bootstrap password should be set", func() {
 			Ω(config.MySQLBootstrapPassword).Should(Equal("mysqlbootstrappwd"))
 		})
 

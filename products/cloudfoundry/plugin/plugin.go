@@ -144,6 +144,8 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		createStringFlag("db-console-username", "console db username", "enamlconsole"),
 		createStringFlag("db-console-password", "console db password"),
 		createStringFlag("db-app_usage-password", "app usage db password"),
+		createStringFlag("db-autoscale-username", "autoscale db user"),
+		createStringFlag("db-autoscale-password", "autoscale db password"),
 
 		//Diego Database
 		createStringSliceFlag("diego-db-ip", "a list of static IPs for the diego database partitions"),

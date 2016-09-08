@@ -1,6 +1,9 @@
 package config
 
-import "github.com/codegangsta/cli"
+import (
+	"github.com/codegangsta/cli"
+	"github.com/enaml-ops/omg-cli/utils"
+)
 
 func RequiredSecretFlags() []string {
 	return []string{
@@ -43,6 +46,7 @@ func RequiredSecretFlags() []string {
 		"cc-staging-upload-password",
 		"db-app_usage-password",
 		"apps-manager-secret-token",
+		"db-autoscale-password",
 	}
 }
 
@@ -88,6 +92,8 @@ func NewSecret(c *cli.Context) Secret {
 		StagingUploadPassword:                     c.String("cc-staging-upload-password"),
 		AppUsageDBPassword:                        c.String("db-app_usage-password"),
 		AppsManagerSecretToken:                    c.String("apps-manager-secret-token"),
+		AutoscaleBrokerPassword:                   utils.NewPassword(16),
+		AutoscaleDBPassword:                       c.String("db-autoscale-password"),
 	}
 }
 
@@ -132,4 +138,7 @@ type Secret struct {
 	ConsulEncryptKeys                         []string
 	AppUsageDBPassword                        string
 	AppsManagerSecretToken                    string
+	AutoscaleBrokerPassword                   string
+	AutoscaleClientSecret                     string
+	AutoscaleDBPassword                       string
 }

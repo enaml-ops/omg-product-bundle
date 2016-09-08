@@ -8,7 +8,6 @@ import (
 )
 
 func NewConfig(c *cli.Context) (*Config, error) {
-
 	//check for required fields
 	if err := checkRequired(c); err != nil {
 		return nil, err

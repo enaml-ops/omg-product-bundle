@@ -1,6 +1,9 @@
 package config
 
-import "github.com/codegangsta/cli"
+import (
+	"github.com/codegangsta/cli"
+	"github.com/enaml-ops/omg-cli/utils"
+)
 
 func RequiredUserFlags() []string {
 	return []string{
@@ -13,6 +16,7 @@ func RequiredUserFlags() []string {
 		"db-console-username",
 		"router-user",
 		"cc-internal-api-user",
+		"db-autoscale-username",
 	}
 }
 
@@ -23,10 +27,12 @@ func NewUser(c *cli.Context) User {
 		StagingUploadUser:     c.String("cc-staging-upload-user"),
 		CCDBUsername:          c.String("db-ccdb-username"),
 		UAADBUserName:         c.String("db-uaa-username"),
+		AutoscaleDBUser:       c.String("db-autoscale-username"),
 		MySQLProxyAPIUsername: c.String("mysql-proxy-api-username"),
 		ConsoleDBUserName:     c.String("db-console-username"),
 		RouterUser:            c.String("router-user"),
 		CCInternalAPIUser:     c.String("cc-internal-api-user"),
+		AutoscaleBrokerUser:   utils.NewPassword(16),
 	}
 }
 
@@ -39,5 +45,7 @@ type User struct {
 	ConsoleDBUserName     string
 	MySQLProxyAPIUsername string
 	UAADBUserName         string
+	AutoscaleDBUser       string
 	RouterUser            string
+	AutoscaleBrokerUser   string
 }
