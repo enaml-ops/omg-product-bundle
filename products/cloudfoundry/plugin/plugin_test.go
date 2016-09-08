@@ -180,6 +180,7 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 				Ω(hasRelease(GardenReleaseName)).Should(BeTrue())
 				Ω(hasRelease(CFLinuxReleaseName)).Should(BeTrue())
 				Ω(hasRelease(EtcdReleaseName)).Should(BeTrue())
+				Ω(hasRelease(MySQLBackupReleaseName)).Should(BeTrue())
 				Ω(hasRelease(PushAppsReleaseName)).Should(BeTrue())
 				Ω(hasRelease(CFAutoscalingReleaseName)).Should(BeTrue())
 				// Ω(hasRelease(NotificationsReleaseName)).Should(BeTrue())

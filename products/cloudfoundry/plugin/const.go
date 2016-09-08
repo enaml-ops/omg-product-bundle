@@ -37,7 +37,9 @@ const (
 	CFAutoscalingReleaseName    = "cf-autoscaling"
 	CFAutoscalingReleaseVersion = "36"
 
-	MySQLBackupReleaseVersion   = "1"
+	MySQLBackupReleaseName    = "mysql-backup"
+	MySQLBackupReleaseVersion = "1"
+
 	ServiceBackupReleaseVersion = "1"
 )
 

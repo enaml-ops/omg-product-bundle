@@ -385,6 +385,7 @@ func (s *Plugin) getDeploymentManifest(c *cli.Context, config *config.Config) (*
 		SHA1:    c.String("etcd-release-sha"),
 	})
 
+	dm.AddRelease(enaml.Release{Name: MySQLBackupReleaseName, Version: MySQLBackupReleaseVersion})
 	dm.AddRelease(enaml.Release{Name: PushAppsReleaseName, Version: PushAppsReleaseVersion})
 	dm.AddRelease(enaml.Release{Name: CFAutoscalingReleaseName, Version: CFAutoscalingReleaseVersion})
 	// dm.AddRelease(enaml.Release{Name: NotificationsReleaseName, Version: NotificationsReleaseVersion})
