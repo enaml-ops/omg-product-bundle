@@ -41,6 +41,8 @@ func RequiredSecretFlags() []string {
 		"mysql-admin-password",
 		"db-console-password",
 		"cc-staging-upload-password",
+		"db-app_usage-password",
+		"apps-manager-secret-token",
 	}
 }
 

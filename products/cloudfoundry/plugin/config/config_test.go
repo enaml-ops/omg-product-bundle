@@ -131,6 +131,8 @@ func BuildConfigContext() *cli.Context {
 		"--doppler-zone", "value",
 		"--cc-internal-api-user", "value",
 		"--nfs-allow-from-network-cidr", "value",
+		"--apps-manager-secret-token", "token",
+		"--db-app_usage-password", "appusagepasssword",
 	})
 	return c
 }
