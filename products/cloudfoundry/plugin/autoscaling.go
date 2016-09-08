@@ -8,6 +8,7 @@ import (
 	das "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/deploy-autoscaling"
 	db "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/destroy-broker"
 	rb "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/register-broker"
+	ta "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/test-autoscaling"
 
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 )
@@ -174,5 +175,36 @@ func NewAutoscalingTests(c *config.Config) InstanceGroupCreator {
 }
 
 func (a autoscalingTests) ToInstanceGroup() *enaml.InstanceGroup {
-	return nil
+	return &enaml.InstanceGroup{
+		Name:      "autoscaling-tests",
+		Instances: 1,
+		VMType:    a.ErrandVMType,
+		Lifecycle: "errand",
+		AZs:       a.AZs,
+		Stemcell:  a.StemcellName,
+		Networks: []enaml.Network{
+			{Name: a.NetworkName},
+		},
+		Update: enaml.Update{
+			MaxInFlight: 1,
+		},
+		Jobs: []enaml.InstanceJob{
+			{
+				Name:    "test-autoscaling",
+				Release: CFAutoscalingReleaseName,
+				Properties: &ta.TestAutoscalingJob{
+					Autoscale: &ta.Autoscale{
+						Cf: &ta.Cf{
+							AdminUser:     "admin",
+							AdminPassword: a.AdminPassword,
+						},
+					},
+					Domain: a.SystemDomain,
+					Ssl: &ta.Ssl{
+						SkipCertVerify: a.SkipSSLCertVerify,
+					},
+				},
+			},
+		},
+	}
 }
