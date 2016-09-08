@@ -18,11 +18,10 @@ type CloudControllerPartition struct {
 }
 
 func NewCloudControllerPartition(config *config.Config) InstanceGroupCreator {
-
 	return &CloudControllerPartition{
 		Config:         config,
 		Metron:         NewMetron(config),
-		ConsulAgent:    NewConsulAgent([]string{}, config),
+		ConsulAgent:    NewConsulAgent([]string{"cloud_controller_ng"}, config),
 		StatsdInjector: NewStatsdInjector(nil),
 	}
 }

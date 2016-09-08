@@ -12,6 +12,7 @@ import (
 	"gopkg.in/yaml.v2"
 
 	ccnglib "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cloud_controller_ng"
+	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/consul_agent"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/route_registrar"
 )
 
@@ -258,6 +259,17 @@ var _ = Describe("Cloud Controller Partition", func() {
 			yml, err := yaml.Marshal(props.Cc.InstallBuildpacks)
 			Ω(err).ShouldNot(HaveOccurred())
 			Ω(yml).Should(MatchYAML(buildpacks))
+		})
+
+		It("should have configured the consul agent job", func() {
+			igf := cloudController.ToInstanceGroup()
+			job := igf.GetJobByName("consul_agent")
+			Ω(job).ShouldNot(BeNil())
+			Ω(job.Release).Should(Equal(CFReleaseName))
+
+			props := job.Properties.(*consul_agent.ConsulAgentJob)
+			Ω(props.Consul.Agent.Domain).Should(Equal("cf.internal"))
+			Ω(props.Consul.Agent.Services).Should(HaveKey("cloud_controller_ng"))
 		})
 
 		It("should have NFS Mounter set as a job", func() {
