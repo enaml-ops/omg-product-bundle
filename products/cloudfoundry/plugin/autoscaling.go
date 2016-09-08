@@ -6,6 +6,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-cli/utils"
 	das "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/deploy-autoscaling"
+	db "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/destroy-broker"
 	rb "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/register-broker"
 
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
@@ -14,6 +15,8 @@ import (
 type (
 	deployAutoscaling       struct{ *config.Config }
 	registerAutoscaleBroker struct{ *config.Config }
+	destroyAutoscaleBroker  struct{ *config.Config }
+	autoscalingTests        struct{ *config.Config }
 )
 
 func NewDepoyAutoscaling(c *config.Config) InstanceGroupCreator {
@@ -119,4 +122,57 @@ func (a registerAutoscaleBroker) ToInstanceGroup() *enaml.InstanceGroup {
 			},
 		},
 	}
+}
+
+func NewAutoscaleDestroyBroker(c *config.Config) InstanceGroupCreator {
+	return destroyAutoscaleBroker{c}
+}
+
+func (d destroyAutoscaleBroker) ToInstanceGroup() *enaml.InstanceGroup {
+	return &enaml.InstanceGroup{
+		Name:      "autoscaling-destroy-broker",
+		Instances: 1,
+		VMType:    d.ErrandVMType,
+		Lifecycle: "errand",
+		AZs:       d.AZs,
+		Stemcell:  d.StemcellName,
+		Networks: []enaml.Network{
+			{Name: d.NetworkName},
+		},
+		Update: enaml.Update{
+			MaxInFlight: 1,
+		},
+		Jobs: []enaml.InstanceJob{
+			{
+				Name:    "destroy-broker",
+				Release: CFAutoscalingReleaseName,
+				Properties: &db.DestroyBrokerJob{
+					Autoscale: &db.Autoscale{
+						Broker: &db.Broker{
+							User:     d.AutoscaleBrokerUser,
+							Password: d.AutoscaleBrokerPassword,
+						},
+						Cf: &db.Cf{
+							AdminUser:     "admin",
+							AdminPassword: d.AdminPassword,
+						},
+						Organization: "system",
+						Space:        "autoscaling",
+					},
+					Domain: d.SystemDomain,
+					Ssl: &db.Ssl{
+						SkipCertVerify: d.SkipSSLCertVerify,
+					},
+				},
+			},
+		},
+	}
+}
+
+func NewAutoscalingTests(c *config.Config) InstanceGroupCreator {
+	return autoscalingTests{c}
+}
+
+func (a autoscalingTests) ToInstanceGroup() *enaml.InstanceGroup {
+	return nil
 }
