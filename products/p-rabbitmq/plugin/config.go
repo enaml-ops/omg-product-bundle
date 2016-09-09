@@ -3,7 +3,7 @@ package prabbitmq
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
+	cli "gopkg.in/urfave/cli.v2"
 )
 
 // Config is used as input for generating instance groups.
