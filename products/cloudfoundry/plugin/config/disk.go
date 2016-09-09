@@ -1,6 +1,6 @@
 package config
 
-import "github.com/codegangsta/cli"
+import "gopkg.in/urfave/cli.v2"
 
 func RequiredDiskFlags() []string {
 	return []string{"diego-cell-disk-type", "diego-brain-disk-type", "diego-db-disk-type", "nfs-disk-type", "etcd-disk-type", "mysql-disk-type"}

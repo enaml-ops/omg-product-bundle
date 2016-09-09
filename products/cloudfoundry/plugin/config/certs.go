@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/codegangsta/cli"
+	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/pluginlib/util"
 )
 

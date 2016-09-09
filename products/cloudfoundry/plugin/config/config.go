@@ -3,8 +3,8 @@ package config
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
 	"github.com/xchapter7x/lo"
+	"gopkg.in/urfave/cli.v2"
 )
 
 func NewConfig(c *cli.Context) (*Config, error) {
@@ -24,18 +24,18 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		MinCliVersion:                 c.String("min-cli-version"),
 		SharePath:                     c.String("nfs-share-path"),
 		AllowSSHAccess:                c.Bool("allow-app-ssh-access"),
-		SkipSSLCertVerify:             c.BoolT("skip-cert-verify"),
+		SkipSSLCertVerify:             c.Bool("skip-cert-verify"),
 		UAALoginProtocol:              c.String("uaa-login-protocol"),
 		SyslogAddress:                 c.String("syslog-address"),
 		SyslogPort:                    c.Int("syslog-port"),
 		SyslogTransport:               c.String("syslog-transport"),
 		DopplerZone:                   c.String("doppler-zone"),
 		DopplerMessageDrainBufferSize: c.Int("doppler-drain-buffer-size"),
-		BBSRequireSSL:                 c.BoolT("bbs-require-ssl"),
+		BBSRequireSSL:                 c.Bool("bbs-require-ssl"),
 		CCUploaderJobPollInterval:     c.Int("cc-uploader-poll-interval"),
 		CCExternalPort:                c.Int("cc-external-port"),
-		SelfServiceLinksEnabled:       c.BoolT("uaa-enable-selfservice-links"),
-		SignupsEnabled:                c.BoolT("uaa-signups-enabled"),
+		SelfServiceLinksEnabled:       c.Bool("uaa-enable-selfservice-links"),
+		SignupsEnabled:                c.Bool("uaa-signups-enabled"),
 		CompanyName:                   c.String("uaa-company-name"),
 		ProductLogo:                   c.String("uaa-product-logo"),
 		SquareLogo:                    c.String("uaa-square-logo"),
@@ -45,8 +45,8 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		LDAPSearchBase:                c.String("uaa-ldap-search-base"),
 		LDAPSearchFilter:              c.String("uaa-ldap-search-filter"),
 		LDAPMailAttributeName:         c.String("uaa-ldap-mail-attributename"),
-		LDAPEnabled:                   c.BoolT("uaa-ldap-enabled"),
-		HAProxySkip:                   c.BoolT("skip-haproxy"),
+		LDAPEnabled:                   c.Bool("uaa-ldap-enabled"),
+		HAProxySkip:                   c.Bool("skip-haproxy"),
 		MySQLProxyExternalHost:        c.String("mysql-proxy-external-host"),
 		RouterEnableSSL:               c.Bool("router-enable-ssl"),
 		NFSAllowFromNetworkCIDR:       c.StringSlice("nfs-allow-from-network-cidr"),
