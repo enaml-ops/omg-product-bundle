@@ -1,5 +1,5 @@
-hash: 393a9f3e4c6a0b3e379e26fc0dc89c6cc89ee7340fafb0ab2602bccadb663edc
-updated: 2016-09-09T12:11:56.973524135-06:00
+hash: f493b7c687ae85bc8bb91f8226b396c1e0072b0adad2cd5bee63aeced0e88a82
+updated: 2016-09-09T16:19:39.510279235-06:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -17,12 +17,12 @@ imports:
   - cloudproperties/azure
   - enamlbosh
 - name: github.com/enaml-ops/omg-cli
-  version: 1ce98a895fecdb7cc4792ff6ce06fe38b7500903
+  version: 51ecb8d88028e6f945006653040f413f9c1911ca
   subpackages:
   - bosh
   - utils
 - name: github.com/enaml-ops/pluginlib
-  version: cdbf9881da6246adb7030a0600d7c74d26ac10af
+  version: 19fe2845d9ba6d5842b5c8a852ebf92254225ec9
   subpackages:
   - cloudconfig
   - pcli

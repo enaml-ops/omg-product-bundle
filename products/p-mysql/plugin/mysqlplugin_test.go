@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/enaml"
 	. "github.com/enaml-ops/omg-product-bundle/products/p-mysql/plugin"
 	"github.com/enaml-ops/pluginlib/util"
@@ -12,6 +11,7 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/xchapter7x/lo"
 	"github.com/xchapter7x/lo/lofakes"
+	"gopkg.in/urfave/cli.v2"
 )
 
 var _ = Describe("given p-mysql Plugin", func() {
@@ -98,7 +98,7 @@ var _ = Describe("given p-mysql Plugin", func() {
 			"cf-mysql-broker-partition",
 			"monitoring-partition",
 			"proxy-partition",
-			"backup-prepare-partition",
+			//	"backup-prepare-partition",
 		}
 
 		BeforeEach(func() {
@@ -114,8 +114,8 @@ var _ = Describe("given p-mysql Plugin", func() {
 			}, cloudConfigBytes)
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})
-		XIt("then we should have a properly initialized deployment set", func() {
-			Ω(deployment.Update).ShouldNot(BeNil())
+		It("then we should have a properly initialized deployment set", func() {
+			Ω(deployment.Update).ShouldNot(BeZero())
 			Ω(len(deployment.Releases)).Should(Equal(4), "invalid number of releases")
 			Ω(len(deployment.Stemcells)).Should(Equal(1), "invalid number of stemcells")
 
