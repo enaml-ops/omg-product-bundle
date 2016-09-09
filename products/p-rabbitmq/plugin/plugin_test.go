@@ -29,10 +29,6 @@ var _ = Describe("prabbitmq plugin", func() {
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
 
-		XIt("should have set the deployment name", func() {
-			// TODO
-		})
-
 		It("should have the correct releases", func() {
 			hasRelease := func(name, version string) bool {
 				for i := range dm.Releases {
@@ -57,8 +53,11 @@ var _ = Describe("prabbitmq plugin", func() {
 			Ω(dm.Update.Serial).Should(BeTrue())
 		})
 
-		XIt("should configure the stemcell", func() {
-			Ω(dm.Stemcells).ShouldNot(BeEmpty())
+		It("should configure the stemcell", func() {
+			Ω(dm.Stemcells).Should(HaveLen(1))
+			Ω(dm.Stemcells[0].OS).Should(Equal(prabbitmq.StemcellName))
+			Ω(dm.Stemcells[0].Alias).Should(Equal(prabbitmq.StemcellAlias))
+			Ω(dm.Stemcells[0].Version).Should(Equal(prabbitmq.StemcellVersion))
 		})
 	})
 })

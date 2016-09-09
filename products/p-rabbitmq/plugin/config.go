@@ -10,10 +10,7 @@ import (
 type Config struct {
 	DeploymentName  string
 	Network         string
-	StemcellName    string
 	StemcellVersion string
-	StemcellURL     string
-	StemcellSHA     string
 	ServerIPs       []string
 	SyslogAddress   string
 	SyslogPort      int
@@ -45,11 +42,12 @@ func configFromContext(c *cli.Context) (*Config, error) {
 	}
 
 	cfg := &Config{
-		DeploymentName: getString("deployment-name"),
-		SyslogAddress:  getString("syslog-address"),
-		SyslogPort:     getInt("syslog-port"),
-		Network:        getString("network"),
-		ServerIPs:      getStringSlice("server-ip"),
+		DeploymentName:  getString("deployment-name"),
+		Network:         getString("network"),
+		StemcellVersion: getString("stemcell-ver"),
+		SyslogAddress:   getString("syslog-address"),
+		SyslogPort:      getInt("syslog-port"),
+		ServerIPs:       getStringSlice("server-ip"),
 	}
 
 	var err error
