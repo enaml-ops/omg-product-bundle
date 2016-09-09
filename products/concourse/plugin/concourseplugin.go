@@ -3,7 +3,7 @@ package concourseplugin
 import (
 	"strings"
 
-	"github.com/codegangsta/cli"
+	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/omg-product-bundle/products/concourse"

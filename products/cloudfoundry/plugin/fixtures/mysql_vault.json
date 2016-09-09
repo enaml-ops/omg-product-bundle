@@ -3,6 +3,7 @@
   "renewable": false,
   "lease_duration": 2592000,
   "data": {
+    "app-domain": "apps.overrideme.com",
     "admin-password": "asdfasdfasdfasdf",
     "apps-metrics-client-secret": "asdfasdfasdfa",
     "apps-metrics-processing-client-secret": "asdfads",

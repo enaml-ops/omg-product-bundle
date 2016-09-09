@@ -40,6 +40,7 @@ var _ = Describe("autoscaling", func() {
 					AZs:          []string{"z1"},
 					StemcellName: "cool-ubuntu-animal",
 					NetworkName:  "foundry-net",
+					AppDomains:   []string{"apps.example.com"},
 					SystemDomain: "sys.example.com",
 					Secret: config.Secret{
 						AutoscaleBrokerPassword:        controlBrokerPassword,
@@ -88,6 +89,9 @@ var _ = Describe("autoscaling", func() {
 				Ω(props).ShouldNot(BeNil())
 
 				job := props.(*das.DeployAutoscalingJob)
+
+				Ω(job.AppDomains).Should(ConsistOf("apps.example.com"))
+
 				Ω(job.Autoscale).ShouldNot(BeNil())
 				Ω(job.Autoscale.Broker).ShouldNot(BeNil())
 				Ω(job.Autoscale.Broker.User).Should(Equal(controlBrokerUser))

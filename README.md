@@ -22,3 +22,8 @@ Currently under development
 - concourse
 - redis
 - cloud foundry
+- cf-mysql
+- p-mysql
+- docker
+- docker registry
+- p-rabbitmq

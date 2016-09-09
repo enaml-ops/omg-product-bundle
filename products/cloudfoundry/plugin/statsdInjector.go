@@ -1,7 +1,7 @@
 package cloudfoundry
 
 import (
-	"github.com/codegangsta/cli"
+	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/enaml"
 	"github.com/xchapter7x/lo"
 )

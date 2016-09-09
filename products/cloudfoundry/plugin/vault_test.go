@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/ghttp"
+	"gopkg.in/urfave/cli.v2"
 
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
@@ -60,7 +61,10 @@ var _ = Describe("Vault helpers", func() {
 	})
 	Describe("given vault unmarshal", func() {
 		Context("when decorating with vault data", func() {
-			var server *ghttp.Server
+			var (
+				server *ghttp.Server
+				c      *cli.Context
+			)
 
 			BeforeEach(func() {
 				b, _ := ioutil.ReadFile("fixtures/mysql_vault.json")
@@ -72,19 +76,14 @@ var _ = Describe("Vault helpers", func() {
 						ghttp.RespondWith(http.StatusOK, b),
 					),
 				)
-			})
 
-			AfterEach(func() {
-				server.Close()
-			})
-
-			It("generates seeded databases", func() {
 				p := new(Plugin)
 				flags := p.GetFlags()
 				args := []string{
 					"app",
 					"--system-domain", "sys.example.com",
 					"--app-domain", "apps.example.com",
+					"--app-domain", "apps2.example.com",
 					"--vault-domain", server.URL(),
 					"--vault-hash-password", "secret/pcf-np-1-password",
 					"--vault-hash-keycert", "secret/pcf-np-1-keycert",
@@ -95,11 +94,23 @@ var _ = Describe("Vault helpers", func() {
 					"--syslog-address", "10.113.82.164",
 				}
 				VaultDecorate(args, flags)
-				c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
+				c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
+			})
+
+			AfterEach(func() {
+				server.Close()
+			})
+
+			It("generates seeded databases", func() {
 				Ω(c.String("db-uaa-password")).ShouldNot(BeEmpty())
 				ig := NewMySQLPartition(&config.Config{})
 				mysql := ig.(*MySQL)
 				Ω(mysql.MySQLSeededDatabases).ShouldNot(BeEmpty())
+			})
+
+			It("uses string slice values specified as args and ignores values in vault", func() {
+				appDomains := c.StringSlice("app-domain")
+				Ω(appDomains).Should(ConsistOf("apps.example.com", "apps2.example.com"))
 			})
 		})
 	})

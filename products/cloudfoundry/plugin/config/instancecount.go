@@ -1,6 +1,6 @@
 package config
 
-import "github.com/codegangsta/cli"
+import "gopkg.in/urfave/cli.v2"
 
 func RequiredInstanceCountFlags() []string {
 	return []string{"cc-instances", "uaa-instances", "cc-worker-instances"}

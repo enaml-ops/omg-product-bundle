@@ -3,13 +3,13 @@ package cloudfoundry
 import (
 	"strings"
 
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
+	"gopkg.in/urfave/cli.v2"
 )
 
 func init() {
@@ -313,6 +313,7 @@ func (s *Plugin) GetMeta() product.Meta {
 			"cflinuxfs2-rootfs-release": strings.Join([]string{CFLinuxReleaseName, CFLinuxReleaseVersion}, " / "),
 			"etcd-release":              strings.Join([]string{EtcdReleaseName, EtcdReleaseVersion}, " / "),
 			"pushapp-release":           strings.Join([]string{PushAppsReleaseName, PushAppsReleaseVersion}, " / "),
+			"stemcell":                  StemcellVersion,
 			// "notifications-release":     strings.Join([]string{NotificationsReleaseName, NotificationsReleaseVersion}, " / "),
 			// "notifications-ui-release":  strings.Join([]string{NotificationsUIReleaseName, NotificationsUIReleaseVersion}, " / "),
 			// "cf-autoscaling-release":    strings.Join([]string{CFAutoscalingReleaseName, CFAutoscalingReleaseVersion}, " / "),
@@ -452,7 +453,6 @@ func VaultDecorate(args []string, flgs []pcli.Flag) {
 		}
 
 		for _, hash := range hashes {
-			lo.G.Debug("checking hash: ", hash)
 
 			if hash != "" {
 				vault.UnmarshalFlags(hash, flgs)
@@ -461,7 +461,7 @@ func VaultDecorate(args []string, flgs []pcli.Flag) {
 
 	} else {
 		lo.G.Debug("complete vault flagset not found:",
-			"active: ", c.BoolT("vault-active"),
+			"active: ", c.Bool("vault-active"),
 			"domain: ", c.String("vault-domain"),
 			"passhash: ", c.String("vault-hash-password"),
 			"keycerthash: ", c.String("vault-hash-keycert"),
@@ -470,14 +470,14 @@ func VaultDecorate(args []string, flgs []pcli.Flag) {
 			"vaulttoken: ", c.String("vault-token"),
 		)
 
-		if c.BoolT("vault-active") {
+		if c.Bool("vault-active") {
 			lo.G.Fatal("you've activated vault, but have not provided a complete set of values... exiting program now")
 		}
 	}
 }
 
 func hasValidVaultFlags(c *cli.Context) bool {
-	return c.BoolT("vault-active") &&
+	return c.Bool("vault-active") &&
 		c.String("vault-domain") != "" &&
 		c.String("vault-token") != ""
 }

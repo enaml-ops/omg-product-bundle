@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/codegangsta/cli"
+	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/enaml"
 	. "github.com/enaml-ops/omg-product-bundle/products/vault/plugin"
 	"github.com/enaml-ops/pluginlib/util"
@@ -163,7 +163,7 @@ var _ = Describe("given vault Plugin", func() {
 func checkFlags(flags []cli.Flag, flagName string) error {
 	var err = fmt.Errorf("could not find an flag %s in plugin", flagName)
 	for _, f := range flags {
-		if f.GetName() == flagName {
+		if f.Names()[0] == flagName {
 			err = nil
 		}
 	}

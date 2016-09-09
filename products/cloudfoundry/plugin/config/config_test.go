@@ -1,11 +1,11 @@
 package config_test
 
 import (
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"gopkg.in/urfave/cli.v2"
 	"github.com/xchapter7x/lo"
 )
 
