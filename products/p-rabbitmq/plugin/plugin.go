@@ -13,17 +13,18 @@ import (
 // Plugin is an omg product plugin for deploying p-rabbitmq.
 type Plugin struct{}
 
+// GetFlags returns the CLI flags accepted by the plugin.
 func (p *Plugin) GetFlags() []pcli.Flag {
 	return []pcli.Flag{
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "deployment-name", Value: "p-rabbitmq", Usage: "the name bosh will use for the deployment"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "network", Usage: "the name of the network to use"},
-		// pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
-		// pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
-		// pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		// pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: "ubuntu-trusty", Usage: "the name of the stemcell you will use"},
-		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "server-ip", Usage: "rabbit-mq server IPs to use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "syslog-address", Usage: "the address of your syslog drain"},
-		pcli.Flag{FlagType: pcli.IntFlag, Name: "syslog-port", Value: "514", Usage: "the port for your syslog connection"},
+		pcli.CreateStringFlag("deployment-name", "the name bosh will use for the deployment", "p-rabbitmq"),
+		pcli.CreateStringFlag("network", "the name of the network to use"),
+		// pcli.CreateStringFlag("stemcell-url", "the url of the stemcell you wish to use"),
+		// pcli.CreateStringFlag("stemcell-ver", "the version number of the stemcell you wish to use"),
+		// pcli.CreateStringFlag("stemcell-sha", "the sha of the stemcell you will use"),
+		// pcli.CreateStringFlag("stemcell-name", "the name of the stemcell you will use", "ubuntu-trusty"),
+		pcli.CreateStringSliceFlag("server-ip", "rabbit-mq server IPs to use"),
+		pcli.CreateStringFlag("syslog-address", "the address of your syslog drain"),
+		pcli.CreateIntFlag("syslog-port", "the port for your syslog connection", "514"),
 	}
 }
 
