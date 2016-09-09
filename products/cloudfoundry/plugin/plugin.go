@@ -313,6 +313,7 @@ func (s *Plugin) GetMeta() product.Meta {
 			"cflinuxfs2-rootfs-release": strings.Join([]string{CFLinuxReleaseName, CFLinuxReleaseVersion}, " / "),
 			"etcd-release":              strings.Join([]string{EtcdReleaseName, EtcdReleaseVersion}, " / "),
 			"pushapp-release":           strings.Join([]string{PushAppsReleaseName, PushAppsReleaseVersion}, " / "),
+			"stemcell":                  StemcellVersion,
 			// "notifications-release":     strings.Join([]string{NotificationsReleaseName, NotificationsReleaseVersion}, " / "),
 			// "notifications-ui-release":  strings.Join([]string{NotificationsUIReleaseName, NotificationsUIReleaseVersion}, " / "),
 			// "cf-autoscaling-release":    strings.Join([]string{CFAutoscalingReleaseName, CFAutoscalingReleaseVersion}, " / "),
