@@ -215,7 +215,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	dm.AddInstanceGroup(NewBrokerRegistrar(s))
 	dm.AddInstanceGroup(NewBrokerDeRegistrar(s))
 	dm.AddInstanceGroup(NewRejoinUnsafe(s))
-	//dm.AddInstanceGroup(NewAcceptanceTests())
+	dm.AddInstanceGroup(NewAcceptanceTests(s))
 	dm.Update = enaml.Update{
 		MaxInFlight:     1,
 		UpdateWatchTime: "30000-300000",
