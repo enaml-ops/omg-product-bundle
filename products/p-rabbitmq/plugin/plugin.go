@@ -72,6 +72,17 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 
 	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: cfg.StemcellVersion, Alias: StemcellAlias})
 
+	dm.SetCompilation(enaml.Compilation{
+		ReuseCompilationVMs: true,
+		Workers:             10,
+		Network:             cfg.Network,
+		CloudProperties: map[string]interface{}{
+			"vm_flavor":                "core-200",
+			"disk_flavor":              "core-200",
+			"vm_attached_disk_size_gb": 32,
+		},
+	})
+
 	// add instance groups
 	dm.AddInstanceGroup(p.NewRabbitMQServerPartition(cfg))
 

@@ -45,12 +45,20 @@ var _ = Describe("prabbitmq plugin", func() {
 			Ω(hasRelease(prabbitmq.RabbitMQMetricsReleaseName, prabbitmq.RabbitMQMetricsReleaseVersion)).Should(BeTrue())
 		})
 
-		It("should have set the update", func() {
+		It("should set the update", func() {
 			Ω(dm.Update.Canaries).Should(Equal(1))
 			Ω(dm.Update.CanaryWatchTime).Should(Equal("30000-300000"))
 			Ω(dm.Update.UpdateWatchTime).Should(Equal("30000-300000"))
 			Ω(dm.Update.MaxInFlight).Should(Equal(1))
 			Ω(dm.Update.Serial).Should(BeTrue())
+		})
+
+		It("should set compilation settings", func() {
+			Ω(dm.Compilation.ReuseCompilationVMs).Should(BeTrue())
+			Ω(dm.Compilation.Workers).Should(Equal(10))
+			Ω(dm.Compilation.CloudProperties).Should(HaveKeyWithValue("vm_flavor", "core-200"))
+			Ω(dm.Compilation.CloudProperties).Should(HaveKeyWithValue("disk_flavor", "core-200"))
+			Ω(dm.Compilation.CloudProperties).Should(HaveKeyWithValue("vm_attached_disk_size_gb", 32))
 		})
 
 		It("should configure the stemcell", func() {
