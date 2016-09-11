@@ -25,6 +25,17 @@ func (p *Plugin) NewRabbitMQServerPartition(c *Config) *enaml.InstanceGroup {
 							FailIfNoPeerCert:  false,
 						},
 						ClusterPartitionHandling: "pause_minority",
+						Administrators: &rmqs.Administrators{
+							Management: &rmqs.Management{
+								Username: "rabbitadmin",
+								Password: "rabbitadmin",
+							},
+							Broker: &rmqs.Broker{
+								Username: "broker",
+								Password: c.BrokerPassword,
+							},
+						},
+						Plugins: []string{"rabbitmq_management"},
 					},
 					SyslogAggregator: &rmqs.SyslogAggregator{
 						Address: c.SyslogAddress,

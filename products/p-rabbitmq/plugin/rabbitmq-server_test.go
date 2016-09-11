@@ -14,18 +14,20 @@ var _ = Describe("RabbitMQ server partition", func() {
 		var ig *enaml.InstanceGroup
 
 		const (
-			controlNetworkName   = "foundry-net"
-			controlSyslogAddress = "1.2.3.4"
-			controlSyslogPort    = 1234
+			controlNetworkName    = "foundry-net"
+			controlSyslogAddress  = "1.2.3.4"
+			controlSyslogPort     = 1234
+			controlBrokerPassword = "brokerpassword"
 		)
 
 		BeforeEach(func() {
 			p := new(prabbitmq.Plugin)
 			c := &prabbitmq.Config{
-				ServerIPs:     []string{"10.0.1.2", "10.0.1.3"},
-				Network:       controlNetworkName,
-				SyslogAddress: controlSyslogAddress,
-				SyslogPort:    controlSyslogPort,
+				ServerIPs:      []string{"10.0.1.2", "10.0.1.3"},
+				Network:        controlNetworkName,
+				SyslogAddress:  controlSyslogAddress,
+				SyslogPort:     controlSyslogPort,
+				BrokerPassword: controlBrokerPassword,
 			}
 			ig = p.NewRabbitMQServerPartition(c)
 			Ω(ig).ShouldNot(BeNil())
@@ -59,6 +61,15 @@ var _ = Describe("RabbitMQ server partition", func() {
 			Ω(props.SyslogAggregator).ShouldNot(BeNil())
 			Ω(props.SyslogAggregator.Address).Should(Equal(controlSyslogAddress))
 			Ω(props.SyslogAggregator.Port).Should(Equal(controlSyslogPort))
+
+			Ω(props.RabbitmqServer.Administrators).ShouldNot(BeNil())
+			Ω(props.RabbitmqServer.Administrators.Management).ShouldNot(BeNil())
+			Ω(props.RabbitmqServer.Administrators.Management.Username).Should(Equal("rabbitadmin"))
+			Ω(props.RabbitmqServer.Administrators.Management.Password).Should(Equal("rabbitadmin"))
+			Ω(props.RabbitmqServer.Administrators.Broker).ShouldNot(BeNil())
+			Ω(props.RabbitmqServer.Administrators.Broker.Username).Should(Equal("broker"))
+			Ω(props.RabbitmqServer.Administrators.Broker.Password).Should(Equal(controlBrokerPassword))
+
 		})
 	})
 })
