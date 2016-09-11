@@ -3,17 +3,28 @@ package prabbitmq
 import (
 	"fmt"
 
+	"github.com/enaml-ops/omg-cli/utils"
+
 	cli "gopkg.in/urfave/cli.v2"
 )
 
 // Config is used as input for generating instance groups.
 type Config struct {
-	DeploymentName  string
-	Network         string
-	StemcellVersion string
-	ServerIPs       []string
-	SyslogAddress   string
-	SyslogPort      int
+	DeploymentName       string
+	SystemDomain         string
+	ServiceURL           string
+	ServiceAdminPassword string
+	PublicIP             string
+	Network              string
+	StemcellVersion      string
+	ServerIPs            []string
+	BrokerIP             string
+	BrokerPassword       string
+	SyslogAddress        string
+	SyslogPort           int
+	NATSMachines         []string
+	NATSPort             int
+	NATSPassword         string
 }
 
 func configFromContext(c *cli.Context) (*Config, error) {
@@ -42,17 +53,35 @@ func configFromContext(c *cli.Context) (*Config, error) {
 	}
 
 	cfg := &Config{
-		DeploymentName:  getString("deployment-name"),
-		Network:         getString("network"),
-		StemcellVersion: getString("stemcell-ver"),
-		SyslogAddress:   getString("syslog-address"),
-		SyslogPort:      getInt("syslog-port"),
-		ServerIPs:       getStringSlice("server-ip"),
+		DeploymentName:       getString("deployment-name"),
+		ServiceURL:           getString("servicde-url"),
+		ServiceAdminPassword: getString("service-admin-password"),
+		SystemDomain:         getString("system-domain"),
+		Network:              getString("network"),
+		StemcellVersion:      getString("stemcell-ver"),
+		ServerIPs:            getStringSlice("server-ip"),
+		BrokerIP:             getString("broker-ip"),
+		BrokerPassword:       getString("broker-password"),
+		SyslogAddress:        getString("syslog-address"),
+		SyslogPort:           getInt("syslog-port"),
+		NATSMachines:         getStringSlice("nats-ip"),
+		NATSPort:             getInt("nats-port"),
+		NATSPassword:         getString("nats-password"),
 	}
+
+	makePassword(&cfg.ServiceAdminPassword)
+	makePassword(&cfg.BrokerPassword)
+	makePassword(&cfg.NATSPassword)
 
 	var err error
 	if len(missingFlags) > 0 {
 		err = fmt.Errorf("prabbitmq: missing flags: %#v", missingFlags)
 	}
 	return cfg, err
+}
+
+func makePassword(s *string) {
+	if *s == generatePassword {
+		*s = utils.NewPassword(16)
+	}
 }
