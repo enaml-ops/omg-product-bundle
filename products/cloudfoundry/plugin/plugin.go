@@ -253,6 +253,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 
 		//Vault stuff
 		pcli.CreateStringFlag("vault-domain", "the location of your vault server (ie. http://10.0.0.1:8200)"),
+		pcli.CreateStringFlag("vault-hash-misc", "the hashname for misc CLI flags"),
 		pcli.CreateStringFlag("vault-hash-password", "the hashname of your secret (ie. secret/pcf-1-passwords"),
 		pcli.CreateStringFlag("vault-hash-keycert", "the hashname of your secret (ie. secret/pcf-1-keycert"),
 		pcli.CreateStringFlag("vault-hash-ip", "the hashname of your secret (ie. secret/pcf-1-ips"),
@@ -410,6 +411,7 @@ func VaultDecorate(args []string, flgs []pcli.Flag) {
 		lo.G.Debug("connecting to vault at: ", c.String("vault-domain"))
 		vault := pluginutil.NewVaultUnmarshal(c.String("vault-domain"), c.String("vault-token"))
 		hashes := []string{
+			c.String("vault-hash-misc"),
 			c.String("vault-hash-password"),
 			c.String("vault-hash-keycert"),
 			c.String("vault-hash-ip"),
@@ -417,7 +419,6 @@ func VaultDecorate(args []string, flgs []pcli.Flag) {
 		}
 
 		for _, hash := range hashes {
-
 			if hash != "" {
 				vault.UnmarshalFlags(hash, flgs)
 			}
