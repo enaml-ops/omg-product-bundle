@@ -112,6 +112,10 @@ var _ = Describe("autoscaling", func() {
 				Ω(job.Autoscale.Organization).Should(Equal("system"))
 				Ω(job.Autoscale.Space).Should(Equal("autoscaling"))
 
+				Ω(job.Autoscale.MarketplaceCompanyName).Should(Equal("Pivotal"))
+				Ω(job.Autoscale.MarketplaceImageUrl).ShouldNot(BeEmpty())
+				Ω(job.Autoscale.MarketplaceDocumentationUrl).Should(Equal("http://docs.gopivotal.com/pivotalcf/"))
+
 				Ω(job.Domain).Should(Equal("sys.example.com"))
 
 				Ω(job.Ssl).ShouldNot(BeNil())
