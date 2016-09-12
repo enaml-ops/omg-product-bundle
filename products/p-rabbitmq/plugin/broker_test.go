@@ -2,7 +2,9 @@ package prabbitmq_test
 
 import (
 	"github.com/enaml-ops/enaml"
+	ma "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/metron_agent"
 	rmqb "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/rabbitmq-broker"
+	sm "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/service-metrics"
 	prabbitmq "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/plugin"
 
 	. "github.com/onsi/ginkgo"
@@ -14,6 +16,7 @@ var _ = Describe("rabbitmq-broker partition", func() {
 		var ig *enaml.InstanceGroup
 
 		const (
+			controlDeploymentName       = "p-rabbitmq"
 			controlNetworkName          = "foundry-net"
 			controlBrokerIP             = "1.2.3.4"
 			controlPublicIP             = "5.6.7.8"
@@ -25,11 +28,14 @@ var _ = Describe("rabbitmq-broker partition", func() {
 			controlNATSPort             = 4333
 			controlNATSPassword         = "natspassword"
 			controlNATSIP               = "10.0.0.2"
+			controlMetronZone           = "metronzone"
+			controlMetronSecret         = "metronsharedsecret"
 		)
 
 		BeforeEach(func() {
 			p := new(prabbitmq.Plugin)
 			c := &prabbitmq.Config{
+				DeploymentName:       controlDeploymentName,
 				Network:              controlNetworkName,
 				SystemDomain:         "sys.example.com",
 				BrokerIP:             controlBrokerIP,
@@ -42,6 +48,8 @@ var _ = Describe("rabbitmq-broker partition", func() {
 				NATSPort:             controlNATSPort,
 				NATSPassword:         controlNATSPassword,
 				NATSMachines:         []string{controlNATSIP},
+				MetronZone:           controlMetronZone,
+				MetronSecret:         controlMetronSecret,
 			}
 			ig = p.NewRabbitMQBrokerPartition(c)
 			Ω(ig).ShouldNot(BeNil())
@@ -58,12 +66,12 @@ var _ = Describe("rabbitmq-broker partition", func() {
 		})
 
 		It("should configure the rabbitmq-broker job", func() {
-			Ω(ig.Jobs).Should(HaveLen(1))
-			Ω(ig.Jobs[0].Properties).ShouldNot(BeNil())
-			Ω(ig.Jobs[0].Name).Should(Equal("rabbitmq-broker"))
-			Ω(ig.Jobs[0].Release).Should(Equal(prabbitmq.CFRabbitMQReleaseName))
+			job := ig.GetJobByName("rabbitmq-broker")
+			Ω(job).ShouldNot(BeNil())
+			Ω(job.Properties).ShouldNot(BeNil())
+			Ω(job.Release).Should(Equal(prabbitmq.CFRabbitMQReleaseName))
 
-			props := ig.Jobs[0].Properties.(*rmqb.RabbitmqBrokerJob)
+			props := job.Properties.(*rmqb.RabbitmqBrokerJob)
 			Ω(props.RabbitmqBroker).ShouldNot(BeNil())
 
 			Ω(props.RabbitmqBroker.Route).Should(Equal("pivotal-rabbitmq-broker"))
@@ -105,6 +113,45 @@ var _ = Describe("rabbitmq-broker partition", func() {
 			Ω(props.Cf.Nats.Port).Should(Equal(controlNATSPort))
 			Ω(props.Cf.Nats.Username).Should(Equal("nats"))
 			Ω(props.Cf.Nats.Password).Should(Equal(controlNATSPassword))
+		})
+
+		It("should configure the metron_agent job", func() {
+			job := ig.GetJobByName("metron_agent")
+			Ω(job).ShouldNot(BeNil())
+			Ω(job.Properties).ShouldNot(BeNil())
+			Ω(job.Release).Should(Equal(prabbitmq.LoggregatorReleaseName))
+
+			props := job.Properties.(*ma.MetronAgentJob)
+			Ω(props.MetronAgent).ShouldNot(BeNil())
+			Ω(props.MetronAgent.Deployment).Should(Equal(controlDeploymentName))
+			Ω(props.MetronAgent.Zone).Should(Equal(controlMetronZone))
+
+			Ω(props.MetronEndpoint).ShouldNot(BeNil())
+			Ω(props.MetronEndpoint.SharedSecret).Should(Equal(controlMetronSecret))
+
+			Ω(props.Loggregator).ShouldNot(BeNil())
+			Ω(props.Loggregator.Etcd).ShouldNot(BeNil())
+		})
+
+		It("should configure the service-metrics job", func() {
+			job := ig.GetJobByName("service-metrics")
+			Ω(job).ShouldNot(BeNil())
+			Ω(job.Properties).ShouldNot(BeNil())
+			Ω(job.Release).Should(Equal(prabbitmq.ServiceMetricsReleaseName))
+
+			props := job.Properties.(*sm.ServiceMetricsJob)
+			Ω(props.ServiceMetrics).ShouldNot(BeNil())
+			Ω(props.ServiceMetrics.ExecutionIntervalSeconds).Should(Equal(30))
+			Ω(props.ServiceMetrics.Origin).Should(Equal(controlDeploymentName))
+			Ω(props.ServiceMetrics.MetricsCommand).Should(Equal("/var/vcap/packages/rabbitmq-server-metrics/bin/rabbitmq-server-metrics"))
+			Ω(props.ServiceMetrics.MetricsCommandArgs).Should(ConsistOf(
+				"-erlangBinPath=/var/vcap/packages/erlang/bin/",
+				"-rabbitmqCtlPath=/var/vcap/packages/rabbitmq-server/bin/rabbitmqctl",
+				"-logPath=/var/vcap/sys/log/service-metrics/rabbitmq-server-metrics.log",
+				"-rabbitmqUsername=rabbitadmin",
+				"-rabbitmqPassword=rabbitadmin",
+				"-rabbitmqApiEndpoint=http://127.0.0.1:15672",
+			))
 		})
 
 	})
