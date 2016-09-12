@@ -3,9 +3,8 @@ package prabbitmq_test
 import (
 	"github.com/enaml-ops/enaml"
 	ma "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/metron_agent"
-	sm "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/service-metrics"
-
 	rmqs "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/rabbitmq-server"
+	sm "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/service-metrics"
 	prabbitmq "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/plugin"
 
 	. "github.com/onsi/ginkgo"
