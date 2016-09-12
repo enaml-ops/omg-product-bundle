@@ -16,7 +16,7 @@ func (p *Plugin) NewRabbitMQServerPartition(c *Config) *enaml.InstanceGroup {
 		Jobs: []enaml.InstanceJob{
 			{
 				Name:    "rabbitmq-server",
-				Release: CFRabbitMQReleaseName, // TODO CHECK ME
+				Release: CFRabbitMQReleaseName,
 				Properties: &rmqs.RabbitmqServerJob{
 					RabbitmqServer: &rmqs.RabbitmqServer{
 						Ssl: &rmqs.Ssl{
