@@ -38,6 +38,9 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateStringFlag("haproxy-stats-password", "admin password to acces HAproxy stats dashboard", generatePassword),
 		pcli.CreateStringFlag("system-services-password", "password for CF system_services account"),
 		pcli.CreateBoolFlag("skip-ssl-verify", "skip SSL verification"),
+		pcli.CreateStringFlag("metron-zone", "metron zone"),
+		pcli.CreateStringFlag("metron-secret", "metron client secret"),
+		pcli.CreateStringSliceFlag("etcd-machine", "IPs of etcd machines"),
 	}
 }
 

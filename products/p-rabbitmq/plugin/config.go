@@ -28,6 +28,9 @@ type Config struct {
 	HAProxyStatsAdminPassword string
 	SystemServicesPassword    string
 	SkipSSLVerify             bool
+	MetronZone                string
+	MetronSecret              string
+	EtcdMachines              []string
 }
 
 func configFromContext(c *cli.Context) (*Config, error) {
@@ -73,6 +76,9 @@ func configFromContext(c *cli.Context) (*Config, error) {
 		HAProxyStatsAdminPassword: getString("haproxy-stats-password"),
 		SystemServicesPassword:    getString("system-services-password"),
 		SkipSSLVerify:             c.Bool("skip-ssl-verify"),
+		MetronZone:                getString("metron-zone"),
+		MetronSecret:              getString("metron-secret"),
+		EtcdMachines:              getStringSlice("etcd-machine"),
 	}
 
 	makePassword(&cfg.ServiceAdminPassword)
