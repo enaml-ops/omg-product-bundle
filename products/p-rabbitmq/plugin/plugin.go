@@ -35,6 +35,7 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateStringSliceFlag("nats-ip", "IP addresses of NATS machines"),
 		pcli.CreateIntFlag("nats-port", "NATS port", "4222"),
 		pcli.CreateStringFlag("nats-password", "password for NATS", generatePassword),
+		pcli.CreateStringFlag("haproxy-stats-password", "admin password to acces HAproxy stats dashboard", generatePassword),
 	}
 }
 
@@ -76,11 +77,6 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 		ReuseCompilationVMs: true,
 		Workers:             10,
 		Network:             cfg.Network,
-		CloudProperties: map[string]interface{}{
-			"vm_flavor":                "core-200",
-			"disk_flavor":              "core-200",
-			"vm_attached_disk_size_gb": 32,
-		},
 	})
 
 	// add instance groups
