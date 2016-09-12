@@ -36,6 +36,8 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateIntFlag("nats-port", "NATS port", "4222"),
 		pcli.CreateStringFlag("nats-password", "password for NATS", generatePassword),
 		pcli.CreateStringFlag("haproxy-stats-password", "admin password to acces HAproxy stats dashboard", generatePassword),
+		pcli.CreateStringFlag("system-services-password", "password for CF system_services account"),
+		pcli.CreateBoolFlag("skip-ssl-verify", "skip SSL verification"),
 	}
 }
 
@@ -82,6 +84,7 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 	dm.AddInstanceGroup(p.NewRabbitMQServerPartition(cfg))
 	dm.AddInstanceGroup(p.NewRabbitMQBrokerPartition(cfg))
 	dm.AddInstanceGroup(p.NewRabbitMQHAProxyPartition(cfg))
+	dm.AddInstanceGroup(p.NewRabbitMQBrokerRegistrar(cfg))
 
 	dm.Update = enaml.Update{
 		Canaries:        1,

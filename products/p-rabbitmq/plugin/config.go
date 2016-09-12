@@ -26,6 +26,8 @@ type Config struct {
 	NATSPort                  int
 	NATSPassword              string
 	HAProxyStatsAdminPassword string
+	SystemServicesPassword    string
+	SkipSSLVerify             bool
 }
 
 func configFromContext(c *cli.Context) (*Config, error) {
@@ -69,6 +71,8 @@ func configFromContext(c *cli.Context) (*Config, error) {
 		NATSPort:                  getInt("nats-port"),
 		NATSPassword:              getString("nats-password"),
 		HAProxyStatsAdminPassword: getString("haproxy-stats-password"),
+		SystemServicesPassword:    getString("system-services-password"),
+		SkipSSLVerify:             c.Bool("skip-ssl-verify"),
 	}
 
 	makePassword(&cfg.ServiceAdminPassword)
