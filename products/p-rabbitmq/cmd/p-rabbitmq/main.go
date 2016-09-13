@@ -1,7 +1,7 @@
 package main
 
 import (
-	pmysql "github.com/enaml-ops/omg-product-bundle/products/p-mysql/plugin"
+	prabbitmq "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/plugin"
 	"github.com/enaml-ops/pluginlib/product"
 )
 
@@ -9,7 +9,7 @@ import (
 var Version string = "v0.0.0" // overridden at link time
 
 func main() {
-	product.Run(&pmysql.Plugin{
-		PluginVersion: Version,
+	product.Run(&prabbitmq.Plugin{
+		Version: Version,
 	})
 }
