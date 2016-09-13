@@ -1,9 +1,9 @@
-hash: f493b7c687ae85bc8bb91f8226b396c1e0072b0adad2cd5bee63aeced0e88a82
-updated: 2016-09-09T16:19:39.510279235-06:00
+hash: 8b38b09f6bd176a2244b3ad72777e99901cea4d0429b417fbe27cc7c2d5e988f
+updated: 2016-09-12T16:42:51.946322933-06:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
-  repo: https://github.com/sneal/bosh-init.git
+  repo: https://github.com/enaml-ops/bosh-init.git
   vcs: git
   subpackages:
   - cmd
@@ -57,7 +57,7 @@ imports:
   - reporters/stenographer
   - types
 - name: github.com/onsi/gomega
-  version: b48c9a8b2644326d0a44eaaacc8d83e35174a05d
+  version: d59fa0ac68bb5dd932ee8d24eed631cdd519efc3
   subpackages:
   - format
   - ghttp
