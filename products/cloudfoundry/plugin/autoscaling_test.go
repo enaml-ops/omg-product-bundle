@@ -90,7 +90,7 @@ var _ = Describe("autoscaling", func() {
 
 				job := props.(*das.DeployAutoscalingJob)
 
-				Ω(job.AppDomains).Should(ConsistOf("apps.example.com"))
+				Ω(job.AppDomains).Should(ConsistOf("sys.example.com"))
 
 				Ω(job.Autoscale).ShouldNot(BeNil())
 				Ω(job.Autoscale.Broker).ShouldNot(BeNil())
@@ -197,6 +197,7 @@ var _ = Describe("autoscaling", func() {
 				Ω(props).ShouldNot(BeNil())
 
 				job := props.(*rb.RegisterBrokerJob)
+				Ω(job.AppDomains).Should(ConsistOf("sys.example.com"))
 				Ω(job.Autoscale).ShouldNot(BeNil())
 				Ω(job.Autoscale.Broker).ShouldNot(BeNil())
 				Ω(job.Autoscale.Broker.User).Should(Equal(controlBrokerUser))

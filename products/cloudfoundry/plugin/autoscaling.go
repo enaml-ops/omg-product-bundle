@@ -43,7 +43,7 @@ func (a deployAutoscaling) ToInstanceGroup() *enaml.InstanceGroup {
 				Name:    "deploy-autoscaling",
 				Release: CFAutoscalingReleaseName,
 				Properties: &das.DeployAutoscalingJob{
-					AppDomains: a.AppDomains,
+					AppDomains: []string{a.SystemDomain}, // yes, the system domain
 					Autoscale: &das.Autoscale{
 						Broker: &das.Broker{
 							User:     a.AutoscaleBrokerUser,
@@ -106,7 +106,7 @@ func (a registerAutoscaleBroker) ToInstanceGroup() *enaml.InstanceGroup {
 				Name:    "register-broker",
 				Release: CFAutoscalingReleaseName,
 				Properties: &rb.RegisterBrokerJob{
-					AppDomains: a.AppDomains,
+					AppDomains: []string{a.SystemDomain}, // yes, the system domain
 					Autoscale: &rb.Autoscale{
 						Broker: &rb.Broker{
 							User:     a.AutoscaleBrokerUser,
