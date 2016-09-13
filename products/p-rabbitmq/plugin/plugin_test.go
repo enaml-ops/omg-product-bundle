@@ -61,11 +61,6 @@ var _ = Describe("prabbitmq plugin", func() {
 			Ω(dm.Update.Serial).Should(BeTrue())
 		})
 
-		It("should set compilation settings", func() {
-			Ω(dm.Compilation.ReuseCompilationVMs).Should(BeTrue())
-			Ω(dm.Compilation.Workers).Should(Equal(10))
-		})
-
 		It("should configure the stemcell", func() {
 			Ω(dm.Stemcells).Should(HaveLen(1))
 			Ω(dm.Stemcells[0].OS).Should(Equal(prabbitmq.StemcellName))

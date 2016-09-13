@@ -40,8 +40,8 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateStringFlag("haproxy-stats-password", "admin password to acces HAproxy stats dashboard", generatePassword),
 		pcli.CreateStringFlag("system-services-password", "password for CF system_services account"),
 		pcli.CreateBoolFlag("skip-ssl-verify", "skip SSL verification"),
-		pcli.CreateStringFlag("metron-zone", "metron zone"),
-		pcli.CreateStringFlag("metron-secret", "metron client secret"),
+		pcli.CreateStringFlag("doppler-zone", "the name zone for doppler"),
+		pcli.CreateStringFlag("doppler-shared-secret", "doppler shared secret"),
 		pcli.CreateStringSliceFlag("etcd-machine", "IPs of etcd machines"),
 	}
 }
@@ -79,12 +79,6 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 	dm.AddRelease(enaml.Release{Name: RabbitMQMetricsReleaseName, Version: RabbitMQMetricsReleaseVersion})
 
 	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: cfg.StemcellVersion, Alias: StemcellAlias})
-
-	dm.SetCompilation(enaml.Compilation{
-		ReuseCompilationVMs: true,
-		Workers:             10,
-		Network:             cfg.Network,
-	})
 
 	dm.AddInstanceGroup(p.NewRabbitMQServerPartition(cfg))
 	dm.AddInstanceGroup(p.NewRabbitMQBrokerPartition(cfg))
