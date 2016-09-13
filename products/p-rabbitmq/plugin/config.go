@@ -70,15 +70,15 @@ func configFromContext(c *cli.Context) (*Config, error) {
 		BrokerPassword:            getString("broker-password"),
 		SyslogAddress:             getString("syslog-address"),
 		SyslogPort:                getInt("syslog-port"),
-		NATSMachines:              getStringSlice("nats-ip"),
+		NATSMachines:              getStringSlice("nats-machine-ip"),
 		NATSPort:                  getInt("nats-port"),
-		NATSPassword:              getString("nats-password"),
+		NATSPassword:              getString("nats-pass"),
 		HAProxyStatsAdminPassword: getString("haproxy-stats-password"),
 		SystemServicesPassword:    getString("system-services-password"),
 		SkipSSLVerify:             c.Bool("skip-ssl-verify"),
 		MetronZone:                getString("doppler-zone"),
 		MetronSecret:              getString("doppler-shared-secret"),
-		EtcdMachines:              getStringSlice("etcd-machine"),
+		EtcdMachines:              getStringSlice("etcd-machine-ip"),
 	}
 
 	makePassword(&cfg.ServiceAdminPassword)

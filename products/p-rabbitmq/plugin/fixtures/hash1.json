@@ -1,0 +1,11 @@
+{
+  "lease_id":"",
+  "renewable":false,
+  "lease_duration":2592000,
+  "data":{
+    "nats-machine-ip":"1.0.0.3,1.0.0.4",
+    "syslog-address": "1.0.0.5"
+  },
+  "warnings":null,
+  "auth":null
+}

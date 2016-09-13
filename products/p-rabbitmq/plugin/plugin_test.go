@@ -2,11 +2,14 @@ package prabbitmq_test
 
 import (
 	"io/ioutil"
+	"net/http"
 
 	"github.com/enaml-ops/enaml"
 	prabbitmq "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/plugin"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/ghttp"
 	logging "github.com/op/go-logging"
 )
 
@@ -67,5 +70,61 @@ var _ = Describe("prabbitmq plugin", func() {
 			Ω(dm.Stemcells[0].Alias).Should(Equal(prabbitmq.StemcellAlias))
 			Ω(dm.Stemcells[0].Version).Should(Equal(prabbitmq.StemcellVersion))
 		})
+	})
+
+	Context("when using Vault integration", func() {
+		var (
+			p      *prabbitmq.Plugin
+			dm     *enaml.DeploymentManifest
+			server *ghttp.Server
+		)
+
+		BeforeEach(func() {
+			hash1, err := ioutil.ReadFile("fixtures/hash1.json")
+			Ω(err).ShouldNot(HaveOccurred())
+			hash2, err := ioutil.ReadFile("fixtures/hash2.json")
+			Ω(err).ShouldNot(HaveOccurred())
+
+			server = ghttp.NewServer()
+			server.AllowUnhandledRequests = true
+			server.AppendHandlers(
+				ghttp.CombineHandlers(
+					ghttp.VerifyRequest("GET", "/v1/secret/hash1"),
+					ghttp.RespondWith(http.StatusOK, hash1),
+				),
+				ghttp.CombineHandlers(
+					ghttp.VerifyRequest("GET", "/v1/secret/hash2"),
+					ghttp.RespondWith(http.StatusOK, hash2),
+				),
+			)
+
+			p = new(prabbitmq.Plugin)
+			manifestBytes := p.GetProduct([]string{
+				"rabbitmq",
+				"--vault-domain", server.URL(),
+				"--vault-token", "asdfghjkl",
+				"--vault-hash", "secret/hash1",
+				"--vault-hash", "secret/hash2",
+			}, []byte{})
+			dm = enaml.NewDeploymentManifest(manifestBytes)
+		})
+
+		AfterEach(func() {
+			server.Close()
+		})
+
+		It("then it should use the values from vault", func() {
+			broker := dm.GetInstanceGroupByName("rabbitmq-broker-partition")
+			brokerJob := broker.GetJobByName("rabbitmq-broker")
+			props := brokerJob.Properties.(map[interface{}]interface{})
+
+			Ω(props["syslog_aggregator"]).Should(HaveKeyWithValue("address", "1.0.0.5"))
+
+			nats := props["cf"].(map[interface{}]interface{})["nats"]
+			Ω(nats).Should(HaveKeyWithValue("password", "natspassword"))
+			machines := nats.(map[interface{}]interface{})["machines"]
+			Ω(machines).Should(ConsistOf("1.0.0.3", "1.0.0.4"))
+		})
+
 	})
 })

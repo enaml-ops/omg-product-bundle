@@ -34,15 +34,19 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateStringFlag("broker-password", "password for the rabbitmq broker", generatePassword),
 		pcli.CreateStringFlag("syslog-address", "the address of your syslog drain"),
 		pcli.CreateIntFlag("syslog-port", "the port for your syslog connection", "514"),
-		pcli.CreateStringSliceFlag("nats-ip", "IP addresses of NATS machines"),
+		pcli.CreateStringSliceFlag("nats-machine-ip", "IP addresses of NATS machines"),
 		pcli.CreateIntFlag("nats-port", "NATS port", "4222"),
-		pcli.CreateStringFlag("nats-password", "password for NATS", generatePassword),
+		pcli.CreateStringFlag("nats-pass", "password for NATS", generatePassword),
 		pcli.CreateStringFlag("haproxy-stats-password", "admin password to acces HAproxy stats dashboard", generatePassword),
 		pcli.CreateStringFlag("system-services-password", "password for CF system_services account"),
 		pcli.CreateBoolFlag("skip-ssl-verify", "skip SSL verification"),
 		pcli.CreateStringFlag("doppler-zone", "the name zone for doppler"),
 		pcli.CreateStringFlag("doppler-shared-secret", "doppler shared secret"),
-		pcli.CreateStringSliceFlag("etcd-machine", "IPs of etcd machines"),
+		pcli.CreateStringSliceFlag("etcd-machine-ip", "IPs of etcd machines"),
+
+		pcli.CreateStringFlag("vault-domain", "the location of your vault server (ie. http://10.0.0.1:8200)"),
+		pcli.CreateStringFlag("vault-token", "the token to make connections to your vault"),
+		pcli.CreateStringSliceFlag("vault-hash", "a list of vault hashes to pull values from"),
 	}
 }
 
@@ -64,7 +68,22 @@ func (p *Plugin) GetMeta() product.Meta {
 
 // GetProduct generates a BOSH deployment manifest for p-rabbitmq.
 func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
-	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(p.GetFlags()))
+	flags := p.GetFlags()
+	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
+
+	// populate flags from vault if configured to do so
+	domain := c.String("vault-domain")
+	tok := c.String("vault-token")
+	hashes := c.StringSlice("vault-hash")
+	if domain != "" && tok != "" && len(hashes) > 0 {
+		lo.G.Debug("connecting to vault at", domain)
+		v := pluginutil.NewVaultUnmarshal(domain, tok)
+		for _, hash := range hashes {
+			v.UnmarshalFlags(hash, flags)
+		}
+		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
+	}
+
 	cfg, err := configFromContext(c)
 	if err != nil {
 		lo.G.Error(err.Error())
