@@ -9,6 +9,7 @@ import (
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/docker/enaml-gen/containers"
+	"github.com/enaml-ops/omg-product-bundle/products/docker/enaml-gen/docker"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/util"
@@ -27,18 +28,20 @@ type jobBucket struct {
 	Instances int
 }
 type Plugin struct {
-	PluginVersion   string
-	DeploymentName  string
-	Containers      interface{}
-	NetworkName     string
-	IPs             []string
-	VMTypeName      string
-	DiskTypeName    string
-	AZs             []string
-	StemcellName    string
-	StemcellURL     string
-	StemcellVersion string
-	StemcellSHA     string
+	PluginVersion      string
+	DeploymentName     string
+	Containers         interface{}
+	NetworkName        string
+	IPs                []string
+	VMTypeName         string
+	DiskTypeName       string
+	AZs                []string
+	StemcellName       string
+	StemcellURL        string
+	StemcellVersion    string
+	StemcellSHA        string
+	RegistryMirrors    []string
+	InsecureRegistries []string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -47,6 +50,8 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.BoolFlag, Name: "infer-from-cloud", Usage: "setting this flag will attempt to pull as many defaults from your targetted bosh's cloud config as it can (vmtype, network, disk, etc)."},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "ip", Usage: "multiple static ips for each redis leader vm"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "az", Usage: "list of AZ names to use"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "insecure-registry", Usage: "Array of insecure registries (no certificate verification for HTTPS and enable HTTP fallback)"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "registry-mirror", Usage: "Array of preferred Docker registry mirrors"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "network", Usage: "the name of the network to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vm-type", Usage: "name of your desired vm type"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "disk-type", Usage: "name of your desired disk type"},
@@ -87,6 +92,8 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.Containers = s.setContainerDefinitionFromFile(c.String("container-definition"))
 	s.IPs = c.StringSlice("ip")
 	s.AZs = c.StringSlice("az")
+	s.InsecureRegistries = c.StringSlice("insecure-registry")
+	s.RegistryMirrors = c.StringSlice("registry-mirror")
 	s.DeploymentName = c.String("deployment-name")
 	s.NetworkName = c.String("network")
 	s.StemcellName = c.String("stemcell-name")
@@ -132,6 +139,7 @@ func (s *Plugin) NewDockerInstanceGroup() (ig *enaml.InstanceGroup) {
 		PersistentDiskType: s.DiskTypeName,
 		Jobs: []enaml.InstanceJob{
 			s.createDockerJob(),
+			s.createContainersJob(),
 		},
 		Networks: []enaml.Network{
 			enaml.Network{Name: s.NetworkName, StaticIPs: s.IPs},
@@ -146,6 +154,19 @@ func (s *Plugin) NewDockerInstanceGroup() (ig *enaml.InstanceGroup) {
 func (s *Plugin) createDockerJob() enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "docker",
+		Release: "docker",
+		Properties: &docker.DockerJob{
+			Docker: &docker.Docker{
+				RegistryMirrors:    s.RegistryMirrors,
+				InsecureRegistries: s.InsecureRegistries,
+			},
+		},
+	}
+}
+
+func (s *Plugin) createContainersJob() enaml.InstanceJob {
+	return enaml.InstanceJob{
+		Name:    "containers",
 		Release: "docker",
 		Properties: &containers.ContainersJob{
 			Containers: s.Containers,
