@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/docker/enaml-gen/docker"
 	. "github.com/enaml-ops/omg-product-bundle/products/docker/plugin"
@@ -13,6 +12,7 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/xchapter7x/lo"
 	"github.com/xchapter7x/lo/lofakes"
+	"gopkg.in/urfave/cli.v2"
 )
 
 var _ = Describe("given docker Plugin", func() {
@@ -336,7 +336,7 @@ var _ = Describe("given docker Plugin", func() {
 func checkFlags(flags []cli.Flag, flagName string) error {
 	var err = fmt.Errorf("could not find an flag %s in plugin", flagName)
 	for _, f := range flags {
-		if f.GetName() == flagName {
+		if len(f.Names()) > 0 && f.Names()[0] == flagName {
 			err = nil
 		}
 	}
