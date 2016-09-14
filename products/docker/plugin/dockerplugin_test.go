@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"gopkg.in/urfave/cli.v2"
+	"github.com/codegangsta/cli"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/docker/enaml-gen/docker"
 	. "github.com/enaml-ops/omg-product-bundle/products/docker/plugin"
@@ -47,6 +47,51 @@ var _ = Describe("given docker Plugin", func() {
 
 		It("then it should properly pass the flag value to the plugin", func() {
 			Ω(plgn.InsecureRegistries).Should(ConsistOf(controlRegistry1, controlRegistry2), "there should be insecure registries in the job properties")
+		})
+	})
+
+	Context("when called with a `--docker-release-ver` `--docker-release-url` `--docker-release-sha` flag", func() {
+
+		It("then it should have those registered as valid flags", func() {
+			cloudConfigBytes, _ := ioutil.ReadFile("./fixtures/sample-aws.yml")
+			Ω(func() {
+				plgn.GetProduct([]string{
+					"appname",
+					"--network", "private",
+					"--vm-type", "medium",
+					"--disk-type", "medium",
+					"--ip", "1.2.3.4",
+					"--az", "z1",
+					"--stemcell-ver", "12.3.44",
+					"--container-definition", "./fixtures/sample-docker.yml",
+					"--docker-release-ver", "skjdf",
+					"--docker-release-url", "asdfasdf",
+					"--docker-release-sha", "asdfasdf",
+				}, cloudConfigBytes)
+			}).ShouldNot(Panic(), "these flags should not cause a panic, b/c they should exist")
+		})
+		It("then it should set the give values as the release values", func() {
+			cloudConfigBytes, _ := ioutil.ReadFile("./fixtures/sample-aws.yml")
+			controlver := "asdfasdf"
+			controlurl := "fasdfasdf"
+			controlsha := "akjhasdkghasdg"
+			dmBytes := plgn.GetProduct([]string{
+				"appname",
+				"--network", "private",
+				"--vm-type", "medium",
+				"--disk-type", "medium",
+				"--ip", "1.2.3.4",
+				"--az", "z1",
+				"--stemcell-ver", "12.3.44",
+				"--container-definition", "./fixtures/sample-docker.yml",
+				"--docker-release-ver", controlver,
+				"--docker-release-url", controlurl,
+				"--docker-release-sha", controlsha,
+			}, cloudConfigBytes)
+			deployment := enaml.NewDeploymentManifest(dmBytes)
+			Ω(deployment.Releases[0].Version).Should(Equal(controlver))
+			Ω(deployment.Releases[0].URL).Should(Equal(controlurl))
+			Ω(deployment.Releases[0].SHA1).Should(Equal(controlsha))
 		})
 	})
 
@@ -291,7 +336,7 @@ var _ = Describe("given docker Plugin", func() {
 func checkFlags(flags []cli.Flag, flagName string) error {
 	var err = fmt.Errorf("could not find an flag %s in plugin", flagName)
 	for _, f := range flags {
-		if f.Names()[0] == flagName {
+		if f.GetName() == flagName {
 			err = nil
 		}
 	}

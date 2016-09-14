@@ -60,6 +60,9 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "container-definition", Usage: "filepath to the container definition for your docker containers"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "docker-release-url", Value: BoshDockerReleaseURL, Usage: "the url of the docker release you wish to use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "docker-release-ver", Value: BoshDockerReleaseVer, Usage: "the version number of the docker release you wish to use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "docker-release-sha", Value: BoshDockerReleaseSHA, Usage: "the sha of the docker release you will use"},
 	}
 }
 
@@ -115,7 +118,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)
 	dm.SetName("docker")
-	dm.AddRemoteRelease("docker", BoshDockerReleaseVer, BoshDockerReleaseURL, BoshDockerReleaseSHA)
+	dm.AddRemoteRelease("docker", c.String("docker-release-ver"), c.String("docker-release-url"), c.String("docker-release-sha"))
 	dm.AddRemoteStemcell(s.StemcellName, s.StemcellName, s.StemcellVersion, s.StemcellURL, s.StemcellSHA)
 
 	dm.AddInstanceGroup(s.NewDockerInstanceGroup())
