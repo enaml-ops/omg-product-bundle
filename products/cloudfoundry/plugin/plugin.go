@@ -47,6 +47,10 @@ func init() {
 	RegisterInstanceGrouperFactory(NewAutoscaleRegisterBroker)
 	RegisterInstanceGrouperFactory(NewAutoscaleDestroyBroker)
 	RegisterInstanceGrouperFactory(NewAutoscalingTests)
+	RegisterInstanceGrouperFactory(NewNotifications)
+	RegisterInstanceGrouperFactory(NewNotificationsTest)
+	RegisterInstanceGrouperFactory(NewNotificationsUI)
+	RegisterInstanceGrouperFactory(NewNotificationsUITest)
 }
 
 //GetFlags -
@@ -150,6 +154,8 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.CreateStringFlag("db-app_usage-password", "app usage db password"),
 		pcli.CreateStringFlag("db-autoscale-username", "autoscale db user", "enamlautoscale"),
 		pcli.CreateStringFlag("db-autoscale-password", "autoscale db password"),
+		pcli.CreateStringFlag("db-notifications-username", "notifications db user", "enamlnotifications"),
+		pcli.CreateStringFlag("db-notifications-password", "notifications db password"),
 
 		//Diego Database
 		pcli.CreateStringSliceFlag("diego-db-ip", "a list of static IPs for the diego database partitions"),
@@ -279,9 +285,9 @@ func (s *Plugin) GetMeta() product.Meta {
 			"etcd-release":              strings.Join([]string{EtcdReleaseName, EtcdReleaseVersion}, " / "),
 			"pushapp-release":           strings.Join([]string{PushAppsReleaseName, PushAppsReleaseVersion}, " / "),
 			"stemcell":                  StemcellVersion,
-			// "notifications-release":     strings.Join([]string{NotificationsReleaseName, NotificationsReleaseVersion}, " / "),
-			// "notifications-ui-release":  strings.Join([]string{NotificationsUIReleaseName, NotificationsUIReleaseVersion}, " / "),
-			// "cf-autoscaling-release":    strings.Join([]string{CFAutoscalingReleaseName, CFAutoscalingReleaseVersion}, " / "),
+			"notifications-release":     strings.Join([]string{NotificationsReleaseName, NotificationsReleaseVersion}, " / "),
+			"notifications-ui-release":  strings.Join([]string{NotificationsUIReleaseName, NotificationsUIReleaseVersion}, " / "),
+			"cf-autoscaling-release":    strings.Join([]string{CFAutoscalingReleaseName, CFAutoscalingReleaseVersion}, " / "),
 		},
 	}
 }
@@ -354,8 +360,8 @@ func (s *Plugin) getDeploymentManifest(c *cli.Context, config *config.Config) (*
 	dm.AddRelease(enaml.Release{Name: MySQLBackupReleaseName, Version: MySQLBackupReleaseVersion})
 	dm.AddRelease(enaml.Release{Name: PushAppsReleaseName, Version: PushAppsReleaseVersion})
 	dm.AddRelease(enaml.Release{Name: CFAutoscalingReleaseName, Version: CFAutoscalingReleaseVersion})
-	// dm.AddRelease(enaml.Release{Name: NotificationsReleaseName, Version: NotificationsReleaseVersion})
-	// dm.AddRelease(enaml.Release{Name: NotificationsUIReleaseName, Version: NotificationsUIReleaseVersion})
+	dm.AddRelease(enaml.Release{Name: NotificationsReleaseName, Version: NotificationsReleaseVersion})
+	dm.AddRelease(enaml.Release{Name: NotificationsUIReleaseName, Version: NotificationsUIReleaseVersion})
 
 	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: c.String("stemcell-version"), Alias: StemcellAlias})
 

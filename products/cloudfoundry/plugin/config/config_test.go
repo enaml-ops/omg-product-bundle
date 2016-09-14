@@ -5,8 +5,8 @@ import (
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"gopkg.in/urfave/cli.v2"
 	"github.com/xchapter7x/lo"
+	"gopkg.in/urfave/cli.v2"
 )
 
 func BuildConfigContext() *cli.Context {
@@ -135,6 +135,7 @@ func BuildConfigContext() *cli.Context {
 		"--db-app_usage-password", "appusagepasssword",
 		"--db-autoscale-password", "autoscaledbpassword",
 		"--db-autoscale-username", "usernameautoscale",
+		"--db-notifications-password", "notificationspassword",
 	})
 	return c
 }

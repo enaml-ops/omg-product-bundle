@@ -61,6 +61,11 @@ func parseSeededDBs(config *config.Config) []MySQLSeededDatabase {
 			Username: config.AutoscaleDBUser,
 			Password: config.AutoscaleDBPassword,
 		},
+		{
+			Name:     "notifications",
+			Username: config.NotificationsDBUser,
+			Password: config.NotificationsDBPassword,
+		},
 	}
 }
 

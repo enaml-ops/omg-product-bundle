@@ -1,8 +1,8 @@
 package config
 
 import (
-	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/omg-cli/utils"
+	"gopkg.in/urfave/cli.v2"
 )
 
 func RequiredUserFlags() []string {
@@ -17,6 +17,7 @@ func RequiredUserFlags() []string {
 		"router-user",
 		"cc-internal-api-user",
 		"db-autoscale-username",
+		"db-notifications-username",
 	}
 }
 
@@ -33,6 +34,7 @@ func NewUser(c *cli.Context) User {
 		RouterUser:            c.String("router-user"),
 		CCInternalAPIUser:     c.String("cc-internal-api-user"),
 		AutoscaleBrokerUser:   utils.NewPassword(16),
+		NotificationsDBUser:   c.String("db-notifications-username"),
 	}
 }
 
@@ -48,4 +50,5 @@ type User struct {
 	AutoscaleDBUser       string
 	RouterUser            string
 	AutoscaleBrokerUser   string
+	NotificationsDBUser   string
 }

@@ -97,6 +97,7 @@ func getPasswordObject() []byte {
 		"db-ccdb-password",
 		"db-console-password",
 		"db-app_usage-password",
+		"db-notifications-password",
 		"diego-db-passphrase",
 		"uaa-ldap-user-password",
 		"admin-password",

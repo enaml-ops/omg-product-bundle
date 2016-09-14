@@ -1,8 +1,8 @@
 package config
 
 import (
-	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/omg-cli/utils"
+	"gopkg.in/urfave/cli.v2"
 )
 
 func RequiredSecretFlags() []string {
@@ -47,6 +47,7 @@ func RequiredSecretFlags() []string {
 		"db-app_usage-password",
 		"apps-manager-secret-token",
 		"db-autoscale-password",
+		"db-notifications-password",
 	}
 }
 
@@ -140,4 +141,5 @@ type Secret struct {
 	AppsManagerSecretToken                    string
 	AutoscaleBrokerPassword                   string
 	AutoscaleDBPassword                       string
+	NotificationsDBPassword                   string
 }
