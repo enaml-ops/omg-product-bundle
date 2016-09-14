@@ -6,6 +6,7 @@ import (
 
 	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-product-bundle/products/docker/enaml-gen/docker"
 	. "github.com/enaml-ops/omg-product-bundle/products/docker/plugin"
 	"github.com/enaml-ops/pluginlib/util"
 	. "github.com/onsi/ginkgo"
@@ -19,6 +20,94 @@ var _ = Describe("given docker Plugin", func() {
 
 	BeforeEach(func() {
 		plgn = new(Plugin)
+	})
+
+	Context("when called with a `--insecure-registry` stringslice flag value/s given", func() {
+		var deployment *enaml.DeploymentManifest
+		var controlRegistry1 = "blah"
+		var controlRegistry2 = "bleh"
+
+		BeforeEach(func() {
+			cloudConfigBytes, _ := ioutil.ReadFile("./fixtures/sample-aws.yml")
+			dmBytes := plgn.GetProduct([]string{
+				"appname",
+				"--network", "private",
+				"--vm-type", "medium",
+				"--disk-type", "medium",
+				"--ip", "1.2.3.4",
+				"--az", "z1",
+				"--stemcell-ver", "12.3.44",
+				"--container-definition", "./fixtures/sample-docker.yml",
+				"--insecure-registry", controlRegistry1,
+				"--insecure-registry", controlRegistry2,
+			}, cloudConfigBytes)
+			deployment = enaml.NewDeploymentManifest(dmBytes)
+			Ω(len(deployment.InstanceGroups)).Should(BeNumerically(">", 0), "we expect there to be some instance groups defined")
+		})
+
+		It("then it should properly pass the flag value to the plugin", func() {
+			Ω(plgn.InsecureRegistries).Should(ConsistOf(controlRegistry1, controlRegistry2), "there should be insecure registries in the job properties")
+		})
+	})
+
+	Context("when called with a `--registry-mirror` stringslice flag value/s given", func() {
+		var deployment *enaml.DeploymentManifest
+		var controlMirror1 = "blah"
+		var controlMirror2 = "bleh"
+
+		BeforeEach(func() {
+			cloudConfigBytes, _ := ioutil.ReadFile("./fixtures/sample-aws.yml")
+			dmBytes := plgn.GetProduct([]string{
+				"appname",
+				"--network", "private",
+				"--vm-type", "medium",
+				"--disk-type", "medium",
+				"--ip", "1.2.3.4",
+				"--az", "z1",
+				"--stemcell-ver", "12.3.44",
+				"--container-definition", "./fixtures/sample-docker.yml",
+				"--registry-mirror", controlMirror1,
+				"--registry-mirror", controlMirror2,
+			}, cloudConfigBytes)
+			deployment = enaml.NewDeploymentManifest(dmBytes)
+			Ω(len(deployment.InstanceGroups)).Should(BeNumerically(">", 0), "we expect there to be some instance groups defined")
+		})
+
+		It("then it should properly pass the flag value to the plugin", func() {
+			Ω(plgn.RegistryMirrors).Should(ConsistOf(controlMirror1, controlMirror2), "there should be registry mirrors in the job properties")
+		})
+	})
+
+	Context("when the plugin has a InsecureRegistries value set", func() {
+		var plgn *Plugin
+		var ig *enaml.InstanceGroup
+		var controlRegistry1 = "blah"
+		var controlRegistry2 = "bleh"
+		BeforeEach(func() {
+			plgn = new(Plugin)
+			plgn.InsecureRegistries = []string{controlRegistry1, controlRegistry2}
+			ig = plgn.NewDockerInstanceGroup()
+		})
+		It("then it should set the insecure-registries array in the bosh deployment manifest the plugin generates", func() {
+			var dockerJobProperties *docker.DockerJob = ig.GetJobByName("docker").Properties.(*docker.DockerJob)
+			Ω(dockerJobProperties.Docker.InsecureRegistries).Should(ConsistOf(controlRegistry1, controlRegistry2), "there should be insecure registries in the job properties")
+		})
+	})
+
+	Context("when the plugin has a RegistryMirrors value set", func() {
+		var plgn *Plugin
+		var ig *enaml.InstanceGroup
+		var controlMirror1 = "blah"
+		var controlMirror2 = "bleh"
+		BeforeEach(func() {
+			plgn = new(Plugin)
+			plgn.RegistryMirrors = []string{controlMirror1, controlMirror2}
+			ig = plgn.NewDockerInstanceGroup()
+		})
+		It("then it should set the insecure-registries array in the bosh deployment manifest the plugin generates", func() {
+			var dockerJobProperties *docker.DockerJob = ig.GetJobByName("docker").Properties.(*docker.DockerJob)
+			Ω(dockerJobProperties.Docker.RegistryMirrors).Should(ConsistOf(controlMirror1, controlMirror2), "there should be insecure registries in the job properties")
+		})
 	})
 
 	Context("when calling GetProduct while targeting an un-compatible cloud config'd bosh", func() {
