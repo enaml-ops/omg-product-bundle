@@ -24,6 +24,7 @@ var _ = Describe("push-apps-manager", func() {
 			controlConsoleDBUser      = "consoledbuser"
 			controlConsoleDBPass      = "consoledbpass"
 			controlAppUsageDBPass     = "appusagedbpassword"
+			controlMySQLAdminPassword = "mysqladmin"
 		)
 
 		BeforeEach(func() {
@@ -38,6 +39,7 @@ var _ = Describe("push-apps-manager", func() {
 					AppsManagerSecretToken:  controlSecretToken,
 					ConsoleDBPassword:       controlConsoleDBPass,
 					AppUsageDBPassword:      controlAppUsageDBPass,
+					MySQLAdminPassword:      controlMySQLAdminPassword,
 				},
 				User: config.User{
 					ConsoleDBUserName: controlConsoleDBUser,
@@ -125,16 +127,16 @@ var _ = Describe("push-apps-manager", func() {
 			Ω(props.Databases).ShouldNot(BeNil())
 			Ω(props.Databases.Console).ShouldNot(BeNil())
 			Ω(props.Databases.Console.Ip).Should(Equal(controlProxyIP))
-			Ω(props.Databases.Console.Username).Should(Equal(controlConsoleDBUser))
-			Ω(props.Databases.Console.Password).Should(Equal(controlConsoleDBPass))
+			Ω(props.Databases.Console.Username).Should(Equal("root"))
+			Ω(props.Databases.Console.Password).Should(Equal(controlMySQLAdminPassword))
 			Ω(props.Databases.Console.Adapter).Should(Equal("mysql"))
 			Ω(props.Databases.Console.Port).Should(Equal(3306))
 			Ω(props.Databases.AppUsageService).ShouldNot(BeNil())
 			Ω(props.Databases.AppUsageService.Name).Should(Equal("app_usage_service"))
 			Ω(props.Databases.AppUsageService.Ip).Should(Equal(controlProxyIP))
 			Ω(props.Databases.AppUsageService.Port).Should(Equal(3306))
-			Ω(props.Databases.AppUsageService.Username).Should(Equal("app_usage"))
-			Ω(props.Databases.AppUsageService.Password).Should(Equal(controlAppUsageDBPass))
+			Ω(props.Databases.AppUsageService.Username).Should(Equal("root"))
+			Ω(props.Databases.AppUsageService.Password).Should(Equal(controlMySQLAdminPassword))
 
 			By("configuring SSL")
 			Ω(props.Ssl).ShouldNot(BeNil())

@@ -63,8 +63,8 @@ func (p *pushAppsManager) ToInstanceGroup() *enaml.InstanceGroup {
 					Databases: &pam.Databases{
 						Console: &pam.Console{
 							Ip:       p.Config.MySQLProxyHost(),
-							Username: p.Config.ConsoleDBUserName,
-							Password: p.Config.ConsoleDBPassword,
+							Username: "root",
+							Password: p.Config.MySQLAdminPassword,
 							Adapter:  "mysql",
 							Port:     3306,
 						},
@@ -72,8 +72,8 @@ func (p *pushAppsManager) ToInstanceGroup() *enaml.InstanceGroup {
 							Name:     "app_usage_service",
 							Ip:       p.Config.MySQLProxyHost(),
 							Port:     3306,
-							Username: "app_usage",
-							Password: p.Config.AppUsageDBPassword,
+							Username: "root",
+							Password: p.Config.MySQLAdminPassword,
 						},
 					},
 					Ssl: &pam.Ssl{
