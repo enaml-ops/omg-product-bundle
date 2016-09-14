@@ -27,3 +27,4 @@ Currently under development
 - docker
 - docker registry
 - p-rabbitmq
+- p-spring-cloud-services
