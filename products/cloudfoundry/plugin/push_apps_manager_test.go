@@ -122,6 +122,8 @@ var _ = Describe("push-apps-manager", func() {
 			Ω(props.Env.BundleWithout).Should(Equal("test development hosted_only"))
 			Ω(props.Env.EnableInternalUserStore).Should(BeFalse())
 			Ω(props.Env.EnableNonAdminRoleManagement).Should(BeFalse())
+			Ω(props.Env.GenericWhiteLabelConfigJson).ShouldNot(BeNil())
+			Ω(props.Env.GenericWhiteLabelConfigJson.FooterText).ShouldNot(BeEmpty())
 
 			By("configuring the databases")
 			Ω(props.Databases).ShouldNot(BeNil())
