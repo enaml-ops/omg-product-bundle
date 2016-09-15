@@ -16,7 +16,7 @@ var _ = Describe("Metron", func() {
 				StemcellName:    "cool-ubuntu-animal",
 				AZs:             []string{"eastprod-1"},
 				NetworkName:     "foundry-net",
-				DopplerZone:      "DopplerZoneguid",
+				DopplerZone:     "DopplerZoneguid",
 				SyslogAddress:   "syslog-server",
 				SyslogPort:      10601,
 				SyslogTransport: "tcp",
@@ -28,7 +28,6 @@ var _ = Describe("Metron", func() {
 			}
 			config.EtcdMachines = []string{"10.0.1.2", "10.0.1.3", "10.0.1.4"}
 			config.ConsulEncryptKeys = []string{"encyption-key"}
-			config.ConsulCaCert = "ca-cert"
 			config.ConsulAgentCert = "agent-cert"
 			config.ConsulAgentKey = "agent-key"
 			config.ConsulServerCert = "server-cert"

@@ -1,12 +1,13 @@
 package config
 
 import (
-	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/pluginlib/util"
+	"gopkg.in/urfave/cli.v2"
 )
 
 func RequiredCertFlags() []string {
-	return []string{"consul-server-ca-cert", "consul-agent-cert", "consul-agent-key", "consul-server-cert", "consul-server-key",
+	return []string{
+		"consul-agent-cert", "consul-agent-key", "consul-server-cert", "consul-server-key",
 		"bbs-server-ca-cert", "bbs-client-cert", "bbs-client-key", "bbs-server-cert", "bbs-server-key",
 		"etcd-server-cert", "etcd-server-key", "etcd-client-cert", "etcd-client-key", "etcd-peer-cert", "etcd-peer-key",
 		"uaa-saml-service-provider-key", "uaa-saml-service-provider-cert", "uaa-jwt-signing-key", "uaa-jwt-verification-key",
@@ -17,10 +18,6 @@ func RequiredCertFlags() []string {
 func NewCerts(c *cli.Context) (*Certs, error) {
 	certs := &Certs{}
 
-	caCert, err := pluginutil.LoadResourceFromContext(c, "consul-server-ca-cert")
-	if err != nil {
-		return nil, err
-	}
 	agentCert, err := pluginutil.LoadResourceFromContext(c, "consul-agent-cert")
 	if err != nil {
 		return nil, err
@@ -132,7 +129,6 @@ func NewCerts(c *cli.Context) (*Certs, error) {
 	certs.SAMLServiceProviderKey = samlKey
 	certs.RouterSSLCert = routerCert
 	certs.RouterSSLKey = routerKey
-	certs.ConsulCaCert = caCert
 	certs.ConsulAgentCert = agentCert
 	certs.ConsulServerCert = serverCert
 	certs.ConsulAgentKey = agentKey
@@ -168,7 +164,6 @@ type Certs struct {
 	RouterSSLCert                  string
 	RouterSSLKey                   string
 	HAProxySSLPem                  string
-	ConsulCaCert                   string
 	ConsulAgentCert                string
 	ConsulAgentKey                 string
 	ConsulServerCert               string

@@ -41,7 +41,6 @@ var _ = Describe("given a Diego Cell Partition", func() {
 					IP:              config.IP{},
 				}
 				config.ConsulEncryptKeys = []string{"encyption-key"}
-				config.ConsulCaCert = "ca-cert"
 				config.ConsulAgentCert = "agent-cert"
 				config.ConsulAgentKey = "agent-key"
 				config.ConsulServerCert = "server-cert"

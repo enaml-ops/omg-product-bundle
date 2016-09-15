@@ -47,7 +47,6 @@ var _ = Describe("given a clock_global partition", func() {
 			config.CCInternalAPIPassword = "internalapipassword"
 			config.CCServiceDashboardsClientSecret = "ccsecret"
 			config.DopplerSharedSecret = "metronsecret"
-			config.ConsulCaCert = "consul-ca-cert"
 			config.ConsulAgentCert = "consul-agent-cert"
 			config.ConsulAgentKey = "consul-agent-key"
 			config.ConsulServerCert = "consulservercert"

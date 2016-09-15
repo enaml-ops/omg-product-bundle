@@ -25,7 +25,6 @@ var _ = Describe("Consul Agent", func() {
 			cfg.ConsulServerCert = "server-cert"
 			cfg.ConsulEncryptKeys = []string{"encyption-key"}
 			cfg.ConsulServerKey = "server-key"
-			cfg.ConsulCaCert = "ca-cert"
 			cfg.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
 		})
 		It("then consul with server false", func() {

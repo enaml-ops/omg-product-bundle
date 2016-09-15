@@ -32,7 +32,6 @@ func BuildConfigContext() *cli.Context {
 		"--nats-pass", "natspass",
 		"--nats-port", "4222",
 		"--loggregator-traffic-controller-vmtype", "vmtype",
-		"--consul-server-ca-cert", "value",
 		"--consul-agent-cert", "value",
 		"--consul-agent-key", "value",
 		"--consul-server-cert", "value",

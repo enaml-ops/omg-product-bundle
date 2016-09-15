@@ -45,7 +45,7 @@ func (s *ConsulAgent) CreateJob() enaml.InstanceJob {
 		Properties: &consullib.ConsulAgentJob{
 			Consul: &consullib.Consul{
 				EncryptKeys: s.Config.ConsulEncryptKeys,
-				CaCert:      s.Config.ConsulCaCert,
+				CaCert:      s.Config.BBSCACert,
 				AgentCert:   s.Config.ConsulAgentCert,
 				AgentKey:    s.Config.ConsulAgentKey,
 				ServerCert:  s.Config.ConsulServerCert,

@@ -18,7 +18,7 @@ var _ = Describe("Consul Partition", func() {
 				StemcellName:    "cool-ubuntu-animal",
 				AZs:             []string{"eastprod-1"},
 				NetworkName:     "foundry-net",
-				DopplerZone:      "DopplerZoneguid",
+				DopplerZone:     "DopplerZoneguid",
 				SyslogAddress:   "syslog-server",
 				SyslogPort:      10601,
 				SyslogTransport: "tcp",
@@ -29,8 +29,8 @@ var _ = Describe("Consul Partition", func() {
 				IP:              config.IP{},
 			}
 			config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
+			config.BBSCACert = "ca-cert"
 			config.ConsulEncryptKeys = []string{"encyption-key"}
-			config.ConsulCaCert = "ca-cert"
 			config.ConsulAgentCert = "agent-cert"
 			config.ConsulAgentKey = "agent-key"
 			config.ConsulServerCert = "server-cert"

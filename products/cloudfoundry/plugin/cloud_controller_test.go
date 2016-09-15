@@ -47,7 +47,6 @@ var _ = Describe("Cloud Controller Partition", func() {
 			config.NATSPassword = "natspass"
 			config.ConsulIPs = []string{"1.0.0.1", "1.0.0.2"}
 			config.ConsulEncryptKeys = []string{"consulencryptionkey"}
-			config.ConsulCaCert = "consul-ca-cert"
 			config.ConsulAgentCert = "consul-agent-cert"
 			config.ConsulAgentKey = "consul-agent-key"
 			config.ConsulServerCert = "consulservercert"

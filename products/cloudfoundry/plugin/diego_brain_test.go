@@ -33,7 +33,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 				NetworkName:               "foundry-net",
 				AllowSSHAccess:            true,
 				NATSPort:                  1234,
-				DopplerZone:                "DopplerZoneguid",
+				DopplerZone:               "DopplerZoneguid",
 				BBSRequireSSL:             false,
 				SkipSSLCertVerify:         false,
 				CCUploaderJobPollInterval: 25,
@@ -48,7 +48,6 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			config.NATSMachines = []string{"10.0.0.11", "10.0.0.12"}
 			config.DopplerSharedSecret = "metronsecret"
 			config.ConsulEncryptKeys = []string{"encyption-key"}
-			config.ConsulCaCert = "ca-cert"
 			config.ConsulAgentCert = "agent-cert"
 			config.ConsulAgentKey = "agent-key"
 			config.ConsulServerCert = "server-cert"
@@ -215,7 +214,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(consul.Consul.ServerCert).Should(Equal("server-cert"))
 			Ω(consul.Consul.AgentCert).Should(Equal("agent-cert"))
 			Ω(consul.Consul.AgentKey).Should(Equal("agent-key"))
-			Ω(consul.Consul.CaCert).Should(Equal("ca-cert"))
+			Ω(consul.Consul.CaCert).Should(Equal("cacert"))
 			Ω(consul.Consul.EncryptKeys).Should(Equal([]string{"encyption-key"}))
 			Ω(consul.Consul.Agent.Servers.Lan).Should(Equal([]string{"1.0.0.1", "1.0.0.2"}))
 

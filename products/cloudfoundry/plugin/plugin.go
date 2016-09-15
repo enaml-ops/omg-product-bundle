@@ -94,7 +94,6 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.CreateStringSliceFlag("consul-ip", "a list of the consul ips you wish to use"),
 		pcli.CreateStringFlag("consul-vm-type", "the name of your desired vm size for consul"),
 		pcli.CreateStringSliceFlag("consul-encryption-key", "encryption key for consul"),
-		pcli.CreateStringFlag("consul-server-ca-cert", "ca cert for consul server, or a filename preceded by '@'"),
 		pcli.CreateStringFlag("consul-agent-cert", "agent cert for consul, or a filename preceded by '@'"),
 		pcli.CreateStringFlag("consul-agent-key", "agent key for consul, or a filename preceded by '@'"),
 		pcli.CreateStringFlag("consul-server-cert", "server cert for consul, or a filename preceded by '@'"),

@@ -25,7 +25,6 @@ certgen --host google.com --prefix bbs-client
 ../vault write ${VAULT_HASH} \
 router-ssl-cert=@router-cert.pem \
 router-ssl-key=@router-key.pem \
-consul-server-ca-cert=@consul-server-ca-cert.pem \
 consul-agent-cert=@consul-agent-cert.pem \
 consul-agent-key=@consul-agent-key.pem \
 consul-server-cert=@consul-server-cert.pem \

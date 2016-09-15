@@ -39,7 +39,6 @@ var _ = Describe("given a Diego Database Partition", func() {
 				}
 				config.EtcdMachines = []string{"1.0.0.7", "1.0.0.8"}
 				config.ConsulEncryptKeys = []string{"encyption-key"}
-				config.ConsulCaCert = "ca-cert"
 				config.ConsulAgentCert = "agent-cert"
 				config.ConsulAgentKey = "agent-key"
 				config.ConsulServerCert = "server-cert"

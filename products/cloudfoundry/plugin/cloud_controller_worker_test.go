@@ -38,7 +38,6 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 			config.ConsulEncryptKeys = []string{"consulencryptionkey"}
 			config.CloudControllerWorkerInstances = 2
 			config.CloudControllerWorkerVMType = "ccworkervmtype"
-			config.ConsulCaCert = "consul-ca-cert"
 			config.ConsulAgentCert = "consul-agent-cert"
 			config.ConsulAgentKey = "consul-agent-key"
 			config.ConsulServerCert = "consulservercert"

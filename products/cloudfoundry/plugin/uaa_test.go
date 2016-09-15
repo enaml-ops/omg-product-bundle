@@ -21,7 +21,7 @@ var _ = Describe("UAA Partition", func() {
 				NetworkName:             "foundry-net",
 				AllowSSHAccess:          true,
 				NATSPort:                4222,
-				DopplerZone:              "DopplerZoneguid",
+				DopplerZone:             "DopplerZoneguid",
 				SyslogAddress:           "syslog-server",
 				SyslogPort:              10601,
 				SyslogTransport:         "tcp",
@@ -78,7 +78,6 @@ var _ = Describe("UAA Partition", func() {
 			config.AppsMetricsClientSecret = "apps-metrics-client-secret"
 			config.AppsMetricsProcessingClientSecret = "apps-metrics-processing-client-secret"
 			config.ConsulEncryptKeys = []string{"encyption-key"}
-			config.ConsulCaCert = "ca-cert"
 			config.ConsulAgentCert = "agent-cert"
 			config.ConsulAgentKey = "agent-key"
 			config.ConsulServerCert = "server-cert"
