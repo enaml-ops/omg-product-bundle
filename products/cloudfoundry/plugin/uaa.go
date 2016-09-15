@@ -21,7 +21,6 @@ type UAA struct {
 
 //NewUAAPartition -
 func NewUAAPartition(config *config.Config) InstanceGroupCreator {
-
 	UAA := &UAA{
 		Config:         config,
 		Metron:         NewMetron(config),
@@ -64,6 +63,7 @@ func (s *UAA) CreateUAA() (login *uaa.Uaa) {
 		Scope:                "openid,oauth.approvals",
 	}
 	clientMap["portal"] = UAAClient{
+		AuthorizedGrantTypes: "authorization_code,client_credentials,password,implicit",
 		ID:                   "portal",
 		Secret:               s.Config.PortalClientSecret,
 		Override:             true,
