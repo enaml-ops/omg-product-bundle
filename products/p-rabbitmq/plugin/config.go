@@ -12,6 +12,7 @@ import (
 type Config struct {
 	DeploymentName            string
 	SystemDomain              string
+	AdminPassword             string
 	ServiceAdminPassword      string
 	PublicIP                  string
 	Network                   string
@@ -59,6 +60,7 @@ func configFromContext(c *cli.Context) (*Config, error) {
 
 	cfg := &Config{
 		DeploymentName:            getString("deployment-name"),
+		AdminPassword:             getString("rabbit-admin-password"),
 		ServiceAdminPassword:      getString("service-admin-password"),
 		SystemDomain:              getString("system-domain"),
 		Network:                   getString("network"),
@@ -79,6 +81,7 @@ func configFromContext(c *cli.Context) (*Config, error) {
 		EtcdMachines:              getStringSlice("etcd-machine-ip"),
 	}
 
+	makePassword(&cfg.AdminPassword)
 	makePassword(&cfg.ServiceAdminPassword)
 	makePassword(&cfg.BrokerPassword)
 	makePassword(&cfg.NATSPassword)

@@ -23,12 +23,14 @@ var _ = Describe("RabbitMQ server partition", func() {
 			controlBrokerPassword = "brokerpassword"
 			controlMetronZone     = "metronzone"
 			controlMetronSecret   = "metronsharedsecret"
+			controlAdminPassword  = "rabbitadminpassword"
 		)
 
 		BeforeEach(func() {
 			p := new(prabbitmq.Plugin)
 			c := &prabbitmq.Config{
 				DeploymentName: controlDeploymentName,
+				AdminPassword:  controlAdminPassword,
 				ServerIPs:      []string{"10.0.1.2", "10.0.1.3"},
 				Network:        controlNetworkName,
 				SyslogAddress:  controlSyslogAddress,
@@ -74,7 +76,7 @@ var _ = Describe("RabbitMQ server partition", func() {
 			Ω(props.RabbitmqServer.Administrators).ShouldNot(BeNil())
 			Ω(props.RabbitmqServer.Administrators.Management).ShouldNot(BeNil())
 			Ω(props.RabbitmqServer.Administrators.Management.Username).Should(Equal("rabbitadmin"))
-			Ω(props.RabbitmqServer.Administrators.Management.Password).Should(Equal("rabbitadmin"))
+			Ω(props.RabbitmqServer.Administrators.Management.Password).Should(Equal(controlAdminPassword))
 			Ω(props.RabbitmqServer.Administrators.Broker).ShouldNot(BeNil())
 			Ω(props.RabbitmqServer.Administrators.Broker.Username).Should(Equal("broker"))
 			Ω(props.RabbitmqServer.Administrators.Broker.Password).Should(Equal(controlBrokerPassword))
@@ -114,7 +116,7 @@ var _ = Describe("RabbitMQ server partition", func() {
 				"-rabbitmqCtlPath=/var/vcap/packages/rabbitmq-server/bin/rabbitmqctl",
 				"-logPath=/var/vcap/sys/log/service-metrics/rabbitmq-server-metrics.log",
 				"-rabbitmqUsername=rabbitadmin",
-				"-rabbitmqPassword=rabbitadmin",
+				"-rabbitmqPassword="+controlAdminPassword,
 				"-rabbitmqApiEndpoint=http://127.0.0.1:15672",
 			))
 		})

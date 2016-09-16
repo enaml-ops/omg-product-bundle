@@ -28,12 +28,14 @@ var _ = Describe("rabbitmq haproxy partition", func() {
 			controlNATSIP         = "10.0.0.2"
 			controlMetronZone     = "metronzone"
 			controlMetronSecret   = "metronsharedsecret"
+			controlAdminPassword  = "rabbitadminpassword"
 		)
 
 		BeforeEach(func() {
 			p := new(prabbitmq.Plugin)
 			c := &prabbitmq.Config{
 				DeploymentName:            controlDeploymentName,
+				AdminPassword:             controlAdminPassword,
 				ServerIPs:                 []string{"10.0.1.2", "10.0.1.3"},
 				Network:                   controlNetworkName,
 				SyslogAddress:             controlSyslogAddress,
@@ -129,7 +131,7 @@ var _ = Describe("rabbitmq haproxy partition", func() {
 				"-rabbitmqCtlPath=/var/vcap/packages/rabbitmq-server/bin/rabbitmqctl",
 				"-logPath=/var/vcap/sys/log/service-metrics/rabbitmq-server-metrics.log",
 				"-rabbitmqUsername=rabbitadmin",
-				"-rabbitmqPassword=rabbitadmin",
+				"-rabbitmqPassword="+controlAdminPassword,
 				"-rabbitmqApiEndpoint=http://127.0.0.1:15672",
 			))
 		})

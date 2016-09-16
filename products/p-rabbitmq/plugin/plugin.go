@@ -26,6 +26,7 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateStringFlag("service-admin-password", "the password used by cloud controller for authentication", generatePassword),
 		pcli.CreateStringFlag("system-domain", "the system domain"),
 		pcli.CreateStringFlag("rabbit-public-ip", "the public IP"),
+		pcli.CreateStringFlag("rabbit-admin-password", "the admin password to use", generatePassword),
 		pcli.CreateStringFlag("network", "the name of the network to use"),
 		pcli.CreateStringFlag("stemcell-ver", "the version number of the stemcell you wish to use", StemcellVersion),
 		pcli.CreateStringSliceFlag("rabbit-server-ip", "rabbit-mq server IPs to use"),

@@ -39,7 +39,7 @@ func newRabbitMQServerJob(c *Config) enaml.InstanceJob {
 				Administrators: &rmqs.Administrators{
 					Management: &rmqs.Management{
 						Username: "rabbitadmin",
-						Password: "rabbitadmin",
+						Password: c.AdminPassword,
 					},
 					Broker: &rmqs.Broker{
 						Username: "broker",
@@ -91,7 +91,7 @@ func newServiceMetricsJob(c *Config) enaml.InstanceJob {
 					"-rabbitmqCtlPath=/var/vcap/packages/rabbitmq-server/bin/rabbitmqctl",
 					"-logPath=/var/vcap/sys/log/service-metrics/rabbitmq-server-metrics.log",
 					"-rabbitmqUsername=rabbitadmin",
-					"-rabbitmqPassword=rabbitadmin",
+					"-rabbitmqPassword=" + c.AdminPassword,
 					"-rabbitmqApiEndpoint=http://127.0.0.1:15672",
 				},
 			},

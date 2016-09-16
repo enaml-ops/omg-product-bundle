@@ -18,6 +18,7 @@ var _ = Describe("rabbitmq-broker partition", func() {
 		const (
 			controlDeploymentName       = "p-rabbitmq"
 			controlNetworkName          = "foundry-net"
+			controlAdminPassword        = "rabbitadminpassword"
 			controlBrokerIP             = "1.2.3.4"
 			controlPublicIP             = "5.6.7.8"
 			controlBrokerPassword       = "brokerpass"
@@ -37,6 +38,7 @@ var _ = Describe("rabbitmq-broker partition", func() {
 				DeploymentName:       controlDeploymentName,
 				Network:              controlNetworkName,
 				SystemDomain:         "sys.example.com",
+				AdminPassword:        controlAdminPassword,
 				BrokerIP:             controlBrokerIP,
 				PublicIP:             controlPublicIP,
 				BrokerPassword:       controlBrokerPassword,
@@ -147,7 +149,7 @@ var _ = Describe("rabbitmq-broker partition", func() {
 				"-rabbitmqCtlPath=/var/vcap/packages/rabbitmq-server/bin/rabbitmqctl",
 				"-logPath=/var/vcap/sys/log/service-metrics/rabbitmq-server-metrics.log",
 				"-rabbitmqUsername=rabbitadmin",
-				"-rabbitmqPassword=rabbitadmin",
+				"-rabbitmqPassword="+controlAdminPassword,
 				"-rabbitmqApiEndpoint=http://127.0.0.1:15672",
 			))
 		})
