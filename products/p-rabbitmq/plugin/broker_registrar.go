@@ -12,6 +12,9 @@ func (p *Plugin) NewRabbitMQBrokerRegistrar(c *Config) *enaml.InstanceGroup {
 		Name:      "broker-registrar",
 		Lifecycle: "errand",
 		Instances: 1,
+		VMType:    c.BrokerVMType,
+		AZs:       c.AZs,
+		Stemcell:  StemcellAlias,
 		Networks: []enaml.Network{
 			{
 				Name:    c.Network,

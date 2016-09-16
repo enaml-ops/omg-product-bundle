@@ -17,6 +17,8 @@ var _ = Describe("rabbitmq broker registrar", func() {
 			controlNetworkName            = "foundry-net"
 			controlBrokerPassword         = "brokerpassword"
 			controlSystemServicesPassword = "systemservicespassword"
+			controlVMType                 = "small"
+			controlAZ                     = "az1"
 		)
 
 		BeforeEach(func() {
@@ -27,6 +29,8 @@ var _ = Describe("rabbitmq broker registrar", func() {
 				SystemServicesPassword: controlSystemServicesPassword,
 				SystemDomain:           "sys.example.com",
 				SkipSSLVerify:          true,
+				BrokerVMType:           controlVMType,
+				AZs:                    []string{controlAZ},
 			}
 			ig = p.NewRabbitMQBrokerRegistrar(c)
 			Ω(ig).ShouldNot(BeNil())
@@ -35,6 +39,9 @@ var _ = Describe("rabbitmq broker registrar", func() {
 		It("should configure the instance group parameters", func() {
 			Ω(ig.Name).Should(Equal("broker-registrar"))
 			Ω(ig.Lifecycle).Should(Equal("errand"))
+			Ω(ig.AZs).Should(ConsistOf(controlAZ))
+			Ω(ig.Stemcell).Should(Equal(prabbitmq.StemcellAlias))
+			Ω(ig.VMType).Should(Equal(controlVMType))
 			Ω(ig.Instances).Should(Equal(1))
 			Ω(ig.Networks).Should(HaveLen(1))
 			Ω(ig.Networks[0].Name).Should(Equal(controlNetworkName))
