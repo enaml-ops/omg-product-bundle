@@ -17,7 +17,7 @@ const (
 	RabbitMQMetricsReleaseName    = "rabbitmq-metrics"
 	RabbitMQMetricsReleaseVersion = "1.29.0"
 
-	StemcellName    = "ubunty-trusty"
+	StemcellName    = "ubuntu-trusty"
 	StemcellAlias   = "trusty"
 	StemcellVersion = "3232.17"
 )
