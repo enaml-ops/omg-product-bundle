@@ -1,5 +1,5 @@
-hash: 8b38b09f6bd176a2244b3ad72777e99901cea4d0429b417fbe27cc7c2d5e988f
-updated: 2016-09-12T16:42:51.946322933-06:00
+hash: e93c242ff53c37fa34b0cd0f2dd43ee0fa5fbb67072e4d0a96bfca02d37093a2
+updated: 2016-09-16T11:30:34.231980119-06:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -17,7 +17,7 @@ imports:
   - cloudproperties/azure
   - enamlbosh
 - name: github.com/enaml-ops/omg-cli
-  version: 51ecb8d88028e6f945006653040f413f9c1911ca
+  version: 9ed67e69c7223edc4cb1c38102e27f26114af207
   subpackages:
   - bosh
   - utils
@@ -57,7 +57,7 @@ imports:
   - reporters/stenographer
   - types
 - name: github.com/onsi/gomega
-  version: d59fa0ac68bb5dd932ee8d24eed631cdd519efc3
+  version: b48c9a8b2644326d0a44eaaacc8d83e35174a05d
   subpackages:
   - format
   - ghttp

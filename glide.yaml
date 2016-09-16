@@ -36,7 +36,7 @@ import:
 - package: github.com/onsi/gomega
 - package: github.com/hashicorp/yamux
 - package: github.com/enaml-ops/omg-cli
-  version: 51ecb8d88028e6f945006653040f413f9c1911ca
+  version: 9ed67e69c7223edc4cb1c38102e27f26114af207
 - package: github.com/enaml-ops/pluginlib
   version: 19fe2845d9ba6d5842b5c8a852ebf92254225ec9
 - package: github.com/golang/protobuf
