@@ -27,7 +27,7 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateStringFlag("system-domain", "the system domain"),
 		pcli.CreateStringFlag("rabbit-public-ip", "the public IP"),
 		pcli.CreateStringFlag("rabbit-admin-password", "the admin password to use", generatePassword),
-		pcli.CreateStringFlag("network", "the name of the network to use"),
+		pcli.CreateStringFlag("network", "the name of the network to use", "default"),
 		pcli.CreateStringFlag("stemcell-ver", "the version number of the stemcell you wish to use", StemcellVersion),
 		pcli.CreateStringSliceFlag("rabbit-server-ip", "rabbit-mq server IPs to use"),
 		pcli.CreateStringFlag("rabbit-broker-ip", "IP of the rabbitmq broker"),
