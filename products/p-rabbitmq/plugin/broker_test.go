@@ -21,7 +21,6 @@ var _ = Describe("rabbitmq-broker partition", func() {
 			controlBrokerIP             = "1.2.3.4"
 			controlPublicIP             = "5.6.7.8"
 			controlBrokerPassword       = "brokerpass"
-			controlServiceURL           = "10.0.0.1"
 			controlServiceAdminPassword = "serviceadminpassword"
 			controlSyslogAddress        = "1.2.3.4"
 			controlSyslogPort           = 1234
@@ -41,7 +40,6 @@ var _ = Describe("rabbitmq-broker partition", func() {
 				BrokerIP:             controlBrokerIP,
 				PublicIP:             controlPublicIP,
 				BrokerPassword:       controlBrokerPassword,
-				ServiceURL:           controlServiceURL,
 				ServiceAdminPassword: controlServiceAdminPassword,
 				SyslogAddress:        controlSyslogAddress,
 				SyslogPort:           controlSyslogPort,
@@ -93,7 +91,7 @@ var _ = Describe("rabbitmq-broker partition", func() {
 			Ω(props.RabbitmqBroker.Rabbitmq.Administrator.Password).Should(Equal(controlBrokerPassword))
 
 			Ω(props.RabbitmqBroker.Service).ShouldNot(BeNil())
-			Ω(props.RabbitmqBroker.Service.Url).Should(Equal(controlServiceURL))
+			Ω(props.RabbitmqBroker.Service.Url).Should(Equal(controlBrokerIP))
 			Ω(props.RabbitmqBroker.Service.Username).Should(Equal("admin"))
 			Ω(props.RabbitmqBroker.Service.Password).Should(Equal(controlServiceAdminPassword))
 

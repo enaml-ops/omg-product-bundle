@@ -51,7 +51,7 @@ func newRabbitMQBrokerJob(c *Config) enaml.InstanceJob {
 					},
 				},
 				Service: &rmqb.Service{
-					Url:      c.ServiceURL,
+					Url:      c.BrokerIP,
 					Username: "admin",
 					Password: c.ServiceAdminPassword,
 				},

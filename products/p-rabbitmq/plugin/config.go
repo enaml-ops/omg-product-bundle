@@ -12,7 +12,6 @@ import (
 type Config struct {
 	DeploymentName            string
 	SystemDomain              string
-	ServiceURL                string
 	ServiceAdminPassword      string
 	PublicIP                  string
 	Network                   string
@@ -60,7 +59,6 @@ func configFromContext(c *cli.Context) (*Config, error) {
 
 	cfg := &Config{
 		DeploymentName:            getString("deployment-name"),
-		ServiceURL:                getString("service-url"),
 		ServiceAdminPassword:      getString("service-admin-password"),
 		SystemDomain:              getString("system-domain"),
 		Network:                   getString("network"),
