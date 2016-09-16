@@ -21,10 +21,9 @@ $ omg-linux deploy-product \
   --bosh-pass pass \
   --ssl-ignore \
   p-rabbitmq-plugin-linux \
-    --service-url 1.0.0.2 \
     --system-domain sys.example.com \
     --rabbit-public-ip 1.0.0.3 \
-    --network networkname \
+    --infer-from-cloud \
     --rabbit-server-ip 1.0.0.4 --rabbit-server-ip 1.0.0.5
     --broker-ip 1.0.0.6 \
     --syslog-address 1.0.0.7 \
@@ -57,14 +56,11 @@ $ omg-linux deploy-product \
   --bosh-pass pass \
   --ssl-ignore \
   p-rabbitmq-plugin-linux \
+    --system-domain sys.example.com \
     --vault-domain http://10.0.0.200:8200 \
     --vault-token qwertyuiopasdfjkl \
     --vault-hash secret/pcf-1-passwords \
     --vault-hash secret/pcf-1-ips \
     --vault-hash secret/pcf-1-hosts \
-    --service-url 1.0.0.2 \
-    --rabbit-public-ip 1.0.0.3 \
-    --network networkname \
-    --rabbit-server-ip 1.0.0.4 --rabbit-server-ip 1.0.0.5 \
-    --broker-ip 1.0.0.6
+    --infer-from-cloud \
 ```
