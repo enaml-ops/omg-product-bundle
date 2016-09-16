@@ -79,6 +79,7 @@ func configFromContext(c *cli.Context) (*Config, error) {
 		MetronZone:                getString("doppler-zone"),
 		MetronSecret:              getString("doppler-shared-secret"),
 		EtcdMachines:              getStringSlice("etcd-machine-ip"),
+		PublicIP:                  getString("rabbit-public-ip"),
 	}
 
 	makePassword(&cfg.AdminPassword)
