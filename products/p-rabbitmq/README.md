@@ -23,9 +23,9 @@ $ omg-linux deploy-product \
   p-rabbitmq-plugin-linux \
     --service-url 1.0.0.2 \
     --system-domain sys.example.com \
-    --public-ip 1.0.0.3 \
+    --rabbit-public-ip 1.0.0.3 \
     --network networkname \
-    --server-ip 1.0.0.4 --server-ip 1.0.0.5
+    --rabbit-server-ip 1.0.0.4 --rabbit-server-ip 1.0.0.5
     --broker-ip 1.0.0.6 \
     --syslog-address 1.0.0.7 \
     --nats-machine-ip 1.0.0.8 --nats-machine-ip 1.0.0.9 \
@@ -63,8 +63,8 @@ $ omg-linux deploy-product \
     --vault-hash secret/pcf-1-ips \
     --vault-hash secret/pcf-1-hosts \
     --service-url 1.0.0.2 \
-    --public-ip 1.0.0.3 \
+    --rabbit-public-ip 1.0.0.3 \
     --network networkname \
-    --server-ip 1.0.0.4 --server-ip 1.0.0.5 \
+    --rabbit-server-ip 1.0.0.4 --rabbit-server-ip 1.0.0.5 \
     --broker-ip 1.0.0.6
 ```
