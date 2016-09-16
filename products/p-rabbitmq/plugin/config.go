@@ -11,6 +11,7 @@ import (
 // Config is used as input for generating instance groups.
 type Config struct {
 	DeploymentName            string
+	AZs                       []string
 	SystemDomain              string
 	AdminPassword             string
 	ServiceAdminPassword      string
@@ -31,6 +32,9 @@ type Config struct {
 	MetronZone                string
 	MetronSecret              string
 	EtcdMachines              []string
+	BrokerVMType              string
+	ServerVMType              string
+	HAProxyVMType             string
 }
 
 func configFromContext(c *cli.Context) (*Config, error) {
@@ -60,6 +64,7 @@ func configFromContext(c *cli.Context) (*Config, error) {
 
 	cfg := &Config{
 		DeploymentName:            getString("deployment-name"),
+		AZs:                       getStringSlice("az"),
 		AdminPassword:             getString("rabbit-admin-password"),
 		ServiceAdminPassword:      getString("service-admin-password"),
 		SystemDomain:              getString("system-domain"),
@@ -80,6 +85,9 @@ func configFromContext(c *cli.Context) (*Config, error) {
 		MetronSecret:              getString("doppler-shared-secret"),
 		EtcdMachines:              getStringSlice("etcd-machine-ip"),
 		PublicIP:                  getString("rabbit-public-ip"),
+		BrokerVMType:              getString("rabbit-broker-vm-type"),
+		ServerVMType:              getString("rabbit-server-vm-type"),
+		HAProxyVMType:             getString("rabbit-haproxy-vm-type"),
 	}
 
 	makePassword(&cfg.AdminPassword)

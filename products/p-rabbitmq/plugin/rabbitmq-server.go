@@ -12,6 +12,9 @@ func (p *Plugin) NewRabbitMQServerPartition(c *Config) *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
 		Name:      "rabbitmq-server-partition",
 		Lifecycle: "service",
+		Stemcell:  StemcellAlias,
+		VMType:    c.ServerVMType,
+		AZs:       c.AZs,
 		Instances: len(c.ServerIPs),
 		Networks: []enaml.Network{
 			{Name: c.Network, StaticIPs: c.ServerIPs},

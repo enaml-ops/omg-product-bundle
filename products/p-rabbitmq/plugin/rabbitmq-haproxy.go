@@ -12,6 +12,9 @@ func (p *Plugin) NewRabbitMQHAProxyPartition(c *Config) *enaml.InstanceGroup {
 		Name:      "rabbitmq-haproxy-partition",
 		Lifecycle: "service",
 		Instances: 1,
+		Stemcell:  StemcellAlias,
+		VMType:    c.HAProxyVMType,
+		AZs:       c.AZs,
 		Networks: []enaml.Network{
 			{
 				Name:      c.Network,

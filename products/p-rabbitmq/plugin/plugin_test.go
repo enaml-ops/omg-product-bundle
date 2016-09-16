@@ -72,6 +72,57 @@ var _ = Describe("prabbitmq plugin", func() {
 		})
 	})
 
+	Context("when inferring defaults from cloud config", func() {
+		var (
+			p  *prabbitmq.Plugin
+			dm *enaml.DeploymentManifest
+		)
+		BeforeEach(func() {
+			p = new(prabbitmq.Plugin)
+			cc, err := ioutil.ReadFile("fixtures/cloudconfig.yml")
+			Ω(err).ShouldNot(HaveOccurred())
+
+			manifestBytes := p.GetProduct([]string{"foo",
+				"--infer-from-cloud",
+				"--rabbit-broker-vm-type", "large",
+			}, cc)
+			dm = enaml.NewDeploymentManifest(manifestBytes)
+		})
+
+		It("should not overwrite flags that were specified on the command line", func() {
+			ig := dm.GetInstanceGroupByName("rabbitmq-broker-partition")
+			Ω(ig).ShouldNot(BeNil())
+			Ω(ig.VMType).Should(Equal("large"))
+		})
+
+		It("should infer VM types not specified on the command line", func() {
+			ig := dm.GetInstanceGroupByName("rabbitmq-server-partition")
+			Ω(ig).ShouldNot(BeNil())
+			Ω(ig.VMType).Should(Equal("smallvm"))
+
+			ig = dm.GetInstanceGroupByName("rabbitmq-haproxy-partition")
+			Ω(ig).ShouldNot(BeNil())
+			Ω(ig.VMType).Should(Equal("smallvm"))
+		})
+
+		It("should infer the network name", func() {
+			for _, name := range []string{"rabbitmq-server-partition", "rabbitmq-haproxy-partition", "rabbitmq-broker-partition"} {
+				ig := dm.GetInstanceGroupByName(name)
+				Ω(ig).ShouldNot(BeNil(), "couldn't find instance group "+name)
+				Ω(ig.Networks).Should(HaveLen(1))
+				Ω(ig.Networks[0].Name).Should(Equal("privatenet"))
+			}
+		})
+
+		It("should infer the AZs", func() {
+			for _, name := range []string{"rabbitmq-server-partition", "rabbitmq-haproxy-partition", "rabbitmq-broker-partition"} {
+				ig := dm.GetInstanceGroupByName(name)
+				Ω(ig).ShouldNot(BeNil(), "couldn't find instance group "+name)
+				Ω(ig.AZs).Should(ConsistOf("z1", "z2"))
+			}
+		})
+	})
+
 	Context("when using Vault integration", func() {
 		var (
 			p      *prabbitmq.Plugin

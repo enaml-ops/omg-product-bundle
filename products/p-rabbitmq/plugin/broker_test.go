@@ -30,12 +30,15 @@ var _ = Describe("rabbitmq-broker partition", func() {
 			controlNATSIP               = "10.0.0.2"
 			controlMetronZone           = "metronzone"
 			controlMetronSecret         = "metronsharedsecret"
+			controlVMType               = "small"
+			controlAZ                   = "az1"
 		)
 
 		BeforeEach(func() {
 			p := new(prabbitmq.Plugin)
 			c := &prabbitmq.Config{
 				DeploymentName:       controlDeploymentName,
+				AZs:                  []string{controlAZ},
 				Network:              controlNetworkName,
 				SystemDomain:         "sys.example.com",
 				AdminPassword:        controlAdminPassword,
@@ -50,6 +53,7 @@ var _ = Describe("rabbitmq-broker partition", func() {
 				NATSMachines:         []string{controlNATSIP},
 				MetronZone:           controlMetronZone,
 				MetronSecret:         controlMetronSecret,
+				BrokerVMType:         controlVMType,
 			}
 			ig = p.NewRabbitMQBrokerPartition(c)
 			Ω(ig).ShouldNot(BeNil())
@@ -58,8 +62,11 @@ var _ = Describe("rabbitmq-broker partition", func() {
 		It("should configure the instance group parameters", func() {
 			Ω(ig.Name).Should(Equal("rabbitmq-broker-partition"))
 			Ω(ig.Lifecycle).Should(Equal("service"))
+			Ω(ig.VMType).Should(Equal(controlVMType))
 			Ω(ig.Instances).Should(Equal(1))
 			Ω(ig.Networks).Should(HaveLen(1))
+			Ω(ig.AZs).Should(ConsistOf(controlAZ))
+			Ω(ig.Stemcell).Should(Equal(prabbitmq.StemcellAlias))
 			Ω(ig.Networks[0].Name).Should(Equal(controlNetworkName))
 			Ω(ig.Networks[0].StaticIPs).Should(ConsistOf(controlBrokerIP))
 			Ω(ig.Networks[0].Default).Should(ConsistOf("dns", "gateway"))

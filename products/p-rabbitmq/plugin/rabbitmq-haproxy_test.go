@@ -29,12 +29,15 @@ var _ = Describe("rabbitmq haproxy partition", func() {
 			controlMetronZone     = "metronzone"
 			controlMetronSecret   = "metronsharedsecret"
 			controlAdminPassword  = "rabbitadminpassword"
+			controlVMType         = "small"
+			controlAZ             = "az1"
 		)
 
 		BeforeEach(func() {
 			p := new(prabbitmq.Plugin)
 			c := &prabbitmq.Config{
 				DeploymentName:            controlDeploymentName,
+				AZs:                       []string{controlAZ},
 				AdminPassword:             controlAdminPassword,
 				ServerIPs:                 []string{"10.0.1.2", "10.0.1.3"},
 				Network:                   controlNetworkName,
@@ -49,6 +52,7 @@ var _ = Describe("rabbitmq haproxy partition", func() {
 				NATSMachines:              []string{controlNATSIP},
 				MetronZone:                controlMetronZone,
 				MetronSecret:              controlMetronSecret,
+				HAProxyVMType:             controlVMType,
 			}
 			ig = p.NewRabbitMQHAProxyPartition(c)
 			Ω(ig).ShouldNot(BeNil())
@@ -58,7 +62,10 @@ var _ = Describe("rabbitmq haproxy partition", func() {
 			Ω(ig.Name).Should(Equal("rabbitmq-haproxy-partition"))
 			Ω(ig.Lifecycle).Should(Equal("service"))
 			Ω(ig.Instances).Should(Equal(1))
+			Ω(ig.Stemcell).Should(Equal(prabbitmq.StemcellAlias))
 			Ω(ig.Networks).Should(HaveLen(1))
+			Ω(ig.VMType).Should(Equal(controlVMType))
+			Ω(ig.AZs).Should(ConsistOf(controlAZ))
 			Ω(ig.Networks[0].Name).Should(Equal(controlNetworkName))
 			Ω(ig.Networks[0].StaticIPs).Should(ConsistOf(controlPublicIP))
 			Ω(ig.Networks[0].Default).Should(ConsistOf("dns", "gateway"))

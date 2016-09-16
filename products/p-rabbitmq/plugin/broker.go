@@ -12,6 +12,9 @@ func (p *Plugin) NewRabbitMQBrokerPartition(c *Config) *enaml.InstanceGroup {
 		Name:      "rabbitmq-broker-partition",
 		Lifecycle: "service",
 		Instances: 1,
+		Stemcell:  StemcellAlias,
+		VMType:    c.BrokerVMType,
+		AZs:       c.AZs,
 		Networks: []enaml.Network{
 			{
 				Name:      c.Network,

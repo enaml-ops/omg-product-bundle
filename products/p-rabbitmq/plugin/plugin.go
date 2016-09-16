@@ -2,6 +2,9 @@ package prabbitmq
 
 import (
 	"fmt"
+	"strings"
+
+	cli "gopkg.in/urfave/cli.v2"
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/pluginlib/pcli"
@@ -25,9 +28,10 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateStringFlag("deployment-name", "the name bosh will use for the deployment", "p-rabbitmq"),
 		pcli.CreateStringFlag("service-admin-password", "the password used by cloud controller for authentication", generatePassword),
 		pcli.CreateStringFlag("system-domain", "the system domain"),
+		pcli.CreateStringSliceFlag("az", "list of AZ names to use"),
 		pcli.CreateStringFlag("rabbit-public-ip", "the public IP"),
 		pcli.CreateStringFlag("rabbit-admin-password", "the admin password to use", generatePassword),
-		pcli.CreateStringFlag("network", "the name of the network to use", "default"),
+		pcli.CreateStringFlag("network", "the name of the network to use"),
 		pcli.CreateStringFlag("stemcell-ver", "the version number of the stemcell you wish to use", StemcellVersion),
 		pcli.CreateStringSliceFlag("rabbit-server-ip", "rabbit-mq server IPs to use"),
 		pcli.CreateStringFlag("rabbit-broker-ip", "IP of the rabbitmq broker"),
@@ -43,6 +47,10 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateStringFlag("doppler-zone", "the name zone for doppler"),
 		pcli.CreateStringFlag("doppler-shared-secret", "doppler shared secret"),
 		pcli.CreateStringSliceFlag("etcd-machine-ip", "IPs of etcd machines"),
+		pcli.CreateBoolFlag("infer-from-cloud", "attempt to pull defaults from your targetted bosh"),
+		pcli.CreateStringFlag("rabbit-broker-vm-type", "VM type for broker"),
+		pcli.CreateStringFlag("rabbit-haproxy-vm-type", "VM type for ha proxy"),
+		pcli.CreateStringFlag("rabbit-server-vm-type", "VM type for RabbitMQ server"),
 
 		pcli.CreateStringFlag("vault-domain", "the location of your vault server (ie. http://10.0.0.1:8200)"),
 		pcli.CreateStringFlag("vault-token", "the token to make connections to your vault"),
@@ -70,6 +78,11 @@ func (p *Plugin) GetMeta() product.Meta {
 func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 	flags := p.GetFlags()
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
+
+	if c.Bool("infer-from-cloud") {
+		inferFromCloud(cloudConfig, flags, c)
+		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
+	}
 
 	// populate flags from vault if configured to do so
 	domain := c.String("vault-domain")
@@ -113,4 +126,27 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 	}
 
 	return dm.Bytes()
+}
+
+func inferFromCloud(cloudConfig []byte, flags []pcli.Flag, c *cli.Context) {
+	inferer := pluginutil.NewCloudConfigInferFromBytes(cloudConfig)
+
+	vm := inferer.InferDefaultVMType()
+	network := inferer.InferDefaultNetwork()
+	az := inferer.InferDefaultAZ()
+
+	for i := range flags {
+		if !c.IsSet(flags[i].Name) {
+			if flags[i].Name == "network" {
+				lo.G.Debugf("got network '%s' from cloud config", network)
+				flags[i].Value = network
+			} else if flags[i].Name == "az" {
+				lo.G.Debugf("got azs '%v' from cloud config", az)
+				flags[i].Value = az
+			} else if strings.HasSuffix(flags[i].Name, "vm-type") {
+				lo.G.Debugf("got flag %s from cloud config (value=%s)", flags[i].Name, vm)
+				flags[i].Value = vm
+			}
+		}
+	}
 }

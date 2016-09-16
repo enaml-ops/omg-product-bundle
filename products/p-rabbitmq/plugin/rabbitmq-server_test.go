@@ -24,12 +24,15 @@ var _ = Describe("RabbitMQ server partition", func() {
 			controlMetronZone     = "metronzone"
 			controlMetronSecret   = "metronsharedsecret"
 			controlAdminPassword  = "rabbitadminpassword"
+			controlVMType         = "small"
+			controlAZ             = "az1"
 		)
 
 		BeforeEach(func() {
 			p := new(prabbitmq.Plugin)
 			c := &prabbitmq.Config{
 				DeploymentName: controlDeploymentName,
+				AZs:            []string{controlAZ},
 				AdminPassword:  controlAdminPassword,
 				ServerIPs:      []string{"10.0.1.2", "10.0.1.3"},
 				Network:        controlNetworkName,
@@ -38,6 +41,7 @@ var _ = Describe("RabbitMQ server partition", func() {
 				BrokerPassword: controlBrokerPassword,
 				MetronZone:     controlMetronZone,
 				MetronSecret:   controlMetronSecret,
+				ServerVMType:   controlVMType,
 			}
 			ig = p.NewRabbitMQServerPartition(c)
 			Ω(ig).ShouldNot(BeNil())
@@ -46,6 +50,9 @@ var _ = Describe("RabbitMQ server partition", func() {
 		It("should configure the instance group parameters", func() {
 			Ω(ig.Name).Should(Equal("rabbitmq-server-partition"))
 			Ω(ig.Lifecycle).Should(Equal("service"))
+			Ω(ig.Stemcell).Should(Equal(prabbitmq.StemcellAlias))
+			Ω(ig.VMType).Should(Equal(controlVMType))
+			Ω(ig.AZs).Should(ConsistOf(controlAZ))
 			Ω(ig.Instances).Should(Equal(2))
 			Ω(ig.Networks).Should(HaveLen(1))
 			Ω(ig.Networks[0].Name).Should(Equal(controlNetworkName))
