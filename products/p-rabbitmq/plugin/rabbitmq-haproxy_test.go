@@ -6,6 +6,7 @@ import (
 	rmqh "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/rabbitmq-haproxy"
 	sm "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/service-metrics"
 	prabbitmq "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/plugin"
+	yaml "gopkg.in/yaml.v2"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -138,6 +139,16 @@ var _ = Describe("rabbitmq haproxy partition", func() {
 				"-haproxyAddress=/var/vcap/sys/run/rabbitmq-haproxy/haproxy.sock",
 				"-logPath=/var/vcap/sys/log/service-metrics/rabbitmq-haproxy-metrics.log",
 			))
+		})
+
+		It("should configure the metrics job", func() {
+			job := ig.GetJobByName("rabbitmq-haproxy-metrics")
+			Ω(job).ShouldNot(BeNil())
+			Ω(job.Release).Should(Equal(prabbitmq.ServiceMetricsReleaseName))
+
+			b, err := yaml.Marshal(job.Properties)
+			Ω(err).ShouldNot(HaveOccurred())
+			Ω(b).Should(MatchYAML(`{}`))
 		})
 	})
 })

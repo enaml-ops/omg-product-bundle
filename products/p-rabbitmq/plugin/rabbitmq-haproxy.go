@@ -27,6 +27,11 @@ func (p *Plugin) NewRabbitMQHAProxyPartition(c *Config) *enaml.InstanceGroup {
 			newRabbitMQHAProxyJob(c),
 			newMetronAgentJob(c),
 			newServiceMetricsHAProxyJob(c),
+			enaml.InstanceJob{
+				Name:       "rabbitmq-haproxy-metrics",
+				Release:    ServiceMetricsReleaseName,
+				Properties: struct{}{},
+			},
 		},
 	}
 }

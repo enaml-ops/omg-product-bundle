@@ -27,6 +27,11 @@ func (p *Plugin) NewRabbitMQBrokerPartition(c *Config) *enaml.InstanceGroup {
 			newRabbitMQBrokerJob(c),
 			newMetronAgentJob(c),
 			newServiceMetricsBrokerJob(c),
+			enaml.InstanceJob{
+				Name:       "rabbitmq-broker-metrics",
+				Release:    ServiceMetricsReleaseName,
+				Properties: struct{}{},
+			},
 		},
 	}
 }

@@ -23,6 +23,11 @@ func (p *Plugin) NewRabbitMQServerPartition(c *Config) *enaml.InstanceGroup {
 			newRabbitMQServerJob(c),
 			newMetronAgentJob(c),
 			newServiceMetricsServerJob(c),
+			enaml.InstanceJob{
+				Name:       "rabbitmq-server-metrics",
+				Release:    ServiceMetricsReleaseName,
+				Properties: struct{}{},
+			},
 		},
 	}
 }

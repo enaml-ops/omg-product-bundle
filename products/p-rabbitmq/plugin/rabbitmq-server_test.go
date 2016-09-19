@@ -6,6 +6,7 @@ import (
 	rmqs "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/rabbitmq-server"
 	sm "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/service-metrics"
 	prabbitmq "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/plugin"
+	yaml "gopkg.in/yaml.v2"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -126,6 +127,16 @@ var _ = Describe("RabbitMQ server partition", func() {
 				"-rabbitmqPassword="+controlAdminPassword,
 				"-rabbitmqApiEndpoint=http://127.0.0.1:15672",
 			))
+		})
+
+		It("should configure the metrics job", func() {
+			job := ig.GetJobByName("rabbitmq-server-metrics")
+			Ω(job).ShouldNot(BeNil())
+			Ω(job.Release).Should(Equal(prabbitmq.ServiceMetricsReleaseName))
+
+			b, err := yaml.Marshal(job.Properties)
+			Ω(err).ShouldNot(HaveOccurred())
+			Ω(b).Should(MatchYAML(`{}`))
 		})
 	})
 })

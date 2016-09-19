@@ -6,6 +6,7 @@ import (
 	rmqb "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/rabbitmq-broker"
 	sm "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/service-metrics"
 	prabbitmq "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/plugin"
+	yaml "gopkg.in/yaml.v2"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -154,5 +155,14 @@ var _ = Describe("rabbitmq-broker partition", func() {
 			Ω(props.ServiceMetrics.MetricsCommandArgs).Should(ConsistOf("admin", controlBrokerPassword))
 		})
 
+		It("should configure the metrics job", func() {
+			job := ig.GetJobByName("rabbitmq-broker-metrics")
+			Ω(job).ShouldNot(BeNil())
+			Ω(job.Release).Should(Equal(prabbitmq.ServiceMetricsReleaseName))
+
+			b, err := yaml.Marshal(job.Properties)
+			Ω(err).ShouldNot(HaveOccurred())
+			Ω(b).Should(MatchYAML(`{}`))
+		})
 	})
 })
