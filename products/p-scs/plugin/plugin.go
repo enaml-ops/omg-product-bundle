@@ -3,6 +3,8 @@ package pscs
 import (
 	"fmt"
 
+	cli "gopkg.in/urfave/cli.v2"
+
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/product"
@@ -37,6 +39,7 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateStringFlag("encryption-key", "encryption key", generatePassword),
 		pcli.CreateStringFlag("cf-admin-password", "CF admin password"),
 		pcli.CreateStringFlag("uaa-admin-client-secret", "UAA client secret for admin account"),
+		pcli.CreateBoolFlag("infer-from-cloud", "attempt to pull defaults from your targetted bosh"),
 	}
 }
 
@@ -56,6 +59,11 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 	flags := p.GetFlags()
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
 
+	if c.Bool("infer-from-cloud") {
+		inferFromCloud(cloudConfig, flags, c)
+		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
+	}
+
 	cfg, err := configFromContext(c)
 	if err != nil {
 		lo.G.Error(err)
@@ -66,5 +74,41 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 	dm.AddRelease(enaml.Release{Name: SpringCloudBrokerReleaseName, Version: SpringCloudBrokerReleaseVersion})
 	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: cfg.StemcellVersion, Alias: StemcellAlias})
 	dm.AddInstanceGroup(NewDeployServiceBroker(cfg))
+	dm.AddInstanceGroup(NewRegisterBroker(cfg))
+	dm.AddInstanceGroup(NewDestroyServiceBroker(cfg))
+
+	dm.Update = enaml.Update{
+		Canaries:        1,
+		CanaryWatchTime: "30000-300000",
+		UpdateWatchTime: "30000-300000",
+		MaxInFlight:     1,
+		Serial:          true,
+	}
+
 	return dm.Bytes()
+}
+
+func inferFromCloud(cloudConfig []byte, flags []pcli.Flag, c *cli.Context) {
+	inferer := pluginutil.NewCloudConfigInferFromBytes(cloudConfig)
+
+	vm := inferer.InferDefaultVMType()
+	network := inferer.InferDefaultNetwork()
+	az := inferer.InferDefaultAZ()
+
+	for i := range flags {
+		name := flags[i].Name
+		if !c.IsSet(name) {
+			switch name {
+			case "network":
+				lo.G.Debugf("got network '%s' from cloud config", network)
+				flags[i].Value = network
+			case "az":
+				lo.G.Debugf("got azs %v from cloud config", az)
+				flags[i].Value = az
+			case "vm-type":
+				lo.G.Debugf("got vm type %s from cloud config", vm)
+				flags[i].Value = vm
+			}
+		}
+	}
 }
