@@ -19,6 +19,7 @@ var _ = Describe("rabbitmq broker registrar", func() {
 			controlSystemServicesPassword = "systemservicespassword"
 			controlVMType                 = "small"
 			controlAZ                     = "az1"
+			controlServiceAdminPassword   = "serviceadmin"
 		)
 
 		BeforeEach(func() {
@@ -31,6 +32,7 @@ var _ = Describe("rabbitmq broker registrar", func() {
 				SkipSSLVerify:          true,
 				BrokerVMType:           controlVMType,
 				AZs:                    []string{controlAZ},
+				ServiceAdminPassword:   controlServiceAdminPassword,
 			}
 			ig = p.NewRabbitMQBrokerRegistrar(c)
 			Ω(ig).ShouldNot(BeNil())
@@ -60,7 +62,7 @@ var _ = Describe("rabbitmq broker registrar", func() {
 			Ω(props.Broker.Name).Should(Equal("p-rabbitmq"))
 			Ω(props.Broker.Host).Should(Equal("pivotal-rabbitmq-broker.sys.example.com"))
 			Ω(props.Broker.Username).Should(Equal("admin"))
-			Ω(props.Broker.Password).Should(Equal(controlBrokerPassword))
+			Ω(props.Broker.Password).Should(Equal(controlServiceAdminPassword))
 
 			Ω(props.Cf).ShouldNot(BeNil())
 			Ω(props.Cf.ApiUrl).Should(Equal("https://api.sys.example.com"))

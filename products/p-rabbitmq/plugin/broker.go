@@ -97,7 +97,7 @@ func newServiceMetricsBrokerJob(c *Config) enaml.InstanceJob {
 				MetricsCommand: "/var/vcap/packages/rabbitmq-broker-metrics/heartbeat.sh",
 				MetricsCommandArgs: []string{
 					"admin",
-					c.BrokerPassword,
+					c.ServiceAdminPassword,
 				},
 			},
 		},

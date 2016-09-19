@@ -152,7 +152,7 @@ var _ = Describe("rabbitmq-broker partition", func() {
 			Ω(props.ServiceMetrics.ExecutionIntervalSeconds).Should(Equal(30))
 			Ω(props.ServiceMetrics.Origin).Should(Equal(controlDeploymentName))
 			Ω(props.ServiceMetrics.MetricsCommand).Should(Equal("/var/vcap/packages/rabbitmq-broker-metrics/heartbeat.sh"))
-			Ω(props.ServiceMetrics.MetricsCommandArgs).Should(ConsistOf("admin", controlBrokerPassword))
+			Ω(props.ServiceMetrics.MetricsCommandArgs).Should(ConsistOf("admin", controlServiceAdminPassword))
 		})
 
 		It("should configure the metrics job", func() {

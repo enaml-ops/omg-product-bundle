@@ -30,7 +30,7 @@ func (p *Plugin) NewRabbitMQBrokerRegistrar(c *Config) *enaml.InstanceGroup {
 						Name:     "p-rabbitmq",
 						Host:     fmt.Sprintf("pivotal-rabbitmq-broker.%s", c.SystemDomain),
 						Username: "admin",
-						Password: c.BrokerPassword,
+						Password: c.ServiceAdminPassword,
 					},
 					Cf: &br.Cf{
 						ApiUrl:            fmt.Sprintf("https://api.%s", c.SystemDomain),
