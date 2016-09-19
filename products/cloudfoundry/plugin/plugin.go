@@ -100,8 +100,8 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.CreateStringFlag("consul-server-key", "server key for consul, or a filename preceded by '@'"),
 
 		pcli.CreateStringFlag("syslog-address", "address of syslog server"),
-		pcli.CreateIntFlag("syslog-port", "port of syslog server"),
-		pcli.CreateStringFlag("syslog-transport", "transport to syslog server"),
+		pcli.CreateIntFlag("syslog-port", "port of syslog server", "514"),
+		pcli.CreateStringFlag("syslog-transport", "transport to syslog server", "tcp"),
 
 		pcli.CreateStringSliceFlag("etcd-machine-ip", "ip of a etcd node vm"),
 		pcli.CreateStringFlag("etcd-vm-type", "the name of your desired vm size for etcd"),
