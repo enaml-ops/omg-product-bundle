@@ -22,7 +22,7 @@ func (p *Plugin) NewRabbitMQServerPartition(c *Config) *enaml.InstanceGroup {
 		Jobs: []enaml.InstanceJob{
 			newRabbitMQServerJob(c),
 			newMetronAgentJob(c),
-			newServiceMetricsJob(c),
+			newServiceMetricsServerJob(c),
 		},
 	}
 }
@@ -80,7 +80,7 @@ func newMetronAgentJob(c *Config) enaml.InstanceJob {
 	}
 }
 
-func newServiceMetricsJob(c *Config) enaml.InstanceJob {
+func newServiceMetricsServerJob(c *Config) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "service-metrics",
 		Release: ServiceMetricsReleaseName,

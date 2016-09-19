@@ -150,15 +150,8 @@ var _ = Describe("rabbitmq-broker partition", func() {
 			Ω(props.ServiceMetrics).ShouldNot(BeNil())
 			Ω(props.ServiceMetrics.ExecutionIntervalSeconds).Should(Equal(30))
 			Ω(props.ServiceMetrics.Origin).Should(Equal(controlDeploymentName))
-			Ω(props.ServiceMetrics.MetricsCommand).Should(Equal("/var/vcap/packages/rabbitmq-server-metrics/bin/rabbitmq-server-metrics"))
-			Ω(props.ServiceMetrics.MetricsCommandArgs).Should(ConsistOf(
-				"-erlangBinPath=/var/vcap/packages/erlang/bin/",
-				"-rabbitmqCtlPath=/var/vcap/packages/rabbitmq-server/bin/rabbitmqctl",
-				"-logPath=/var/vcap/sys/log/service-metrics/rabbitmq-server-metrics.log",
-				"-rabbitmqUsername=rabbitadmin",
-				"-rabbitmqPassword="+controlAdminPassword,
-				"-rabbitmqApiEndpoint=http://127.0.0.1:15672",
-			))
+			Ω(props.ServiceMetrics.MetricsCommand).Should(Equal("/var/vcap/packages/rabbitmq-broker-metrics/heartbeat.sh"))
+			Ω(props.ServiceMetrics.MetricsCommandArgs).Should(ConsistOf("admin", controlBrokerPassword))
 		})
 
 	})

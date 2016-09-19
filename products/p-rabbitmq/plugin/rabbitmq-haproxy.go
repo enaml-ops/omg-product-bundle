@@ -5,6 +5,7 @@ import (
 
 	"github.com/enaml-ops/enaml"
 	rmqh "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/rabbitmq-haproxy"
+	sm "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/service-metrics"
 )
 
 func (p *Plugin) NewRabbitMQHAProxyPartition(c *Config) *enaml.InstanceGroup {
@@ -25,7 +26,7 @@ func (p *Plugin) NewRabbitMQHAProxyPartition(c *Config) *enaml.InstanceGroup {
 		Jobs: []enaml.InstanceJob{
 			newRabbitMQHAProxyJob(c),
 			newMetronAgentJob(c),
-			newServiceMetricsJob(c),
+			newServiceMetricsHAProxyJob(c),
 		},
 	}
 }
@@ -60,6 +61,25 @@ func newRabbitMQHAProxyJob(c *Config) enaml.InstanceJob {
 			SyslogAggregator: &rmqh.SyslogAggregator{
 				Address: c.SyslogAddress,
 				Port:    c.SyslogPort,
+			},
+		},
+	}
+}
+
+func newServiceMetricsHAProxyJob(c *Config) enaml.InstanceJob {
+	return enaml.InstanceJob{
+		Name:    "service-metrics",
+		Release: ServiceMetricsReleaseName,
+		Properties: &sm.ServiceMetricsJob{
+			ServiceMetrics: &sm.ServiceMetrics{
+				ExecutionIntervalSeconds: 30,
+				Origin:         c.DeploymentName,
+				MetricsCommand: "/var/vcap/packages/rabbitmq-haproxy-metrics/bin/rabbitmq-haproxy-metrics",
+				MetricsCommandArgs: []string{
+					"-haproxyNetwork=unix",
+					"-haproxyAddress=/var/vcap/sys/run/rabbitmq-haproxy/haproxy.sock",
+					"-logPath=/var/vcap/sys/log/service-metrics/rabbitmq-haproxy-metrics.log",
+				},
 			},
 		},
 	}

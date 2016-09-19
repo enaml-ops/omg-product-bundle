@@ -5,6 +5,7 @@ import (
 
 	"github.com/enaml-ops/enaml"
 	rmqb "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/rabbitmq-broker"
+	sm "github.com/enaml-ops/omg-product-bundle/products/p-rabbitmq/enaml-gen/service-metrics"
 )
 
 func (p *Plugin) NewRabbitMQBrokerPartition(c *Config) *enaml.InstanceGroup {
@@ -25,7 +26,7 @@ func (p *Plugin) NewRabbitMQBrokerPartition(c *Config) *enaml.InstanceGroup {
 		Jobs: []enaml.InstanceJob{
 			newRabbitMQBrokerJob(c),
 			newMetronAgentJob(c),
-			newServiceMetricsJob(c),
+			newServiceMetricsBrokerJob(c),
 		},
 	}
 }
@@ -74,6 +75,24 @@ func newRabbitMQBrokerJob(c *Config) enaml.InstanceJob {
 					Port:     c.NATSPort,
 					Username: "nats",
 					Password: c.NATSPassword,
+				},
+			},
+		},
+	}
+}
+
+func newServiceMetricsBrokerJob(c *Config) enaml.InstanceJob {
+	return enaml.InstanceJob{
+		Name:    "service-metrics",
+		Release: ServiceMetricsReleaseName,
+		Properties: &sm.ServiceMetricsJob{
+			ServiceMetrics: &sm.ServiceMetrics{
+				ExecutionIntervalSeconds: 30,
+				Origin:         c.DeploymentName,
+				MetricsCommand: "/var/vcap/packages/rabbitmq-broker-metrics/heartbeat.sh",
+				MetricsCommandArgs: []string{
+					"admin",
+					c.BrokerPassword,
 				},
 			},
 		},
