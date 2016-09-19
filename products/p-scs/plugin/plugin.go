@@ -23,8 +23,10 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 	return []pcli.Flag{
 		pcli.CreateStringFlag("deployment-name", "the name bosh will use for the deployment", "p-rabbitmq"),
 		pcli.CreateStringFlag("system-domain", "the system domain"),
+		pcli.CreateStringSliceFlag("az", "the AZs to use"),
 		pcli.CreateStringFlag("network", "the name of the network to use"),
 		pcli.CreateStringFlag("stemcell-ver", "the version number of the stemcell you wish to use", StemcellVersion),
+		pcli.CreateStringFlag("vm-type", "VM type to use for SCS instance groups"),
 		pcli.CreateBoolFlag("skip-ssl-verify", "skip SSL verification"),
 		pcli.CreateStringFlag("broker-username", "the service broker username", generatePassword),
 		pcli.CreateStringFlag("broker-password", "the service broker password", generatePassword),

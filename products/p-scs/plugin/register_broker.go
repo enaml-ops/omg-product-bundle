@@ -10,6 +10,9 @@ func NewRegisterBroker(c *Config) *enaml.InstanceGroup {
 		Name:      "register-service-broker",
 		Instances: 1,
 		Lifecycle: "errand",
+		Stemcell:  StemcellAlias,
+		VMType:    c.VMType,
+		AZs:       c.AZs,
 		Networks: []enaml.Network{
 			{Name: c.Network, Default: []interface{}{"dns", "gateway"}},
 		},

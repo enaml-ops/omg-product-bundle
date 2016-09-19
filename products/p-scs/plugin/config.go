@@ -11,6 +11,8 @@ import (
 // Config is used as input for generating instance groups.
 type Config struct {
 	DeploymentName        string
+	VMType                string
+	AZs                   []string
 	SystemDomain          string
 	AppDomains            []string
 	Network               string
@@ -37,13 +39,7 @@ func configFromContext(c *cli.Context) (*Config, error) {
 		}
 		return v
 	}
-	// getInt := func(flag string) int {
-	// 	v := c.Int(flag)
-	// 	if v == 0 { // TODO is this okay?
-	// 		missingFlags = append(missingFlags, flag)
-	// 	}
-	// 	return v
-	// }
+
 	getStringSlice := func(flag string) []string {
 		v := c.StringSlice(flag)
 		if len(v) == 0 {
@@ -54,6 +50,8 @@ func configFromContext(c *cli.Context) (*Config, error) {
 
 	cfg := &Config{
 		DeploymentName:        getString("deployment-name"),
+		VMType:                getString("vm-type"),
+		AZs:                   getStringSlice("az"),
 		SystemDomain:          getString("system-domain"),
 		AppDomains:            getStringSlice("app-domain"),
 		Network:               getString("network"),

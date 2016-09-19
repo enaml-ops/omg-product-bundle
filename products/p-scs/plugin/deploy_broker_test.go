@@ -25,6 +25,8 @@ var _ = Describe("deploy broker partition", func() {
 			controlEncryptionKey     = "encryptionkey"
 			controlCFAdminPass       = "cfadmin"
 			controlUAAAdminSecret    = "uaaadminsecret"
+			controlAZ                = "az1"
+			controlVMType            = "small"
 		)
 
 		BeforeEach(func() {
@@ -42,6 +44,8 @@ var _ = Describe("deploy broker partition", func() {
 				EncryptionKey:         controlEncryptionKey,
 				CFAdminPassword:       controlCFAdminPass,
 				UAAAdminClientSecret:  controlUAAAdminSecret,
+				AZs:                   []string{controlAZ},
+				VMType:                controlVMType,
 			}
 			ig = pscs.NewDeployServiceBroker(cfg)
 		})
@@ -49,7 +53,10 @@ var _ = Describe("deploy broker partition", func() {
 		It("should configure the instance group", func() {
 			Ω(ig.Name).Should(Equal("deploy-service-broker"))
 			Ω(ig.Lifecycle).Should(Equal("errand"))
+			Ω(ig.Stemcell).Should(Equal(pscs.StemcellAlias))
 			Ω(ig.Instances).Should(Equal(1))
+			Ω(ig.AZs).Should(ConsistOf(controlAZ))
+			Ω(ig.VMType).Should(Equal(controlVMType))
 			Ω(ig.Networks).Should(HaveLen(1))
 			Ω(ig.Networks[0].Name).Should(Equal(controlNetworkName))
 			Ω(ig.Networks[0].Default).Should(ConsistOf("dns", "gateway"))

@@ -9,6 +9,9 @@ func NewDeployServiceBroker(c *Config) *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
 		Name:      "deploy-service-broker",
 		Instances: 1,
+		Stemcell:  StemcellAlias,
+		VMType:    c.VMType,
+		AZs:       c.AZs,
 		Lifecycle: "errand",
 		Networks: []enaml.Network{
 			{Name: c.Network, Default: []interface{}{"dns", "gateway"}},
