@@ -116,6 +116,7 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 	dm.AddInstanceGroup(p.NewRabbitMQBrokerPartition(cfg))
 	dm.AddInstanceGroup(p.NewRabbitMQHAProxyPartition(cfg))
 	dm.AddInstanceGroup(p.NewRabbitMQBrokerRegistrar(cfg))
+	dm.AddInstanceGroup(p.NewRabbitMQBrokerDeregistrar(cfg))
 
 	dm.Update = enaml.Update{
 		Canaries:        1,

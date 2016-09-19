@@ -53,7 +53,7 @@ var _ = Describe("prabbitmq plugin", func() {
 			Ω(dm.GetInstanceGroupByName("rabbitmq-broker-partition")).ShouldNot(BeNil())
 			Ω(dm.GetInstanceGroupByName("rabbitmq-haproxy-partition")).ShouldNot(BeNil())
 			Ω(dm.GetInstanceGroupByName("broker-registrar")).ShouldNot(BeNil())
-
+			Ω(dm.GetInstanceGroupByName("broker-deregistrar")).ShouldNot(BeNil())
 		})
 
 		It("should set the update", func() {
