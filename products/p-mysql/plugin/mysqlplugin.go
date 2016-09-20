@@ -101,15 +101,14 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "galera-healthcheck-password", Usage: "galera healthcheck endpoint user's password"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "galera-healthcheck-db-password", Usage: "galera healthcheck db password"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "cluster-health-password", Usage: "clusterhealth password"},
-
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "notification-client-secret", Usage: "client secret for monitoring notifications"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "uaa-admin-client-secret", Usage: "uaa client secret for monitoring notifications"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "notifications-client-secret", Usage: "client secret for monitoring notifications"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "uaa-admin-secret", Usage: "uaa client secret for monitoring notifications"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "notification-recipient-email", Usage: "email to send monitoring notifications to"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-user", Usage: "the user to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-password", Usage: "the password to access the backup rest endpoint"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-password", Usage: "the password to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-quota-enforcer-password", Usage: "the password to the broker quota enforcer"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-username", Value: natsUser, Usage: "the user to access the nats instance"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-user", Value: natsUser, Usage: "the user to access the nats instance"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-pass", Usage: "the password to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-port", Value: natsPort, Usage: "the port to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-username", Usage: "the api username for the proxy"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-password", Usage: "the api password for the proxy"},
@@ -117,7 +116,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-auth-password", Usage: "a basic auth password for mysql broker"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-cookie-secret", Usage: "the broker cookie secret"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "service-secret", Usage: "the broker service secret"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "cf-admin-password", Usage: "the cf admin user's password"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "admin-password", Usage: "the CF admin user's password"},
 
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-domain", Usage: "the location of your vault server (ie. http://10.0.0.1:8200)"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-password", Usage: "the hashname of your secret (ie. secret/p-mysql-1-passwords"},
@@ -175,12 +174,12 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.ClusterHealthPassword = c.String("cluster-health-password")
 	s.BaseDomain = c.String("base-domain")
 	s.NotificationRecipientEmail = c.String("notification-recipient-email")
-	s.NotificationClientSecret = c.String("notification-client-secret")
-	s.UaaAdminClientSecret = c.String("uaa-admin-client-secret")
+	s.NotificationClientSecret = c.String("notifications-client-secret")
+	s.UaaAdminClientSecret = c.String("uaa-admin-secret")
 	s.BackupEndpointUser = c.String("backup-endpoint-user")
 	s.BackupEndpointPassword = c.String("backup-endpoint-password")
-	s.NatsUser = c.String("nats-username")
-	s.NatsPassword = c.String("nats-password")
+	s.NatsUser = c.String("nats-user")
+	s.NatsPassword = c.String("nats-pass")
 	s.NatsPort = c.String("nats-port")
 	s.ProxyAPIUser = c.String("proxy-api-username")
 	s.ProxyAPIPass = c.String("proxy-api-password")
@@ -191,7 +190,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.BrokerAuthPassword = c.String("broker-auth-password")
 	s.BrokerCookieSecret = c.String("broker-cookie-secret")
 	s.ServiceSecret = c.String("service-secret")
-	s.CFAdminPassword = c.String("cf-admin-password")
+	s.CFAdminPassword = c.String("admin-password")
 
 	var err error
 	if err = s.flagValidation(); err != nil {
