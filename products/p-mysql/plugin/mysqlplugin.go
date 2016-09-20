@@ -69,6 +69,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "deployment-name", Value: "p-mysql", Usage: "the name bosh will use for this deployment"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "base-domain", Usage: "the base domain you wish to associate your mysql routes with"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "notification-recipient-email", Usage: "email to send monitoring notifications to"},
 
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
@@ -91,6 +92,13 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "monitoring-ip", Usage: "multiple static ips for each monitoring job vm"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "broker-ip", Usage: "multiple static ips for each broker job vm"},
 
+		// this set of values comes from the ERT deployment
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "admin-password", Usage: "the CF admin user's password"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "notifications-client-secret", Usage: "client secret for monitoring notifications"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "uaa-admin-secret", Usage: "uaa client secret for monitoring notifications"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-user", Value: natsUser, Usage: "the user to access the nats instance"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-pass", Usage: "the password to access the nats instance"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-port", Value: natsPort, Usage: "the port to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "syslog-address", Usage: "the address of your syslog drain"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "syslog-port", Value: "514", Usage: "the port for your syslog connection"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "syslog-transport", Value: "tcp", Usage: "the proto for your syslog connection"},
@@ -101,28 +109,20 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "galera-healthcheck-password", Usage: "galera healthcheck endpoint user's password"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "galera-healthcheck-db-password", Usage: "galera healthcheck db password"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "cluster-health-password", Usage: "clusterhealth password"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "notifications-client-secret", Usage: "client secret for monitoring notifications"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "uaa-admin-secret", Usage: "uaa client secret for monitoring notifications"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "notification-recipient-email", Usage: "email to send monitoring notifications to"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-user", Usage: "the user to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-password", Usage: "the password to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-quota-enforcer-password", Usage: "the password to the broker quota enforcer"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-user", Value: natsUser, Usage: "the user to access the nats instance"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-pass", Usage: "the password to access the nats instance"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-port", Value: natsPort, Usage: "the port to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-username", Usage: "the api username for the proxy"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-password", Usage: "the api password for the proxy"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-auth-username", Usage: "a basic auth user for mysql broker"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-auth-password", Usage: "a basic auth password for mysql broker"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-cookie-secret", Usage: "the broker cookie secret"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "service-secret", Usage: "the broker service secret"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "admin-password", Usage: "the CF admin user's password"},
 
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-domain", Usage: "the location of your vault server (ie. http://10.0.0.1:8200)"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-password", Usage: "the hashname of your secret (ie. secret/p-mysql-1-passwords"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-token", Usage: "the token to make connections to your vault"},
-		pcli.Flag{FlagType: pcli.BoolFlag, Name: "vault-rotate", Usage: "set this flag to true if you would like re/set the values in vault. this will rotate internal certs and passwords"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-active", Usage: "use the data which is stored in vault for the flag values it contains"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "vault-hash-ert", Usage: "hashes containing ERT secrets.  these hashes are only read, never written (ie. secret/pcf-np-1-passwords"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-mysql-secret", Usage: "the hash of your secret (ie. secret/p-mysql-1-passwords"},
 	}
 }
 
@@ -151,6 +151,16 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	flgs := s.GetFlags()
 	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
+
+	domain := c.String("vault-domain")
+	token := c.String("vault-token")
+	if domain != "" && token != "" {
+		v := pluginutil.NewVaultUnmarshal(domain, token)
+
+		for _, hash := range c.StringSlice("vault-hash-ert") {
+			ertVaultDecorate(flgs, hash, v)
+		}
+	}
 
 	s.IPs = c.StringSlice("ip")
 	s.ProxyIPs = c.StringSlice("proxy-ip")
@@ -299,6 +309,19 @@ func (s *Plugin) flagValidation() (err error) {
 	return
 }
 
+func ertVaultDecorate(flags []pcli.Flag, hash string, v *pluginutil.VaultUnmarshal) {
+	err := v.UnmarshalSomeFlags(hash, flags,
+		"syslog-address",
+		"uaa-admin-secret",
+		"notifications-client-secret",
+		"nats-user",
+		"nats-pass",
+		"admin-password")
+	if err != nil {
+		lo.G.Errorf("Error unmarshalling ERT flags: %s", err.Error())
+	}
+}
+
 func InferFromCloudDecorate(inferFlagMap map[string][]string, cloudConfig []byte, args []string, flgs []pcli.Flag) {
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
 
@@ -312,7 +335,6 @@ func InferFromCloudDecorate(inferFlagMap map[string][]string, cloudConfig []byte
 }
 
 func setAllInferredFlagDefaults(matchlist []string, defaultvalue string, flgs []pcli.Flag) {
-
 	for _, match := range matchlist {
 		setFlagDefault(match, defaultvalue, flgs)
 	}
@@ -320,7 +342,6 @@ func setAllInferredFlagDefaults(matchlist []string, defaultvalue string, flgs []
 
 func setFlagDefault(flagname, defaultvalue string, flgs []pcli.Flag) {
 	for idx, flg := range flgs {
-
 		if flg.Name == flagname {
 			flgs[idx].Value = defaultvalue
 		}
