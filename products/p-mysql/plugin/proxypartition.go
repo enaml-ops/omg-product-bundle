@@ -35,7 +35,7 @@ func NewProxyPartition(plgn *Plugin) *enaml.InstanceGroup {
 func newProxyJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "proxy",
-		Release: "cf-mysql",
+		Release: CFMysqlReleaseName,
 		Properties: &proxy.ProxyJob{
 			ExternalHost: strings.Join([]string{"p-mysql", "sys", plgn.BaseDomain}, "."),
 			ClusterIps:   plgn.IPs,

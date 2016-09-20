@@ -34,7 +34,7 @@ func NewBrokerDeRegistrar(plgn *Plugin) *enaml.InstanceGroup {
 func newBrokerDeRegistrarJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "broker-deregistrar",
-		Release: "cf-mysql",
+		Release: CFMysqlReleaseName,
 		Properties: &broker_deregistrar.BrokerDeregistrarJob{
 			Cf: &broker_deregistrar.Cf{
 				ApiUrl:            strings.Join([]string{"https://api", "sys", plgn.BaseDomain}, "."),

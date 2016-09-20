@@ -42,7 +42,7 @@ func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
 	}
 	return enaml.InstanceJob{
 		Name:    "cf-mysql-broker",
-		Release: "cf-mysql",
+		Release: CFMysqlReleaseName,
 		Properties: &cf_mysql_broker.CfMysqlBrokerJob{
 			Broker: &cf_mysql_broker.Broker{
 				QuotaEnforcer: &cf_mysql_broker.QuotaEnforcer{

@@ -34,7 +34,7 @@ func NewBrokerRegistrar(plgn *Plugin) *enaml.InstanceGroup {
 func newBrokerRegistrarJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "broker-registrar",
-		Release: "cf-mysql",
+		Release: CFMysqlReleaseName,
 		Properties: &broker_registrar.BrokerRegistrarJob{
 			Cf: &broker_registrar.Cf{
 				ApiUrl:            strings.Join([]string{"https://api", "sys", plgn.BaseDomain}, "."),

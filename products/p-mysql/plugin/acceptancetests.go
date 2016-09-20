@@ -34,7 +34,7 @@ func NewAcceptanceTests(plgn *Plugin) *enaml.InstanceGroup {
 func newAcceptanceTestsJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "acceptance-tests",
-		Release: "cf-mysql",
+		Release: CFMysqlReleaseName,
 		Properties: &acceptance_tests.AcceptanceTestsJob{
 			TimeoutScale: 1,
 			Cf: &acceptance_tests.Cf{

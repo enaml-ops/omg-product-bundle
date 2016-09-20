@@ -39,7 +39,7 @@ func NewMysqlPartition(plgn *Plugin) *enaml.InstanceGroup {
 func newSendEmailJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "send-email",
-		Release: "mysql-monitoring",
+		Release: MysqlMonitoringReleaseName,
 		Properties: &send_email.SendEmailJob{
 			Ssl: &send_email.Ssl{
 				SkipCertVerify: true,
@@ -62,7 +62,7 @@ func newSendEmailJob(plgn *Plugin) enaml.InstanceJob {
 func newStreamingMysqlBackupToolJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "streaming-mysql-backup-tool",
-		Release: "mysql-backup",
+		Release: MysqlBackupReleaseName,
 		Properties: &streaming_mysql_backup_tool.StreamingMysqlBackupToolJob{
 			CfMysqlBackup: &streaming_mysql_backup_tool.CfMysqlBackup{
 				BackupServer: &streaming_mysql_backup_tool.BackupServer{
@@ -86,7 +86,7 @@ func newStreamingMysqlBackupToolJob(plgn *Plugin) enaml.InstanceJob {
 func newCFMySQLJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "mysql",
-		Release: "cf-mysql",
+		Release: CFMysqlReleaseName,
 		Properties: &mysql.MysqlJob{
 			AdminUsername: adminUsername,
 			AdminPassword: plgn.AdminPassword,

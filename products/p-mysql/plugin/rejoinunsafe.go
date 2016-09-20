@@ -32,7 +32,7 @@ func NewRejoinUnsafe(plgn *Plugin) *enaml.InstanceGroup {
 func newRejoinUnsafeJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "rejoin-unsafe",
-		Release: "cf-mysql",
+		Release: CFMysqlReleaseName,
 		Properties: &rejoin_unsafe.RejoinUnsafeJob{
 			ClusterIps: plgn.IPs,
 			CfMysql: &rejoin_unsafe.CfMysql{

@@ -35,7 +35,7 @@ func NewMonitoringPartition(plgn *Plugin) *enaml.InstanceGroup {
 func newReplicationCanaryJob(plgn *Plugin) enaml.InstanceJob {
 	return enaml.InstanceJob{
 		Name:    "replication-canary",
-		Release: "mysql-monitoring",
+		Release: MysqlMonitoringReleaseName,
 		Properties: &replication_canary.ReplicationCanaryJob{
 			Domain: strings.Join([]string{"sys", plgn.BaseDomain}, "."),
 			SyslogAggregator: &replication_canary.SyslogAggregator{
