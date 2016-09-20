@@ -91,7 +91,7 @@ func newCFMySQLJob(plgn *Plugin) enaml.InstanceJob {
 			AdminUsername: adminUsername,
 			AdminPassword: plgn.AdminPassword,
 			CfMysql: &mysql.CfMysql{
-				&mysql.Mysql{
+				Mysql: &mysql.Mysql{
 					DisableAutoSst:     true,
 					InterruptNotifyCmd: "/var/vcap/jobs/send-email/bin/run",
 					ClusterHealth: &mysql.ClusterHealth{
