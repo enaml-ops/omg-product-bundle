@@ -1,10 +1,12 @@
 package pmysql
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/util"
@@ -112,7 +114,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-user", Usage: "the user to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "backup-endpoint-password", Usage: "the password to access the backup rest endpoint"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-quota-enforcer-password", Usage: "the password to the broker quota enforcer"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-username", Usage: "the api username for the proxy"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-username", Usage: "the api username for the proxy", Value: "admin"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "proxy-api-password", Usage: "the api password for the proxy"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-auth-username", Usage: "a basic auth user for mysql broker"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "broker-auth-password", Usage: "a basic auth password for mysql broker"},
@@ -123,6 +125,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-token", Usage: "the token to make connections to your vault"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "vault-hash-ert", Usage: "hashes containing ERT secrets.  these hashes are only read, never written (ie. secret/pcf-np-1-passwords"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-mysql-secret", Usage: "the hash of your secret (ie. secret/p-mysql-1-passwords"},
+		pcli.CreateBoolFlag("vault-rotate", "set this flag to reset the values in vault. this will rotate internal passwords in the 'vault-hash-mysql-secret' hash"),
 	}
 }
 
@@ -160,6 +163,21 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 		for _, hash := range c.StringSlice("vault-hash-ert") {
 			ertVaultDecorate(flgs, hash, v)
 		}
+
+		hash := c.String("vault-hash-mysql-secret")
+		if hash != "" {
+			if c.Bool("vault-rotate") {
+				if err := vaultRotateMySQL(hash, v); err != nil {
+					lo.G.Error("error rotating mysql secrets:", err)
+				}
+			}
+
+			if err := v.UnmarshalFlags(hash, flgs); err != nil {
+				lo.G.Error("error unmarshalling vault hash", hash)
+			}
+		}
+
+		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
 	}
 
 	s.IPs = c.StringSlice("ip")
@@ -314,12 +332,37 @@ func ertVaultDecorate(flags []pcli.Flag, hash string, v *pluginutil.VaultUnmarsh
 		"syslog-address",
 		"uaa-admin-secret",
 		"notifications-client-secret",
-		"nats-user",
 		"nats-pass",
 		"admin-password")
 	if err != nil {
 		lo.G.Errorf("Error unmarshalling ERT flags: %s", err.Error())
 	}
+}
+
+func vaultRotateMySQL(hash string, v pluginutil.VaultRotater) error {
+	secrets := map[string]string{
+		"mysql-admin-password":           utils.NewPassword(16),
+		"seeded-db-password":             utils.NewPassword(16),
+		"galera-healthcheck-username":    utils.NewPassword(16),
+		"galera-healthcheck-password":    utils.NewPassword(16),
+		"galera-healthcheck-db-password": utils.NewPassword(16),
+		"cluster-health-password":        utils.NewPassword(16),
+		"backup-endpoint-user":           utils.NewPassword(16),
+		"backup-endpoint-password":       utils.NewPassword(16),
+		"broker-quota-enforcer-password": utils.NewPassword(16),
+		"proxy-api-password":             utils.NewPassword(16),
+		"broker-auth-username":           utils.NewPassword(16),
+		"broker-auth-password":           utils.NewPassword(16),
+		"broker-cookie-secret":           utils.NewPassword(16),
+		"service-secret":                 utils.NewPassword(16),
+	}
+
+	b, err := json.Marshal(secrets)
+	if err != nil {
+		return err
+	}
+	lo.G.Debug("rotating secrets for hash", hash)
+	return v.RotateSecrets(hash, b)
 }
 
 func InferFromCloudDecorate(inferFlagMap map[string][]string, cloudConfig []byte, args []string, flgs []pcli.Flag) {
