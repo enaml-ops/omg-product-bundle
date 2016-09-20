@@ -71,7 +71,7 @@ func configFromContext(c *cli.Context) (*Config, error) {
 	makePassword(&cfg.BrokerUsername)
 	makePassword(&cfg.BrokerPassword)
 	makePassword(&cfg.WorkerClientSecret)
-	makePassword(&cfg.WorkerClientSecret)
+	makePassword(&cfg.WorkerPassword)
 	makePassword(&cfg.InstancesPassword)
 	makePassword(&cfg.BrokerDashboardSecret)
 	makePassword(&cfg.EncryptionKey)
