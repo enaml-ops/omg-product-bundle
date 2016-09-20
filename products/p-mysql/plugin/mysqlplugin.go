@@ -22,11 +22,6 @@ const (
 	MysqlMonitoringReleaseVersion = "3"
 )
 
-type jobBucket struct {
-	JobName   string
-	JobType   int
-	Instances int
-}
 type Plugin struct {
 	PluginVersion               string
 	DeploymentName              string
@@ -146,10 +141,10 @@ func (s *Plugin) GetMeta() product.Meta {
 }
 
 func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
-	var err error
-	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
 	flgs := s.GetFlags()
 	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
+	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
+
 	s.IPs = c.StringSlice("ip")
 	s.ProxyIPs = c.StringSlice("proxy-ip")
 	s.AZs = c.StringSlice("az")
@@ -190,6 +185,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.ServiceSecret = c.String("service-secret")
 	s.CFAdminPassword = c.String("cf-admin-password")
 
+	var err error
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)
 		lo.G.Fatal("exiting due to invalid args")
@@ -199,9 +195,10 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 		lo.G.Error("invalid settings for cloud config on target bosh: ", err)
 		lo.G.Fatal("your deployment is not compatible with your cloud config, exiting")
 	}
+
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)
-	dm.SetName(c.String("deployment-name"))
+	dm.SetName(s.DeploymentName)
 	dm.AddRelease(enaml.Release{Name: CFMysqlReleaseName, Version: c.String("cf-mysql-release-version")})
 	dm.AddRelease(enaml.Release{Name: MysqlBackupReleaseName, Version: c.String("mysql-backup-release-version")})
 	dm.AddRelease(enaml.Release{Name: ServiceBackupReleaseName, Version: c.String("service-backup-release-version")})
@@ -224,14 +221,6 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 		Canaries:        1,
 	}
 	return dm.Bytes()
-}
-
-func (s *Plugin) createDockerJob() enaml.InstanceJob {
-	return enaml.InstanceJob{
-		Name:       "p-mysql",
-		Release:    "p-mysql",
-		Properties: nil,
-	}
 }
 
 func (s *Plugin) cloudconfigValidation(cloudConfig *enaml.CloudConfigManifest) (err error) {
