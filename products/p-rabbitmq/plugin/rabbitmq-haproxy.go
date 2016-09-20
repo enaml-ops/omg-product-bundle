@@ -29,7 +29,7 @@ func (p *Plugin) NewRabbitMQHAProxyPartition(c *Config) *enaml.InstanceGroup {
 			newServiceMetricsHAProxyJob(c),
 			enaml.InstanceJob{
 				Name:       "rabbitmq-haproxy-metrics",
-				Release:    ServiceMetricsReleaseName,
+				Release:    RabbitMQMetricsReleaseName,
 				Properties: struct{}{},
 			},
 		},

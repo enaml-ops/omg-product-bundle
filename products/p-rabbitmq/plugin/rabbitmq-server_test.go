@@ -132,7 +132,7 @@ var _ = Describe("RabbitMQ server partition", func() {
 		It("should configure the metrics job", func() {
 			job := ig.GetJobByName("rabbitmq-server-metrics")
 			Ω(job).ShouldNot(BeNil())
-			Ω(job.Release).Should(Equal(prabbitmq.ServiceMetricsReleaseName))
+			Ω(job.Release).Should(Equal(prabbitmq.RabbitMQMetricsReleaseName))
 
 			b, err := yaml.Marshal(job.Properties)
 			Ω(err).ShouldNot(HaveOccurred())

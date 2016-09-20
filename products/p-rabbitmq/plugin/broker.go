@@ -29,7 +29,7 @@ func (p *Plugin) NewRabbitMQBrokerPartition(c *Config) *enaml.InstanceGroup {
 			newServiceMetricsBrokerJob(c),
 			enaml.InstanceJob{
 				Name:       "rabbitmq-broker-metrics",
-				Release:    ServiceMetricsReleaseName,
+				Release:    RabbitMQMetricsReleaseName,
 				Properties: struct{}{},
 			},
 		},

@@ -25,7 +25,7 @@ func (p *Plugin) NewRabbitMQServerPartition(c *Config) *enaml.InstanceGroup {
 			newServiceMetricsServerJob(c),
 			enaml.InstanceJob{
 				Name:       "rabbitmq-server-metrics",
-				Release:    ServiceMetricsReleaseName,
+				Release:    RabbitMQMetricsReleaseName,
 				Properties: struct{}{},
 			},
 		},
