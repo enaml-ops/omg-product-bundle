@@ -64,8 +64,8 @@ func configFromContext(c *cli.Context) (*Config, error) {
 		InstancesPassword:     getString("instances-password"),
 		BrokerDashboardSecret: getString("broker-dashboard-secret"),
 		EncryptionKey:         getString("encryption-key"),
-		CFAdminPassword:       getString("cf-admin-password"),
-		UAAAdminClientSecret:  getString("uaa-admin-client-secret"),
+		CFAdminPassword:       getString("admin-password"),
+		UAAAdminClientSecret:  getString("uaa-admin-secret"),
 	}
 
 	makePassword(&cfg.BrokerUsername)

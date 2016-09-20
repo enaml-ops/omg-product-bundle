@@ -37,9 +37,13 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.CreateStringFlag("instances-password", "instances password", generatePassword),
 		pcli.CreateStringFlag("broker-dashboard-secret", "broker dashboard secret", generatePassword),
 		pcli.CreateStringFlag("encryption-key", "encryption key", generatePassword),
-		pcli.CreateStringFlag("cf-admin-password", "CF admin password"),
-		pcli.CreateStringFlag("uaa-admin-client-secret", "UAA client secret for admin account"),
+		pcli.CreateStringFlag("admin-password", "CF admin password"),
+		pcli.CreateStringFlag("uaa-admin-secret", "UAA client secret for admin account"),
 		pcli.CreateBoolFlag("infer-from-cloud", "attempt to pull defaults from your targetted bosh"),
+
+		pcli.CreateStringFlag("vault-domain", "the location of your vault server (ie. http://10.0.0.1:8200)"),
+		pcli.CreateStringFlag("vault-token", "the token to make connections to your vault"),
+		pcli.CreateStringSliceFlag("vault-hash", "a list of vault hashes to pull values from"),
 	}
 }
 
@@ -61,6 +65,21 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 
 	if c.Bool("infer-from-cloud") {
 		inferFromCloud(cloudConfig, flags, c)
+		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
+	}
+
+	domain := c.String("vault-domain")
+	tok := c.String("vault-token")
+	hashes := c.StringSlice("vault-hash")
+	if domain != "" && tok != "" && len(hashes) > 0 {
+		lo.G.Debug("connecting to vault at", domain)
+		v := pluginutil.NewVaultUnmarshal(domain, tok)
+		for _, hash := range hashes {
+			err := v.UnmarshalFlags(hash, flags)
+			if err != nil {
+				lo.G.Errorf("error reading vault hash %s: %s", hash, err.Error())
+			}
+		}
 		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
 	}
 
