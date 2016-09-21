@@ -21,6 +21,8 @@ const (
 	ServiceBackupReleaseVersion   = "14"
 	MysqlMonitoringReleaseName    = "mysql-monitoring"
 	MysqlMonitoringReleaseVersion = "3"
+
+	defaultStemcellVersion = "3232.17"
 )
 
 type Plugin struct {
@@ -73,7 +75,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "notification-recipient-email", Usage: "email to send monitoring notifications to"},
 
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use", Value: defaultStemcellVersion},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
 
@@ -133,7 +135,7 @@ func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "p-mysql",
 		Properties: map[string]interface{}{
-			"version":        s.PluginVersion,
+			"version":        defaultStemcellVersion,
 			"stemcell":       s.StemcellVersion,
 			"pivotal-mysql":  "1.7.12",
 			"cf-mysql":       fmt.Sprintf("%s / %s", CFMysqlReleaseName, CFMysqlReleaseVersion),
