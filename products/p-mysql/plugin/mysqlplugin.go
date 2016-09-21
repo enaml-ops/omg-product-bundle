@@ -56,6 +56,7 @@ type Plugin struct {
 	NatsPassword                string
 	NatsUser                    string
 	NatsPort                    string
+	NatsIPs                     []string
 	ProxyAPIUser                string
 	ProxyAPIPass                string
 	MonitoringIPs               []string
@@ -102,6 +103,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-user", Value: natsUser, Usage: "the user to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-pass", Usage: "the password to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-port", Value: natsPort, Usage: "the port to access the nats instance"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "nats-machine-ip", Usage: "IP of your NATS machines"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "syslog-address", Usage: "the address of your syslog drain"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "syslog-port", Value: "514", Usage: "the port for your syslog connection"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "syslog-transport", Value: "tcp", Usage: "the proto for your syslog connection"},
@@ -212,6 +214,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.NatsUser = c.String("nats-user")
 	s.NatsPassword = c.String("nats-pass")
 	s.NatsPort = c.String("nats-port")
+	s.NatsIPs = c.StringSlice("nats-machine-ip")
 	s.ProxyAPIUser = c.String("proxy-api-username")
 	s.ProxyAPIPass = c.String("proxy-api-password")
 	s.MonitoringIPs = c.StringSlice("monitoring-ip")

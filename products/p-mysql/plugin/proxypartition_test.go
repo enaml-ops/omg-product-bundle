@@ -44,6 +44,9 @@ var _ = Describe("given NewProxyPartition func", func() {
 				var controlIPs = []string{
 					"1.0.0.1", "1.0.0.2", "1.0.0.3",
 				}
+				var controlNatsIPs = []string{
+					"1.0.0.7", "1.0.0.8", "1.0.0.9",
+				}
 				var controlAddress = "address"
 				var controlPort = "port"
 				var controlTransport = "transport"
@@ -57,6 +60,7 @@ var _ = Describe("given NewProxyPartition func", func() {
 					plgn.BaseDomain = controlBaseDomain
 					plgn.ProxyIPs = controlProxyIPs
 					plgn.IPs = controlIPs
+					plgn.NatsIPs = controlNatsIPs
 					plgn.NatsUser = controlNatsUser
 					plgn.NatsPassword = controlNatsPass
 					plgn.NatsPort = controlNatsPort
@@ -83,7 +87,7 @@ var _ = Describe("given NewProxyPartition func", func() {
 				})
 
 				It("then it should have a valid nats configuration", func() {
-					Ω(jobProperties.Nats.Machines).Should(Equal(controlProxyIPs), "we should have a nats proxy ip list defined")
+					Ω(jobProperties.Nats.Machines).Should(Equal(controlNatsIPs), "we should have a nats proxy ip list defined")
 					Ω(jobProperties.Nats.Password).Should(Equal(controlNatsPass), "we should have a nats password defined")
 					Ω(jobProperties.Nats.Port).Should(Equal(controlNatsPort), "we should have a nats port defined")
 					Ω(jobProperties.Nats.User).Should(Equal(controlNatsUser), "we should have a nats user defined")

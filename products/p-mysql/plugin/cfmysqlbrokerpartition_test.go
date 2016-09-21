@@ -68,6 +68,9 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 				var controlProxyIPs = []string{
 					"1.0.0.5", "1.0.0.6",
 				}
+				var controlNatsIPs = []string{
+					"1.0.0.7", "1.0.0.8", "1.0.0.9",
+				}
 				var controlAddress = "address"
 				var controlPort = "port"
 				var controlTransport = "transport"
@@ -83,6 +86,7 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					plgn.BrokerAuthPassword = controlAuthPass
 					plgn.BrokerCookieSecret = controlCookieSecret
 					plgn.ProxyIPs = controlProxyIPs
+					plgn.NatsIPs = controlNatsIPs
 					plgn.NatsUser = controlNatsUser
 					plgn.NatsPassword = controlNatsPass
 					plgn.NatsPort = controlNatsPort
@@ -123,7 +127,7 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					Ω(jobProperties.AuthPassword).Should(Equal(controlAuthPass))
 				})
 				It("then it should have a valid nats element", func() {
-					Ω(jobProperties.Nats.Machines).Should(Equal(controlProxyIPs), "we should have a nats proxy ip list defined")
+					Ω(jobProperties.Nats.Machines).Should(Equal(controlNatsIPs), "we should have a nats proxy ip list defined")
 					Ω(jobProperties.Nats.Password).Should(Equal(controlNatsPass), "we should have a nats password defined")
 					Ω(jobProperties.Nats.Port).Should(Equal(controlNatsPort), "we should have a nats port defined")
 					Ω(jobProperties.Nats.User).Should(Equal(controlNatsUser), "we should have a nats user defined")

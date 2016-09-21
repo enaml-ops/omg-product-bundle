@@ -40,7 +40,7 @@ func newProxyJob(plgn *Plugin) enaml.InstanceJob {
 			ExternalHost: strings.Join([]string{"p-mysql", "sys", plgn.BaseDomain}, "."),
 			ClusterIps:   plgn.IPs,
 			Nats: &proxy.Nats{
-				Machines: plgn.ProxyIPs,
+				Machines: plgn.NatsIPs,
 				Password: plgn.NatsPassword,
 				User:     plgn.NatsUser,
 				Port:     plgn.NatsPort,

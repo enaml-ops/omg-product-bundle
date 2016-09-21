@@ -61,7 +61,7 @@ func newBrokerJob(plgn *Plugin) enaml.InstanceJob {
 			AuthUsername:      plgn.BrokerAuthUsername,
 			AuthPassword:      plgn.BrokerAuthPassword,
 			Nats: &cf_mysql_broker.Nats{
-				Machines: plgn.ProxyIPs,
+				Machines: plgn.NatsIPs,
 				Password: plgn.NatsPassword,
 				User:     plgn.NatsUser,
 				Port:     plgn.NatsPort,
