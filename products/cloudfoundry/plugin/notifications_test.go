@@ -31,6 +31,8 @@ var _ = Describe("notifications", func() {
 		controlNotificationsUISecret = "notificationsuisecret"
 		controlNotificationsSecret   = "notificationssecret"
 		controlMySQLProxy            = "10.0.0.10"
+		controlSyslogAddress         = "10.0.0.11"
+		controlSyslogPort            = 514
 	)
 
 	BeforeEach(func() {
@@ -57,6 +59,8 @@ var _ = Describe("notifications", func() {
 			StemcellName:      controlStemcellName,
 			AZs:               []string{"az1"},
 			SkipSSLCertVerify: true,
+			SyslogAddress:     controlSyslogAddress,
+			SyslogPort:        controlSyslogPort,
 		}
 	})
 
@@ -206,11 +210,13 @@ var _ = Describe("notifications", func() {
 
 			Ω(props.Domain).Should(Equal(controlSystemDomain))
 
-			// TODO Ω(props.NotificationsUi.SyslogUrl).Should(Equal(""))
+			Ω(props.NotificationsUi.SyslogUrl).Should(Equal(fmt.Sprintf("syslog://%s:%d", controlSyslogAddress, controlSyslogPort)))
 			Ω(props.NotificationsUi.Network).Should(Equal("notifications"))
 			Ω(props.NotificationsUi.AppDomain).Should(Equal(controlSystemDomain))
 			Ω(props.NotificationsUi.EncryptionKey).Should(Equal(controlEncryptionKey))
 			Ω(props.NotificationsUi.EnableDiego).Should(BeTrue())
+			Ω(props.NotificationsUi.FooterText).ShouldNot(BeNil())
+			Ω(props.NotificationsUi.FooterImage).ShouldNot(BeNil())
 			Ω(props.NotificationsUi.InstanceCount).Should(Equal(1))
 			Ω(props.NotificationsUi.Organization).Should(Equal("system"))
 			Ω(props.NotificationsUi.Space).Should(Equal("notifications-with-ui"))
