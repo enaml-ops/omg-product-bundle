@@ -135,8 +135,8 @@ func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "p-mysql",
 		Properties: map[string]interface{}{
-			"version":        defaultStemcellVersion,
-			"stemcell":       s.StemcellVersion,
+			"version":        s.PluginVersion,
+			"stemcell":       defaultStemcellVersion,
 			"pivotal-mysql":  "1.7.12",
 			"cf-mysql":       fmt.Sprintf("%s / %s", CFMysqlReleaseName, CFMysqlReleaseVersion),
 			"mysql-backup":   fmt.Sprintf("%s / %s", MysqlBackupReleaseName, MysqlBackupReleaseVersion),
