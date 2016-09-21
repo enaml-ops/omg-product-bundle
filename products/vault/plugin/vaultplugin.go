@@ -28,16 +28,22 @@ type jobBucket struct {
 	Instances int
 }
 type Plugin struct {
-	PluginVersion   string
-	NetworkName     string
-	IPs             []string
-	VMTypeName      string
-	DiskTypeName    string
-	AZs             []string
-	StemcellName    string
-	StemcellURL     string
-	StemcellVersion string
-	StemcellSHA     string
+	PluginVersion    string
+	NetworkName      string
+	IPs              []string
+	VMTypeName       string
+	DiskTypeName     string
+	AZs              []string
+	StemcellName     string
+	StemcellURL      string
+	StemcellVersion  string
+	StemcellSHA      string
+	VaultReleaseURL  string
+	VaultReleaseVer  string
+	VaultReleaseSHA  string
+	ConsulReleaseURL string
+	ConsulReleaseVer string
+	ConsulReleaseSHA string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -51,6 +57,13 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
+
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-release-url", Value: BoshVaultReleaseURL, Usage: "vault bosh release url"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-release-version", Value: BoshVaultReleaseVer, Usage: "vault bosh release version"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-release-sha", Value: BoshVaultReleaseSHA, Usage: "vault bosh release sha"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "consul-release-url", Value: BoshConsulReleaseURL, Usage: "consul bosh release url"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "consul-release-version", Value: BoshConsulReleaseVer, Usage: "consul bosh release version"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "consul-release-sha", Value: BoshConsulReleaseSHA, Usage: "consul bosh release sha"},
 	}
 }
 
@@ -78,6 +91,12 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.StemcellURL = c.String("stemcell-url")
 	s.VMTypeName = c.String("vm-type")
 	s.DiskTypeName = c.String("disk-type")
+	s.VaultReleaseURL = c.String("vault-release-url")
+	s.VaultReleaseVer = c.String("vault-release-version")
+	s.VaultReleaseSHA = c.String("vault-release-sha")
+	s.ConsulReleaseURL = c.String("consul-release-url")
+	s.ConsulReleaseVer = c.String("consul-release-version")
+	s.ConsulReleaseSHA = c.String("consul-release-sha")
 
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)
@@ -91,8 +110,8 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)
 	dm.SetName("vault")
-	dm.AddRemoteRelease("vault", BoshVaultReleaseVer, BoshVaultReleaseURL, BoshVaultReleaseSHA)
-	dm.AddRemoteRelease("consul", BoshConsulReleaseVer, BoshConsulReleaseURL, BoshConsulReleaseSHA)
+	dm.AddRemoteRelease("vault", s.VaultReleaseVer, s.VaultReleaseURL, s.VaultReleaseSHA)
+	dm.AddRemoteRelease("consul", s.ConsulReleaseVer, s.ConsulReleaseURL, s.ConsulReleaseSHA)
 	dm.AddRemoteStemcell(s.StemcellName, s.StemcellName, s.StemcellVersion, s.StemcellURL, s.StemcellSHA)
 
 	dm.AddInstanceGroup(s.NewVaultInstanceGroup())
