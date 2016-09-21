@@ -125,6 +125,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-token", Usage: "the token to make connections to your vault"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "vault-hash-ert", Usage: "hashes containing ERT secrets.  these hashes are only read, never written (ie. secret/pcf-np-1-passwords"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-mysql-secret", Usage: "the hash of your secret (ie. secret/p-mysql-1-passwords"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-hash-mysql-ip", Usage: "the hash of your secret (ie. secret/p-mysql-1-ips"},
 		pcli.CreateBoolFlag("vault-rotate", "set this flag to reset the values in vault. this will rotate internal passwords in the 'vault-hash-mysql-secret' hash"),
 	}
 }
@@ -164,7 +165,14 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 			ertVaultDecorate(flgs, hash, v)
 		}
 
-		hash := c.String("vault-hash-mysql-secret")
+		hash := c.String("vault-hash-mysql-ip")
+		if hash != "" {
+			if err := v.UnmarshalFlags(hash, flgs); err != nil {
+				lo.G.Error("error unmarshalling vault hash", hash, err)
+			}
+		}
+
+		hash = c.String("vault-hash-mysql-secret")
 		if hash != "" {
 			if c.Bool("vault-rotate") {
 				if err := vaultRotateMySQL(hash, v); err != nil {
@@ -173,7 +181,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 			}
 
 			if err := v.UnmarshalFlags(hash, flgs); err != nil {
-				lo.G.Error("error unmarshalling vault hash", hash)
+				lo.G.Error("error unmarshalling vault hash", hash, err)
 			}
 		}
 
