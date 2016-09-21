@@ -3,7 +3,6 @@ package pmysql
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-cli/utils"
@@ -134,19 +133,13 @@ func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "p-mysql",
 		Properties: map[string]interface{}{
-			"version": s.PluginVersion,
-			"p-mysql-release": strings.Join([]string{
-				CFMysqlReleaseName,
-				CFMysqlReleaseVersion}, " / "),
-			"mysql-backup": strings.Join([]string{
-				MysqlBackupReleaseName,
-				MysqlBackupReleaseVersion}, " / "),
-			"service-backup": strings.Join([]string{
-				ServiceBackupReleaseName,
-				ServiceBackupReleaseVersion}, " / "),
-			"mysql-monitor": strings.Join([]string{
-				MysqlMonitoringReleaseName,
-				MysqlMonitoringReleaseVersion}, " / "),
+			"version":        s.PluginVersion,
+			"stemcell":       s.StemcellVersion,
+			"pivotal-mysql":  "1.7.12",
+			"cf-mysql":       fmt.Sprintf("%s / %s", CFMysqlReleaseName, CFMysqlReleaseVersion),
+			"mysql-backup":   fmt.Sprintf("%s / %s", MysqlBackupReleaseName, MysqlBackupReleaseVersion),
+			"service-backup": fmt.Sprintf("%s / %s", ServiceBackupReleaseName, ServiceBackupReleaseVersion),
+			"mysql-monitor":  fmt.Sprintf("%s / %s", MysqlMonitoringReleaseName, MysqlMonitoringReleaseVersion),
 		},
 	}
 }
