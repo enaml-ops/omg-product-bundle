@@ -336,8 +336,11 @@ func (s *Plugin) flagValidation() (err error) {
 func ertVaultDecorate(flags []pcli.Flag, hash string, v *pluginutil.VaultUnmarshal) {
 	err := v.UnmarshalSomeFlags(hash, flags,
 		"syslog-address",
+		"syslog-port",
+		"syslog-transport",
 		"uaa-admin-secret",
 		"notifications-client-secret",
+		"nats-machine-ip",
 		"nats-pass",
 		"admin-password")
 	if err != nil {
