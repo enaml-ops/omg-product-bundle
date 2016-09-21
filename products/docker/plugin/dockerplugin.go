@@ -117,7 +117,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	}
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)
-	dm.SetName("docker")
+	dm.SetName(s.DeploymentName)
 	dm.AddRemoteRelease("docker", c.String("docker-release-ver"), c.String("docker-release-url"), c.String("docker-release-sha"))
 	dm.AddRemoteStemcell(s.StemcellName, s.StemcellName, s.StemcellVersion, s.StemcellURL, s.StemcellSHA)
 
