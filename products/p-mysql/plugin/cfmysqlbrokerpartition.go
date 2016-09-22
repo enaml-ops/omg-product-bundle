@@ -102,6 +102,10 @@ func newDefaultServicePlan(plgn *Plugin) (res map[string]interface{}) {
 		"documentationUrl":    "http://docs.pivotal.io/p-mysql",
 		"supportUrl":          "http://support.pivotal.io",
 	}
+	res["tags"] = []string{
+		"mysql",
+		"relational",
+	}
 	res["plans"] = []map[string]interface{}{
 		map[string]interface{}{
 			"name":                 "100mb-dev",
@@ -123,10 +127,6 @@ func newDefaultServicePlan(plgn *Plugin) (res map[string]interface{}) {
 					"40 concurrent connections",
 				},
 				"displayName": "100 MB Dev",
-				"tags": []string{
-					"mysql",
-					"relational",
-				},
 			},
 		},
 	}

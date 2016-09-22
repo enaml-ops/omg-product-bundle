@@ -147,6 +147,7 @@ var _ = Describe("given NewMonitoringPartition func", func() {
 					Ω(len(services)).Should(BeNumerically(">", 0), "there should be at least one service defined")
 					Ω(services[0]["dashboard_client"].(map[string]string)["secret"]).Should(Equal(controlServiceSecret), "we should properly set a service secret in the default service plan")
 					Ω(services[0]["dashboard_client"].(map[string]string)["redirect_uri"]).Should(Equal(controlRedirectURI), "we should properly configure the redirect uri")
+					Ω(services[0]["tags"].([]string)).Should(ConsistOf("mysql", "relational"))
 				})
 			})
 		})
