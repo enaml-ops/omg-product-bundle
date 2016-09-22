@@ -102,10 +102,10 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "uaa-admin-secret", Usage: "uaa client secret for monitoring notifications"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-user", Value: natsUser, Usage: "the user to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-pass", Usage: "the password to access the nats instance"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "nats-port", Value: natsPort, Usage: "the port to access the nats instance"},
+		pcli.Flag{FlagType: pcli.IntFlag, Name: "nats-port", Value: natsPort, Usage: "the port to access the nats instance"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "nats-machine-ip", Usage: "IP of your NATS machines"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "syslog-address", Usage: "the address of your syslog drain"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "syslog-port", Value: "514", Usage: "the port for your syslog connection"},
+		pcli.Flag{FlagType: pcli.IntFlag, Name: "syslog-port", Value: "514", Usage: "the port for your syslog connection"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "syslog-transport", Value: "tcp", Usage: "the proto for your syslog connection"},
 
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "mysql-admin-password", Usage: "the admin password for your mysql"},
