@@ -40,6 +40,7 @@ var _ = Describe("given a Diego Cell Partition", func() {
 					InstanceCount:   config.InstanceCount{},
 					IP:              config.IP{},
 				}
+				config.SkipSSLCertVerify = true
 				config.ConsulEncryptKeys = []string{"encyption-key"}
 				config.ConsulAgentCert = "agent-cert"
 				config.ConsulAgentKey = "agent-key"
@@ -89,6 +90,11 @@ var _ = Describe("given a Diego Cell Partition", func() {
 					It("then it should set the BBS API location", func() {
 						props := job.Properties.(*rep.RepJob)
 						Ω(props.Diego.Rep.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
+					})
+					It("then it should set SSL", func() {
+						props := job.Properties.(*rep.RepJob)
+						Ω(props.Diego.Ssl).ShouldNot(BeNil())
+						Ω(props.Diego.Ssl.SkipCertVerify).Should(BeTrue())
 					})
 					It("should make rootfses an array", func() {
 						props := job.Properties.(*rep.RepJob)

@@ -43,10 +43,11 @@ func (s *gorouter) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 
 func (s *gorouter) newRouter() *grtrlib.Router {
 	return &grtrlib.Router{
-		EnableSsl:     s.Config.RouterEnableSSL,
-		SecureCookies: false,
-		SslKey:        s.Config.RouterSSLKey,
-		SslCert:       s.Config.RouterSSLCert,
+		EnableSsl:         s.Config.RouterEnableSSL,
+		SecureCookies:     false,
+		SslKey:            s.Config.RouterSSLKey,
+		SslCert:           s.Config.RouterSSLCert,
+		SslSkipValidation: s.Config.SkipSSLCertVerify,
 		Status: &grtrlib.Status{
 			User:     s.Config.RouterUser,
 			Password: s.Config.RouterPass,

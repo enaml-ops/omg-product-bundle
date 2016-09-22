@@ -21,7 +21,7 @@ var _ = Describe("Go-Router Partition", func() {
 				AZs:             []string{"eastprod-1"},
 				NetworkName:     "foundry-net",
 				NATSPort:        4222,
-				DopplerZone:      "DopplerZoneguid",
+				DopplerZone:     "DopplerZoneguid",
 				RouterEnableSSL: true,
 				Secret:          config.Secret{},
 				User:            config.User{},
@@ -29,6 +29,7 @@ var _ = Describe("Go-Router Partition", func() {
 				InstanceCount:   config.InstanceCount{},
 				IP:              config.IP{},
 			}
+			config.SkipSSLCertVerify = true
 			config.NATSUser = "nats"
 			config.NATSPassword = "pass"
 			config.NATSMachines = []string{"1.0.0.5", "1.0.0.6"}
@@ -89,6 +90,7 @@ var _ = Describe("Go-Router Partition", func() {
 			job := ig.GetJobByName("gorouter")
 			properties := job.Properties.(*grtrlib.GorouterJob)
 			Ω(properties.Router.EnableSsl).Should(BeTrue())
+			Ω(properties.Router.SslSkipValidation).Should(BeTrue())
 		})
 
 		It("then it should allow the user to configure the nats pool to use", func() {

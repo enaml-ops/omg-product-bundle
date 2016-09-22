@@ -57,6 +57,9 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 			SystemDomain:             c.Config.SystemDomain,
 			AppDomains:               c.Config.AppDomains,
 			SystemDomainOrganization: "system",
+			Ssl: &ccworkerlib.Ssl{
+				SkipCertVerify: c.Config.SkipSSLCertVerify,
+			},
 			Cc: &ccworkerlib.Cc{
 				AllowAppSshAccess: c.Config.AllowSSHAccess,
 				Buildpacks: &ccworkerlib.Buildpacks{

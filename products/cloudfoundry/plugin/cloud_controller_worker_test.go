@@ -30,6 +30,7 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 				InstanceCount:  config.InstanceCount{},
 				IP:             config.IP{},
 			}
+			config.SkipSSLCertVerify = true
 			config.MySQLProxyIPs = []string{"10.0.0.3"}
 			config.NATSMachines = []string{"10.0.0.4"}
 			config.NATSUser = "natsuser"
@@ -96,6 +97,10 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 			Ω(props.SystemDomain).Should(Equal("sys.yourdomain.com"))
 			Ω(props.AppDomains).Should(ConsistOf("apps.yourdomain.com"))
 			Ω(props.SystemDomainOrganization).Should(Equal("system"))
+
+			ssl := props.Ssl
+			Ω(ssl).ShouldNot(BeNil())
+			Ω(ssl.SkipCertVerify).Should(BeTrue())
 
 			ccdb := props.Ccdb
 			Ω(ccdb.DbScheme).Should(Equal("mysql"))

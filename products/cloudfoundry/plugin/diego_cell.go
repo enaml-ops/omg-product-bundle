@@ -89,6 +89,9 @@ func (s *diegoCell) newGarden() (gardenLinux *garden.GardenJob) {
 func (s *diegoCell) newRDiego() (rdiego *rep.RepJob) {
 	rdiego = &rep.RepJob{
 		Diego: &rep.Diego{
+			Ssl: &rep.Ssl{
+				SkipCertVerify: s.Config.SkipSSLCertVerify,
+			},
 			Executor: &rep.Executor{
 				PostSetupHook: `sh -c "rm -f /home/vcap/app/.java-buildpack.log /home/vcap/app/**/.java-buildpack.log"`,
 				PostSetupUser: "root",
