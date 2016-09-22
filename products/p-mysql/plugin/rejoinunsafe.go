@@ -12,7 +12,7 @@ func NewRejoinUnsafe(plgn *Plugin) *enaml.InstanceGroup {
 		Instances: 1,
 		VMType:    plgn.VMTypeName,
 		AZs:       plgn.AZs,
-		Stemcell:  plgn.StemcellName,
+		Stemcell:  StemcellAlias,
 		Jobs: []enaml.InstanceJob{
 			newRejoinUnsafeJob(plgn),
 		},

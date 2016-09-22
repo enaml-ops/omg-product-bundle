@@ -22,6 +22,8 @@ const (
 	MysqlMonitoringReleaseName    = "mysql-monitoring"
 	MysqlMonitoringReleaseVersion = "3"
 
+	StemcellName           = "ubuntu-trusty"
+	StemcellAlias          = "trusty"
 	defaultStemcellVersion = "3232.17"
 )
 
@@ -34,10 +36,7 @@ type Plugin struct {
 	VMTypeName                  string
 	DiskTypeName                string
 	AZs                         []string
-	StemcellName                string
-	StemcellURL                 string
 	StemcellVersion             string
-	StemcellSHA                 string
 	SyslogAddress               string
 	SyslogPort                  string
 	SyslogTransport             string
@@ -75,10 +74,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "base-domain", Usage: "the base domain you wish to associate your mysql routes with"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "notification-recipient-email", Usage: "email to send monitoring notifications to"},
 
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use", Value: defaultStemcellVersion},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: "ubuntu-trusty", Usage: "the OS of the stemcell you will use"},
 
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "cf-mysql-release-version", Value: CFMysqlReleaseVersion, Usage: "the cf-mysql release version to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "mysql-backup-release-version", Value: MysqlBackupReleaseVersion, Usage: "the mysql-backup release version to use"},
@@ -190,10 +186,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.AZs = c.StringSlice("az")
 	s.DeploymentName = c.String("deployment-name")
 	s.NetworkName = c.String("network")
-	s.StemcellName = c.String("stemcell-name")
 	s.StemcellVersion = c.String("stemcell-ver")
-	s.StemcellSHA = c.String("stemcell-sha")
-	s.StemcellURL = c.String("stemcell-url")
 	s.VMTypeName = c.String("vm-type")
 	s.DiskTypeName = c.String("disk-type")
 	s.AdminPassword = c.String("mysql-admin-password")
@@ -244,7 +237,8 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	dm.AddRelease(enaml.Release{Name: MysqlBackupReleaseName, Version: c.String("mysql-backup-release-version")})
 	dm.AddRelease(enaml.Release{Name: ServiceBackupReleaseName, Version: c.String("service-backup-release-version")})
 	dm.AddRelease(enaml.Release{Name: MysqlMonitoringReleaseName, Version: c.String("mysql-monitoring-release-version")})
-	dm.AddRemoteStemcell(s.StemcellName, s.StemcellName, s.StemcellVersion, s.StemcellURL, s.StemcellSHA)
+
+	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: s.StemcellVersion, Alias: StemcellAlias})
 	dm.AddInstanceGroup(NewMysqlPartition(s))
 	dm.AddInstanceGroup(NewProxyPartition(s))
 	dm.AddInstanceGroup(NewMonitoringPartition(s))

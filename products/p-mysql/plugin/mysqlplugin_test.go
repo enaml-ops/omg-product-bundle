@@ -49,9 +49,7 @@ var _ = Describe("given p-mysql Plugin", func() {
 				"--vm-type", controlVM,
 				"--ip", controlIP,
 				"--az", "z1-nothere",
-				"--stemcell-url", "something",
 				"--stemcell-ver", "12.3.44",
-				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 			}, cloudConfigBytes)
 			Ω(logfake.FatalCallCount()).Should(Equal(1))
 		})
@@ -141,17 +139,14 @@ var _ = Describe("given p-mysql Plugin", func() {
 				"--disk-type", controlDisk,
 				"--ip", controlIP,
 				"--az", "z1",
-				"--stemcell-name", "blahname",
-				"--stemcell-url", "something",
 				"--stemcell-ver", "12.3.44",
-				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 			}, cloudConfigBytes)
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})
 		It("then we should have a properly configured stemcell definition in our deployment (os & alias from flag value)", func() {
 			Ω(len(deployment.Stemcells)).Should(Equal(1))
-			Ω(deployment.Stemcells[0].OS).Should(Equal("blahname"))
-			Ω(deployment.Stemcells[0].Alias).Should(Equal("blahname"))
+			Ω(deployment.Stemcells[0].OS).Should(Equal(StemcellName))
+			Ω(deployment.Stemcells[0].Alias).Should(Equal(StemcellAlias))
 		})
 	})
 
@@ -168,10 +163,7 @@ var _ = Describe("given p-mysql Plugin", func() {
 				"network",
 				"vm-type",
 				"disk-type",
-				"stemcell-url",
 				"stemcell-ver",
-				"stemcell-sha",
-				"stemcell-name",
 			} {
 				Ω(checkFlags(flags, flagname)).ShouldNot(HaveOccurred())
 			}

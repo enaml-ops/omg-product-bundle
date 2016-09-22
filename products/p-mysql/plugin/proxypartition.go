@@ -14,7 +14,7 @@ func NewProxyPartition(plgn *Plugin) *enaml.InstanceGroup {
 		Instances:          len(plgn.ProxyIPs),
 		VMType:             plgn.VMTypeName,
 		AZs:                plgn.AZs,
-		Stemcell:           plgn.StemcellName,
+		Stemcell:           StemcellAlias,
 		PersistentDiskType: plgn.DiskTypeName,
 		Jobs: []enaml.InstanceJob{
 			newProxyJob(plgn),

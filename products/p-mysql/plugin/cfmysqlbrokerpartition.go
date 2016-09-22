@@ -15,7 +15,7 @@ func NewCfMysqlBrokerPartition(plgn *Plugin) *enaml.InstanceGroup {
 		Instances:          len(plgn.BrokerIPs),
 		VMType:             plgn.VMTypeName,
 		AZs:                plgn.AZs,
-		Stemcell:           plgn.StemcellName,
+		Stemcell:           StemcellAlias,
 		PersistentDiskType: plgn.DiskTypeName,
 		Jobs: []enaml.InstanceJob{
 			newBrokerJob(plgn),
