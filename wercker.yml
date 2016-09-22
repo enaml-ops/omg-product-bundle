@@ -73,8 +73,8 @@ crosscompile:
           GOOS=linux go build -o p-mysql-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-mysql/cmd/p-mysql/main.go
           GOOS=linux go build -o p-rabbitmq-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-rabbitmq/cmd/p-rabbitmq/main.go
           GOOS=darwin go build -o p-rabbitmq-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-rabbitmq/cmd/p-rabbitmq/main.go
-          GOOS=linux go build -o p-scs-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-scs/cmd/p-scs/main.go
-          GOOS=darwin go build -o p-scs-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-scs/cmd/p-scs/main.go
+          GOOS=linux go build -o p-spring-cloud-services-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-scs/cmd/p-scs/main.go
+          GOOS=darwin go build -o p-spring-cloud-services-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-scs/cmd/p-scs/main.go
 
     - script:
         name: add repo to artifact
