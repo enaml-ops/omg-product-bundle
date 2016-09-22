@@ -9,13 +9,12 @@ import (
 
 func NewBrokerDeRegistrar(plgn *Plugin) *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
-		Name:               "broker-deregistrar",
-		Lifecycle:          "errand",
-		Instances:          1,
-		VMType:             plgn.VMTypeName,
-		AZs:                plgn.AZs,
-		Stemcell:           plgn.StemcellName,
-		PersistentDiskType: plgn.DiskTypeName,
+		Name:      "broker-deregistrar",
+		Lifecycle: "errand",
+		Instances: 1,
+		VMType:    plgn.VMTypeName,
+		AZs:       plgn.AZs,
+		Stemcell:  plgn.StemcellName,
 		Jobs: []enaml.InstanceJob{
 			newBrokerDeRegistrarJob(plgn),
 		},

@@ -7,13 +7,12 @@ import (
 
 func NewRejoinUnsafe(plgn *Plugin) *enaml.InstanceGroup {
 	return &enaml.InstanceGroup{
-		Name:               "rejoin-unsafe",
-		Lifecycle:          "errand",
-		Instances:          1,
-		VMType:             plgn.VMTypeName,
-		AZs:                plgn.AZs,
-		Stemcell:           plgn.StemcellName,
-		PersistentDiskType: plgn.DiskTypeName,
+		Name:      "rejoin-unsafe",
+		Lifecycle: "errand",
+		Instances: 1,
+		VMType:    plgn.VMTypeName,
+		AZs:       plgn.AZs,
+		Stemcell:  plgn.StemcellName,
 		Jobs: []enaml.InstanceJob{
 			newRejoinUnsafeJob(plgn),
 		},
