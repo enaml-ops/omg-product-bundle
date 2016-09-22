@@ -52,10 +52,10 @@ func (p *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "p-spring-cloud-services",
 		Properties: map[string]interface{}{
-			"version":                      p.Version,
-			"stemcell":                     StemcellVersion,
-			"pivotal-spring-cloud-servies": fmt.Sprintf("%s / %s", "pivotal-spring-cloud-servies", ProductVersion),
-			"spring-cloud-broker-release":  fmt.Sprintf("%s / %s", SpringCloudBrokerReleaseName, SpringCloudBrokerReleaseVersion),
+			"version":                       p.Version,
+			"stemcell":                      StemcellVersion,
+			"pivotal-spring-cloud-services": fmt.Sprintf("%s / %s", "pivotal-spring-cloud-services", ProductVersion),
+			"spring-cloud-broker-release":   fmt.Sprintf("%s / %s", SpringCloudBrokerReleaseName, SpringCloudBrokerReleaseVersion),
 		},
 	}
 }
