@@ -132,7 +132,6 @@ func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) (enaml.Deployment
 	deployment.DatabaseStorageType = c.String(databaseStorageType)
 	deployment.AZs = c.StringSlice(az)
 	deployment.WorkerInstances = c.Int(workerInstances)
-	deployment.DeploymentName = c.String(deploymentName)
 	deployment.ConcourseReleaseURL = c.String(concourseReleaseURL)
 	deployment.ConcourseReleaseSHA = c.String(concourseReleaseSHA)
 	deployment.ConcourseReleaseVer = c.String(concourseReleaseVer)
