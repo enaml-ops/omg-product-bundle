@@ -1,9 +1,9 @@
 package plugin
 
 import (
+	"fmt"
 	"strings"
 
-	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/omg-product-bundle/products/dockerregistry"
@@ -11,6 +11,7 @@ import (
 	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
+	"gopkg.in/urfave/cli.v2"
 )
 
 const (
@@ -76,14 +77,15 @@ func (p *Plugin) GetMeta() product.Meta {
 	}
 }
 
-func (p *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
+func (p *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err error) {
 	if len(cloudConfig) == 0 {
-		lo.G.Debug("plugin: empty cloud config")
-		panic("cloud config cannot be empty")
+		err = fmt.Errorf("cloud config cannot be empty")
+		lo.G.Error(err.Error())
+		return nil, err
 	}
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(p.GetFlags()))
 	dm := NewDeploymentManifest(c, cloudConfig)
-	return dm.Bytes()
+	return dm.Bytes(), err
 }
 
 func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) *enaml.DeploymentManifest {

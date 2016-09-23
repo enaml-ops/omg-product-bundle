@@ -16,11 +16,25 @@ import (
 var _ = Describe("prabbitmq plugin", func() {
 
 	BeforeSuite(func() {
-		// suppress logging for tests
 		logging.SetBackend(logging.NewLogBackend(ioutil.Discard, "", 0))
 	})
 
 	Context("when generating a manifest with incomplete input", func() {
+		var (
+			p *prabbitmq.Plugin
+		)
+
+		BeforeEach(func() {
+			p = new(prabbitmq.Plugin)
+		})
+		It("then we should return error", func() {
+			_, err := p.GetProduct([]string{"foo"}, []byte{})
+			Ω(err).Should(HaveOccurred())
+		})
+	})
+
+	Context("when we are testing defaults????", func() {
+
 		var (
 			p  *prabbitmq.Plugin
 			dm *enaml.DeploymentManifest
@@ -28,10 +42,26 @@ var _ = Describe("prabbitmq plugin", func() {
 
 		BeforeEach(func() {
 			p = new(prabbitmq.Plugin)
-			manifestBytes := p.GetProduct([]string{"foo"}, []byte{})
+			manifestBytes, err := p.GetProduct([]string{"foo",
+				"--az", "asdf",
+				"--system-domain", "asdf",
+				"--network", "asdf",
+				"--rabbit-server-ip", "asdf",
+				"--rabbit-broker-ip", "asdf",
+				"--system-services-password", "asdf",
+				"--doppler-zone", "asdf",
+				"--doppler-shared-secret", "asdf",
+				"--etcd-machine-ip", "asdf",
+				"--rabbit-public-ip", "asdf",
+				"--rabbit-broker-vm-type", "asdf",
+				"--rabbit-server-vm-type", "asdf",
+				"--rabbit-haproxy-vm-type", "asdf",
+				"--syslog-address", "asdf",
+				"--nats-machine-ip", "asdf",
+			}, []byte{})
+			Ω(err).ShouldNot(HaveOccurred())
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
-
 		It("should have the correct releases", func() {
 			hasRelease := func(name, version string) bool {
 				for i := range dm.Releases {
@@ -82,10 +112,21 @@ var _ = Describe("prabbitmq plugin", func() {
 			cc, err := ioutil.ReadFile("fixtures/cloudconfig.yml")
 			Ω(err).ShouldNot(HaveOccurred())
 
-			manifestBytes := p.GetProduct([]string{"foo",
+			manifestBytes, err := p.GetProduct([]string{"foo",
 				"--infer-from-cloud",
 				"--rabbit-broker-vm-type", "large",
+				"--system-domain", "asdf",
+				"--rabbit-server-ip", "asdf",
+				"--rabbit-broker-ip", "asdf",
+				"--system-services-password", "asdf",
+				"--doppler-zone", "asdf",
+				"--doppler-shared-secret", "asdf",
+				"--etcd-machine-ip", "asdf",
+				"--rabbit-public-ip", "asdf",
+				"--syslog-address", "asdf",
+				"--nats-machine-ip", "asdf",
 			}, cc)
+			Ω(err).ShouldNot(HaveOccurred())
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
 
@@ -150,13 +191,27 @@ var _ = Describe("prabbitmq plugin", func() {
 			)
 
 			p = new(prabbitmq.Plugin)
-			manifestBytes := p.GetProduct([]string{
+			manifestBytes, err := p.GetProduct([]string{
 				"rabbitmq",
 				"--vault-domain", server.URL(),
 				"--vault-token", "asdfghjkl",
 				"--vault-hash", "secret/hash1",
 				"--vault-hash", "secret/hash2",
+				"--az", "z1",
+				"--system-domain", "asdf",
+				"--network", "asdf",
+				"--rabbit-server-ip", "asdf",
+				"--rabbit-broker-ip", "asdf",
+				"--system-services-password", "asdf",
+				"--doppler-zone", "asdf",
+				"--doppler-shared-secret", "asdf",
+				"--etcd-machine-ip", "asdf",
+				"--rabbit-public-ip", "asdf",
+				"--rabbit-broker-vm-type", "asdf",
+				"--rabbit-server-vm-type", "asdf",
+				"--rabbit-haproxy-vm-type", "asdf",
 			}, []byte{})
+			Ω(err).ShouldNot(HaveOccurred())
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
 

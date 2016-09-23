@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/enaml"
 	. "github.com/enaml-ops/omg-product-bundle/products/redis/plugin"
 	"github.com/enaml-ops/pluginlib/util"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"gopkg.in/urfave/cli.v2"
 )
 
 var _ = Describe("given redis Plugin", func() {
@@ -33,29 +33,27 @@ var _ = Describe("given redis Plugin", func() {
 		})
 
 		It("then we should fail fast and give the user guidance on what is wrong", func() {
-			Ω(func() {
-				plgn.GetProduct([]string{
-					"appname",
-					"--disk-size", controlDisk,
-					"--leader-instances", controlInstances,
-					"--network-name", controlNetName,
-					"--redis-pass", controlPass,
-					"--vm-size", controlVM,
-					"--leader-ip", controlIP,
-					"--slave-ip", controlIP,
-					"--stemcell-url", "something",
-					"--stemcell-ver", "12.3.44",
-					"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
-				}, cloudConfigBytes)
-			}).Should(Panic())
+			_, err := plgn.GetProduct([]string{
+				"appname",
+				"--disk-size", controlDisk,
+				"--leader-instances", controlInstances,
+				"--network-name", controlNetName,
+				"--redis-pass", controlPass,
+				"--vm-size", controlVM,
+				"--leader-ip", controlIP,
+				"--slave-ip", controlIP,
+				"--stemcell-url", "something",
+				"--stemcell-ver", "12.3.44",
+				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
+			}, cloudConfigBytes)
+			Ω(err).Should(HaveOccurred())
 		})
 	})
 
 	Context("when calling plugin without all required flags", func() {
 		It("then it should fail fast and give the user guidance on what is wrong", func() {
-			Ω(func() {
-				plgn.GetProduct([]string{"appname"}, []byte(``))
-			}).Should(Panic())
+			_, err := plgn.GetProduct([]string{"appname"}, []byte(``))
+			Ω(err).Should(HaveOccurred())
 		})
 	})
 
@@ -70,7 +68,7 @@ var _ = Describe("given redis Plugin", func() {
 
 		BeforeEach(func() {
 			cloudConfigBytes, _ := ioutil.ReadFile("./fixtures/sample-aws.yml")
-			dmBytes := plgn.GetProduct([]string{
+			dmBytes, err := plgn.GetProduct([]string{
 				"appname",
 				"--disk-size", controlDisk,
 				"--leader-instances", controlInstances,
@@ -81,6 +79,7 @@ var _ = Describe("given redis Plugin", func() {
 				"--slave-ip", controlIP,
 				"--stemcell-ver", "12.3.44",
 			}, cloudConfigBytes)
+			Ω(err).ShouldNot(HaveOccurred())
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})
 		It("then we should have a properly initialized deployment set", func() {

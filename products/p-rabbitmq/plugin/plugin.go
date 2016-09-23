@@ -75,7 +75,8 @@ func (p *Plugin) GetMeta() product.Meta {
 }
 
 // GetProduct generates a BOSH deployment manifest for p-rabbitmq.
-func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
+func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
+	var err error
 	flags := p.GetFlags()
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
 
@@ -97,11 +98,13 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
 	}
 
-	cfg, err := configFromContext(c)
+	var cfg *Config
+	cfg, err = configFromContext(c)
+
 	if err != nil {
 		lo.G.Error(err.Error())
+		return nil, err
 	}
-
 	dm := new(enaml.DeploymentManifest)
 	dm.SetName(cfg.DeploymentName)
 
@@ -126,7 +129,7 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 		Serial:          true,
 	}
 
-	return dm.Bytes()
+	return dm.Bytes(), err
 }
 
 func inferFromCloud(cloudConfig []byte, flags []pcli.Flag, c *cli.Context) {

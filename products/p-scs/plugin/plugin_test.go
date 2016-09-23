@@ -20,16 +20,39 @@ var _ = Describe("p-scs plugin", func() {
 
 	Context("when generating a manifest with incomplete input", func() {
 		var (
+			p   *pscs.Plugin
+			err error
+		)
+
+		BeforeEach(func() {
+			p = new(pscs.Plugin)
+			_, err = p.GetProduct([]string{"foo"}, []byte{})
+		})
+		It("should yield an error", func() {
+			Ω(err).Should(HaveOccurred())
+		})
+	})
+
+	Context("when called with valid flags", func() {
+		var (
 			p  *pscs.Plugin
 			dm *enaml.DeploymentManifest
 		)
 
 		BeforeEach(func() {
 			p = new(pscs.Plugin)
-			manifestBytes := p.GetProduct([]string{"foo"}, []byte{})
+			manifestBytes, err := p.GetProduct([]string{"foo",
+				"--vm-type", "asdf",
+				"--az", "asdf",
+				"--system-domain", "asdf",
+				"--app-domain", "asdf",
+				"--network", "asdf",
+				"--admin-password", "asdf",
+				"--uaa-admin-secret", "asdf",
+			}, []byte{})
+			Ω(err).ShouldNot(HaveOccurred())
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
-
 		It("should have the correct releases", func() {
 			hasRelease := func(name, version string) bool {
 				for i := range dm.Releases {
@@ -39,18 +62,17 @@ var _ = Describe("p-scs plugin", func() {
 				}
 				return false
 			}
-
 			Ω(hasRelease(pscs.SpringCloudBrokerReleaseName, pscs.SpringCloudBrokerReleaseVersion)).Should(BeTrue())
 		})
 
 		It("should have the correct instance groups", func() {
-			Ω(dm.GetInstanceGroupByName("register-service-broker")).ShouldNot(BeNil())
-			Ω(dm.GetInstanceGroupByName("deploy-service-broker")).ShouldNot(BeNil())
-			Ω(dm.GetInstanceGroupByName("destroy-service-broker")).ShouldNot(BeNil())
+			Ω(dm.GetInstanceGroupByName("register-service-broker")).ShouldNot(BeNil(), "we should have a register service broker group")
+			Ω(dm.GetInstanceGroupByName("deploy-service-broker")).ShouldNot(BeNil(), "we should have a deploy service broker group")
+			Ω(dm.GetInstanceGroupByName("destroy-service-broker")).ShouldNot(BeNil(), "we should have a destroy service broker group")
 		})
 
 		It("should set the update", func() {
-			Ω(dm.Update.Canaries).Should(Equal(1))
+			Ω(dm.Update.Canaries).Should(Equal(1), "we found at least 1 canary in list")
 			Ω(dm.Update.CanaryWatchTime).Should(Equal("30000-300000"))
 			Ω(dm.Update.UpdateWatchTime).Should(Equal("30000-300000"))
 			Ω(dm.Update.MaxInFlight).Should(Equal(1))
@@ -58,7 +80,7 @@ var _ = Describe("p-scs plugin", func() {
 		})
 
 		It("should configure the stemcell", func() {
-			Ω(dm.Stemcells).Should(HaveLen(1))
+			Ω(dm.Stemcells).Should(HaveLen(1), "we found at least 1 stemcell in list")
 			Ω(dm.Stemcells[0].OS).Should(Equal(pscs.StemcellName))
 			Ω(dm.Stemcells[0].Alias).Should(Equal(pscs.StemcellAlias))
 			Ω(dm.Stemcells[0].Version).Should(Equal(pscs.StemcellVersion))
@@ -76,7 +98,14 @@ var _ = Describe("p-scs plugin", func() {
 			cc, err := ioutil.ReadFile("fixtures/cloudconfig.yml")
 			Ω(err).ShouldNot(HaveOccurred())
 
-			manifestBytes := p.GetProduct([]string{"foo", "--infer-from-cloud", "--vm-type", "xlarge"}, cc)
+			manifestBytes, err := p.GetProduct([]string{"foo", "--infer-from-cloud",
+				"--vm-type", "xlarge",
+				"--system-domain", "asdf",
+				"--app-domain", "asdf",
+				"--admin-password", "asdf",
+				"--uaa-admin-secret", "asdf",
+			}, cc)
+			Ω(err).ShouldNot(HaveOccurred())
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
 

@@ -292,27 +292,29 @@ func (s *Plugin) GetMeta() product.Meta {
 }
 
 //GetProduct -
-func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
+func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err error) {
 	flgs := s.GetFlags()
 	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
 
 	if err := VaultRotate(args, flgs); err != nil {
-		lo.G.Fatalf("unable to rotate vault values: %v", err.Error())
+		lo.G.Errorf("unable to rotate vault values: %v", err.Error())
+		return nil, err
 	}
 	VaultDecorate(args, flgs)
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
 	var dm *enaml.DeploymentManifest
-	var err error
 	var cfg *config.Config
+
 	if cfg, err = config.NewConfig(c); err == nil {
 		dm, err = s.getDeploymentManifest(c, cfg)
+
 		if err != nil {
-			lo.G.Fatalf("error creating manifest: %v", err.Error())
+			lo.G.Errorf("error creating manifest: %v", err.Error())
 		}
 	} else {
-		lo.G.Fatalf("error getting config: %v", err.Error())
+		lo.G.Errorf("error getting config: %v", err.Error())
 	}
-	return dm.Bytes()
+	return dm.Bytes(), err
 }
 
 func (s *Plugin) getDeploymentManifest(c *cli.Context, config *config.Config) (*enaml.DeploymentManifest, error) {

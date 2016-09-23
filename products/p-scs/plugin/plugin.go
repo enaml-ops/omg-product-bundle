@@ -60,7 +60,8 @@ func (p *Plugin) GetMeta() product.Meta {
 	}
 }
 
-func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
+func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
+	var err error
 	flags := p.GetFlags()
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
 
@@ -79,6 +80,7 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 			err := v.UnmarshalFlags(hash, flags)
 			if err != nil {
 				lo.G.Errorf("error reading vault hash %s: %s", hash, err.Error())
+				return nil, err
 			}
 		}
 		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
@@ -87,6 +89,7 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 	cfg, err := configFromContext(c)
 	if err != nil {
 		lo.G.Error(err)
+		return nil, err
 	}
 
 	dm := new(enaml.DeploymentManifest)
@@ -105,7 +108,7 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) []byte {
 		Serial:          true,
 	}
 
-	return dm.Bytes()
+	return dm.Bytes(), err
 }
 
 func inferFromCloud(cloudConfig []byte, flags []pcli.Flag, c *cli.Context) {

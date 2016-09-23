@@ -1,9 +1,9 @@
 package concourseplugin
 
 import (
+	"fmt"
 	"strings"
 
-	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/omg-product-bundle/products/concourse"
@@ -11,6 +11,7 @@ import (
 	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
+	"gopkg.in/urfave/cli.v2"
 )
 
 type ConcoursePlugin struct {
@@ -78,9 +79,6 @@ func (s *ConcoursePlugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: stemcellAlias, Value: "trusty", Usage: "alias of stemcell"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: stemcellOS, Value: "ubuntu-trusty", Usage: "os of stemcell"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: stemcellVersion, Value: "latest", Usage: "version of stemcell"},
-
-		//pcli.Flag{FlagType: pcli.StringFlag, Name: tlsCert, Usage: "tls cert for concourse web"},
-		//pcli.Flag{FlagType: pcli.StringFlag, Name: tlsKey, Usage: "tls key for concourse web"},
 	}
 	return
 }
@@ -96,17 +94,21 @@ func (s *ConcoursePlugin) GetMeta() product.Meta {
 	}
 }
 
-func (s *ConcoursePlugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
+func (s *ConcoursePlugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err error) {
+	var dm enaml.DeploymentManifest
+
 	if len(cloudConfig) == 0 {
-		lo.G.Debug("concourseplugin: empty cloud config")
-		panic("cloud config cannot be empty")
+		err = fmt.Errorf("cloud config cannot be empty")
+		lo.G.Error(err.Error())
+
+	} else {
+		c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
+		dm, err = NewDeploymentManifest(c, cloudConfig)
 	}
-	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
-	dm := NewDeploymentManifest(c, cloudConfig)
-	return dm.Bytes()
+	return dm.Bytes(), err
 }
 
-func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) enaml.DeploymentManifest {
+func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) (enaml.DeploymentManifest, error) {
 	var deployment = concourse.NewDeployment()
 	deployment.DeploymentName = c.String(deploymentName)
 
@@ -141,22 +143,10 @@ func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) enaml.DeploymentM
 	deployment.GardenReleaseSHA = c.String(gardenReleaseSHA)
 	deployment.GardenReleaseVer = c.String(gardenReleaseVer)
 
-	/*
-		TLS causing currently causing issues, need to investigate further
-		if c.IsSet(tlsCert) && c.IsSet(tlsKey) {
-			deployment.TLSCert = c.String(tlsCert)
-			deployment.TLSKey = c.String(tlsKey)
-		} else {
-			if _, cert, key, err := utils.GenerateCert([]string{c.String(concourseIP)}); err != nil {
-				panic(err.Error())
-			} else {
-				deployment.TLSCert = cert
-				deployment.TLSKey = key
-			}
-		}*/
+	var err error
 
-	if err := deployment.Initialize(cloudConfig); err != nil {
-		panic(err.Error())
+	if err = deployment.Initialize(cloudConfig); err != nil {
+		lo.G.Error(err.Error())
 	}
-	return deployment.GetDeployment()
+	return deployment.GetDeployment(), err
 }

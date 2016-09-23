@@ -78,8 +78,7 @@ func (s *Plugin) GetMeta() product.Meta {
 	}
 }
 
-func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
-	var err error
+func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err error) {
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
 
 	s.IPs = c.StringSlice("ip")
@@ -100,12 +99,12 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)
-		lo.G.Fatal("exiting due to invalid args")
+		return nil, err
 	}
 
 	if err = s.cloudconfigValidation(enaml.NewCloudConfigManifest(cloudConfig)); err != nil {
 		lo.G.Error("invalid settings for cloud config on target bosh: ", err)
-		lo.G.Fatal("your deployment is not compatible with your cloud config, exiting")
+		return nil, err
 	}
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)
@@ -122,7 +121,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 		Serial:          false,
 		Canaries:        1,
 	}
-	return dm.Bytes()
+	return dm.Bytes(), err
 }
 
 func (s *Plugin) NewVaultInstanceGroup() (ig *enaml.InstanceGroup) {

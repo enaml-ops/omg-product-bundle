@@ -144,7 +144,7 @@ func (s *Plugin) GetMeta() product.Meta {
 	}
 }
 
-func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
+func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err error) {
 	flgs := s.GetFlags()
 	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
@@ -162,6 +162,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 		if hash != "" {
 			if err := v.UnmarshalFlags(hash, flgs); err != nil {
 				lo.G.Error("error unmarshalling vault hash", hash, err)
+				return nil, err
 			}
 		}
 
@@ -170,11 +171,13 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 			if c.Bool("vault-rotate") {
 				if err := vaultRotateMySQL(hash, v); err != nil {
 					lo.G.Error("error rotating mysql secrets:", err)
+					return nil, err
 				}
 			}
 
 			if err := v.UnmarshalFlags(hash, flgs); err != nil {
 				lo.G.Error("error unmarshalling vault hash", hash, err)
+				return nil, err
 			}
 		}
 
@@ -219,15 +222,14 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 	s.ServiceSecret = c.String("service-secret")
 	s.CFAdminPassword = c.String("admin-password")
 
-	var err error
 	if err = s.flagValidation(); err != nil {
 		lo.G.Error("invalid arguments: ", err)
-		lo.G.Fatal("exiting due to invalid args")
+		return nil, err
 	}
 
 	if err = s.cloudconfigValidation(enaml.NewCloudConfigManifest(cloudConfig)); err != nil {
 		lo.G.Error("invalid settings for cloud config on target bosh: ", err)
-		lo.G.Fatal("your deployment is not compatible with your cloud config, exiting")
+		return nil, err
 	}
 
 	lo.G.Debug("context", c)
@@ -255,7 +257,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 		Serial:          false,
 		Canaries:        1,
 	}
-	return dm.Bytes()
+	return dm.Bytes(), err
 }
 
 func (s *Plugin) cloudconfigValidation(cloudConfig *enaml.CloudConfigManifest) (err error) {

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/enaml"
 	. "github.com/enaml-ops/omg-product-bundle/products/vault/plugin"
 	"github.com/enaml-ops/pluginlib/util"
@@ -12,6 +11,7 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/xchapter7x/lo"
 	"github.com/xchapter7x/lo/lofakes"
+	"gopkg.in/urfave/cli.v2"
 )
 
 var _ = Describe("given vault Plugin", func() {
@@ -42,7 +42,7 @@ var _ = Describe("given vault Plugin", func() {
 		})
 
 		It("then we should fail fast and give the user guidance on what is wrong", func() {
-			plgn.GetProduct([]string{
+			_, err := plgn.GetProduct([]string{
 				"appname",
 				"--disk-type", controlDisk,
 				"--network", controlNetName,
@@ -53,7 +53,7 @@ var _ = Describe("given vault Plugin", func() {
 				"--stemcell-ver", "12.3.44",
 				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 			}, cloudConfigBytes)
-			Ω(logfake.FatalCallCount()).Should(Equal(1))
+			Ω(err).Should(HaveOccurred())
 		})
 	})
 
@@ -73,8 +73,8 @@ var _ = Describe("given vault Plugin", func() {
 		})
 
 		It("then it should fail fast and give the user guidance on what is wrong", func() {
-			plgn.GetProduct([]string{"appname"}, []byte(``))
-			Ω(logfake.FatalCallCount()).Should(BeNumerically(">=", 1))
+			_, err := plgn.GetProduct([]string{"appname"}, []byte(``))
+			Ω(err).Should(HaveOccurred())
 		})
 	})
 
@@ -87,7 +87,7 @@ var _ = Describe("given vault Plugin", func() {
 
 		BeforeEach(func() {
 			cloudConfigBytes, _ := ioutil.ReadFile("./fixtures/sample-aws.yml")
-			dmBytes := plgn.GetProduct([]string{
+			dmBytes, err := plgn.GetProduct([]string{
 				"appname",
 				"--network", controlNetName,
 				"--vm-type", controlVM,
@@ -96,6 +96,7 @@ var _ = Describe("given vault Plugin", func() {
 				"--az", "z1",
 				"--stemcell-ver", "12.3.44",
 			}, cloudConfigBytes)
+			Ω(err).ShouldNot(HaveOccurred())
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})
 		It("then we should have a properly initialized deployment set", func() {
@@ -115,7 +116,7 @@ var _ = Describe("given vault Plugin", func() {
 
 		BeforeEach(func() {
 			cloudConfigBytes, _ := ioutil.ReadFile("./fixtures/sample-aws.yml")
-			dmBytes := plgn.GetProduct([]string{
+			dmBytes, err := plgn.GetProduct([]string{
 				"appname",
 				"--network", controlNetName,
 				"--vm-type", controlVM,
@@ -127,6 +128,7 @@ var _ = Describe("given vault Plugin", func() {
 				"--stemcell-ver", "12.3.44",
 				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 			}, cloudConfigBytes)
+			Ω(err).ShouldNot(HaveOccurred())
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})
 		It("then we should have a properly configured stemcell definition in our deployment (os & alias from flag value)", func() {

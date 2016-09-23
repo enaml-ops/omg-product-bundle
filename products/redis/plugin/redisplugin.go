@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	"gopkg.in/urfave/cli.v2"
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
+	"gopkg.in/urfave/cli.v2"
 )
 
 const (
@@ -60,17 +60,17 @@ func (s *Plugin) GetMeta() product.Meta {
 	}
 }
 
-func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
+func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err error) {
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
 
 	if err := s.flagValidation(c); err != nil {
 		lo.G.Error("invalid arguments: ", err)
-		lo.G.Panic("exiting due to invalid args")
+		return nil, err
 	}
 
 	if err := s.cloudconfigValidation(c, enaml.NewCloudConfigManifest(cloudConfig)); err != nil {
 		lo.G.Error("invalid settings for cloud config on target bosh: ", err)
-		lo.G.Panic("your deployment is not compatible with your cloud config, exiting")
+		return nil, err
 	}
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)
@@ -105,7 +105,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte) {
 			bkt.JobType,
 		))
 	}
-	return dm.Bytes()
+	return dm.Bytes(), err
 }
 
 func (s *Plugin) cloudconfigValidation(c *cli.Context, cloudConfig *enaml.CloudConfigManifest) (err error) {
