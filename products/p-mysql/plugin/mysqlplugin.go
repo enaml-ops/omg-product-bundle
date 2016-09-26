@@ -5,10 +5,9 @@ import (
 	"fmt"
 
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/pluginlib/pcli"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/enaml-ops/pluginlib/product"
-	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 )
 
@@ -346,20 +345,20 @@ func ertVaultDecorate(flags []pcli.Flag, hash string, v *pluginutil.VaultUnmarsh
 
 func vaultRotateMySQL(hash string, v pluginutil.VaultRotater) error {
 	secrets := map[string]string{
-		"mysql-admin-password":           utils.NewPassword(16),
-		"seeded-db-password":             utils.NewPassword(16),
-		"galera-healthcheck-username":    utils.NewPassword(16),
-		"galera-healthcheck-password":    utils.NewPassword(16),
-		"galera-healthcheck-db-password": utils.NewPassword(16),
-		"cluster-health-password":        utils.NewPassword(16),
-		"backup-endpoint-user":           utils.NewPassword(16),
-		"backup-endpoint-password":       utils.NewPassword(16),
-		"broker-quota-enforcer-password": utils.NewPassword(16),
-		"proxy-api-password":             utils.NewPassword(16),
-		"broker-auth-username":           utils.NewPassword(16),
-		"broker-auth-password":           utils.NewPassword(16),
-		"broker-cookie-secret":           utils.NewPassword(16),
-		"service-secret":                 utils.NewPassword(16),
+		"mysql-admin-password":           pluginutil.NewPassword(16),
+		"seeded-db-password":             pluginutil.NewPassword(16),
+		"galera-healthcheck-username":    pluginutil.NewPassword(16),
+		"galera-healthcheck-password":    pluginutil.NewPassword(16),
+		"galera-healthcheck-db-password": pluginutil.NewPassword(16),
+		"cluster-health-password":        pluginutil.NewPassword(16),
+		"backup-endpoint-user":           pluginutil.NewPassword(16),
+		"backup-endpoint-password":       pluginutil.NewPassword(16),
+		"broker-quota-enforcer-password": pluginutil.NewPassword(16),
+		"proxy-api-password":             pluginutil.NewPassword(16),
+		"broker-auth-username":           pluginutil.NewPassword(16),
+		"broker-auth-password":           pluginutil.NewPassword(16),
+		"broker-cookie-secret":           pluginutil.NewPassword(16),
+		"service-secret":                 pluginutil.NewPassword(16),
 	}
 
 	b, err := json.Marshal(secrets)

@@ -7,7 +7,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/enaml-ops/omg-cli/utils"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 )
 
 var (
@@ -27,7 +27,7 @@ func main() {
 	}
 
 	hosts := strings.Split(*host, ",")
-	caCert, cert, key, err := utils.GenerateCert(hosts)
+	caCert, cert, key, err := pluginutil.GenerateCert(hosts)
 	if err != nil {
 		log.Fatal("error generating cert:", err)
 	}

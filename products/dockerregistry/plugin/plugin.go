@@ -5,11 +5,10 @@ import (
 	"strings"
 
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/omg-product-bundle/products/dockerregistry"
 	"github.com/enaml-ops/pluginlib/pcli"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/enaml-ops/pluginlib/product"
-	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 	"gopkg.in/urfave/cli.v2"
 )
@@ -107,11 +106,11 @@ func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) *enaml.Deployment
 		NFSServerVMType:          c.String(nfsVMType),
 		NFSDiskType:              c.String(nfsDiskType),
 		NFSIP:                    c.String(nfsIP),
-		Secret:                   utils.NewPassword(20),
+		Secret:                   pluginutil.NewPassword(20),
 	}
 
 	certIPs := append(deployment.ProxyIPs, deployment.PublicIP...)
-	if _, cert, key, err := utils.GenerateCert(certIPs); err != nil {
+	if _, cert, key, err := pluginutil.GenerateCert(certIPs); err != nil {
 		lo.G.Error(err.Error())
 		panic(err.Error())
 	} else {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-cli/utils"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	das "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/deploy-autoscaling"
 	db "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/destroy-broker"
 	rb "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/register-broker"
@@ -57,7 +57,7 @@ func (a deployAutoscaling) ToInstanceGroup() *enaml.InstanceGroup {
 						Database: &das.Database{
 							Url: fmt.Sprintf("mysql://%s:%s@%s:3306/autoscale", a.AutoscaleDBUser, a.AutoscaleDBPassword, a.MySQLProxyHost()),
 						},
-						EncryptionKey:     utils.NewPassword(16),
+						EncryptionKey:     pluginutil.NewPassword(16),
 						EnableDiego:       true,
 						NotificationsHost: fmt.Sprintf("https://notifications.%s", a.SystemDomain),
 						Organization:      "system",

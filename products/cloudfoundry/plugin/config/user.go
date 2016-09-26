@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/enaml-ops/omg-cli/utils"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	"gopkg.in/urfave/cli.v2"
 )
 
@@ -33,7 +33,7 @@ func NewUser(c *cli.Context) User {
 		ConsoleDBUserName:     c.String("db-console-username"),
 		RouterUser:            c.String("router-user"),
 		CCInternalAPIUser:     c.String("cc-internal-api-user"),
-		AutoscaleBrokerUser:   utils.NewPassword(16),
+		AutoscaleBrokerUser:   pluginutil.NewPassword(16),
 		NotificationsDBUser:   c.String("db-notifications-username"),
 	}
 }

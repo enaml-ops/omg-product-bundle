@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/auctioneer"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/cc_uploader"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/converger"
@@ -16,6 +15,7 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/stager"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/enaml-gen/tps"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/xchapter7x/lo"
 )
 
@@ -191,7 +191,7 @@ func (d *diegoBrain) newRouteEmitter() *enaml.InstanceJob {
 }
 
 func (d *diegoBrain) newSSHProxy() *enaml.InstanceJob {
-	_, privateKey, err := utils.GenerateKeys()
+	_, privateKey, err := pluginutil.GenerateKeys()
 	if err != nil {
 		lo.G.Error("couldn't generate private key for SSH proxy")
 		return nil

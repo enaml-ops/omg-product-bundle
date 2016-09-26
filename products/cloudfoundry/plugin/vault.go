@@ -18,9 +18,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/pluginlib/pcli"
-	"github.com/enaml-ops/pluginlib/util"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/xchapter7x/lo"
 )
 
@@ -161,12 +160,12 @@ func getKeyCertObject(systemDomain string, appDomain []string) ([]byte, error) {
 	}
 
 	certVault := make(map[string]string)
-	caKey, caCert, err := utils.Initialize()
+	caKey, caCert, err := pluginutil.Initialize()
 	if err != nil {
 		return nil, err
 	}
 	for _, fn := range fieldnames {
-		ca, cert, key, err := utils.GenerateCertWithCA([]string{fn.host, "*." + fn.host}, caCert, caKey)
+		ca, cert, key, err := pluginutil.GenerateCertWithCA([]string{fn.host, "*." + fn.host}, caCert, caKey)
 		if err != nil {
 			lo.G.Errorf("couldn't create cert for flag %s", fn.flag)
 			return nil, err
@@ -185,14 +184,14 @@ func getKeyCertObject(systemDomain string, appDomain []string) ([]byte, error) {
 	for _, ad := range appDomain {
 		hosts = append(hosts, "*."+ad)
 	}
-	_, cert, key, err := utils.GenerateCertWithCA(hosts, caCert, caKey)
+	_, cert, key, err := pluginutil.GenerateCertWithCA(hosts, caCert, caKey)
 	if err != nil {
 		lo.G.Error("coudln't generate haproxy cert")
 		return nil, err
 	}
 	certVault["haproxy-sslpem"] = cert + key
 
-	jwtPublicKey, jwtPrivateKey, err := utils.GenerateKeys()
+	jwtPublicKey, jwtPrivateKey, err := pluginutil.GenerateKeys()
 	if err != nil {
 		lo.G.Error("couldn't generate UAA JWT keys")
 		return nil, err

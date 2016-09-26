@@ -12,7 +12,7 @@ import (
 	. "github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/pluginfakes"
-	"github.com/enaml-ops/pluginlib/util"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 )
 
 var _ = Describe("Vault helpers", func() {

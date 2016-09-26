@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/enaml-ops/pluginlib/util"
+	clictx "github.com/enaml-ops/omg-product-bundle/cli"
 	"gopkg.in/urfave/cli.v2"
 )
 
@@ -18,107 +18,107 @@ func RequiredCertFlags() []string {
 func NewCerts(c *cli.Context) (*Certs, error) {
 	certs := &Certs{}
 
-	agentCert, err := pluginutil.LoadResourceFromContext(c, "consul-agent-cert")
+	agentCert, err := clictx.LoadResourceFromContext(c, "consul-agent-cert")
 	if err != nil {
 		return nil, err
 	}
-	agentKey, err := pluginutil.LoadResourceFromContext(c, "consul-agent-key")
+	agentKey, err := clictx.LoadResourceFromContext(c, "consul-agent-key")
 	if err != nil {
 		return nil, err
 	}
-	serverCert, err := pluginutil.LoadResourceFromContext(c, "consul-server-cert")
+	serverCert, err := clictx.LoadResourceFromContext(c, "consul-server-cert")
 	if err != nil {
 		return nil, err
 	}
-	serverKey, err := pluginutil.LoadResourceFromContext(c, "consul-server-key")
+	serverKey, err := clictx.LoadResourceFromContext(c, "consul-server-key")
 	if err != nil {
 		return nil, err
 	}
-	bbsCaCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-ca-cert")
-	if err != nil {
-		return nil, err
-	}
-
-	bbsClientCert, err := pluginutil.LoadResourceFromContext(c, "bbs-client-cert")
+	bbsCaCert, err := clictx.LoadResourceFromContext(c, "bbs-server-ca-cert")
 	if err != nil {
 		return nil, err
 	}
 
-	bbsClientKey, err := pluginutil.LoadResourceFromContext(c, "bbs-client-key")
+	bbsClientCert, err := clictx.LoadResourceFromContext(c, "bbs-client-cert")
 	if err != nil {
 		return nil, err
 	}
 
-	bbsServerCert, err := pluginutil.LoadResourceFromContext(c, "bbs-server-cert")
+	bbsClientKey, err := clictx.LoadResourceFromContext(c, "bbs-client-key")
 	if err != nil {
 		return nil, err
 	}
 
-	bbsServerKey, err := pluginutil.LoadResourceFromContext(c, "bbs-server-key")
+	bbsServerCert, err := clictx.LoadResourceFromContext(c, "bbs-server-cert")
 	if err != nil {
 		return nil, err
 	}
 
-	etcdServerCert, err := pluginutil.LoadResourceFromContext(c, "etcd-server-cert")
+	bbsServerKey, err := clictx.LoadResourceFromContext(c, "bbs-server-key")
 	if err != nil {
 		return nil, err
 	}
 
-	etcdServerKey, err := pluginutil.LoadResourceFromContext(c, "etcd-server-key")
+	etcdServerCert, err := clictx.LoadResourceFromContext(c, "etcd-server-cert")
 	if err != nil {
 		return nil, err
 	}
 
-	etcdClientCert, err := pluginutil.LoadResourceFromContext(c, "etcd-client-cert")
+	etcdServerKey, err := clictx.LoadResourceFromContext(c, "etcd-server-key")
 	if err != nil {
 		return nil, err
 	}
 
-	etcdClientKey, err := pluginutil.LoadResourceFromContext(c, "etcd-client-key")
+	etcdClientCert, err := clictx.LoadResourceFromContext(c, "etcd-client-cert")
 	if err != nil {
 		return nil, err
 	}
 
-	etcdPeerCert, err := pluginutil.LoadResourceFromContext(c, "etcd-peer-cert")
+	etcdClientKey, err := clictx.LoadResourceFromContext(c, "etcd-client-key")
 	if err != nil {
 		return nil, err
 	}
 
-	etcdPeerKey, err := pluginutil.LoadResourceFromContext(c, "etcd-peer-key")
+	etcdPeerCert, err := clictx.LoadResourceFromContext(c, "etcd-peer-cert")
 	if err != nil {
 		return nil, err
 	}
 
-	sslpem, err := pluginutil.LoadResourceFromContext(c, "haproxy-sslpem")
+	etcdPeerKey, err := clictx.LoadResourceFromContext(c, "etcd-peer-key")
 	if err != nil {
 		return nil, err
 	}
 
-	routerCert, err := pluginutil.LoadResourceFromContext(c, "router-ssl-cert")
-	if err != nil {
-		return nil, err
-	}
-	routerKey, err := pluginutil.LoadResourceFromContext(c, "router-ssl-key")
+	sslpem, err := clictx.LoadResourceFromContext(c, "haproxy-sslpem")
 	if err != nil {
 		return nil, err
 	}
 
-	samlKey, err := pluginutil.LoadResourceFromContext(c, "uaa-saml-service-provider-key")
+	routerCert, err := clictx.LoadResourceFromContext(c, "router-ssl-cert")
+	if err != nil {
+		return nil, err
+	}
+	routerKey, err := clictx.LoadResourceFromContext(c, "router-ssl-key")
 	if err != nil {
 		return nil, err
 	}
 
-	samlCert, err := pluginutil.LoadResourceFromContext(c, "uaa-saml-service-provider-cert")
+	samlKey, err := clictx.LoadResourceFromContext(c, "uaa-saml-service-provider-key")
 	if err != nil {
 		return nil, err
 	}
 
-	jwtSigningKey, err := pluginutil.LoadResourceFromContext(c, "uaa-jwt-signing-key")
+	samlCert, err := clictx.LoadResourceFromContext(c, "uaa-saml-service-provider-cert")
 	if err != nil {
 		return nil, err
 	}
 
-	jwtVerificationKey, err := pluginutil.LoadResourceFromContext(c, "uaa-jwt-verification-key")
+	jwtSigningKey, err := clictx.LoadResourceFromContext(c, "uaa-jwt-signing-key")
+	if err != nil {
+		return nil, err
+	}
+
+	jwtVerificationKey, err := clictx.LoadResourceFromContext(c, "uaa-jwt-verification-key")
 	if err != nil {
 		return nil, err
 	}

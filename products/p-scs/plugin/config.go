@@ -3,7 +3,7 @@ package pscs
 import (
 	"fmt"
 
-	"github.com/enaml-ops/omg-cli/utils"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 
 	cli "gopkg.in/urfave/cli.v2"
 )
@@ -85,6 +85,6 @@ func configFromContext(c *cli.Context) (*Config, error) {
 
 func makePassword(s *string) {
 	if *s == generatePassword {
-		*s = utils.NewPassword(16)
+		*s = pluginutil.NewPassword(16)
 	}
 }

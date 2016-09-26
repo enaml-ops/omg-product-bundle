@@ -1,5 +1,5 @@
-hash: 3f998e76b8907473e0f2f49ffb825db9740c0121102614548ae2fe0d96b91901
-updated: 2016-09-22T23:54:33.193148-04:00
+hash: e613fc3561b09b61f5ab22a32b53dfb9d63b45f250e91f7aeded763f1b2007c0
+updated: 2016-09-26T11:21:08.972663449-06:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -13,22 +13,22 @@ imports:
 - name: github.com/enaml-ops/enaml
   version: b232608251205ea0fc1e039631214a64954f7cb1
   subpackages:
-  - enamlbosh
   - cloudproperties/aws
   - cloudproperties/azure
+  - enamlbosh
 - name: github.com/enaml-ops/omg-cli
-  version: 0b76838767d376cdf6ea69315d083a701066f3a8
+  version: 437173c84d1b9372744f1f7f7ab65fbdf1e57831
   subpackages:
-  - utils
   - bosh
+  - utils
 - name: github.com/enaml-ops/pluginlib
-  version: 2d571002ce62d4347cf2d57345e5077f7a860c08
+  version: 71083d2749838a653c1666f6dd137483faad80a4
   subpackages:
-  - product
-  - pcli
-  - util
-  - registry
   - cloudconfig
+  - pcli
+  - pluginutil
+  - product
+  - registry
 - name: github.com/golang/protobuf
   version: 1f49d83d9aa00e6ce4fc8258c71cc7786aec968a
   subpackages:
@@ -41,8 +41,36 @@ imports:
   version: 2788f0dbd16903de03cb8186e5c7d97b69ad387b
 - name: github.com/onsi/ginkgo
   version: 46c87bb63f2d8d62b3076873b7a84da124da72ce
+  subpackages:
+  - config
+  - internal/codelocation
+  - internal/containernode
+  - internal/failer
+  - internal/leafnodes
+  - internal/remote
+  - internal/spec
+  - internal/specrunner
+  - internal/suite
+  - internal/testingtproxy
+  - internal/writer
+  - reporters
+  - reporters/stenographer
+  - types
 - name: github.com/onsi/gomega
   version: d59fa0ac68bb5dd932ee8d24eed631cdd519efc3
+  subpackages:
+  - format
+  - ghttp
+  - internal/assertion
+  - internal/asyncassertion
+  - internal/oraclematcher
+  - internal/testingtsupport
+  - matchers
+  - matchers/support/goraph/bipartitegraph
+  - matchers/support/goraph/edge
+  - matchers/support/goraph/node
+  - matchers/support/goraph/util
+  - types
 - name: github.com/op/go-logging
   version: 970db520ece77730c7e4724c61121037378659d9
 - name: github.com/pivotal-golang/clock
@@ -61,8 +89,10 @@ imports:
   - pkix
 - name: github.com/xchapter7x/lo
   version: e33b245fc7a8186582208abc2458c2691bff681c
+  subpackages:
+  - lofakes
 - name: golang.org/x/net
-  version: 6d3beaea10370160dea67f5c9327ed791afd5389
+  version: f09c4662a0bd6bd8943ac7b4931e185df9471da4
   subpackages:
   - context
 - name: golang.org/x/oauth2
@@ -72,15 +102,19 @@ imports:
 - name: google.golang.org/appengine
   version: 45688856612892bdabe348fff413e5075ac72f46
   subpackages:
-  - urlfetch
   - internal
-  - internal/urlfetch
   - internal/base
   - internal/datastore
   - internal/log
   - internal/remote_api
+  - internal/urlfetch
+  - urlfetch
 - name: gopkg.in/urfave/cli.v2
   version: c72728f42438425ffcd487986936357e17ebba3f
 - name: gopkg.in/yaml.v2
   version: 31c299268d302dd0aa9a0dcf765a3d58971ac83f
-devImports: []
+testImports:
+- name: golang.org/x/sys
+  version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
+  subpackages:
+  - unix

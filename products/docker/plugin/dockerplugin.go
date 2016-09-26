@@ -11,8 +11,8 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/docker/enaml-gen/containers"
 	"github.com/enaml-ops/omg-product-bundle/products/docker/enaml-gen/docker"
 	"github.com/enaml-ops/pluginlib/pcli"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/enaml-ops/pluginlib/product"
-	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 )
 

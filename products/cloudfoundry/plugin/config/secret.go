@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/enaml-ops/omg-cli/utils"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	"gopkg.in/urfave/cli.v2"
 )
 
@@ -93,7 +93,7 @@ func NewSecret(c *cli.Context) Secret {
 		StagingUploadPassword:                     c.String("cc-staging-upload-password"),
 		AppUsageDBPassword:                        c.String("db-app_usage-password"),
 		AppsManagerSecretToken:                    c.String("apps-manager-secret-token"),
-		AutoscaleBrokerPassword:                   utils.NewPassword(16),
+		AutoscaleBrokerPassword:                   pluginutil.NewPassword(16),
 		AutoscaleDBPassword:                       c.String("db-autoscale-password"),
 	}
 }

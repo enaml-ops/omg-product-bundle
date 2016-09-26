@@ -7,7 +7,7 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/docker/enaml-gen/docker"
 	. "github.com/enaml-ops/omg-product-bundle/products/docker/plugin"
-	"github.com/enaml-ops/pluginlib/util"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/xchapter7x/lo"

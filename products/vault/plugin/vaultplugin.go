@@ -9,7 +9,7 @@ import (
 	vaultlib "github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/vault"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/product"
-	"github.com/enaml-ops/pluginlib/util"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/xchapter7x/lo"
 )
 

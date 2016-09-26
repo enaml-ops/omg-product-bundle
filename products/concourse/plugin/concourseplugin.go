@@ -5,11 +5,10 @@ import (
 	"strings"
 
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-cli/utils"
 	"github.com/enaml-ops/omg-product-bundle/products/concourse"
 	"github.com/enaml-ops/pluginlib/pcli"
+	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/enaml-ops/pluginlib/product"
-	"github.com/enaml-ops/pluginlib/util"
 	"github.com/xchapter7x/lo"
 	"gopkg.in/urfave/cli.v2"
 )
@@ -115,12 +114,12 @@ func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) (enaml.Deployment
 	if c.IsSet(postgresqlDbPwd) {
 		deployment.PostgresPassword = c.String(postgresqlDbPwd)
 	} else {
-		deployment.PostgresPassword = utils.NewPassword(20)
+		deployment.PostgresPassword = pluginutil.NewPassword(20)
 	}
 	if c.IsSet(concoursePassword) {
 		deployment.ConcoursePassword = c.String(concoursePassword)
 	} else {
-		deployment.ConcoursePassword = utils.NewPassword(20)
+		deployment.ConcoursePassword = pluginutil.NewPassword(20)
 	}
 	deployment.ConcourseUserName = c.String(concourseUsername)
 	deployment.ConcourseURL = c.String(externalURL)
