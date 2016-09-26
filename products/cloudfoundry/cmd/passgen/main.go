@@ -2,20 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"math/rand"
-	"time"
-)
+	"os"
 
-func RandomString(strlen int) string {
-	rand.Seed(time.Now().UTC().UnixNano())
-	const chars = "abcdefghipqrstuvwxyz0123456789"
-	result := make([]byte, strlen)
-	for i := 0; i < strlen; i++ {
-		result[i] = chars[rand.Intn(len(chars))]
-	}
-	return string(result)
-}
+	"github.com/enaml-ops/pluginlib/pluginutil"
+)
 
 const passLength = 20
 
@@ -66,11 +56,10 @@ func main() {
 		"uaa-jwt-verification-key",
 		"uaa-saml-service-provider-key",
 	}
-	var passVault map[string]string = make(map[string]string)
 
+	passVault := make(map[string]string)
 	for _, fn := range fieldnames {
-		passVault[fn] = RandomString(passLength)
+		passVault[fn] = pluginutil.NewPassword(passLength)
 	}
-	b, _ := json.Marshal(passVault)
-	fmt.Println(string(b))
+	json.NewEncoder(os.Stdout).Encode(passVault)
 }

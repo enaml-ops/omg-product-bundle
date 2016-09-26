@@ -12,7 +12,6 @@ import (
 	"encoding/pem"
 	"fmt"
 	"math/big"
-	mrand "math/rand"
 	"net"
 	"os"
 	"strings"
@@ -64,16 +63,6 @@ func RotateCertHash(vault VaultRotater, hash, systemDomain string, appsDomain []
 		lo.G.Errorf("error updating hash: %v", err.Error())
 	}
 	return err
-}
-
-func randomString(strlen int) string {
-	mrand.Seed(time.Now().UTC().UnixNano())
-	const chars = "abcdefghipqrstuvwxyz0123456789"
-	result := make([]byte, strlen)
-	for i := 0; i < strlen; i++ {
-		result[i] = chars[mrand.Intn(len(chars))]
-	}
-	return string(result)
 }
 
 const passLength = 20
@@ -129,10 +118,10 @@ func getPasswordObject() []byte {
 		"host-key-fingerprint",
 		"apps-manager-secret-token",
 	}
-	var passVault map[string]string = make(map[string]string)
 
+	passVault := make(map[string]string)
 	for _, fn := range fieldnames {
-		passVault[fn] = randomString(passLength)
+		passVault[fn] = pluginutil.NewPassword(passLength)
 	}
 	b, _ := json.Marshal(passVault)
 	return b
