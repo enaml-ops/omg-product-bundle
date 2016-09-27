@@ -1,14 +1,15 @@
 package pscs
 
 import (
+	"encoding/json"
 	"fmt"
 
 	cli "gopkg.in/urfave/cli.v2"
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/pluginlib/pcli"
-	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/pluginutil"
+	"github.com/enaml-ops/pluginlib/product"
 	"github.com/xchapter7x/lo"
 )
 
@@ -44,7 +45,8 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 
 		pcli.CreateStringFlag("vault-domain", "the location of your vault server (ie. http://10.0.0.1:8200)"),
 		pcli.CreateStringFlag("vault-token", "the token to make connections to your vault"),
-		pcli.CreateStringSliceFlag("vault-hash", "a list of vault hashes to pull values from"),
+		pcli.CreateStringFlag("vault-hash-secret", "the hash to read/write SCS secrets to"),
+		pcli.CreateStringSliceFlag("vault-hash", "a list of vault hashes to pull values from (read only)"),
 	}
 }
 
@@ -60,6 +62,17 @@ func (p *Plugin) GetMeta() product.Meta {
 	}
 }
 
+// flags that go in the secrets hash
+var secrets = map[string]struct{}{
+	"broker-username":         {},
+	"broker-password":         {},
+	"worker-client-secret":    {},
+	"worker-password":         {},
+	"instances-password":      {},
+	"broker-dashboard-secret": {},
+	"encryption-key":          {},
+}
+
 func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 	var err error
 	flags := p.GetFlags()
@@ -70,19 +83,30 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
 	}
 
+	writeToVault := false
+	var v *pluginutil.VaultUnmarshal
+
 	domain := c.String("vault-domain")
 	tok := c.String("vault-token")
 	hashes := c.StringSlice("vault-hash")
+	secretHash := c.String("vault-hash-secret")
+	if secretHash != "" {
+		hashes = append(hashes, secretHash)
+	}
 	if domain != "" && tok != "" && len(hashes) > 0 {
 		lo.G.Debug("connecting to vault at", domain)
-		v := pluginutil.NewVaultUnmarshal(domain, tok)
+		v = pluginutil.NewVaultUnmarshal(domain, tok)
 		for _, hash := range hashes {
-			err := v.UnmarshalFlags(hash, flags)
+			err = v.UnmarshalFlags(hash, flags)
 			if err != nil {
 				lo.G.Errorf("error reading vault hash %s: %s", hash, err.Error())
 				return nil, err
 			}
 		}
+		// if we aren't able to get values for all password flags, then we'll have to generate
+		// them...and if we generate them we should write them back to vault
+		writeToVault = shouldWriteBackToVault(flags)
+
 		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
 	}
 
@@ -90,6 +114,14 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 	if err != nil {
 		lo.G.Error(err)
 		return nil, err
+	}
+
+	// at thish point we'll populated flags with generated passwords
+	// and may need to write them back
+	if writeToVault && v != nil {
+		if err = writeSecretsToVault(v, secretHash, cfg); err != nil {
+			return nil, err
+		}
 	}
 
 	dm := new(enaml.DeploymentManifest)
@@ -134,4 +166,55 @@ func inferFromCloud(cloudConfig []byte, flags []pcli.Flag, c *cli.Context) {
 			}
 		}
 	}
+}
+
+// storeSecrets writes generated secrets back to vault
+func writeSecretsToVault(v *pluginutil.VaultUnmarshal, hash string, cfg *Config) error {
+	// this is a bit of a hack as the current VaultUnmarshal type
+	// doesn't expose direct access to the vault values...
+	// this will change when credential stores are broken out for v1
+
+	type secretHash struct {
+		BrokerUsername        string `json:"broker-username"`
+		BrokerPassword        string `json:"broker-password"`
+		WorkerClientSecret    string `json:"worker-client-secret"`
+		WorkerPassword        string `json:"worker-password"`
+		InstancesPassword     string `json:"instances-password"`
+		BrokerDashboardSecret string `json:"broker-dashboard-secret"`
+		EncryptionKey         string `json:"encryption-key"`
+	}
+
+	sh := secretHash{
+		BrokerUsername:        cfg.BrokerUsername,
+		BrokerPassword:        cfg.BrokerPassword,
+		WorkerClientSecret:    cfg.WorkerClientSecret,
+		WorkerPassword:        cfg.WorkerPassword,
+		InstancesPassword:     cfg.InstancesPassword,
+		BrokerDashboardSecret: cfg.BrokerDashboardSecret,
+		EncryptionKey:         cfg.EncryptionKey,
+	}
+
+	b, err := json.Marshal(sh)
+	if err != nil {
+		return err
+	}
+	lo.G.Debug("writing secrets back to vault")
+	lo.G.Debugf("%#v\n", sh)
+
+	// note: RotateSecrets simply stores the provided []byte to the specified hash
+	return v.RotateSecrets(hash, b)
+}
+
+func shouldWriteBackToVault(flags []pcli.Flag) bool {
+	// for each flag in the secrets hash
+	for i := range flags {
+		// if the flag is not populated and needs to be generated
+		// then we have to generate and write back to vault
+		if _, ok := secrets[flags[i].Name]; ok {
+			if flags[i].Value == generatePassword {
+				return true
+			}
+		}
+	}
+	return false
 }
