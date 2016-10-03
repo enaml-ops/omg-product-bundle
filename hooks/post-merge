@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+changed="$(git diff-tree -r --name-only --no-commit-id HEAD@{1} HEAD)"
+echo "$changed" | grep --quiet -E "glide.yaml|glide.lock"
+
+if [ $? -eq 0 ]; then
+  rm -rf vendor
+  glide install
+fi
