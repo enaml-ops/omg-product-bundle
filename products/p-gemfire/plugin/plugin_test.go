@@ -14,20 +14,6 @@ var _ = Describe("pgemfire plugin", func() {
 			gPlugin = &Plugin{Version: "0.0"}
 		})
 
-		XContext("and a a rest port is NOT provided", func() {
-			It("should set the rest port to 8080 if no value is given", func() {
-				_, err := gPlugin.GetProduct([]string{"pgemfire-command"}, []byte{})
-				Expect(err).ShouldNot(HaveOccurred())
-			})
-		})
-
-		XContext("and a rest port IS provided", func() {
-			It("should overwrite the default rest port value if a value is provided", func() {
-				_, err := gPlugin.GetProduct([]string{"pgemfire-command"}, []byte{})
-				Expect(err).ShouldNot(HaveOccurred())
-			})
-		})
-
 		It("should contain a server and locator instance group", func() {
 			manifestBytes, err := gPlugin.GetProduct([]string{
 				"pgemfire-command",
@@ -35,6 +21,8 @@ var _ = Describe("pgemfire plugin", func() {
 				"--network-name", "net1",
 				"--locator-static-ip", "1.0.0.2",
 				"--server-instance-count", "1",
+				"--gemfire-locator-vm-size", "asdf",
+				"--gemfire-server-vm-size", "asdf",
 			}, []byte{})
 			Expect(err).ShouldNot(HaveOccurred())
 			manifest := enaml.NewDeploymentManifest(manifestBytes)
@@ -45,22 +33,74 @@ var _ = Describe("pgemfire plugin", func() {
 		})
 
 		It("should return error when AZ/s are not provided", func() {
-			_, err := gPlugin.GetProduct([]string{"pgemfire-command"}, []byte{})
+			_, err := gPlugin.GetProduct([]string{
+				"pgemfire-command",
+				"--network-name", "asdf",
+				"--locator-static-ip", "asdf",
+				"--server-instance-count", "1",
+				"--gemfire-locator-vm-size", "asdf",
+				"--gemfire-server-vm-size", "asdf",
+			}, []byte{})
 			Expect(err).Should(HaveOccurred())
 		})
 
 		It("should return error when network name is not provided", func() {
-			_, err := gPlugin.GetProduct([]string{"pgemfire-command"}, []byte{})
+			_, err := gPlugin.GetProduct([]string{
+				"pgemfire-command",
+				"--az", "asdf",
+				"--locator-static-ip", "asdf",
+				"--server-instance-count", "1",
+				"--gemfire-locator-vm-size", "asdf",
+				"--gemfire-server-vm-size", "asdf",
+			}, []byte{})
 			Expect(err).Should(HaveOccurred())
 		})
 
 		It("should return error when locator IPs are not given", func() {
-			_, err := gPlugin.GetProduct([]string{"pgemfire-command"}, []byte{})
+			_, err := gPlugin.GetProduct([]string{
+				"pgemfire-command",
+				"--az", "asdf",
+				"--network-name", "asdf",
+				"--server-instance-count", "1",
+				"--gemfire-locator-vm-size", "asdf",
+				"--gemfire-server-vm-size", "asdf",
+			}, []byte{})
 			Expect(err).Should(HaveOccurred())
 		})
 
 		It("should return error when server instance count is not provided", func() {
-			_, err := gPlugin.GetProduct([]string{"pgemfire-command"}, []byte{})
+			_, err := gPlugin.GetProduct([]string{
+				"pgemfire-command",
+				"--az", "asdf",
+				"--network-name", "asdf",
+				"--locator-static-ip", "asdf",
+				"--gemfire-locator-vm-size", "asdf",
+				"--gemfire-server-vm-size", "asdf",
+			}, []byte{})
+			Expect(err).Should(HaveOccurred())
+		})
+
+		It("should return error when --gemfire-locator-vm-size is not provided", func() {
+			_, err := gPlugin.GetProduct([]string{
+				"pgemfire-command",
+				"--az", "asdf",
+				"--network-name", "asdf",
+				"--locator-static-ip", "asdf",
+				"--server-instance-count", "1",
+				"--gemfire-server-vm-size", "asdf",
+			}, []byte{})
+			Expect(err).Should(HaveOccurred())
+		})
+
+		It("should return error when --gemfire-server-vm-size is not provided", func() {
+			_, err := gPlugin.GetProduct([]string{
+				"pgemfire-command",
+				"--az", "asdf",
+				"--network-name", "asdf",
+				"--locator-static-ip", "asdf",
+				"--server-instance-count", "1",
+				"--gemfire-locator-vm-size", "asdf",
+			}, []byte{})
 			Expect(err).Should(HaveOccurred())
 		})
 	})

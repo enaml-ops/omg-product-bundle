@@ -10,16 +10,23 @@ import (
 
 var _ = Describe("Locator Group", func() {
 	var locatorGroup *LocatorGroup
+	var controlVMMemory = 1024
+	var controlPort = 55221
+	var controlRestPort = 8080
+	var controlVMType = "large"
+	var controlStaticIPs = []string{"1.0.0.1", "1.0.0.2"}
+	var controlNetworkName = "my-network"
+	var controlJobName = "locator"
+	var staticIPs []string
+	var instanceGroup *enaml.InstanceGroup
+
+	BeforeEach(func() {
+		locatorGroup = NewLocatorGroup(controlNetworkName, controlStaticIPs, controlPort, controlRestPort, controlVMMemory, controlVMType)
+		instanceGroup = locatorGroup.GetInstanceGroup()
+	})
 
 	Context("when a locator ip list is set", func() {
-		var controlStaticIPs = []string{"1.0.0.1", "1.0.0.2"}
-		var controlNetworkName = "my-network"
-		var controlJobName = "locator"
-		var staticIPs []string
-		var instanceGroup *enaml.InstanceGroup
 		BeforeEach(func() {
-			locatorGroup = NewLocatorGroup(controlNetworkName, controlStaticIPs)
-			instanceGroup = locatorGroup.GetInstanceGroup()
 			staticIPs = instanceGroup.GetNetworkByName(controlNetworkName).StaticIPs
 		})
 
@@ -34,6 +41,40 @@ var _ = Describe("Locator Group", func() {
 		It("Should create map to properties.gemfire.locator.addresses", func() {
 			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(locator.LocatorJob)
 			Ω(jobProperties.Gemfire.Locator.Addresses).Should(Equal(controlStaticIPs))
+		})
+	})
+
+	Context("when a locator vmtype is set", func() {
+		It("should set the instance groups vm type", func() {
+			Ω(instanceGroup.VMType).Should(Equal(controlVMType))
+		})
+	})
+
+	Context("when valid gemfire.properties are set", func() {
+		var jobProperties locator.LocatorJob
+
+		BeforeEach(func() {
+			jobProperties = instanceGroup.GetJobByName("locator").Properties.(locator.LocatorJob)
+		})
+
+		It("should set a rest-port", func() {
+			Ω(jobProperties.Gemfire.Locator.RestPort).Should(Equal(controlRestPort))
+		})
+
+		It("should set a port", func() {
+			Ω(jobProperties.Gemfire.Locator.Port).Should(Equal(controlPort))
+		})
+
+		It("should set a vm-memory", func() {
+			Ω(jobProperties.Gemfire.Locator.VmMemory).Should(Equal(controlVMMemory))
+		})
+
+		It("should set number of locators", func() {
+			Ω(jobProperties.Gemfire.ClusterTopology.NumberOfLocators).Should(Equal(len(controlStaticIPs)), "this number should match the number of actual locators")
+		})
+
+		It("should set min number of locators", func() {
+			Ω(jobProperties.Gemfire.ClusterTopology.MinNumberOfLocators).Should(Equal(len(controlStaticIPs)), "this number should match the number of actual locators")
 		})
 	})
 })
