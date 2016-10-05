@@ -21,6 +21,9 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 	if err := checkRequiredFields(c); err != nil {
 		return nil, err
 	}
+
+	deploymentManifest.Name = c.String("deployment-name")
+	azs := c.StringSlice("az")
 	networkname := c.String("network-name")
 	staticips := c.StringSlice("locator-static-ip")
 	locatorport := c.Int("gemfire-locator-port")
@@ -38,6 +41,8 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 	})
 	locatorInstanceGroup.Stemcell = c.String("stemcell-alias")
 	serverInstanceGroup.Stemcell = c.String("stemcell-alias")
+	locatorInstanceGroup.AZs = azs
+	serverInstanceGroup.AZs = azs
 	deploymentManifest.Update = enaml.Update{
 		MaxInFlight: 1,
 	}
