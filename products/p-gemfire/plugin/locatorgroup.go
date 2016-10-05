@@ -10,9 +10,6 @@ type LocatorGroup struct {
 	NetworkName string
 }
 
-const locatorJobName = "locator"
-const locatorGroup = "locator-group"
-
 func NewLocatorGroup(networkname string, staticips []string) *LocatorGroup {
 	lg := new(LocatorGroup)
 	lg.NetworkName = networkname
@@ -31,7 +28,7 @@ func (s *LocatorGroup) GetInstanceGroup() *enaml.InstanceGroup {
 	instanceGroup.Instances = len(s.StaticIPs)
 	job := &enaml.InstanceJob{
 		Name:    locatorJobName,
-		Release: "",
+		Release: releaseName,
 		Properties: locator.LocatorJob{
 			Gemfire: &locator.Gemfire{
 				Locator: &locator.Locator{

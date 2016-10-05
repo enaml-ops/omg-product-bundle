@@ -40,6 +40,8 @@ var _ = Describe("pgemfire plugin", func() {
 			manifest := enaml.NewDeploymentManifest(manifestBytes)
 			locator := manifest.GetInstanceGroupByName("locator-group")
 			Expect(locator).ShouldNot(BeNil())
+			server := manifest.GetInstanceGroupByName("server-group")
+			Expect(server).ShouldNot(BeNil())
 		})
 
 		It("should return error when AZ/s are not provided", func() {

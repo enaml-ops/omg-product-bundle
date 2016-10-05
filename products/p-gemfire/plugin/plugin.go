@@ -24,7 +24,9 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 	networkname := c.String("network-name")
 	staticips := c.StringSlice("locator-static-ip")
 	locatorInstanceGroup := NewLocatorGroup(networkname, staticips)
+	serverInstanceGroup := NewServerGroup(networkname, staticips)
 	deploymentManifest.AddInstanceGroup(locatorInstanceGroup.GetInstanceGroup())
+	deploymentManifest.AddInstanceGroup(serverInstanceGroup.GetInstanceGroup())
 	return deploymentManifest.Bytes(), nil
 }
 
