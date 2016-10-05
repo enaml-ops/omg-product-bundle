@@ -18,35 +18,41 @@ type Plugin struct {
 func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 	var deploymentManifest = new(enaml.DeploymentManifest)
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(p.GetFlags()))
+
 	if err := checkRequiredFields(c); err != nil {
 		return nil, err
 	}
-
-	deploymentManifest.Name = c.String("deployment-name")
-	azs := c.StringSlice("az")
-	networkname := c.String("network-name")
-	staticips := c.StringSlice("locator-static-ip")
-	locatorport := c.Int("gemfire-locator-port")
-	locatorrestport := c.Int("gemfire-locator-rest-port")
-	locatorvmmemory := c.Int("gemfire-locator-vm-memory")
-	locatorvmtype := c.String("gemfire-locator-vm-size")
-	locator := NewLocatorGroup(networkname, staticips, locatorport, locatorrestport, locatorvmmemory, locatorvmtype)
-	server := NewServerGroup(networkname, staticips)
-	locatorInstanceGroup := locator.GetInstanceGroup()
-	serverInstanceGroup := server.GetInstanceGroup()
+	deploymentManifest.SetName(c.String("deployment-name"))
+	deploymentManifest.AddRelease(enaml.Release{Name: releaseName, Version: c.String("gemfire-release-ver")})
 	deploymentManifest.AddStemcell(enaml.Stemcell{
 		OS:      c.String("stemcell-name"),
 		Version: c.String("stemcell-ver"),
 		Alias:   c.String("stemcell-alias"),
 	})
-	locatorInstanceGroup.Stemcell = c.String("stemcell-alias")
-	serverInstanceGroup.Stemcell = c.String("stemcell-alias")
-	locatorInstanceGroup.AZs = azs
-	serverInstanceGroup.AZs = azs
 	deploymentManifest.Update = enaml.Update{
 		MaxInFlight: 1,
 	}
+
+	azs := c.StringSlice("az")
+	networkname := c.String("network-name")
+	locatorstaticips := c.StringSlice("locator-static-ip")
+	locatorport := c.Int("gemfire-locator-port")
+	locatorrestport := c.Int("gemfire-locator-rest-port")
+	locatorvmmemory := c.Int("gemfire-locator-vm-memory")
+	locatorvmtype := c.String("gemfire-locator-vm-size")
+	locator := NewLocatorGroup(networkname, locatorstaticips, locatorport, locatorrestport, locatorvmmemory, locatorvmtype)
+	locatorInstanceGroup := locator.GetInstanceGroup()
+	locatorInstanceGroup.Stemcell = c.String("stemcell-alias")
+	locatorInstanceGroup.AZs = azs
 	deploymentManifest.AddInstanceGroup(locatorInstanceGroup)
+
+	serverport := c.Int("gemfire-server-port")
+	servervmtype := c.String("gemfire-server-vm-size")
+	serverInstanceCount := c.Int("server-instance-count")
+	server := NewServerGroup(networkname, serverport, serverInstanceCount, servervmtype, locator)
+	serverInstanceGroup := server.GetInstanceGroup()
+	serverInstanceGroup.Stemcell = c.String("stemcell-alias")
+	serverInstanceGroup.AZs = azs
 	deploymentManifest.AddInstanceGroup(serverInstanceGroup)
 	return deploymentManifest.Bytes(), nil
 }
@@ -116,6 +122,12 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		},
 		pcli.Flag{
 			FlagType: pcli.IntFlag,
+			Name:     "gemfire-server-port",
+			Value:    defaultServerPort,
+			Usage:    "the port gemfire servers will listen on",
+		},
+		pcli.Flag{
+			FlagType: pcli.IntFlag,
 			Name:     "gemfire-locator-port",
 			Value:    defaultLocatorPort,
 			Usage:    "the port gemfire locators will listen on",
@@ -159,6 +171,12 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 			Name:     "stemcell-ver",
 			Value:    defaultStemcellVersion,
 			Usage:    "the name of the stemcell you with to use",
+		},
+		pcli.Flag{
+			FlagType: pcli.StringFlag,
+			Name:     "gemfire-release-ver",
+			Value:    releaseVersion,
+			Usage:    "the version of the release to use for the deployment",
 		},
 	}
 }

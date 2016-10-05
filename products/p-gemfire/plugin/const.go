@@ -7,6 +7,7 @@ const (
 	locatorGroup           = "locator-group"
 	releaseName            = "GemFire"
 	releaseVersion         = "latest"
+	defaultServerPort      = "55001"
 	defaultLocatorRestPort = "8080"
 	defaultLocatorPort     = "55221"
 	defaultLocatorVMMemory = "1024"

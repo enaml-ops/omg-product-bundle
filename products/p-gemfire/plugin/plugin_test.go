@@ -32,6 +32,7 @@ var _ = Describe("pgemfire plugin", func() {
 			Expect(locator).ShouldNot(BeNil())
 			server := manifest.GetInstanceGroupByName("server-group")
 			Expect(server).ShouldNot(BeNil())
+			fmt.Println(string(manifestBytes))
 		})
 
 		It("should return error when AZ/s are not provided", func() {
@@ -106,6 +107,26 @@ var _ = Describe("pgemfire plugin", func() {
 			Expect(err).Should(HaveOccurred())
 		})
 
+		It("should properly set up the gemfire release", func() {
+			controlStemcellAlias := "ubuntu-magic"
+			manifestBytes, err := gPlugin.GetProduct([]string{
+				"pgemfire-command",
+				"--az", "z1",
+				"--network-name", "net1",
+				"--locator-static-ip", "1.0.0.2",
+				"--server-instance-count", "1",
+				"--gemfire-locator-vm-size", "asdf",
+				"--gemfire-server-vm-size", "asdf",
+				"--stemcell-alias", controlStemcellAlias,
+			}, []byte{})
+			Expect(err).ShouldNot(HaveOccurred())
+			manifest := enaml.NewDeploymentManifest(manifestBytes)
+			Ω(manifest.Releases).ShouldNot(BeEmpty())
+			Ω(manifest.Releases[0]).ShouldNot(BeNil())
+			Ω(manifest.Releases[0].Name).Should(Equal("GemFire"))
+			Ω(manifest.Releases[0].Version).Should(Equal("latest"))
+		})
+
 		It("should properly set up the stemcells", func() {
 			controlStemcellAlias := "ubuntu-magic"
 			manifestBytes, err := gPlugin.GetProduct([]string{
@@ -120,7 +141,6 @@ var _ = Describe("pgemfire plugin", func() {
 			}, []byte{})
 			Expect(err).ShouldNot(HaveOccurred())
 			manifest := enaml.NewDeploymentManifest(manifestBytes)
-			fmt.Println(string(manifestBytes))
 			Ω(manifest.Stemcells).ShouldNot(BeNil())
 			Ω(manifest.Stemcells[0].Alias).Should(Equal(controlStemcellAlias))
 			for _, instanceGroup := range manifest.InstanceGroups {
