@@ -49,7 +49,8 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 	serverport := c.Int("gemfire-server-port")
 	servervmtype := c.String("gemfire-server-vm-size")
 	serverInstanceCount := c.Int("server-instance-count")
-	server := NewServerGroup(networkname, serverport, serverInstanceCount, servervmtype, locator)
+	servervmmemory := c.Int("gemfire-server-vm-memory")
+	server := NewServerGroup(networkname, serverport, serverInstanceCount, servervmtype, servervmmemory, locator)
 	serverInstanceGroup := server.GetInstanceGroup()
 	serverInstanceGroup.Stemcell = c.String("stemcell-alias")
 	serverInstanceGroup.AZs = azs
@@ -137,6 +138,12 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 			Name:     "gemfire-locator-vm-memory",
 			Value:    defaultLocatorVMMemory,
 			Usage:    "the amount of memory allocated by the locator process",
+		},
+		pcli.Flag{
+			FlagType: pcli.IntFlag,
+			Name:     "gemfire-server-vm-memory",
+			Value:    defaultLocatorVMMemory,
+			Usage:    "the amount of memory allocated by the server process",
 		},
 		pcli.Flag{
 			FlagType: pcli.IntFlag,

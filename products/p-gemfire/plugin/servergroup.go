@@ -10,14 +10,18 @@ type ServerGroup struct {
 	InstanceCount int
 	NetworkName   string
 	VMType        string
+	Port          int
+	VMMemory      int
 }
 
-func NewServerGroup(networkname string, serverport int, instanceCount int, vmtype string, locator *LocatorGroup) *ServerGroup {
+func NewServerGroup(networkname string, serverport int, instanceCount int, vmtype string, vmmemory int, locator *LocatorGroup) *ServerGroup {
 	sg := new(ServerGroup)
 	sg.NetworkName = networkname
 	sg.Locator = locator
 	sg.InstanceCount = instanceCount
 	sg.VMType = vmtype
+	sg.Port = serverport
+	sg.VMMemory = vmmemory
 	return sg
 }
 
@@ -45,6 +49,8 @@ func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
 				},
 				Server: &server.Server{
 					RestPort: s.Locator.RestPort,
+					Port:     s.Port,
+					VmMemory: s.VMMemory,
 				},
 				ClusterTopology: &server.ClusterTopology{
 					NumberOfLocators: len(s.Locator.StaticIPs),
