@@ -1,6 +1,8 @@
 package gemfire_plugin_test
 
 import (
+	"fmt"
+
 	"github.com/enaml-ops/enaml"
 	. "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/plugin"
 	. "github.com/onsi/ginkgo"
@@ -102,6 +104,27 @@ var _ = Describe("pgemfire plugin", func() {
 				"--gemfire-locator-vm-size", "asdf",
 			}, []byte{})
 			Expect(err).Should(HaveOccurred())
+		})
+
+		It("should properly set up the stemcells", func() {
+			controlStemcellAlias := "ubuntu-magic"
+			manifestBytes, err := gPlugin.GetProduct([]string{
+				"pgemfire-command",
+				"--az", "z1",
+				"--network-name", "net1",
+				"--locator-static-ip", "1.0.0.2",
+				"--server-instance-count", "1",
+				"--gemfire-locator-vm-size", "asdf",
+				"--gemfire-server-vm-size", "asdf",
+				"--stemcell-alias", controlStemcellAlias,
+			}, []byte{})
+			Expect(err).ShouldNot(HaveOccurred())
+			manifest := enaml.NewDeploymentManifest(manifestBytes)
+			Ω(manifest.Stemcells).ShouldNot(BeNil())
+			Ω(manifest.Stemcells[0].Alias).Should(Equal(controlStemcellAlias))
+			for _, instanceGroup := range manifest.InstanceGroups {
+				Expect(instanceGroup.Stemcell).Should(Equal(controlStemcellAlias), fmt.Sprintf("stemcell for instance group %v was not set properly", instanceGroup.Name))
+			}
 		})
 	})
 })
