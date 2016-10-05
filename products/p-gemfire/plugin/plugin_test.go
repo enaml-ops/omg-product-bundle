@@ -32,7 +32,6 @@ var _ = Describe("pgemfire plugin", func() {
 			Expect(locator).ShouldNot(BeNil())
 			server := manifest.GetInstanceGroupByName("server-group")
 			Expect(server).ShouldNot(BeNil())
-			fmt.Println(string(manifestBytes))
 		})
 
 		It("should return error when AZ/s are not provided", func() {

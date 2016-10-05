@@ -87,8 +87,14 @@ func validate(flagName string, c *cli.Context) error {
 // GetMeta returns metadata about the p-rabbitmq product.
 func (p *Plugin) GetMeta() product.Meta {
 	return product.Meta{
-		Name:       "p-gemfire",
-		Properties: map[string]interface{}{},
+		Name: "p-gemfire",
+		Properties: map[string]interface{}{
+			"version":              p.Version,
+			"stemcell":             defaultStemcellVersion,
+			"pivotal-gemfire-tile": "NOT COMPATIBLE WITH TILE RELEASES",
+			"p-gemfire":            fmt.Sprintf("%s / %s", releaseName, releaseVersion),
+			"description":          "this plugin is designed to work with a special p-gemfire release",
+		},
 	}
 }
 
