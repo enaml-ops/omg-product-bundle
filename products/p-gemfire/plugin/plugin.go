@@ -30,7 +30,11 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 		Alias:   c.String("stemcell-alias"),
 	})
 	deploymentManifest.Update = enaml.Update{
-		MaxInFlight: 1,
+		MaxInFlight:     1,
+		UpdateWatchTime: "30000-300000",
+		CanaryWatchTime: "30000-300000",
+		Serial:          false,
+		Canaries:        1,
 	}
 
 	azs := c.StringSlice("az")

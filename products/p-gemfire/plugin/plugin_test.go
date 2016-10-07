@@ -106,6 +106,26 @@ var _ = Describe("pgemfire plugin", func() {
 			Expect(err).Should(HaveOccurred())
 		})
 
+		It("should properly set up the Update segment", func() {
+			controlStemcellAlias := "ubuntu-magic"
+			manifestBytes, err := gPlugin.GetProduct([]string{
+				"pgemfire-command",
+				"--az", "z1",
+				"--network-name", "net1",
+				"--locator-static-ip", "1.0.0.2",
+				"--server-instance-count", "1",
+				"--gemfire-locator-vm-size", "asdf",
+				"--gemfire-server-vm-size", "asdf",
+				"--stemcell-alias", controlStemcellAlias,
+			}, []byte{})
+			Expect(err).ShouldNot(HaveOccurred())
+			manifest := enaml.NewDeploymentManifest(manifestBytes)
+			Ω(manifest.Update.MaxInFlight).ShouldNot(Equal(0), "max in flight")
+			Ω(manifest.Update.UpdateWatchTime).ShouldNot(BeEmpty(), "update watch time")
+			Ω(manifest.Update.CanaryWatchTime).ShouldNot(BeEmpty(), "canary watch time")
+			Ω(manifest.Update.Canaries).ShouldNot(Equal(0), "number of canaries")
+		})
+
 		It("should properly set up the gemfire release", func() {
 			controlStemcellAlias := "ubuntu-magic"
 			manifestBytes, err := gPlugin.GetProduct([]string{
