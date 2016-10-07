@@ -12,12 +12,14 @@ type ServerGroup struct {
 	VMType        string
 	Port          int
 	VMMemory      int
+	StaticIPs     []string
 }
 
-func NewServerGroup(networkname string, serverport int, instanceCount int, vmtype string, vmmemory int, locator *LocatorGroup) *ServerGroup {
+func NewServerGroup(networkname string, serverport int, instanceCount int, staticIPs []string, vmtype string, vmmemory int, locator *LocatorGroup) *ServerGroup {
 	sg := new(ServerGroup)
 	sg.NetworkName = networkname
 	sg.Locator = locator
+	sg.StaticIPs = staticIPs
 	sg.InstanceCount = instanceCount
 	sg.VMType = vmtype
 	sg.Port = serverport
@@ -25,9 +27,14 @@ func NewServerGroup(networkname string, serverport int, instanceCount int, vmtyp
 	return sg
 }
 
-func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
-	instanceGroup := new(enaml.InstanceGroup)
-	instanceGroup.Name = serverGroup
+func (s *ServerGroup) getInstanceCount() int {
+	if len(s.StaticIPs) > 0 {
+		return len(s.StaticIPs)
+	}
+	return s.InstanceCount
+}
+
+func (s *ServerGroup) getNetwork() enaml.Network {
 	network := enaml.Network{
 		Name: s.NetworkName,
 		Default: []interface{}{
@@ -35,8 +42,18 @@ func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
 			"gateway",
 		},
 	}
-	instanceGroup.AddNetwork(network)
-	instanceGroup.Instances = s.InstanceCount
+
+	if len(s.StaticIPs) > 0 {
+		network.StaticIPs = s.StaticIPs
+	}
+	return network
+}
+
+func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
+	instanceGroup := new(enaml.InstanceGroup)
+	instanceGroup.Name = serverGroup
+	instanceGroup.AddNetwork(s.getNetwork())
+	instanceGroup.Instances = s.getInstanceCount()
 	instanceGroup.VMType = s.VMType
 	job := &enaml.InstanceJob{
 		Name:    serverJobName,

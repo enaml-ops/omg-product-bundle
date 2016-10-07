@@ -11,7 +11,7 @@ import (
 var _ = Describe("server Group", func() {
 	var serverGroup *ServerGroup
 
-	Context("when a server ip list is set", func() {
+	Context("when valid server argument values are given w/o static server IPs", func() {
 		var controlNetworkName = "my-network"
 		var controlJobName = "server"
 		var staticIPs []string
@@ -23,17 +23,41 @@ var _ = Describe("server Group", func() {
 		var controlServerPort = 55001
 		var controlRestPort = 8080
 		var controlVMType = "large"
-		var controlStaticIPs = []string{"1.0.0.1", "1.0.0.2"}
+		var controlLocatorStaticIPs = []string{"1.0.0.1", "1.0.0.2"}
 		var controlInstanceCount = 6
 
 		BeforeEach(func() {
-			locatorGroup = NewLocatorGroup(controlNetworkName, controlStaticIPs, controlPort, controlRestPort, controlVMMemory, controlVMType)
-			serverGroup = NewServerGroup(controlNetworkName, controlServerPort, controlInstanceCount, controlVMType, controlServerVMMemory, locatorGroup)
+			locatorGroup = NewLocatorGroup(controlNetworkName, controlLocatorStaticIPs, controlPort, controlRestPort, controlVMMemory, controlVMType)
+			serverGroup = NewServerGroup(controlNetworkName, controlServerPort, controlInstanceCount, []string{}, controlVMType, controlServerVMMemory, locatorGroup)
 			instanceGroup = serverGroup.GetInstanceGroup()
 			staticIPs = instanceGroup.GetNetworkByName(controlNetworkName).StaticIPs
 		})
 
-		It("should create an instance group with static IPs", func() {
+		Context("and static server IPs are given", func() {
+			var controlServerStaticIPs = []string{"1.0.0.2", "1.0.0.3"}
+			var controlInstanceCount = len(controlServerStaticIPs) + 1
+
+			BeforeEach(func() {
+
+				serverGroup = NewServerGroup(controlNetworkName, controlServerPort, controlInstanceCount, controlServerStaticIPs, controlVMType, controlServerVMMemory, locatorGroup)
+				instanceGroup = serverGroup.GetInstanceGroup()
+				staticIPs = instanceGroup.GetNetworkByName(controlNetworkName).StaticIPs
+			})
+
+			It("should ignore the given instance count", func() {
+				Ω(instanceGroup.Instances).ShouldNot(Equal(controlInstanceCount))
+			})
+
+			It("should set the instance count to the number of static server ips given", func() {
+				Ω(instanceGroup.Instances).Should(Equal(len(controlServerStaticIPs)), "number of staticIPs compared to instance count")
+			})
+
+			It("should set static server IPs from the values given", func() {
+				Expect(staticIPs).Should(Equal(controlServerStaticIPs))
+			})
+		})
+
+		It("should create an instance group with static IPs for locators", func() {
 			Expect(staticIPs).Should(BeNil())
 		})
 
@@ -47,12 +71,12 @@ var _ = Describe("server Group", func() {
 
 		It("Should create map to properties.gemfire.server.addresses", func() {
 			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(server.ServerJob)
-			Ω(jobProperties.Gemfire.Locator.Addresses).Should(Equal(controlStaticIPs))
+			Ω(jobProperties.Gemfire.Locator.Addresses).Should(Equal(controlLocatorStaticIPs))
 		})
 
 		It("Should create valid job properties for cluster topology", func() {
 			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(server.ServerJob)
-			Ω(jobProperties.Gemfire.ClusterTopology.NumberOfLocators).Should(Equal(len(controlStaticIPs)), "number of locators should be derived from the number of StaticIPs")
+			Ω(jobProperties.Gemfire.ClusterTopology.NumberOfLocators).Should(Equal(len(controlLocatorStaticIPs)), "number of locators should be derived from the number of StaticIPs")
 			Ω(jobProperties.Gemfire.ClusterTopology.NumberOfServers).Should(Equal(controlInstanceCount), "number of locators should be derived from the given instance count value")
 		})
 

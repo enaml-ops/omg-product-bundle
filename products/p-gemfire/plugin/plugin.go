@@ -49,8 +49,9 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 	serverport := c.Int("gemfire-server-port")
 	servervmtype := c.String("gemfire-server-vm-size")
 	serverInstanceCount := c.Int("server-instance-count")
+	serverStaticIPs := c.StringSlice("server-static-ip")
 	servervmmemory := c.Int("gemfire-server-vm-memory")
-	server := NewServerGroup(networkname, serverport, serverInstanceCount, servervmtype, servervmmemory, locator)
+	server := NewServerGroup(networkname, serverport, serverInstanceCount, serverStaticIPs, servervmtype, servervmmemory, locator)
 	serverInstanceGroup := server.GetInstanceGroup()
 	serverInstanceGroup.Stemcell = c.String("stemcell-alias")
 	serverInstanceGroup.AZs = azs
@@ -123,9 +124,15 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 			Usage:    "static IPs to assign to locator VMs",
 		},
 		pcli.Flag{
+			FlagType: pcli.StringSliceFlag,
+			Name:     "server-static-ip",
+			Usage:    "static IPs to assign to server VMs - this is optional, if non given bosh will assign IPs and create instances based on the InstanceCount flag value",
+		},
+		pcli.Flag{
 			FlagType: pcli.IntFlag,
 			Name:     "server-instance-count",
-			Usage:    "the number of server instances you wish to deploy",
+			Value:    defaultServerInstanceCount,
+			Usage:    "the number of server instances you wish to deploy - if static ips are given this will be ignored",
 		},
 		pcli.Flag{
 			FlagType: pcli.IntFlag,
