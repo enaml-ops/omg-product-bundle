@@ -18,12 +18,12 @@ type ConcoursePlugin struct {
 }
 
 const (
-	defaultConcourseReleaseURL string = "https://bosh.io/d/github.com/concourse/concourse?v=1.6.0"
-	defaultConcourseReleaseSHA string = "6fcd122fd95005e076956cf25a940f082cccb222"
-	defaultConcourseReleaseVer string = "1.6.0"
-	defaultGardenReleaseURL    string = "https://bosh.io/d/github.com/cloudfoundry-incubator/garden-runc-release?v=0.5.0"
-	defaultGardenReleaseSHA    string = "eee2d6fc57a03f1d7e5d2625d617dda18704610f"
-	defaultGardenReleaseVer    string = "0.5.0"
+	defaultConcourseReleaseURL string = "https://bosh.io/d/github.com/concourse/concourse?v=2.2.1"
+	defaultConcourseReleaseSHA string = "879d5cb45d12f173ff4c7912c7c7cdcd3e18c442"
+	defaultConcourseReleaseVer string = "2.2.1"
+	defaultGardenReleaseURL    string = "https://bosh.io/d/github.com/cloudfoundry-incubator/garden-runc-release?v=0.8.0"
+	defaultGardenReleaseSHA    string = "20e98ea84c8f4426bba00bbca17d931e27d3c07d"
+	defaultGardenReleaseVer    string = "0.8.0"
 
 	concoursePassword   string = "concourse-password"
 	concourseUsername   string = "concourse-username"
