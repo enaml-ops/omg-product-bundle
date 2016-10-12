@@ -8,8 +8,8 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/consul"
 	vaultlib "github.com/enaml-ops/omg-product-bundle/products/vault/enaml-gen/vault"
 	"github.com/enaml-ops/pluginlib/pcli"
-	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/pluginutil"
+	"github.com/enaml-ops/pluginlib/product"
 	"github.com/xchapter7x/lo"
 )
 
@@ -48,7 +48,7 @@ type Plugin struct {
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
-		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "ip", Usage: "multiple static ips for each redis leader vm"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "ip", Usage: "multiple static ips for each vault VM Node"},
 		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "az", Usage: "list of AZ names to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "network", Usage: "the name of the network to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vm-type", Usage: "name of your desired vm type"},
