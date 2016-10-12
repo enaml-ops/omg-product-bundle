@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"os"
 
+	"gopkg.in/yaml.v2"
+
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/server"
 	. "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -242,6 +245,30 @@ var _ = Describe("pgemfire plugin", func() {
 			for _, instanceGroup := range manifest.InstanceGroups {
 				Expect(instanceGroup.AZs).Should(Equal([]string{controlAZ}), fmt.Sprintf("Availability ZOnes for instance group %v was not set properly", instanceGroup.Name))
 			}
+		})
+		Context("and command line args are setting server static ips", func() {
+			It("should properly set up the number of servers in cluster topology", func() {
+				var controlAZ = "z1"
+				var controlIPCount = "6"
+				var givenStaticCount = 1
+				manifestBytes, err := gPlugin.GetProduct([]string{
+					"pgemfire-command",
+					"--az", controlAZ,
+					"--network-name", "net1",
+					"--locator-static-ip", "1.0.0.2",
+					"--server-instance-count", controlIPCount,
+					"--server-static-ip", "1.0.0.3",
+					"--gemfire-locator-vm-size", "asdf",
+					"--gemfire-server-vm-size", "asdf",
+				}, []byte{})
+				Expect(err).ShouldNot(HaveOccurred())
+				manifest := enaml.NewDeploymentManifest(manifestBytes)
+				instanceGroup := manifest.GetInstanceGroupByName("server-group")
+				var properties = new(server.ServerJob)
+				propertiesBytes, _ := yaml.Marshal(instanceGroup.GetJobByName("server").Properties)
+				yaml.Unmarshal(propertiesBytes, properties)
+				Expect(properties.Gemfire.ClusterTopology.NumberOfServers).Should(Equal(givenStaticCount), fmt.Sprintf("we should match ips given not instance count given"))
+			})
 		})
 	})
 })

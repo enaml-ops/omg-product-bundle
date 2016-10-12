@@ -35,7 +35,6 @@ var _ = Describe("server Group", func() {
 
 		Context("and static server IPs are given", func() {
 			var controlServerStaticIPs = []string{"1.0.0.2", "1.0.0.3"}
-			var controlInstanceCount = len(controlServerStaticIPs) + 1
 
 			BeforeEach(func() {
 

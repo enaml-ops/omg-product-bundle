@@ -71,7 +71,7 @@ func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
 				},
 				ClusterTopology: &server.ClusterTopology{
 					NumberOfLocators: len(s.Locator.StaticIPs),
-					NumberOfServers:  s.InstanceCount,
+					NumberOfServers:  s.getInstanceCount(),
 				},
 			},
 		},
