@@ -115,7 +115,7 @@ var _ = Describe("pgemfire plugin", func() {
 			Expect(err).Should(HaveOccurred())
 		})
 
-		It("should return error when server instance count is not provided", func() {
+		It("should not require server-instance-count field", func() {
 			_, err := gPlugin.GetProduct([]string{
 				"pgemfire-command",
 				"--az", "asdf",
@@ -124,7 +124,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
 			}, []byte{})
-			Expect(err).Should(HaveOccurred())
+			Expect(err).ShouldNot(HaveOccurred(), "server-instance-count should not be required")
 		})
 
 		It("should return error when --gemfire-locator-vm-size is not provided", func() {

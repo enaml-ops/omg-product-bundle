@@ -69,7 +69,6 @@ var requiredFlags = []string{
 	"az",
 	"network-name",
 	"locator-static-ip",
-	"server-instance-count",
 	"gemfire-locator-vm-size",
 	"gemfire-server-vm-size",
 }
