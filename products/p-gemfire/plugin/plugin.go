@@ -85,7 +85,7 @@ func checkRequiredFields(c *cli.Context) error {
 }
 
 func makeEnvVarName(flagName string) string {
-	return strings.Replace(strings.ToUpper(flagName), "-", "_", -1)
+	return "OMG_" + strings.Replace(strings.ToUpper(flagName), "-", "_", -1)
 }
 
 func validate(flagName string, c *cli.Context) error {
