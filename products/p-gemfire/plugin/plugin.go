@@ -2,6 +2,8 @@ package gemfire_plugin
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/pluginlib/pcli"
@@ -82,11 +84,16 @@ func checkRequiredFields(c *cli.Context) error {
 	return nil
 }
 
+func makeEnvVarName(flagName string) string {
+	return strings.Replace(strings.ToUpper(flagName), "-", "_", -1)
+}
+
 func validate(flagName string, c *cli.Context) error {
-	if !c.IsSet(flagName) {
-		return fmt.Errorf("error: sorry you need to give me an `--%s`", flagName)
+
+	if c.IsSet(flagName) || os.Getenv(makeEnvVarName(flagName)) != "" {
+		return nil
 	}
-	return nil
+	return fmt.Errorf("error: sorry you need to give me an `--%s`", flagName)
 }
 
 // GetMeta returns metadata about the p-rabbitmq product.

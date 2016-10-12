@@ -2,6 +2,7 @@ package gemfire_plugin_test
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/enaml-ops/enaml"
 	. "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/plugin"
@@ -11,6 +12,31 @@ import (
 
 var _ = Describe("pgemfire plugin", func() {
 	var gPlugin *Plugin
+
+	Context("When a commnd line args are populate as ENV Vars", func() {
+
+		var controlAZName = "blah"
+		BeforeEach(func() {
+			gPlugin = &Plugin{Version: "0.0"}
+			os.Setenv("AZ", controlAZName)
+		})
+		AfterEach(func() {
+			os.Setenv("AZ", "")
+		})
+
+		It("should pass validation of required flags", func() {
+			_, err := gPlugin.GetProduct([]string{
+				"pgemfire-command",
+				"--network-name", "net1",
+				"--locator-static-ip", "1.0.0.2",
+				"--server-instance-count", "1",
+				"--gemfire-locator-vm-size", "asdf",
+				"--gemfire-server-vm-size", "asdf",
+			}, []byte{})
+			Expect(err).ShouldNot(HaveOccurred(), "should pass env var isset required value check")
+		})
+	})
+
 	Context("When a commnd line args are passed", func() {
 		BeforeEach(func() {
 			gPlugin = &Plugin{Version: "0.0"}
