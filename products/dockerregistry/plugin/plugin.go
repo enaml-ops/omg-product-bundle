@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"strings"
 
+	"gopkg.in/urfave/cli.v2"
+
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/dockerregistry"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/enaml-ops/pluginlib/product"
 	"github.com/xchapter7x/lo"
-	"gopkg.in/urfave/cli.v2"
 )
 
 const (
@@ -82,12 +83,13 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err er
 		lo.G.Error(err.Error())
 		return nil, err
 	}
+	var dm *enaml.DeploymentManifest
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(p.GetFlags()))
-	dm := NewDeploymentManifest(c, cloudConfig)
+	dm, err = NewDeploymentManifest(c, cloudConfig)
 	return dm.Bytes(), err
 }
 
-func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) *enaml.DeploymentManifest {
+func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) (*enaml.DeploymentManifest, error) {
 	deployment := dockerregistry.DockerRegistry{
 		DeploymentName:           c.String(deploymentName),
 		DockerRegistryReleaseVer: c.String(registryReleaseVer),
@@ -112,7 +114,7 @@ func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) *enaml.Deployment
 	certIPs := append(deployment.ProxyIPs, deployment.PublicIP...)
 	if _, cert, key, err := pluginutil.GenerateCert(certIPs); err != nil {
 		lo.G.Error(err.Error())
-		panic(err.Error())
+		return nil, err
 	} else {
 		deployment.ProxyCert = cert
 		deployment.ProxyCertKey = key
@@ -120,9 +122,9 @@ func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) *enaml.Deployment
 
 	if manifest, err := deployment.CreateDeploymentManifest(cloudConfig); err != nil {
 		lo.G.Error(err.Error())
-		panic(err)
+		return nil, err
 	} else {
-		return manifest
+		return manifest, nil
 	}
 
 }
