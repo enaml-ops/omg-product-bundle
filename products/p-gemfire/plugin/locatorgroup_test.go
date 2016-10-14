@@ -20,8 +20,6 @@ var _ = Describe("Locator Group", func() {
 	var staticIPs []string
 	var instanceGroup *enaml.InstanceGroup
 	var controlArpCleanerJobName = "arp-cleaner"
-	var controlGemAgentJobName = "gemfire-agent"
-
 	var controlReleaseName = "GemFire"
 
 	BeforeEach(func() {
@@ -84,11 +82,6 @@ var _ = Describe("Locator Group", func() {
 		It("should contain a job for arp-cleaner from the gemfire release", func() {
 			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName)).ShouldNot(BeNil())
 			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName).Release).Should(Equal(controlReleaseName))
-		})
-
-		It("should contain a job for gemfire-agent from the gemfire release", func() {
-			Ω(instanceGroup.GetJobByName(controlGemAgentJobName)).ShouldNot(BeNil())
-			Ω(instanceGroup.GetJobByName(controlGemAgentJobName).Release).Should(Equal(controlReleaseName))
 		})
 	})
 })

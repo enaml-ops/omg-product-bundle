@@ -26,7 +26,6 @@ var _ = Describe("server Group", func() {
 		var controlLocatorStaticIPs = []string{"1.0.0.1", "1.0.0.2"}
 		var controlInstanceCount = 6
 		var controlArpCleanerJobName = "arp-cleaner"
-		var controlGemAgentJobName = "gemfire-agent"
 		var controlReleaseName = "GemFire"
 
 		BeforeEach(func() {
@@ -62,11 +61,6 @@ var _ = Describe("server Group", func() {
 		It("should contain a job for arp-cleaner from the gemfire release", func() {
 			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName)).ShouldNot(BeNil())
 			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName).Release).Should(Equal(controlReleaseName))
-		})
-
-		It("should contain a job for gemfire-agent from the gemfire release", func() {
-			Ω(instanceGroup.GetJobByName(controlGemAgentJobName)).ShouldNot(BeNil())
-			Ω(instanceGroup.GetJobByName(controlGemAgentJobName).Release).Should(Equal(controlReleaseName))
 		})
 
 		It("should create an instance group with static IPs for locators", func() {

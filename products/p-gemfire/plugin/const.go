@@ -2,7 +2,6 @@ package gemfire_plugin
 
 const (
 	arpCleanerJobName          = "arp-cleaner"
-	gemAgentJobName            = "gemfire-agent"
 	serverJobName              = "server"
 	serverGroup                = "server-group"
 	locatorJobName             = "locator"

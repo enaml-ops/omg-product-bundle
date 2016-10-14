@@ -60,13 +60,8 @@ func (s *LocatorGroup) GetInstanceGroup() *enaml.InstanceGroup {
 		Name:    arpCleanerJobName,
 		Release: releaseName,
 	}
-	agentJob := &enaml.InstanceJob{
-		Name:    gemAgentJobName,
-		Release: releaseName,
-	}
 	instanceGroup.AddJob(locatorJob)
 	instanceGroup.AddJob(arpJob)
-	instanceGroup.AddJob(agentJob)
 	instanceGroup.VMType = s.VMType
 	instanceGroup.Lifecycle = "service"
 	return instanceGroup

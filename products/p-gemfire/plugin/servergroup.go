@@ -80,12 +80,7 @@ func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
 		Name:    arpCleanerJobName,
 		Release: releaseName,
 	}
-	agentJob := &enaml.InstanceJob{
-		Name:    gemAgentJobName,
-		Release: releaseName,
-	}
 	instanceGroup.AddJob(serverJob)
 	instanceGroup.AddJob(arpJob)
-	instanceGroup.AddJob(agentJob)
 	return instanceGroup
 }
