@@ -38,7 +38,7 @@ func (s *LocatorGroup) GetInstanceGroup() *enaml.InstanceGroup {
 	}
 	instanceGroup.AddNetwork(network)
 	instanceGroup.Instances = len(s.StaticIPs)
-	job := &enaml.InstanceJob{
+	locatorJob := &enaml.InstanceJob{
 		Name:    locatorJobName,
 		Release: releaseName,
 		Properties: locator.LocatorJob{
@@ -56,7 +56,17 @@ func (s *LocatorGroup) GetInstanceGroup() *enaml.InstanceGroup {
 			},
 		},
 	}
-	instanceGroup.AddJob(job)
+	arpJob := &enaml.InstanceJob{
+		Name:    arpCleanerJobName,
+		Release: releaseName,
+	}
+	agentJob := &enaml.InstanceJob{
+		Name:    gemAgentJobName,
+		Release: releaseName,
+	}
+	instanceGroup.AddJob(locatorJob)
+	instanceGroup.AddJob(arpJob)
+	instanceGroup.AddJob(agentJob)
 	instanceGroup.VMType = s.VMType
 	instanceGroup.Lifecycle = "service"
 	return instanceGroup

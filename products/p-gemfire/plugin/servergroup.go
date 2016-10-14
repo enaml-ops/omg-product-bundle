@@ -55,7 +55,7 @@ func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
 	instanceGroup.AddNetwork(s.getNetwork())
 	instanceGroup.Instances = s.getInstanceCount()
 	instanceGroup.VMType = s.VMType
-	job := &enaml.InstanceJob{
+	serverJob := &enaml.InstanceJob{
 		Name:    serverJobName,
 		Release: releaseName,
 		Properties: server.ServerJob{
@@ -76,6 +76,16 @@ func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
 			},
 		},
 	}
-	instanceGroup.AddJob(job)
+	arpJob := &enaml.InstanceJob{
+		Name:    arpCleanerJobName,
+		Release: releaseName,
+	}
+	agentJob := &enaml.InstanceJob{
+		Name:    gemAgentJobName,
+		Release: releaseName,
+	}
+	instanceGroup.AddJob(serverJob)
+	instanceGroup.AddJob(arpJob)
+	instanceGroup.AddJob(agentJob)
 	return instanceGroup
 }

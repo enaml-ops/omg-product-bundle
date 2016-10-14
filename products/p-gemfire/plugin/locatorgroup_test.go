@@ -19,6 +19,10 @@ var _ = Describe("Locator Group", func() {
 	var controlJobName = "locator"
 	var staticIPs []string
 	var instanceGroup *enaml.InstanceGroup
+	var controlArpCleanerJobName = "arp-cleaner"
+	var controlGemAgentJobName = "gemfire-agent"
+
+	var controlReleaseName = "GemFire"
 
 	BeforeEach(func() {
 		locatorGroup = NewLocatorGroup(controlNetworkName, controlStaticIPs, controlPort, controlRestPort, controlVMMemory, controlVMType)
@@ -75,6 +79,16 @@ var _ = Describe("Locator Group", func() {
 
 		It("should set min number of locators", func() {
 			Ω(jobProperties.Gemfire.ClusterTopology.MinNumberOfLocators).Should(Equal(len(controlStaticIPs)), "this number should match the number of actual locators")
+		})
+
+		It("should contain a job for arp-cleaner from the gemfire release", func() {
+			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName)).ShouldNot(BeNil())
+			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName).Release).Should(Equal(controlReleaseName))
+		})
+
+		It("should contain a job for gemfire-agent from the gemfire release", func() {
+			Ω(instanceGroup.GetJobByName(controlGemAgentJobName)).ShouldNot(BeNil())
+			Ω(instanceGroup.GetJobByName(controlGemAgentJobName).Release).Should(Equal(controlReleaseName))
 		})
 	})
 })
