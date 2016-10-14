@@ -57,8 +57,9 @@ func (s *LocatorGroup) GetInstanceGroup() *enaml.InstanceGroup {
 		},
 	}
 	arpJob := &enaml.InstanceJob{
-		Name:    arpCleanerJobName,
-		Release: releaseName,
+		Name:       arpCleanerJobName,
+		Release:    releaseName,
+		Properties: locator.LocatorJob{},
 	}
 	instanceGroup.AddJob(locatorJob)
 	instanceGroup.AddJob(arpJob)

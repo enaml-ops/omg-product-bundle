@@ -82,6 +82,7 @@ var _ = Describe("Locator Group", func() {
 		It("should contain a job for arp-cleaner from the gemfire release", func() {
 			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName)).ShouldNot(BeNil())
 			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName).Release).Should(Equal(controlReleaseName))
+			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName).Properties).ShouldNot(BeNil())
 		})
 	})
 })

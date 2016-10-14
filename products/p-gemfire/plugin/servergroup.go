@@ -77,8 +77,9 @@ func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
 		},
 	}
 	arpJob := &enaml.InstanceJob{
-		Name:    arpCleanerJobName,
-		Release: releaseName,
+		Name:       arpCleanerJobName,
+		Release:    releaseName,
+		Properties: server.ServerJob{},
 	}
 	instanceGroup.AddJob(serverJob)
 	instanceGroup.AddJob(arpJob)

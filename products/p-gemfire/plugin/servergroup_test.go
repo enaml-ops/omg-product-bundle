@@ -61,6 +61,7 @@ var _ = Describe("server Group", func() {
 		It("should contain a job for arp-cleaner from the gemfire release", func() {
 			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName)).ShouldNot(BeNil())
 			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName).Release).Should(Equal(controlReleaseName))
+			Ω(instanceGroup.GetJobByName(controlArpCleanerJobName).Properties).ShouldNot(BeNil())
 		})
 
 		It("should create an instance group with static IPs for locators", func() {
