@@ -1,0 +1,9 @@
+releases:
+- name: cf-rabbitmq
+  version: 300.8.0
+- name: service-metrics
+  version: 2.4.3
+- name: loggregator
+  version: "10"
+- name: rabbitmq-metrics
+  version: 1.30.0

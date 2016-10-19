@@ -77,6 +77,8 @@ crosscompile:
           GOOS=darwin go build -o p-spring-cloud-services-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-scs/cmd/p-scs/main.go
           GOOS=linux go build -o p-gemfire-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-gemfire/cmd/p-gemfire/main.go
           GOOS=darwin go build -o p-gemfire-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/p-gemfire/cmd/p-gemfire/main.go
+          GOOS=linux go build -o sfogliatelle-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/sfogliatelle/cmd/sfogliatelle/main.go
+          GOOS=darwin go build -o sfogliatelle-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/sfogliatelle/cmd/sfogliatelle/main.go
 
     - script:
         name: add repo to artifact
@@ -232,6 +234,18 @@ deploy-pre-release:
     - github-upload-asset:
         token: $GITHUB_TOKEN
         file: p-gemfire-plugin-osx
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: sfogliatelle-plugin-linux
+        release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
+        content-type: application/x-gzip
+
+    - github-upload-asset:
+        token: $GITHUB_TOKEN
+        file: sfogliatelle-plugin-osx
         release_id: $WERCKER_GITHUB_CREATE_RELEASE_ID
         content-type: application/x-gzip
 

@@ -46,3 +46,4 @@ import:
   - context
 - package: github.com/square/certstrap
 - package: github.com/op/go-logging
+- package: github.com/imdario/mergo

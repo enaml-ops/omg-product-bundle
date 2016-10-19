@@ -1,0 +1,2 @@
+name: rabbitmq-server-partition
+instances: 10
