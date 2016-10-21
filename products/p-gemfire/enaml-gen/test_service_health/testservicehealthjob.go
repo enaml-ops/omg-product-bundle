@@ -5,7 +5,7 @@ package test_service_health
 */
 type TestServiceHealthJob struct {
 
-	/*Gemfire - Descr: Name of service plan registered with cloud controller Default: <nil>
+	/*Gemfire - Descr: Name to give test app in order to bind test GemFire CF service Default: gemfire-smoke-test-app-e897eb2d-d5dc-4186-8cee
 */
 	Gemfire *Gemfire `yaml:"gemfire,omitempty"`
 

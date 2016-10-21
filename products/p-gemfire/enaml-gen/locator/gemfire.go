@@ -5,12 +5,12 @@ package locator
 */
 type Gemfire struct {
 
-	/*Locator - Descr: List of GemFire Locator addresses of the form X.X.X.X Default: <nil>
-*/
-	Locator *Locator `yaml:"locator,omitempty"`
-
 	/*ClusterTopology - Descr: Current topology Default: 2
 */
 	ClusterTopology *ClusterTopology `yaml:"cluster_topology,omitempty"`
+
+	/*Locator - Descr: RAM allocated to the locator VM in MB Default: <nil>
+*/
+	Locator *Locator `yaml:"locator,omitempty"`
 
 }

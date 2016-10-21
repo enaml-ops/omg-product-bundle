@@ -5,12 +5,12 @@ package test_service_health
 */
 type Testing struct {
 
-	/*CfServiceName - Descr: Name to give test GemFire CF service Default: gemfire-smoke-test-service-70552f90-7785-4347-9516
-*/
-	CfServiceName interface{} `yaml:"cf_service_name,omitempty"`
-
 	/*CfAppName - Descr: Name to give test app in order to bind test GemFire CF service Default: gemfire-smoke-test-app-e897eb2d-d5dc-4186-8cee
 */
 	CfAppName interface{} `yaml:"cf_app_name,omitempty"`
+
+	/*CfServiceName - Descr: Name to give test GemFire CF service Default: gemfire-smoke-test-service-70552f90-7785-4347-9516
+*/
+	CfServiceName interface{} `yaml:"cf_service_name,omitempty"`
 
 }

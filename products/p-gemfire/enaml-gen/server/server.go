@@ -13,6 +13,10 @@ type Server struct {
 */
 	RestPort interface{} `yaml:"rest_port,omitempty"`
 
+	/*DevRestApi - Descr: activate the dev rest api on your gemfire server nodes Default: false
+*/
+	DevRestApi *DevRestApi `yaml:"dev_rest_api,omitempty"`
+
 	/*VmMemory - Descr: RAM allocated to the VM Default: <nil>
 */
 	VmMemory interface{} `yaml:"vm_memory,omitempty"`

@@ -9,7 +9,7 @@ type LocatorJob struct {
 */
 	ExternalDependencies *ExternalDependencies `yaml:"external_dependencies,omitempty"`
 
-	/*Gemfire - Descr: List of GemFire Locator addresses of the form X.X.X.X Default: <nil>
+	/*Gemfire - Descr: Current topology Default: 2
 */
 	Gemfire *Gemfire `yaml:"gemfire,omitempty"`
 

@@ -5,12 +5,12 @@ package test_service_health
 */
 type Cc struct {
 
+	/*Api - Descr: Password for authentication Default: <nil>
+*/
+	Api *Api `yaml:"api,omitempty"`
+
 	/*AppDomain - Descr: Cloud Controller Application Domain Default: <nil>
 */
 	AppDomain interface{} `yaml:"app_domain,omitempty"`
-
-	/*Api - Descr: Username to authenticate with Default: <nil>
-*/
-	Api *Api `yaml:"api,omitempty"`
 
 }

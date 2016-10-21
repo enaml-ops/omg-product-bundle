@@ -5,16 +5,16 @@ package server
 */
 type Gemfire struct {
 
-	/*ClusterTopology - Descr: Number of locators per cluster Default: 0
-*/
-	ClusterTopology *ClusterTopology `yaml:"cluster_topology,omitempty"`
-
-	/*Locator - Descr: List of GemFire Locator addresses of the form X.X.X.X Default: <nil>
+	/*Locator - Descr: Port the Locator is listening on Default: <nil>
 */
 	Locator *Locator `yaml:"locator,omitempty"`
 
-	/*Server - Descr: Port the Server will listen on Default: 55001
+	/*Server - Descr: RAM allocated to the VM Default: <nil>
 */
 	Server *Server `yaml:"server,omitempty"`
+
+	/*ClusterTopology - Descr: Number of cache servers per cluster Default: 0
+*/
+	ClusterTopology *ClusterTopology `yaml:"cluster_topology,omitempty"`
 
 }

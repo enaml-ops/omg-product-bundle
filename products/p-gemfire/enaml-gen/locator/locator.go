@@ -5,6 +5,10 @@ package locator
 */
 type Locator struct {
 
+	/*VmMemory - Descr: RAM allocated to the locator VM in MB Default: <nil>
+*/
+	VmMemory interface{} `yaml:"vm_memory,omitempty"`
+
 	/*Addresses - Descr: List of GemFire Locator addresses of the form X.X.X.X Default: <nil>
 */
 	Addresses interface{} `yaml:"addresses,omitempty"`
@@ -16,9 +20,5 @@ type Locator struct {
 	/*RestPort - Descr: Port the Locator will listen on for REST API Default: 8080
 */
 	RestPort interface{} `yaml:"rest_port,omitempty"`
-
-	/*VmMemory - Descr: RAM allocated to the locator VM in MB Default: <nil>
-*/
-	VmMemory interface{} `yaml:"vm_memory,omitempty"`
 
 }

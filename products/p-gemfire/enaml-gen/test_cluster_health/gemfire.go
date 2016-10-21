@@ -5,7 +5,7 @@ package test_cluster_health
 */
 type Gemfire struct {
 
-	/*Locator - Descr: List of GemFire Locator addresses for plan 1 of the form X.X.X.X Default: <nil>
+	/*Locator - Descr: Port the Locator is listening on Default: 55221
 */
 	Locator *Locator `yaml:"locator,omitempty"`
 
