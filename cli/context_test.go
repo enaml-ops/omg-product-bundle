@@ -4,10 +4,11 @@ import (
 	"flag"
 	"io/ioutil"
 
-	. "github.com/enaml-ops/pluginlib/pluginutil"
+	cli "gopkg.in/urfave/cli.v2"
+
+	. "github.com/enaml-ops/omg-product-bundle/cli"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"gopkg.in/urfave/cli.v2"
 )
 
 var _ = Describe("LoadResourceFromContext function", func() {

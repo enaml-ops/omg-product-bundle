@@ -20,6 +20,9 @@ const (
 	BoshConsulReleaseURL = "https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease?v=20"
 	BoshConsulReleaseVer = "20"
 	BoshConsulReleaseSHA = "9a0591c6b4d88d7d756ea933e14ddf112d05f334"
+	StemcellName         = "ubuntu-trusty"
+	StemcellAlias        = "ubuntu-trusty"
+	StemcellVersion      = "3263.8"
 )
 
 type jobBucket struct {
@@ -56,8 +59,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
-
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: s.GetMeta().Stemcell.Name, Usage: "the name of the stemcell you will use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-release-url", Value: BoshVaultReleaseURL, Usage: "vault bosh release url"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-release-version", Value: BoshVaultReleaseVer, Usage: "vault bosh release version"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-release-sha", Value: BoshVaultReleaseSHA, Usage: "vault bosh release sha"},
@@ -70,6 +72,25 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "vault",
+		Stemcell: enaml.Stemcell{
+			Name:    StemcellName,
+			Alias:   StemcellAlias,
+			Version: StemcellVersion,
+		},
+		Releases: []enaml.Release{
+			enaml.Release{
+				Name:    "vault",
+				Version: BoshVaultReleaseVer,
+				URL:     BoshVaultReleaseURL,
+				SHA1:    BoshVaultReleaseSHA,
+			},
+			enaml.Release{
+				Name:    "consul",
+				Version: BoshConsulReleaseVer,
+				URL:     BoshConsulReleaseURL,
+				SHA1:    BoshConsulReleaseSHA,
+			},
+		},
 		Properties: map[string]interface{}{
 			"version":        s.PluginVersion,
 			"vault-release":  strings.Join([]string{BoshVaultReleaseURL, BoshVaultReleaseVer, BoshVaultReleaseSHA}, " / "),
