@@ -27,10 +27,12 @@ var _ = Describe("server Group", func() {
 		var controlInstanceCount = 6
 		var controlArpCleanerJobName = "arp-cleaner"
 		var controlReleaseName = "GemFire"
+		var controlDevRestPort = 7070
+		var controlDevRestActive = false
 
 		BeforeEach(func() {
 			locatorGroup = NewLocatorGroup(controlNetworkName, controlLocatorStaticIPs, controlPort, controlRestPort, controlVMMemory, controlVMType)
-			serverGroup = NewServerGroup(controlNetworkName, controlServerPort, controlInstanceCount, []string{}, controlVMType, controlServerVMMemory, locatorGroup)
+			serverGroup = NewServerGroup(controlNetworkName, controlServerPort, controlInstanceCount, []string{}, controlVMType, controlServerVMMemory, controlDevRestPort, controlDevRestActive, locatorGroup)
 			instanceGroup = serverGroup.GetInstanceGroup()
 			staticIPs = instanceGroup.GetNetworkByName(controlNetworkName).StaticIPs
 		})
@@ -40,7 +42,7 @@ var _ = Describe("server Group", func() {
 
 			BeforeEach(func() {
 
-				serverGroup = NewServerGroup(controlNetworkName, controlServerPort, controlInstanceCount, controlServerStaticIPs, controlVMType, controlServerVMMemory, locatorGroup)
+				serverGroup = NewServerGroup(controlNetworkName, controlServerPort, controlInstanceCount, controlServerStaticIPs, controlVMType, controlServerVMMemory, controlDevRestPort, controlDevRestActive, locatorGroup)
 				instanceGroup = serverGroup.GetInstanceGroup()
 				staticIPs = instanceGroup.GetNetworkByName(controlNetworkName).StaticIPs
 			})
@@ -91,6 +93,13 @@ var _ = Describe("server Group", func() {
 			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(server.ServerJob)
 			Ω(jobProperties.Gemfire.Server.Port).Should(Equal(controlServerPort), "server port should match the user given value")
 			Ω(jobProperties.Gemfire.Server.VmMemory).Should(Equal(controlServerVMMemory), "server vm memory should mathc the user given value")
+		})
+		Context("when given a dev rest api config value", func() {
+			It("should set the values in the server", func() {
+				jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(server.ServerJob)
+				Ω(jobProperties.Gemfire.Server.DevRestApi.Port).Should(Equal(controlDevRestPort))
+				Ω(jobProperties.Gemfire.Server.DevRestApi.Active).Should(Equal(controlDevRestActive))
+			})
 		})
 	})
 })

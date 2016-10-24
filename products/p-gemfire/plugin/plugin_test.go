@@ -3,6 +3,7 @@ package gemfire_plugin_test
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"gopkg.in/yaml.v2"
 
@@ -268,6 +269,33 @@ var _ = Describe("pgemfire plugin", func() {
 				propertiesBytes, _ := yaml.Marshal(instanceGroup.GetJobByName("server").Properties)
 				yaml.Unmarshal(propertiesBytes, properties)
 				Expect(properties.Gemfire.ClusterTopology.NumberOfServers).Should(Equal(givenStaticCount), fmt.Sprintf("we should match ips given not instance count given"))
+			})
+		})
+
+		Context("and command line args are setting dev rest apiu config", func() {
+			It("should properly set up the settings for the dev rest api", func() {
+				var controlPort = 4567
+				var controlActive = "true"
+				manifestBytes, err := gPlugin.GetProduct([]string{
+					"pgemfire-command",
+					"--az", "blah",
+					"--network-name", "net1",
+					"--locator-static-ip", "1.0.0.2",
+					"--server-instance-count", "3",
+					"--server-static-ip", "1.0.0.3",
+					"--gemfire-locator-vm-size", "asdf",
+					"--gemfire-server-vm-size", "asdf",
+					"--gemfire-dev-rest-api-port", strconv.Itoa(controlPort),
+					"--gemfire-dev-rest-api-active", controlActive,
+				}, []byte{})
+				Expect(err).ShouldNot(HaveOccurred())
+				manifest := enaml.NewDeploymentManifest(manifestBytes)
+				instanceGroup := manifest.GetInstanceGroupByName("server-group")
+				var properties = new(server.ServerJob)
+				propertiesBytes, _ := yaml.Marshal(instanceGroup.GetJobByName("server").Properties)
+				yaml.Unmarshal(propertiesBytes, properties)
+				Expect(properties.Gemfire.Server.DevRestApi.Port).Should(Equal(controlPort), fmt.Sprintf("should overwrite the port default"))
+				Expect(properties.Gemfire.Server.DevRestApi.Active).Should(BeTrue(), fmt.Sprintf("should overwrite the active default"))
 			})
 		})
 	})

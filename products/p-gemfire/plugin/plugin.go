@@ -57,7 +57,9 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
 	serverInstanceCount := c.Int("server-instance-count")
 	serverStaticIPs := c.StringSlice("server-static-ip")
 	servervmmemory := c.Int("gemfire-server-vm-memory")
-	server := NewServerGroup(networkname, serverport, serverInstanceCount, serverStaticIPs, servervmtype, servervmmemory, locator)
+	serverdevrestport := c.Int("gemfire-dev-rest-api-port")
+	serverdevrestactive := c.Bool("gemfire-dev-rest-api-active")
+	server := NewServerGroup(networkname, serverport, serverInstanceCount, serverStaticIPs, servervmtype, servervmmemory, serverdevrestport, serverdevrestactive, locator)
 	serverInstanceGroup := server.GetInstanceGroup()
 	serverInstanceGroup.Stemcell = c.String("stemcell-alias")
 	serverInstanceGroup.AZs = azs
@@ -155,6 +157,18 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 			Name:     "gemfire-locator-port",
 			Value:    defaultLocatorPort,
 			Usage:    "the port gemfire locators will listen on",
+		},
+		pcli.Flag{
+			FlagType: pcli.IntFlag,
+			Name:     "gemfire-dev-rest-api-port",
+			Value:    defaultDevRestPort,
+			Usage:    "this will set the port the dev rest api listens on, if active",
+		},
+		pcli.Flag{
+			FlagType: pcli.BoolFlag,
+			Name:     "gemfire-dev-rest-api-active",
+			Value:    defaultDevRestActive,
+			Usage:    "set to true to activate the dev rest api on server nodes",
 		},
 		pcli.Flag{
 			FlagType: pcli.IntFlag,

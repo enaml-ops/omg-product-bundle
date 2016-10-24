@@ -17,4 +17,6 @@ const (
 	defaultStemcellAlias       = "trusty"
 	defaultStemcellVersion     = "3232.17"
 	defaultServerInstanceCount = "2"
+	defaultDevRestPort         = "7070"
+	defaultDevRestActive       = "true"
 )

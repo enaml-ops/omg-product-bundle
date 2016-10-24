@@ -13,10 +13,14 @@ type ServerGroup struct {
 	Port          int
 	VMMemory      int
 	StaticIPs     []string
+	DevRestPort   int
+	DevRestActive bool
 }
 
-func NewServerGroup(networkname string, serverport int, instanceCount int, staticIPs []string, vmtype string, vmmemory int, locator *LocatorGroup) *ServerGroup {
+func NewServerGroup(networkname string, serverport int, instanceCount int, staticIPs []string, vmtype string, vmmemory int, devrestport int, devrestactive bool, locator *LocatorGroup) *ServerGroup {
 	sg := new(ServerGroup)
+	sg.DevRestPort = devrestport
+	sg.DevRestActive = devrestactive
 	sg.NetworkName = networkname
 	sg.Locator = locator
 	sg.StaticIPs = staticIPs
@@ -68,6 +72,10 @@ func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
 					RestPort: s.Locator.RestPort,
 					Port:     s.Port,
 					VmMemory: s.VMMemory,
+					DevRestApi: &server.DevRestApi{
+						Port:   s.DevRestPort,
+						Active: s.DevRestActive,
+					},
 				},
 				ClusterTopology: &server.ClusterTopology{
 					NumberOfLocators: len(s.Locator.StaticIPs),
