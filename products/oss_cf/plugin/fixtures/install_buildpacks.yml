@@ -1,0 +1,16 @@
+- name: staticfile_buildpack
+  package: staticfile-buildpack
+- name: java-offline-buildpack
+  package: buildpack_java_offline
+- name: ruby_buildpack
+  package: ruby-buildpack
+- name: nodejs_buildpack
+  package: nodejs-buildpack
+- name: go_buildpack
+  package: go-buildpack
+- name: python_buildpack
+  package: python-buildpack
+- name: php_buildpack
+  package: php-buildpack
+- name: binary_buildpack
+  package: binary-buildpack
