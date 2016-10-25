@@ -19,23 +19,26 @@ const (
 	defaultRegistryReleaseSHA string = "834f8ca9fd8f5280d94007b724a3b710739619db"
 	defaultRegistryReleaseVer string = "3"
 
-	registryReleaseURL string = "docker-registry-release-url"
-	registryReleaseSHA string = "docker-registry-release-sha"
-	registryReleaseVer string = "docker-registry-release-version"
-	stemcellAlias      string = "stemcell-alias"
-	stemcellOS         string = "stemcell-os"
-	stemcellVersion    string = "stemcell-version"
-	az                 string = "az"
-	deploymentName     string = "deployment-name"
-	networkName        string = "network-name"
-	registryIP         string = "registry-ip"
-	registryVMType     string = "registry-vm-type"
-	proxyVMType        string = "proxy-vm-type"
-	proxyIP            string = "proxy-ip"
-	nfsVMType          string = "nfs-server-vm-type"
-	nfsDiskType        string = "nfs-server-disk-type"
-	nfsIP              string = "nfs-server-ip"
-	publicHostName     string = "public-host-name"
+	registryReleaseURL     string = "docker-registry-release-url"
+	registryReleaseSHA     string = "docker-registry-release-sha"
+	registryReleaseVer     string = "docker-registry-release-version"
+	stemcellAlias          string = "stemcell-alias"
+	stemcellOS             string = "stemcell-os"
+	stemcellVersion        string = "stemcell-version"
+	az                     string = "az"
+	deploymentName         string = "deployment-name"
+	networkName            string = "network-name"
+	registryIP             string = "registry-ip"
+	registryVMType         string = "registry-vm-type"
+	proxyVMType            string = "proxy-vm-type"
+	proxyIP                string = "proxy-ip"
+	nfsVMType              string = "nfs-server-vm-type"
+	nfsDiskType            string = "nfs-server-disk-type"
+	nfsIP                  string = "nfs-server-ip"
+	publicHostName         string = "public-host-name"
+	defaultStemcellName           = "ubuntu-trusty"
+	defaultStemcellAlias          = "trusty"
+	defaultStemcellVersion        = "latest"
 )
 
 type Plugin struct {
@@ -60,9 +63,9 @@ func (p *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: registryReleaseURL, Value: defaultRegistryReleaseURL, Usage: "release url for docker-registry bosh release"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: registryReleaseSHA, Value: defaultRegistryReleaseSHA, Usage: "release sha for docker-registry bosh release"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: registryReleaseVer, Value: defaultRegistryReleaseVer, Usage: "release version for docker-registry bosh release"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: stemcellAlias, Value: "trusty", Usage: "alias of stemcell"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: stemcellOS, Value: "ubuntu-trusty", Usage: "os of stemcell"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: stemcellVersion, Value: "latest", Usage: "version of stemcell"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: stemcellAlias, Value: p.GetMeta().Stemcell.Alias, Usage: "alias of stemcell"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: stemcellOS, Value: p.GetMeta().Stemcell.Name, Usage: "os of stemcell"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: stemcellVersion, Value: p.GetMeta().Stemcell.Version, Usage: "version of stemcell"},
 	}
 	return
 }
@@ -70,6 +73,19 @@ func (p *Plugin) GetFlags() (flags []pcli.Flag) {
 func (p *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "docker-registry",
+		Stemcell: enaml.Stemcell{
+			Name:    defaultStemcellName,
+			Alias:   defaultStemcellAlias,
+			Version: defaultStemcellVersion,
+		},
+		Releases: []enaml.Release{
+			enaml.Release{
+				Name:    "docker-registry",
+				Version: defaultRegistryReleaseVer,
+				URL:     defaultRegistryReleaseURL,
+				SHA1:    defaultRegistryReleaseSHA,
+			},
+		},
 		Properties: map[string]interface{}{
 			"version":                 p.PluginVersion,
 			"docker-registry-release": strings.Join([]string{defaultRegistryReleaseURL, defaultRegistryReleaseVer, defaultRegistryReleaseSHA}, " / "),

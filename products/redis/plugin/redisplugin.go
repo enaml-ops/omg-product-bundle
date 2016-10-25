@@ -13,10 +13,13 @@ import (
 )
 
 const (
-	BoshReleaseURL = "https://bosh.io/d/github.com/cloudfoundry-community/redis-boshrelease?v=12"
-	BoshReleaseVer = "12"
-	BoshReleaseSHA = "324910eaf68e8803ad2317d5a2f5f6a06edc0a40"
-	Master         = iota
+	StemcellName    = "trusty"
+	StemcellAlias   = "trusty"
+	StemcellVersion = "3263.8"
+	BoshReleaseURL  = "https://bosh.io/d/github.com/cloudfoundry-community/redis-boshrelease?v=12"
+	BoshReleaseVer  = "12"
+	BoshReleaseSHA  = "324910eaf68e8803ad2317d5a2f5f6a06edc0a40"
+	Master          = iota
 	Slave
 	Errand
 	Pool
@@ -46,13 +49,26 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: s.GetMeta().Stemcell.Name, Usage: "the name of the stemcell you will use"},
 	}
 }
 
 func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "redis",
+		Stemcell: enaml.Stemcell{
+			Name:    StemcellName,
+			Alias:   StemcellAlias,
+			Version: StemcellVersion,
+		},
+		Releases: []enaml.Release{
+			enaml.Release{
+				Name:    "redis",
+				Version: BoshReleaseVer,
+				URL:     BoshReleaseURL,
+				SHA1:    BoshReleaseSHA,
+			},
+		},
 		Properties: map[string]interface{}{
 			"version":       s.PluginVersion,
 			"redis-release": strings.Join([]string{BoshReleaseURL, BoshReleaseVer, BoshReleaseSHA}, " / "),

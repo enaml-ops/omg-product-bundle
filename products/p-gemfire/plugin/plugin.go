@@ -101,6 +101,17 @@ func validate(flagName string, c *cli.Context) error {
 func (p *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "p-gemfire",
+		Stemcell: enaml.Stemcell{
+			Name:    defaultStemcellName,
+			Alias:   defaultStemcellAlias,
+			Version: defaultStemcellVersion,
+		},
+		Releases: []enaml.Release{
+			enaml.Release{
+				Name:    releaseName,
+				Version: releaseVersion,
+			},
+		},
 		Properties: map[string]interface{}{
 			"version":              p.Version,
 			"stemcell":             defaultStemcellVersion,
@@ -201,19 +212,19 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 		pcli.Flag{
 			FlagType: pcli.StringFlag,
 			Name:     "stemcell-name",
-			Value:    defaultStemcellName,
+			Value:    p.GetMeta().Stemcell.Name,
 			Usage:    "the name of the stemcell you with to use",
 		},
 		pcli.Flag{
 			FlagType: pcli.StringFlag,
 			Name:     "stemcell-alias",
-			Value:    defaultStemcellAlias,
+			Value:    p.GetMeta().Stemcell.Alias,
 			Usage:    "the name of the stemcell you with to use",
 		},
 		pcli.Flag{
 			FlagType: pcli.StringFlag,
 			Name:     "stemcell-ver",
-			Value:    defaultStemcellVersion,
+			Value:    p.GetMeta().Stemcell.Version,
 			Usage:    "the name of the stemcell you with to use",
 		},
 		pcli.Flag{

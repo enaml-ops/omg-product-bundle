@@ -131,6 +131,29 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "p-mysql",
+		Stemcell: enaml.Stemcell{
+			Name:    StemcellName,
+			Alias:   StemcellAlias,
+			Version: defaultStemcellVersion,
+		},
+		Releases: []enaml.Release{
+			enaml.Release{
+				Name:    CFMysqlReleaseName,
+				Version: CFMysqlReleaseVersion,
+			},
+			enaml.Release{
+				Name:    MysqlBackupReleaseName,
+				Version: MysqlBackupReleaseVersion,
+			},
+			enaml.Release{
+				Name:    ServiceBackupReleaseName,
+				Version: ServiceBackupReleaseVersion,
+			},
+			enaml.Release{
+				Name:    MysqlMonitoringReleaseName,
+				Version: MysqlMonitoringReleaseVersion,
+			},
+		},
 		Properties: map[string]interface{}{
 			"version":        s.PluginVersion,
 			"stemcell":       defaultStemcellVersion,

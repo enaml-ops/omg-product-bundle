@@ -8,8 +8,8 @@ import (
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/pluginlib/pcli"
-	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/pluginutil"
+	"github.com/enaml-ops/pluginlib/product"
 	"github.com/xchapter7x/lo"
 )
 
@@ -62,6 +62,29 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 func (p *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "p-rabbitmq",
+		Stemcell: enaml.Stemcell{
+			Name:    StemcellName,
+			Alias:   StemcellAlias,
+			Version: StemcellVersion,
+		},
+		Releases: []enaml.Release{
+			enaml.Release{
+				Name:    CFRabbitMQReleaseName,
+				Version: CFRabbitMQReleaseVersion,
+			},
+			enaml.Release{
+				Name:    ServiceMetricsReleaseName,
+				Version: ServiceMetricsReleaseVersion,
+			},
+			enaml.Release{
+				Name:    LoggregatorReleaseName,
+				Version: LoggregatorReleaseVersion,
+			},
+			enaml.Release{
+				Name:    RabbitMQMetricsReleaseName,
+				Version: RabbitMQMetricsReleaseVersion,
+			},
+		},
 		Properties: map[string]interface{}{
 			"version":                  p.Version,
 			"stemcell":                 StemcellVersion,

@@ -20,6 +20,8 @@ const (
 	BoshDockerReleaseURL = "https://bosh.io/d/github.com/cf-platform-eng/docker-boshrelease?v=28.0.1"
 	BoshDockerReleaseVer = "28.0.1"
 	BoshDockerReleaseSHA = "448eaa2f478dc8794933781b478fae02aa44ed6b"
+	defaultReleaseName   = "docker"
+	defaultStemcellName  = "trusty"
 )
 
 type jobBucket struct {
@@ -58,7 +60,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: "trusty", Usage: "the name of the stemcell you will use"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: s.GetMeta().Stemcell.Name, Usage: "the name of the stemcell you will use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "container-definition", Usage: "filepath to the container definition for your docker containers"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "docker-release-url", Value: BoshDockerReleaseURL, Usage: "the url of the docker release you wish to use"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: "docker-release-ver", Value: BoshDockerReleaseVer, Usage: "the version number of the docker release you wish to use"},
@@ -69,6 +71,17 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "docker",
+		Stemcell: enaml.Stemcell{
+			Name: defaultStemcellName,
+		},
+		Releases: []enaml.Release{
+			enaml.Release{
+				Name:    defaultReleaseName,
+				Version: BoshDockerReleaseVer,
+				URL:     BoshDockerReleaseURL,
+				SHA1:    BoshDockerReleaseSHA,
+			},
+		},
 		Properties: map[string]interface{}{
 			"version":        s.PluginVersion,
 			"docker-release": strings.Join([]string{BoshDockerReleaseURL, BoshDockerReleaseVer, BoshDockerReleaseSHA}, " / "),
@@ -117,7 +130,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err er
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)
 	dm.SetName(s.DeploymentName)
-	dm.AddRemoteRelease("docker", c.String("docker-release-ver"), c.String("docker-release-url"), c.String("docker-release-sha"))
+	dm.AddRemoteRelease(defaultReleaseName, c.String("docker-release-ver"), c.String("docker-release-url"), c.String("docker-release-sha"))
 	dm.AddRemoteStemcell(s.StemcellName, s.StemcellName, s.StemcellVersion, s.StemcellURL, s.StemcellSHA)
 
 	dm.AddInstanceGroup(s.NewDockerInstanceGroup())

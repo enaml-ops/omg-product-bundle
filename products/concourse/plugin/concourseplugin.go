@@ -25,30 +25,33 @@ const (
 	defaultGardenReleaseSHA    string = "20e98ea84c8f4426bba00bbca17d931e27d3c07d"
 	defaultGardenReleaseVer    string = "0.8.0"
 
-	concoursePassword   string = "concourse-password"
-	concourseUsername   string = "concourse-username"
-	externalURL         string = "external-url"
-	webIPs              string = "web-ip"
-	networkName         string = "network-name"
-	az                  string = "az"
-	deploymentName      string = "deployment-name"
-	webVMType           string = "web-vm-type"
-	databaseVMType      string = "database-vm-type"
-	workerVMType        string = "worker-vm-type"
-	workerInstances     string = "worker-instance-count"
-	databaseStorageType string = "database-storage-type"
-	postgresqlDbPwd     string = "concourse-db-pwd"
-	concourseReleaseURL string = "concourse-release-url"
-	concourseReleaseSHA string = "concourse-release-sha"
-	concourseReleaseVer string = "concourse-release-ver"
-	gardenReleaseURL    string = "garden-release-url"
-	gardenReleaseSHA    string = "garden-release-sha"
-	gardenReleaseVer    string = "garden-release-ver"
-	stemcellAlias       string = "stemcell-alias"
-	stemcellOS          string = "stemcell-os"
-	stemcellVersion     string = "stemcell-version"
-	tlsCert             string = "tls-cert"
-	tlsKey              string = "tls-key"
+	concoursePassword      string = "concourse-password"
+	concourseUsername      string = "concourse-username"
+	externalURL            string = "external-url"
+	webIPs                 string = "web-ip"
+	networkName            string = "network-name"
+	az                     string = "az"
+	deploymentName         string = "deployment-name"
+	webVMType              string = "web-vm-type"
+	databaseVMType         string = "database-vm-type"
+	workerVMType           string = "worker-vm-type"
+	workerInstances        string = "worker-instance-count"
+	databaseStorageType    string = "database-storage-type"
+	postgresqlDbPwd        string = "concourse-db-pwd"
+	concourseReleaseURL    string = "concourse-release-url"
+	concourseReleaseSHA    string = "concourse-release-sha"
+	concourseReleaseVer    string = "concourse-release-ver"
+	gardenReleaseURL       string = "garden-release-url"
+	gardenReleaseSHA       string = "garden-release-sha"
+	gardenReleaseVer       string = "garden-release-ver"
+	stemcellAlias          string = "stemcell-alias"
+	stemcellOS             string = "stemcell-os"
+	stemcellVersion        string = "stemcell-version"
+	tlsCert                string = "tls-cert"
+	tlsKey                 string = "tls-key"
+	defaultStemcellAlias          = "trusty"
+	defaultStemcellName           = "ubuntu-trusty"
+	defaultStemcellVersion        = "latest"
 )
 
 func (s *ConcoursePlugin) GetFlags() (flags []pcli.Flag) {
@@ -85,6 +88,25 @@ func (s *ConcoursePlugin) GetFlags() (flags []pcli.Flag) {
 func (s *ConcoursePlugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "concourse",
+		Stemcell: enaml.Stemcell{
+			Name:    defaultStemcellName,
+			Alias:   defaultStemcellAlias,
+			Version: defaultStemcellVersion,
+		},
+		Releases: []enaml.Release{
+			enaml.Release{
+				Name:    "garden-runc",
+				Version: defaultGardenReleaseVer,
+				URL:     defaultGardenReleaseURL,
+				SHA1:    defaultGardenReleaseSHA,
+			},
+			enaml.Release{
+				Name:    "concourse",
+				Version: defaultConcourseReleaseVer,
+				URL:     defaultConcourseReleaseURL,
+				SHA1:    defaultConcourseReleaseSHA,
+			},
+		},
 		Properties: map[string]interface{}{
 			"version":           s.PluginVersion,
 			"concourse-release": strings.Join([]string{defaultConcourseReleaseURL, defaultConcourseReleaseVer, defaultConcourseReleaseSHA}, " / "),

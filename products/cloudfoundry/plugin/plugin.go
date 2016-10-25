@@ -6,8 +6,8 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/cloudfoundry/plugin/config"
 	"github.com/enaml-ops/pluginlib/pcli"
-	"github.com/enaml-ops/pluginlib/product"
 	"github.com/enaml-ops/pluginlib/pluginutil"
+	"github.com/enaml-ops/pluginlib/product"
 	"github.com/xchapter7x/lo"
 	"gopkg.in/urfave/cli.v2"
 )
@@ -62,11 +62,11 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.CreateStringFlag("etcd-release-version", "version for etcd bosh release", EtcdReleaseVersion),
 		pcli.CreateStringFlag("cf-mysql-release-version", "version for cf-mysql bosh release", CFMysqlReleaseVersion),
 		pcli.CreateStringFlag("cflinuxfs2-release-version", "version for cflinuxfs2 bosh release", CFLinuxReleaseVersion),
-		pcli.CreateStringFlag("stemcell-version", "version of stemcell", StemcellVersion),
+		pcli.CreateStringFlag("stemcell-version", "version of stemcell", s.GetMeta().Stemcell.Version),
 
 		// shared for all instance groups:
 		pcli.CreateBoolFlag("infer-from-cloud", "setting this flag will attempt to pull as many defaults from your targetted bosh's cloud config as it can (vmtype, network, disk, etc)."),
-		pcli.CreateStringFlag("stemcell-name", "the alias of your desired stemcell", StemcellAlias),
+		pcli.CreateStringFlag("stemcell-name", "the alias of your desired stemcell", s.GetMeta().Stemcell.Alias),
 		pcli.CreateStringSliceFlag("az", "list of AZ names to use"),
 		pcli.CreateStringFlag("network", "the name of the network to use"),
 		pcli.CreateStringFlag("system-domain", "System Domain"),
@@ -273,6 +273,54 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 func (s *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "cloudfoundry",
+
+		Stemcell: enaml.Stemcell{
+			Name:    StemcellName,
+			Alias:   StemcellAlias,
+			Version: StemcellVersion,
+		},
+		Releases: []enaml.Release{
+			enaml.Release{
+				Name:    CFReleaseName,
+				Version: CFReleaseVersion,
+			},
+			enaml.Release{
+				Name:    CFMysqlReleaseName,
+				Version: CFMysqlReleaseVersion,
+			},
+			enaml.Release{
+				Name:    DiegoReleaseName,
+				Version: DiegoReleaseVersion,
+			},
+			enaml.Release{
+				Name:    GardenReleaseName,
+				Version: GardenReleaseVersion,
+			},
+			enaml.Release{
+				Name:    CFLinuxReleaseName,
+				Version: CFLinuxReleaseVersion,
+			},
+			enaml.Release{
+				Name:    EtcdReleaseName,
+				Version: EtcdReleaseVersion,
+			},
+			enaml.Release{
+				Name:    PushAppsReleaseName,
+				Version: PushAppsReleaseVersion,
+			},
+			enaml.Release{
+				Name:    NotificationsReleaseName,
+				Version: NotificationsReleaseVersion,
+			},
+			enaml.Release{
+				Name:    NotificationsUIReleaseName,
+				Version: NotificationsUIReleaseVersion,
+			},
+			enaml.Release{
+				Name:    CFAutoscalingReleaseName,
+				Version: CFAutoscalingReleaseVersion,
+			},
+		},
 		Properties: map[string]interface{}{
 			"version":                   s.PluginVersion,
 			"pivotal-elastic-runtime":   strings.Join([]string{"pivotal-elastic-runtime", PivotalERTVersion}, " / "),

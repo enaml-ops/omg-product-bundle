@@ -53,6 +53,17 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 func (p *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "p-spring-cloud-services",
+		Stemcell: enaml.Stemcell{
+			Name:    StemcellName,
+			Alias:   StemcellAlias,
+			Version: StemcellVersion,
+		},
+		Releases: []enaml.Release{
+			enaml.Release{
+				Name:    SpringCloudBrokerReleaseName,
+				Version: SpringCloudBrokerReleaseVersion,
+			},
+		},
 		Properties: map[string]interface{}{
 			"version":                       p.Version,
 			"stemcell":                      StemcellVersion,
