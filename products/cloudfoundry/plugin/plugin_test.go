@@ -1,6 +1,7 @@
 package cloudfoundry
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -17,7 +18,34 @@ import (
 
 var _ = Describe("Cloud Foundry Plugin", func() {
 
+	Describe("given a call to the plugin", func() {
+
+		Context("when 'stemcell-name' flag is given by the user", func() {
+			var ertPlugin *Plugin
+
+			BeforeEach(func() {
+				ertPlugin = new(Plugin)
+			})
+
+			It("then it should overwrite the default and use the value given", func() {
+				controlStemcellAlias := "ubuntu-magic"
+				manifestBytes, err := ertPlugin.GetProduct(append(
+					[]string{"ert-command"},
+					ertRequiredFlags(controlStemcellAlias)...,
+				), []byte{})
+				Expect(err).ShouldNot(HaveOccurred())
+				manifest := enaml.NewDeploymentManifest(manifestBytes)
+				Ω(manifest.Stemcells).ShouldNot(BeNil())
+				Ω(manifest.Stemcells[0].Alias).Should(Equal(controlStemcellAlias))
+				for _, instanceGroup := range manifest.InstanceGroups {
+					Expect(instanceGroup.Stemcell).Should(Equal(controlStemcellAlias), fmt.Sprintf("stemcell for instance group %v was not set properly", instanceGroup.Name))
+				}
+			})
+		})
+	})
+
 	Describe("given InferFromCloudDecorate", func() {
+
 		Context("when infer-from-cloud is set to true", func() {
 			var flgs []pcli.Flag
 			var args []string
@@ -189,3 +217,141 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 		})
 	})
 })
+
+func ertRequiredFlags(stemcellAlias string) []string {
+	return []string{
+		"--stemcell-name", stemcellAlias,
+		"--vault-active=false",
+		"--network", "1",
+		"--system-domain", "1",
+		"--host-key-fingerprint", "1",
+		"--support-address", "1",
+		"--min-cli-version", "1",
+		"--nfs-share-path", "1",
+		"--uaa-login-protocol", "1",
+		"--doppler-zone", "1",
+		"--uaa-company-name", "1",
+		"--uaa-product-logo", "1",
+		"--uaa-square-logo", "1",
+		"--uaa-footer-legal-txt", "1",
+		"--az", "1",
+		"--app-domain", "1",
+		"--nfs-allow-from-network-cidr", "1",
+		"--nats-port", "1",
+		"--doppler-drain-buffer-size", "1",
+		"--cc-uploader-poll-interval", "1",
+		"--cc-external-port", "1",
+		"--loggregator-port", "1",
+		"--consul-agent-cert", "1",
+		"--consul-agent-key", "1",
+		"--consul-server-cert", "1",
+		"--consul-server-key", "1",
+		"--bbs-server-ca-cert", "1",
+		"--bbs-client-cert", "1",
+		"--bbs-client-key", "1",
+		"--bbs-server-cert", "1",
+		"--bbs-server-key", "1",
+		"--etcd-server-cert", "1",
+		"--etcd-server-key", "1",
+		"--etcd-client-cert", "1",
+		"--etcd-client-key", "1",
+		"--etcd-peer-cert", "1",
+		"--etcd-peer-key", "1",
+		"--uaa-saml-service-provider-key", "1",
+		"--uaa-saml-service-provider-cert", "1",
+		"--uaa-jwt-signing-key", "1",
+		"--uaa-jwt-verification-key", "1",
+		"--router-ssl-cert", "1",
+		"--router-ssl-key", "1",
+		"--diego-cell-disk-type", "1",
+		"--diego-brain-disk-type", "1",
+		"--diego-db-disk-type", "1",
+		"--nfs-disk-type", "1",
+		"--etcd-disk-type", "1",
+		"--mysql-disk-type", "1",
+		"--cc-instances", "1",
+		"--uaa-instances", "1",
+		"--cc-worker-instances", "1",
+		"--db-uaa-password", "1",
+		"--push-apps-manager-password", "1",
+		"--system-services-password", "1",
+		"--system-verification-password", "1",
+		"--opentsdb-firehose-nozzle-client-secret", "1",
+		"--identity-client-secret", "1",
+		"--login-client-secret", "1",
+		"--portal-client-secret", "1",
+		"--autoscaling-service-client-secret", "1",
+		"--system-passwords-client-secret", "1",
+		"--cc-service-dashboards-client-secret", "1",
+		"--gorouter-client-secret", "1",
+		"--notifications-client-secret", "1",
+		"--notifications-ui-client-secret", "1",
+		"--cloud-controller-username-lookup-client-secret", "1",
+		"--cc-routing-client-secret", "1",
+		"--apps-metrics-client-secret", "1",
+		"--apps-metrics-processing-client-secret", "1",
+		"--admin-password", "1",
+		"--nats-pass", "1",
+		"--mysql-bootstrap-password", "1",
+		"--consul-encryption-key", "1",
+		"--smoke-tests-password", "1",
+		"--doppler-shared-secret", "1",
+		"--doppler-client-secret", "1",
+		"--cc-bulk-api-password", "1",
+		"--cc-internal-api-password", "1",
+		"--ssh-proxy-uaa-secret", "1",
+		"--cc-db-encryption-key", "1",
+		"--db-ccdb-password", "1",
+		"--diego-db-passphrase", "1",
+		"--uaa-admin-secret", "1",
+		"--router-pass", "1",
+		"--mysql-proxy-api-password", "1",
+		"--mysql-admin-password", "1",
+		"--db-console-password", "1",
+		"--cc-staging-upload-password", "1",
+		"--db-app_usage-password", "1",
+		"--apps-manager-secret-token", "1",
+		"--db-autoscale-password", "1",
+		"--db-notifications-password", "1",
+		"--nats-user", "1",
+		"--mysql-bootstrap-username", "1",
+		"--cc-staging-upload-user", "1",
+		"--db-ccdb-username", "1",
+		"--db-uaa-username", "1",
+		"--mysql-proxy-api-username", "1",
+		"--db-console-username", "1",
+		"--router-user", "1",
+		"--cc-internal-api-user", "1",
+		"--db-autoscale-username", "1",
+		"--db-notifications-username", "1",
+		"--mysql-proxy-vm-type", "1",
+		"--clock-global-vm-type", "1",
+		"--cc-vm-type", "1",
+		"--diego-brain-vm-type", "1",
+		"--diego-cell-vm-type", "1",
+		"--doppler-vm-type", "1",
+		"--loggregator-traffic-controller-vmtype", "1",
+		"--cc-worker-vm-type", "1",
+		"--errand-vm-type", "1",
+		"--etcd-vm-type", "1",
+		"--nats-vm-type", "1",
+		"--consul-vm-type", "1",
+		"--mysql-vm-type", "1",
+		"--diego-db-vm-type", "1",
+		"--uaa-vm-type", "1",
+		"--router-vm-type", "1",
+		"--nfs-vm-type", "1",
+		"--nfs-ip", "1",
+		"--mysql-ip", "1",
+		"--diego-cell-ip", "1",
+		"--consul-ip", "1",
+		"--doppler-ip", "1",
+		"--mysql-proxy-ip", "1",
+		"--loggregator-traffic-controller-ip", "1",
+		"--nats-machine-ip", "1",
+		"--etcd-machine-ip", "1",
+		"--diego-brain-ip", "1",
+		"--diego-db-ip", "1",
+		"--router-ip", "1",
+	}
+}

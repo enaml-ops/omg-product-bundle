@@ -412,7 +412,7 @@ func (s *Plugin) getDeploymentManifest(c *cli.Context, config *config.Config) (*
 	dm.AddRelease(enaml.Release{Name: NotificationsReleaseName, Version: NotificationsReleaseVersion})
 	dm.AddRelease(enaml.Release{Name: NotificationsUIReleaseName, Version: NotificationsUIReleaseVersion})
 
-	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: c.String("stemcell-version"), Alias: StemcellAlias})
+	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: c.String("stemcell-version"), Alias: c.String("stemcell-name")})
 
 	dm.Update.MaxInFlight = 1
 	dm.Update.Canaries = 1
