@@ -115,7 +115,9 @@ func (s *MySQL) newMySQLJob() enaml.InstanceJob {
 						Password: s.Config.MySQLAdminPassword,
 					},
 					GaleraHealthcheck: &mysqllib.GaleraHealthcheck{
-						DbPassword: s.Config.MySQLAdminPassword,
+						EndpointUsername: s.Config.MySQLBootstrapUser,
+						EndpointPassword: s.Config.MySQLBootstrapPassword,
+						DbPassword:       s.Config.MySQLBootstrapPassword,
 					},
 					ClusterIps:             s.Config.MySQLIPs,
 					DatabaseStartupTimeout: s.DatabaseStartupTimeout,

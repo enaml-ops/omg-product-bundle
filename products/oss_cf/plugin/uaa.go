@@ -248,15 +248,67 @@ func (s *UAA) CreateUAA() (login *uaa.Uaa) {
 				Override: true,
 			},
 			UseridsEnabled: true,
-			Users: []string{
-				fmt.Sprintf("admin|%s|scim.write,scim.read,openid,cloud_controller.admin,dashboard.user,console.admin,console.support,doppler.firehose,notification_preferences.read,notification_preferences.write,notifications.manage,notification_templates.read,notification_templates.write,emails.write,notifications.write,zones.read,zones.write", s.Config.AdminPassword),
-				fmt.Sprintf("push_apps_manager|%s|cloud_controller.admin", s.Config.PushAppsManagerPassword),
-				fmt.Sprintf("smoke_tests|%s|cloud_controller.admin", s.Config.SmokeTestsPassword),
-				fmt.Sprintf("system_services|%s|cloud_controller.admin", s.Config.SystemServicesPassword),
-				fmt.Sprintf("system_verification|%s|scim.write,scim.read,openid,cloud_controller.admin,dashboard.user,console.admin,console.support", s.Config.SystemVerificationPassword),
+			Users: []UAAScimUser{
+				UAAScimUser{
+					Name:     "admin",
+					Password: s.Config.AdminPassword,
+					Groups: []string{
+						"scim.write",
+						"scim.read",
+						"openid",
+						"cloud_controller.admin",
+						"dashboard.user",
+						"console.admin",
+						"console.support",
+						"doppler.firehose",
+						"notification_preferences.read",
+						"notification_preferences.write",
+						"notifications.manage",
+						"notification_templates.read",
+						"notification_templates.write",
+						"emails.write",
+						"notifications.write",
+						"zones.read",
+						"zones.write",
+					},
+				},
+				UAAScimUser{
+					Name:     "push_apps_manager",
+					Password: s.Config.PushAppsManagerPassword,
+					Groups:   []string{"cloud_controller.admin"},
+				},
+				UAAScimUser{
+					Name:     "smoke_tests",
+					Password: s.Config.SmokeTestsPassword,
+					Groups:   []string{"cloud_controller.admin"},
+				},
+				UAAScimUser{
+					Name:     "system_services",
+					Password: s.Config.SystemServicesPassword,
+					Groups:   []string{"cloud_controller.admin"},
+				},
+				UAAScimUser{
+					Name:     "system_verification",
+					Password: s.Config.SystemVerificationPassword,
+					Groups: []string{
+						"scim.write",
+						"scim.read",
+						"openid",
+						"cloud_controller.admin",
+						"dashboard.user",
+						"console.admin",
+						"console.support",
+					},
+				},
 			},
 		},
 	}
+}
+
+type UAAScimUser struct {
+	Name     string   `yaml:"name,omitempty"`
+	Password string   `yaml:"password,omitempty"`
+	Groups   []string `yaml:"groups,omitempty"`
 }
 
 //CreateLogin - Helper method to create login structure

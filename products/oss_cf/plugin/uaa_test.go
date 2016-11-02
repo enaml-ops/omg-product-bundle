@@ -193,7 +193,7 @@ var _ = Describe("UAA Partition", func() {
 			Ω(props.Uaa.Scim.User.Override).Should(BeTrue())
 			Ω(props.Uaa.Scim.UseridsEnabled).Should(BeTrue())
 			Ω(props.Uaa.Scim.Users).ShouldNot(BeNil())
-			users := props.Uaa.Scim.Users.([]string)
+			users := props.Uaa.Scim.Users.([]UAAScimUser)
 			Ω(len(users)).Should(Equal(5))
 		})
 		It("then it should then have uaa job with valid login information", func() {
