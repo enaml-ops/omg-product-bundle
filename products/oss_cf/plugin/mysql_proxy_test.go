@@ -1,7 +1,7 @@
 package cloudfoundry_test
 
 import (
-	"github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/proxy"
+	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/proxy"
 	. "github.com/enaml-ops/omg-product-bundle/products/oss_cf/plugin"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/plugin/config"
 	. "github.com/onsi/ginkgo"
@@ -94,11 +94,11 @@ var _ = Describe("MySQL Proxy Partition", func() {
 			Ω(job).ShouldNot(BeNil())
 			Ω(job.Release).Should(Equal("cf-mysql"))
 			props, _ := job.Properties.(*proxy.ProxyJob)
-			Ω(props.Proxy.ApiUsername).Should(Equal("apiuser"))
-			Ω(props.Proxy.ApiPassword).Should(Equal("apipassword"))
-			Ω(props.Proxy.ProxyIps).Should(ConsistOf("1.0.10.3", "1.0.10.4"))
-			Ω(props.ExternalHost).Should(Equal("mysqlhostname"))
-			Ω(props.ClusterIps).Should(ConsistOf("1.0.10.1", "1.0.10.2"))
+			Ω(props.CfMysql.Proxy.ApiUsername).Should(Equal("apiuser"))
+			Ω(props.CfMysql.Proxy.ApiPassword).Should(Equal("apipassword"))
+			Ω(props.CfMysql.Proxy.ProxyIps).Should(ConsistOf("1.0.10.3", "1.0.10.4"))
+			Ω(props.CfMysql.ExternalHost).Should(Equal("mysqlhostname"))
+			Ω(props.CfMysql.Mysql.ClusterIps).Should(ConsistOf("1.0.10.1", "1.0.10.2"))
 			Ω(props.SyslogAggregator.Address).Should(Equal("syslog-server"))
 			Ω(props.SyslogAggregator.Port).Should(Equal(10601))
 			Ω(props.SyslogAggregator.Transport).Should(Equal("tcp"))

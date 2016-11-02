@@ -1,7 +1,7 @@
 package cloudfoundry_test
 
 import (
-	"github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/mysql"
+	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/mysql"
 	. "github.com/enaml-ops/omg-product-bundle/products/oss_cf/plugin"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/plugin/config"
 	. "github.com/onsi/ginkgo"
@@ -101,17 +101,16 @@ var _ = Describe("MySQL Partition", func() {
 			job := ig.GetJobByName("mysql")
 			Ω(job).ShouldNot(BeNil())
 			props, _ := job.Properties.(*mysql.MysqlJob)
-			Ω(props.AdminPassword).Should(Equal("mysqladmin"))
-			Ω(props.DatabaseStartupTimeout).Should(Equal(1200))
-			Ω(props.MaxConnections).Should(Equal(1500))
-			Ω(props.InnodbBufferPoolSize).Should(Equal(2147483648))
-			Ω(props.BootstrapEndpoint.Username).Should(Equal("mysqlbootstrap"))
-			Ω(props.BootstrapEndpoint.Password).Should(Equal("mysqlbootstrappwd"))
+			Ω(props.CfMysql.Mysql.DatabaseStartupTimeout).Should(Equal(1200))
+			Ω(props.CfMysql.Mysql.MaxConnections).Should(Equal(1500))
+			Ω(props.CfMysql.Mysql.InnodbBufferPoolSize).Should(Equal(2147483648))
+			Ω(props.CfMysql.Mysql.AdminUsername).Should(Equal("mysqlbootstrap"))
+			Ω(props.CfMysql.Mysql.AdminPassword).Should(Equal("mysqlbootstrappwd"))
 			Ω(props.SyslogAggregator.Address).Should(Equal("syslog-server"))
 			Ω(props.SyslogAggregator.Port).Should(Equal(10601))
 			Ω(props.SyslogAggregator.Transport).Should(Equal("tcp"))
-			Ω(props.ClusterIps).Should(ConsistOf("1.0.10.1", "1.0.10.2"))
-			Ω(props.SeededDatabases).ShouldNot(BeEmpty())
+			Ω(props.CfMysql.Mysql.ClusterIps).Should(ConsistOf("1.0.10.1", "1.0.10.2"))
+			Ω(props.CfMysql.Mysql.SeededDatabases).ShouldNot(BeEmpty())
 		})
 
 		It("then the mysql job should have seeded databases", func() {

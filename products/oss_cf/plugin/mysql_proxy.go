@@ -2,7 +2,7 @@ package cloudfoundry
 
 import (
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-product-bundle/products/cf-mysql/enaml-gen/proxy"
+	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/proxy"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/plugin/config"
 )
 
@@ -44,13 +44,17 @@ func (s *MySQLProxy) newMySQLProxyJob() enaml.InstanceJob {
 		Name:    "proxy",
 		Release: "cf-mysql",
 		Properties: &proxy.ProxyJob{
-			Proxy: &proxy.Proxy{
-				ApiUsername: s.Config.MySQLProxyAPIUsername,
-				ApiPassword: s.Config.MySQLProxyAPIPassword,
-				ProxyIps:    s.Config.MySQLProxyIPs,
+			CfMysql: &proxy.CfMysql{
+				ExternalHost: s.Config.MySQLProxyExternalHost,
+				Proxy: &proxy.Proxy{
+					ApiUsername: s.Config.MySQLProxyAPIUsername,
+					ApiPassword: s.Config.MySQLProxyAPIPassword,
+					ProxyIps:    s.Config.MySQLProxyIPs,
+				},
+				Mysql: &proxy.Mysql{
+					ClusterIps: s.Config.MySQLIPs,
+				},
 			},
-			ExternalHost: s.Config.MySQLProxyExternalHost,
-			ClusterIps:   s.Config.MySQLIPs,
 			SyslogAggregator: &proxy.SyslogAggregator{
 				Address:   s.Config.SyslogAddress,
 				Port:      s.Config.SyslogPort,
