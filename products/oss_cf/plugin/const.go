@@ -8,7 +8,7 @@ const (
 
 	StemcellName    = "ubuntu-trusty"
 	StemcellAlias   = "trusty"
-	StemcellVersion = "3232.17"
+	StemcellVersion = "latest"
 
 	CFLinuxReleaseName    = "cflinuxfs2-rootfs"
 	CFLinuxReleaseVersion = "1.37.0"
