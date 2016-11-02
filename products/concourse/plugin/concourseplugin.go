@@ -1,7 +1,9 @@
 package concourseplugin
 
 import (
+	"errors"
 	"fmt"
+	"net/url"
 	"strings"
 
 	"github.com/enaml-ops/enaml"
@@ -163,7 +165,13 @@ func NewDeploymentManifest(c *cli.Context, cloudConfig []byte) (enaml.Deployment
 	deployment.GardenReleaseSHA = c.String(gardenReleaseSHA)
 	deployment.GardenReleaseVer = c.String(gardenReleaseVer)
 
-	var err error
+	url, err := url.Parse(deployment.ConcourseURL)
+	if err != nil {
+		return enaml.DeploymentManifest{}, fmt.Errorf("concourse-url invalid: %v", err)
+	}
+	if url.Scheme == "" {
+		return enaml.DeploymentManifest{}, errors.New("concourse-url missing scheme")
+	}
 
 	if err = deployment.Initialize(cloudConfig); err != nil {
 		lo.G.Error(err.Error())
