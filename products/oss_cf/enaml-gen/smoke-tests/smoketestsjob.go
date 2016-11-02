@@ -5,8 +5,12 @@ package smoke_tests
 */
 type SmokeTestsJob struct {
 
-	/*SmokeTests - Descr: Toggles a portion of the suite that exercises Windows platform support Default: false
+	/*CfMysql - Descr: Expect proxy to force redirect to HTTPS Default: true
 */
-	SmokeTests *SmokeTests `yaml:"smoke_tests,omitempty"`
+	CfMysql *CfMysql `yaml:"cf_mysql,omitempty"`
+
+	/*Cf - Descr: Whether to add --skip-ssl-validation for cf cli Default: false
+*/
+	Cf *Cf `yaml:"cf,omitempty"`
 
 }
