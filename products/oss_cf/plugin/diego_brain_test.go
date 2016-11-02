@@ -3,14 +3,10 @@ package cloudfoundry_test
 import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/auctioneer"
-	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/cc_uploader"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/consul_agent"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/metron_agent"
-	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/nsync"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/route_emitter"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/ssh_proxy"
-	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/stager"
-	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/tps"
 	. "github.com/enaml-ops/omg-product-bundle/products/oss_cf/plugin"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/plugin/config"
 	. "github.com/onsi/ginkgo"
@@ -111,9 +107,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 
 			By("configuring the CC uploader")
 			job = ig.GetJobByName("cc_uploader")
-			Ω(job.Release).Should(Equal(DiegoReleaseName))
-			cc := job.Properties.(*cc_uploader.CcUploaderJob)
-			Ω(cc.Diego.Ssl.SkipCertVerify).Should(BeFalse())
+			Ω(job).Should(BeNil(), "cc_uploader ")
 
 			By("configuring the file server")
 			job = ig.GetJobByName("file_server")
@@ -121,17 +115,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 
 			By("configuring nsync")
 			job = ig.GetJobByName("nsync")
-			Ω(job.Release).Should(Equal(DiegoReleaseName))
-			n := job.Properties.(*nsync.NsyncJob)
-			Ω(n.Diego.Ssl.SkipCertVerify).Should(BeFalse())
-			Ω(n.Capi.Nsync.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
-			Ω(n.Capi.Nsync.Bbs.CaCert).Should(Equal("cacert"))
-			Ω(n.Capi.Nsync.Bbs.ClientCert).Should(Equal("clientcert"))
-			Ω(n.Capi.Nsync.Bbs.ClientKey).Should(Equal("clientkey"))
-			Ω(n.Capi.Nsync.Cc.BaseUrl).Should(Equal("https://api.sys.test.com"))
-			Ω(n.Capi.Nsync.Cc.BasicAuthUsername).Should(Equal("internaluser"))
-			Ω(n.Capi.Nsync.Cc.BasicAuthPassword).Should(Equal("internalpassword"))
-			Ω(n.Capi.Nsync.Cc.PollingIntervalInSeconds).Should(Equal(25))
+			Ω(job).Should(BeNil())
 
 			By("configuring the route emitter")
 			job = ig.GetJobByName("route_emitter")
@@ -166,32 +150,11 @@ var _ = Describe("given a Diego Brain Partition", func() {
 
 			By("configuring the stager")
 			job = ig.GetJobByName("stager")
-			Ω(job.Release).Should(Equal(DiegoReleaseName))
-			stager := job.Properties.(*stager.StagerJob)
-			Ω(s.Diego.Ssl.SkipCertVerify).Should(BeFalse())
-			Ω(stager.Capi.Stager.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
-			Ω(stager.Capi.Stager.Bbs.CaCert).Should(Equal("cacert"))
-			Ω(stager.Capi.Stager.Bbs.ClientCert).Should(Equal("clientcert"))
-			Ω(stager.Capi.Stager.Bbs.ClientKey).Should(Equal("clientkey"))
-			Ω(stager.Capi.Stager.Bbs.RequireSsl).Should(BeFalse())
-			Ω(stager.Capi.Stager.Cc.ExternalPort).Should(Equal(9023))
-			Ω(stager.Capi.Stager.Cc.BasicAuthUsername).Should(Equal("internaluser"))
-			Ω(stager.Capi.Stager.Cc.BasicAuthPassword).Should(Equal("internalpassword"))
+			Ω(job).Should(BeNil())
 
 			By("configuring the tps")
 			job = ig.GetJobByName("tps")
-			Ω(job.Release).Should(Equal(DiegoReleaseName))
-			t := job.Properties.(*tps.TpsJob)
-			Ω(t.Diego.Ssl.SkipCertVerify).Should(BeFalse())
-			Ω(t.Capi.Tps.TrafficControllerUrl).Should(Equal("wss://doppler.sys.test.com:443"))
-			Ω(t.Capi.Tps.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))
-			Ω(t.Capi.Tps.Bbs.CaCert).Should(Equal("cacert"))
-			Ω(t.Capi.Tps.Bbs.ClientCert).Should(Equal("clientcert"))
-			Ω(t.Capi.Tps.Bbs.ClientKey).Should(Equal("clientkey"))
-			Ω(t.Capi.Tps.Bbs.RequireSsl).Should(BeFalse())
-			Ω(t.Capi.Tps.Cc.ExternalPort).Should(Equal(9023))
-			Ω(t.Capi.Tps.Cc.BasicAuthUsername).Should(Equal("internaluser"))
-			Ω(t.Capi.Tps.Cc.BasicAuthPassword).Should(Equal("internalpassword"))
+			Ω(job).Should(BeNil())
 
 			By("configuring the consul agent")
 			job = ig.GetJobByName("consul_agent")
