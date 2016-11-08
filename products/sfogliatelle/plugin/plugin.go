@@ -7,9 +7,10 @@ import (
 	"strings"
 
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/pluginlib/cred"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
-	"github.com/enaml-ops/pluginlib/product"
+	"github.com/enaml-ops/pluginlib/productv1"
 	"github.com/imdario/mergo"
 	"gopkg.in/urfave/cli.v2"
 	"gopkg.in/yaml.v2"
@@ -21,7 +22,7 @@ type Plugin struct {
 }
 
 // GetProduct generates a BOSH deployment manifest for sfogliatelle.
-func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
+func (p *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([]byte, error) {
 	var deploymentManifest = enaml.NewDeploymentManifestFromFile(p.Source)
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(p.GetFlags()))
 

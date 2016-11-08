@@ -27,7 +27,7 @@ var _ = Describe("sfogliatelle plugin", func() {
 		It("should pass validation of required flags", func() {
 			_, err := splugin.GetProduct([]string{
 				"sfogliatelle-command",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).Should(HaveOccurred(), "we should error if the proper flags are not given")
 		})
 	})
@@ -38,7 +38,7 @@ var _ = Describe("sfogliatelle plugin", func() {
 			_, err := splugin.GetProduct([]string{
 				"sfogliatelle-command",
 				"--layer-file", "fixtures/instance-layer.yml",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred(), "should pass env var isset required value check")
 		})
 
@@ -49,7 +49,7 @@ var _ = Describe("sfogliatelle plugin", func() {
 					"sfogliatelle-command",
 					"--layer-file", "fixtures/instance-layer.yml",
 					"--instance-group-name", "rabbitmq-server-partition",
-				}, []byte{})
+				}, []byte{}, nil)
 				Expect(err).ShouldNot(HaveOccurred())
 				manifest := enaml.NewDeploymentManifest(manifestBytes)
 				ig := manifest.GetInstanceGroupByName("rabbitmq-server-partition")
@@ -66,7 +66,7 @@ var _ = Describe("sfogliatelle plugin", func() {
 					"--layer-file", "fixtures/job-layer.yml",
 					"--instance-group-name", "rabbitmq-server-partition",
 					"--job-name", "metron_agent",
-				}, []byte{})
+				}, []byte{}, nil)
 				Expect(err).ShouldNot(HaveOccurred())
 				manifest := enaml.NewDeploymentManifest(manifestBytes)
 				ig := manifest.GetInstanceGroupByName("rabbitmq-server-partition")
@@ -84,7 +84,7 @@ var _ = Describe("sfogliatelle plugin", func() {
 				manifestBytes, err := splugin.GetProduct([]string{
 					"sfogliatelle-command",
 					"--layer-file", "fixtures/deploy-layer.yml",
-				}, []byte{})
+				}, []byte{}, nil)
 				Expect(err).ShouldNot(HaveOccurred())
 				manifest := enaml.NewDeploymentManifest(manifestBytes)
 
