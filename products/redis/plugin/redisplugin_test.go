@@ -45,14 +45,14 @@ var _ = Describe("given redis Plugin", func() {
 				"--stemcell-url", "something",
 				"--stemcell-ver", "12.3.44",
 				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			Ω(err).Should(HaveOccurred())
 		})
 	})
 
 	Context("when calling plugin without all required flags", func() {
 		It("then it should fail fast and give the user guidance on what is wrong", func() {
-			_, err := plgn.GetProduct([]string{"appname"}, []byte(``))
+			_, err := plgn.GetProduct([]string{"appname"}, []byte(``), nil)
 			Ω(err).Should(HaveOccurred())
 		})
 	})
@@ -78,7 +78,7 @@ var _ = Describe("given redis Plugin", func() {
 				"--leader-ip", controlIP,
 				"--slave-ip", controlIP,
 				"--stemcell-ver", "12.3.44",
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})
