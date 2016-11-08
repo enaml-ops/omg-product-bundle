@@ -28,7 +28,7 @@ var _ = Describe("prabbitmq plugin", func() {
 			p = new(prabbitmq.Plugin)
 		})
 		It("then we should return error", func() {
-			_, err := p.GetProduct([]string{"foo"}, []byte{})
+			_, err := p.GetProduct([]string{"foo"}, []byte{}, nil)
 			Ω(err).Should(HaveOccurred())
 		})
 	})
@@ -58,7 +58,7 @@ var _ = Describe("prabbitmq plugin", func() {
 				"--rabbit-haproxy-vm-type", "asdf",
 				"--syslog-address", "asdf",
 				"--nats-machine-ip", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
@@ -125,7 +125,7 @@ var _ = Describe("prabbitmq plugin", func() {
 				"--rabbit-public-ip", "asdf",
 				"--syslog-address", "asdf",
 				"--nats-machine-ip", "asdf",
-			}, cc)
+			}, cc, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
@@ -210,7 +210,7 @@ var _ = Describe("prabbitmq plugin", func() {
 				"--rabbit-broker-vm-type", "asdf",
 				"--rabbit-server-vm-type", "asdf",
 				"--rabbit-haproxy-vm-type", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})

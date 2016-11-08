@@ -7,9 +7,10 @@ import (
 	cli "gopkg.in/urfave/cli.v2"
 
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/pluginlib/cred"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
-	"github.com/enaml-ops/pluginlib/product"
+	"github.com/enaml-ops/pluginlib/productv1"
 	"github.com/xchapter7x/lo"
 )
 
@@ -98,7 +99,7 @@ func (p *Plugin) GetMeta() product.Meta {
 }
 
 // GetProduct generates a BOSH deployment manifest for p-rabbitmq.
-func (p *Plugin) GetProduct(args []string, cloudConfig []byte) ([]byte, error) {
+func (p *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([]byte, error) {
 	var err error
 	flags := p.GetFlags()
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flags))
