@@ -50,7 +50,7 @@ var _ = Describe("given p-mysql Plugin", func() {
 				"--ip", controlIP,
 				"--az", "z1-nothere",
 				"--stemcell-ver", "12.3.44",
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			Ω(err).Should(HaveOccurred())
 		})
 	})
@@ -71,7 +71,7 @@ var _ = Describe("given p-mysql Plugin", func() {
 		})
 
 		It("then it should fail fast and give the user guidance on what is wrong", func() {
-			_, err := plgn.GetProduct([]string{"appname"}, []byte(``))
+			_, err := plgn.GetProduct([]string{"appname"}, []byte(``), nil)
 			Ω(err).Should(HaveOccurred())
 		})
 	})
@@ -109,7 +109,7 @@ var _ = Describe("given p-mysql Plugin", func() {
 				"--ip", controlIP,
 				"--az", "z1",
 				"--stemcell-ver", "12.3.44",
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})
@@ -141,7 +141,7 @@ var _ = Describe("given p-mysql Plugin", func() {
 				"--ip", controlIP,
 				"--az", "z1",
 				"--stemcell-ver", "12.3.44",
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})

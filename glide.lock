@@ -1,5 +1,5 @@
-hash: 3e0cbc6de65465edda50e7b5423aaeb775a0f24e5dc9b83a6c56fff54fe45ab5
-updated: 2016-10-24T15:39:03.215240763-04:00
+hash: bfd7fdb6de4bb8a207b1e09f11027c398b2ba27c053f9bbb51126fdd75dac76e
+updated: 2016-11-08T12:18:17.09732393-06:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -17,11 +17,13 @@ imports:
   - cloudproperties/azure
   - enamlbosh
 - name: github.com/enaml-ops/pluginlib
-  version: 824082430c3139d2434bb386ab1c252aff278d6c
+  version: 2c6f71179c5f5d33fd5c13fc2abfeeb68e224005
   subpackages:
+  - cred
   - pcli
   - pluginutil
   - product
+  - productv1
 - name: github.com/golang/protobuf
   version: 98fa357170587e470c5f27d3c3ea0947b71eb455
   subpackages:
@@ -73,11 +75,11 @@ imports:
 - name: github.com/pivotal-golang/clock
   version: e0835a7d46f9ea781e764f0dc9325110e32a97dd
 - name: github.com/pivotalservices/gtils
-  version: 2605eda5a33230d9613738bba5271d1c040e4a15
+  version: 65c0f332bafc62dc7e1824982ac31b5c21f927b2
   subpackages:
   - osutils
 - name: github.com/pkg/errors
-  version: 839d9e913e063e28dfd0e6c7b7512793e0a48be9
+  version: 248dadf4e9068a0b3e79f02ed0a610d935de5302
 - name: github.com/pkg/sftp
   version: 4d0e916071f68db74f8a73926335f809396d6b42
 - name: github.com/square/certstrap
