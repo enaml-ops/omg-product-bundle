@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/enaml-ops/omg-product-bundle/products/sfogliatelle/plugin"
-	"github.com/enaml-ops/pluginlib/product"
+	"github.com/enaml-ops/pluginlib/productv1"
 )
 
 // Version is the version of the sfogliatelle plugin.
