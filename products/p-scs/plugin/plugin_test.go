@@ -26,7 +26,7 @@ var _ = Describe("p-scs plugin", func() {
 
 		BeforeEach(func() {
 			p = new(pscs.Plugin)
-			_, err = p.GetProduct([]string{"foo"}, []byte{})
+			_, err = p.GetProduct([]string{"foo"}, []byte{}, nil)
 		})
 		It("should yield an error", func() {
 			Ω(err).Should(HaveOccurred())
@@ -49,7 +49,7 @@ var _ = Describe("p-scs plugin", func() {
 				"--network", "asdf",
 				"--admin-password", "asdf",
 				"--uaa-admin-secret", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
@@ -104,7 +104,7 @@ var _ = Describe("p-scs plugin", func() {
 				"--app-domain", "asdf",
 				"--admin-password", "asdf",
 				"--uaa-admin-secret", "asdf",
-			}, cc)
+			}, cc, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			dm = enaml.NewDeploymentManifest(manifestBytes)
 		})
