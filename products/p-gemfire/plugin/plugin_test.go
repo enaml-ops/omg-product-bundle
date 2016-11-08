@@ -36,7 +36,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--server-instance-count", "1",
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred(), "should pass env var isset required value check")
 		})
 
@@ -48,7 +48,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--server-instance-count", "1",
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred())
 			manifest := enaml.NewDeploymentManifest(manifestBytes)
 			for _, instanceGroup := range manifest.InstanceGroups {
@@ -71,7 +71,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--server-instance-count", "1",
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred())
 			manifest := enaml.NewDeploymentManifest(manifestBytes)
 			locator := manifest.GetInstanceGroupByName("locator-group")
@@ -88,7 +88,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--server-instance-count", "1",
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).Should(HaveOccurred())
 		})
 
@@ -100,7 +100,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--server-instance-count", "1",
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).Should(HaveOccurred())
 		})
 
@@ -112,7 +112,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--server-instance-count", "1",
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).Should(HaveOccurred())
 		})
 
@@ -124,7 +124,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--locator-static-ip", "asdf",
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred(), "server-instance-count should not be required")
 		})
 
@@ -136,7 +136,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--locator-static-ip", "asdf",
 				"--server-instance-count", "1",
 				"--gemfire-server-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).Should(HaveOccurred())
 		})
 
@@ -148,7 +148,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--locator-static-ip", "asdf",
 				"--server-instance-count", "1",
 				"--gemfire-locator-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).Should(HaveOccurred())
 		})
 
@@ -163,7 +163,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
 				"--stemcell-alias", controlStemcellAlias,
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred())
 			manifest := enaml.NewDeploymentManifest(manifestBytes)
 			Ω(manifest.Update.MaxInFlight).ShouldNot(Equal(0), "max in flight")
@@ -183,7 +183,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
 				"--stemcell-alias", controlStemcellAlias,
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred())
 			manifest := enaml.NewDeploymentManifest(manifestBytes)
 			Ω(manifest.Releases).ShouldNot(BeEmpty())
@@ -203,7 +203,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
 				"--stemcell-alias", controlStemcellAlias,
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred())
 			manifest := enaml.NewDeploymentManifest(manifestBytes)
 			Ω(manifest.Stemcells).ShouldNot(BeNil())
@@ -224,7 +224,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--server-instance-count", "1",
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred())
 			manifest := enaml.NewDeploymentManifest(manifestBytes)
 			Ω(manifest.Name).Should(Equal(controlName))
@@ -240,7 +240,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--server-instance-count", "1",
 				"--gemfire-locator-vm-size", "asdf",
 				"--gemfire-server-vm-size", "asdf",
-			}, []byte{})
+			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred())
 			manifest := enaml.NewDeploymentManifest(manifestBytes)
 			for _, instanceGroup := range manifest.InstanceGroups {
@@ -261,7 +261,7 @@ var _ = Describe("pgemfire plugin", func() {
 					"--server-static-ip", "1.0.0.3",
 					"--gemfire-locator-vm-size", "asdf",
 					"--gemfire-server-vm-size", "asdf",
-				}, []byte{})
+				}, []byte{}, nil)
 				Expect(err).ShouldNot(HaveOccurred())
 				manifest := enaml.NewDeploymentManifest(manifestBytes)
 				instanceGroup := manifest.GetInstanceGroupByName("server-group")
@@ -287,7 +287,7 @@ var _ = Describe("pgemfire plugin", func() {
 					"--gemfire-server-vm-size", "asdf",
 					"--gemfire-dev-rest-api-port", strconv.Itoa(controlPort),
 					"--gemfire-dev-rest-api-active", controlActive,
-				}, []byte{})
+				}, []byte{}, nil)
 				Expect(err).ShouldNot(HaveOccurred())
 				manifest := enaml.NewDeploymentManifest(manifestBytes)
 				instanceGroup := manifest.GetInstanceGroupByName("server-group")

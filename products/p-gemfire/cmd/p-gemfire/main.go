@@ -2,7 +2,7 @@ package main
 
 import (
 	pgemfire "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/plugin"
-	"github.com/enaml-ops/pluginlib/product"
+	"github.com/enaml-ops/pluginlib/productv1"
 )
 
 // Version is the version of the p-gemfire plugin.
