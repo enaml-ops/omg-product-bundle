@@ -5,9 +5,10 @@ import (
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/plugin/config"
+	"github.com/enaml-ops/pluginlib/cred"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
-	"github.com/enaml-ops/pluginlib/product"
+	"github.com/enaml-ops/pluginlib/productv1"
 	"github.com/xchapter7x/lo"
 	"gopkg.in/urfave/cli.v2"
 )
@@ -329,7 +330,7 @@ func (s *Plugin) GetMeta() product.Meta {
 }
 
 //GetProduct -
-func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err error) {
+func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b []byte, err error) {
 	flgs := s.GetFlags()
 	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
 

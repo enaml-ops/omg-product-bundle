@@ -40,7 +40,7 @@ var _ = Describe("given docker Plugin", func() {
 				"--container-definition", "./fixtures/sample-docker.yml",
 				"--insecure-registry", controlRegistry1,
 				"--insecure-registry", controlRegistry2,
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 			Ω(err).ShouldNot(HaveOccurred())
 			Ω(len(deployment.InstanceGroups)).Should(BeNumerically(">", 0), "we expect there to be some instance groups defined")
@@ -68,7 +68,7 @@ var _ = Describe("given docker Plugin", func() {
 					"--docker-release-ver", "skjdf",
 					"--docker-release-url", "asdfasdf",
 					"--docker-release-sha", "asdfasdf",
-				}, cloudConfigBytes)
+				}, cloudConfigBytes, nil)
 			}).ShouldNot(Panic(), "these flags should not cause a panic, b/c they should exist")
 		})
 		It("then it should set the give values as the release values", func() {
@@ -88,7 +88,7 @@ var _ = Describe("given docker Plugin", func() {
 				"--docker-release-ver", controlver,
 				"--docker-release-url", controlurl,
 				"--docker-release-sha", controlsha,
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			deployment := enaml.NewDeploymentManifest(dmBytes)
 			Ω(err).ShouldNot(HaveOccurred())
 			Ω(deployment.Releases[0].Version).Should(Equal(controlver))
@@ -115,7 +115,7 @@ var _ = Describe("given docker Plugin", func() {
 				"--container-definition", "./fixtures/sample-docker.yml",
 				"--registry-mirror", controlMirror1,
 				"--registry-mirror", controlMirror2,
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 			Ω(err).ShouldNot(HaveOccurred())
 			Ω(len(deployment.InstanceGroups)).Should(BeNumerically(">", 0), "we expect there to be some instance groups defined")
@@ -190,7 +190,7 @@ var _ = Describe("given docker Plugin", func() {
 				"--stemcell-ver", "12.3.44",
 				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 				"--container-definition", "./fixtures/sample-docker.yml",
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			Ω(err).Should(HaveOccurred())
 		})
 	})
@@ -211,7 +211,7 @@ var _ = Describe("given docker Plugin", func() {
 		})
 
 		It("then it should fail fast and give the user guidance on what is wrong", func() {
-			_, err := plgn.GetProduct([]string{"appname"}, []byte(``))
+			_, err := plgn.GetProduct([]string{"appname"}, []byte(``), nil)
 			Ω(err).Should(HaveOccurred())
 		})
 	})
@@ -239,7 +239,7 @@ var _ = Describe("given docker Plugin", func() {
 				"--az", "z1",
 				"--stemcell-ver", "12.3.44",
 				"--container-definition", "this-file-does-not-exist",
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 		})
 
 		AfterEach(func() {
@@ -269,7 +269,7 @@ var _ = Describe("given docker Plugin", func() {
 				"--az", "z1",
 				"--stemcell-ver", "12.3.44",
 				"--container-definition", "./fixtures/sample-docker.yml",
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})
@@ -302,7 +302,7 @@ var _ = Describe("given docker Plugin", func() {
 				"--stemcell-ver", "12.3.44",
 				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 				"--container-definition", "./fixtures/sample-docker.yml",
-			}, cloudConfigBytes)
+			}, cloudConfigBytes, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			deployment = enaml.NewDeploymentManifest(dmBytes)
 		})

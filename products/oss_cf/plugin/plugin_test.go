@@ -32,7 +32,7 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 				manifestBytes, err := ertPlugin.GetProduct(append(
 					[]string{"ert-command"},
 					ertRequiredFlags(controlStemcellAlias)...,
-				), []byte{})
+				), []byte{}, nil)
 				Expect(err).ShouldNot(HaveOccurred())
 				manifest := enaml.NewDeploymentManifest(manifestBytes)
 				Ω(manifest.Stemcells).ShouldNot(BeNil())

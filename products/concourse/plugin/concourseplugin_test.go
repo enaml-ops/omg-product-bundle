@@ -20,7 +20,7 @@ var _ = Describe("given ConcoursePlugin Plugin", func() {
 					"--concourse-username", "concourse",
 					"--concourse-password", "concourse",
 					"--az", "z1",
-				}, nil)
+				}, []byte{}, nil)
 				Ω(err).Should(HaveOccurred())
 			})
 		})
@@ -39,7 +39,7 @@ var _ = Describe("given ConcoursePlugin Plugin", func() {
 				"--worker-vm-type", "medium",
 				"--database-vm-type", "medium",
 				"--database-storage-type", "large",
-			}, cloudBytes)
+			}, cloudBytes, nil)
 			Ω(err).Should(HaveOccurred())
 		})
 	})
@@ -65,7 +65,7 @@ var _ = Describe("given ConcoursePlugin Plugin", func() {
 					"--worker-vm-type", "medium",
 					"--database-vm-type", "medium",
 					"--database-storage-type", "large",
-				}, cloudBytes)
+				}, cloudBytes, nil)
 			})
 			It("then it should return the bytes representation of the object", func() {
 				Ω(err).ShouldNot(HaveOccurred())

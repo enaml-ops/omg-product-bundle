@@ -8,9 +8,10 @@ import (
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/dockerregistry"
+	"github.com/enaml-ops/pluginlib/cred"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
-	"github.com/enaml-ops/pluginlib/product"
+	"github.com/enaml-ops/pluginlib/productv1"
 	"github.com/xchapter7x/lo"
 )
 
@@ -93,7 +94,7 @@ func (p *Plugin) GetMeta() product.Meta {
 	}
 }
 
-func (p *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err error) {
+func (p *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b []byte, err error) {
 	if len(cloudConfig) == 0 {
 		err = fmt.Errorf("cloud config cannot be empty")
 		lo.G.Error(err.Error())

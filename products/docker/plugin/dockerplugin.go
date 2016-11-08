@@ -10,9 +10,10 @@ import (
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/docker/enaml-gen/containers"
 	"github.com/enaml-ops/omg-product-bundle/products/docker/enaml-gen/docker"
+	"github.com/enaml-ops/pluginlib/cred"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
-	"github.com/enaml-ops/pluginlib/product"
+	"github.com/enaml-ops/pluginlib/productv1"
 	"github.com/xchapter7x/lo"
 )
 
@@ -29,6 +30,7 @@ type jobBucket struct {
 	JobType   int
 	Instances int
 }
+
 type Plugin struct {
 	PluginVersion      string
 	DeploymentName     string
@@ -100,7 +102,7 @@ func (s *Plugin) setContainerDefinitionFromFile(filename string) interface{} {
 	return res
 }
 
-func (s *Plugin) GetProduct(args []string, cloudConfig []byte) (b []byte, err error) {
+func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b []byte, err error) {
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
 	flgs := s.GetFlags()
 	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
