@@ -61,6 +61,7 @@ var _ = Describe("given ConcoursePlugin Plugin", func() {
 					"--concourse-username", "concourse",
 					"--concourse-password", "concourse",
 					"--az", "z1",
+					"--web-ip", "10.0.1.2",
 					"--web-vm-type", "small",
 					"--worker-vm-type", "medium",
 					"--database-vm-type", "medium",
