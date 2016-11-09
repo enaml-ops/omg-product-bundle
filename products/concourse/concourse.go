@@ -33,7 +33,7 @@ type Deployment struct {
 	WorkerInstances     int
 	DeploymentName      string
 	PostgresPassword    string
-	WebVMType           string
+	WebVMType           string `omg:"web-vm-type"`
 	WorkerVMType        string
 	DatabaseVMType      string
 	DatabaseStorageType string

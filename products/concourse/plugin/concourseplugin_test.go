@@ -10,6 +10,7 @@ import (
 
 var _ = Describe("given ConcoursePlugin Plugin", func() {
 	Context("when plugin is not properly initialized", func() {
+
 		Context("when GetProduct is called with an empty cloud config", func() {
 			It("should return an error", func() {
 				p := new(ConcoursePlugin)
@@ -23,6 +24,21 @@ var _ = Describe("given ConcoursePlugin Plugin", func() {
 				}, []byte{}, nil)
 				Ω(err).Should(HaveOccurred())
 			})
+
+			Context("when GetProduct is called with missing flag values", func() {
+				It("should return an error", func() {
+					p := new(ConcoursePlugin)
+					_, err := p.GetProduct([]string{
+						"test",
+						"--network-name", "private",
+						"--external-url", "http://concourse.caleb-washburn.com",
+						"--concourse-username", "concourse",
+						"--concourse-password", "concourse",
+						"--az", "z1",
+					}, []byte{0, 1, 2}, nil)
+					Ω(err).Should(HaveOccurred())
+				})
+			})
 		})
 
 		It("returns an error if the external URL is missing the scheme", func() {
@@ -35,6 +51,7 @@ var _ = Describe("given ConcoursePlugin Plugin", func() {
 				"--concourse-username", "concourse",
 				"--concourse-password", "concourse",
 				"--az", "z1",
+				"--web-ip", "10.0.1.2",
 				"--web-vm-type", "small",
 				"--worker-vm-type", "medium",
 				"--database-vm-type", "medium",
@@ -43,6 +60,7 @@ var _ = Describe("given ConcoursePlugin Plugin", func() {
 			Ω(err).Should(HaveOccurred())
 		})
 	})
+
 	Context("when plugin is properly initialized", func() {
 		var myplugin *ConcoursePlugin
 		BeforeEach(func() {

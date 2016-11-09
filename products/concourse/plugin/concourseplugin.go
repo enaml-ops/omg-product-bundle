@@ -15,43 +15,39 @@ import (
 	"github.com/xchapter7x/lo"
 )
 
-type ConcoursePlugin struct {
-	PluginVersion string
-}
-
 const (
-	defaultConcourseReleaseURL string = "https://bosh.io/d/github.com/concourse/concourse?v=2.2.1"
-	defaultConcourseReleaseSHA string = "879d5cb45d12f173ff4c7912c7c7cdcd3e18c442"
-	defaultConcourseReleaseVer string = "2.2.1"
-	defaultGardenReleaseURL    string = "https://bosh.io/d/github.com/cloudfoundry-incubator/garden-runc-release?v=0.8.0"
-	defaultGardenReleaseSHA    string = "20e98ea84c8f4426bba00bbca17d931e27d3c07d"
-	defaultGardenReleaseVer    string = "0.8.0"
+	defaultConcourseReleaseURL = "https://bosh.io/d/github.com/concourse/concourse?v=2.2.1"
+	defaultConcourseReleaseSHA = "879d5cb45d12f173ff4c7912c7c7cdcd3e18c442"
+	defaultConcourseReleaseVer = "2.2.1"
+	defaultGardenReleaseURL    = "https://bosh.io/d/github.com/cloudfoundry-incubator/garden-runc-release?v=0.8.0"
+	defaultGardenReleaseSHA    = "20e98ea84c8f4426bba00bbca17d931e27d3c07d"
+	defaultGardenReleaseVer    = "0.8.0"
 
-	concoursePassword      string = "concourse-password"
-	concourseUsername      string = "concourse-username"
-	externalURL            string = "external-url"
-	webIPs                 string = "web-ip"
-	networkName            string = "network-name"
-	az                     string = "az"
-	deploymentName         string = "deployment-name"
-	webVMType              string = "web-vm-type"
-	databaseVMType         string = "database-vm-type"
-	workerVMType           string = "worker-vm-type"
-	workerInstances        string = "worker-instance-count"
-	databaseStorageType    string = "database-storage-type"
-	postgresqlDbPwd        string = "concourse-db-pwd"
-	concourseReleaseURL    string = "concourse-release-url"
-	concourseReleaseSHA    string = "concourse-release-sha"
-	concourseReleaseVer    string = "concourse-release-ver"
-	gardenReleaseURL       string = "garden-release-url"
-	gardenReleaseSHA       string = "garden-release-sha"
-	gardenReleaseVer       string = "garden-release-ver"
-	stemcellAlias          string = "stemcell-alias"
-	stemcellOS             string = "stemcell-os"
-	stemcellVersion        string = "stemcell-version"
-	defaultStemcellAlias          = "trusty"
-	defaultStemcellName           = "ubuntu-trusty"
-	defaultStemcellVersion        = "latest"
+	concoursePassword      = "concourse-password"
+	concourseUsername      = "concourse-username"
+	externalURL            = "external-url"
+	webIPs                 = "web-ip"
+	networkName            = "network-name"
+	az                     = "az"
+	deploymentName         = "deployment-name"
+	webVMType              = "web-vm-type"
+	databaseVMType         = "database-vm-type"
+	workerVMType           = "worker-vm-type"
+	workerInstances        = "worker-instance-count"
+	databaseStorageType    = "database-storage-type"
+	postgresqlDbPwd        = "concourse-db-pwd"
+	concourseReleaseURL    = "concourse-release-url"
+	concourseReleaseSHA    = "concourse-release-sha"
+	concourseReleaseVer    = "concourse-release-ver"
+	gardenReleaseURL       = "garden-release-url"
+	gardenReleaseSHA       = "garden-release-sha"
+	gardenReleaseVer       = "garden-release-ver"
+	stemcellAlias          = "stemcell-alias"
+	stemcellOS             = "stemcell-os"
+	stemcellVersion        = "stemcell-version"
+	defaultStemcellAlias   = "trusty"
+	defaultStemcellName    = "ubuntu-trusty"
+	defaultStemcellVersion = "latest"
 )
 
 // Config contains the configuration for a Concourse deployment.
@@ -81,6 +77,12 @@ type Config struct {
 	StemcellAlias   string
 	StemcellOS      string `omg:"stemcell-os"`
 	StemcellVersion string
+}
+
+// ConcoursePlugin is an omg product plugin for deploying Concourse.
+type ConcoursePlugin struct {
+	PluginVersion string
+	cfg           Config
 }
 
 func (s *ConcoursePlugin) GetFlags() (flags []pcli.Flag) {
@@ -150,16 +152,15 @@ func (s *ConcoursePlugin) GetProduct(args []string, cloudConfig []byte, cs cred.
 	}
 
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
-	cfg := &Config{}
-	err := pcli.UnmarshalFlags(cfg, c)
+	err := pcli.UnmarshalFlags(&s.cfg, c)
 	if err != nil {
 		return nil, err
 	}
 
-	makePassword(&cfg.PostgresPassword)
-	makePassword(&cfg.ConcoursePassword)
+	makePassword(&s.cfg.PostgresPassword)
+	makePassword(&s.cfg.ConcoursePassword)
 
-	dm, err := NewDeploymentManifest(cfg, cloudConfig)
+	dm, err := s.newDeploymentManifest(cloudConfig)
 	return dm.Bytes(), err
 }
 
@@ -169,28 +170,28 @@ func makePassword(s *string) {
 	}
 }
 
-func NewDeploymentManifest(c *Config, cloudConfig []byte) (enaml.DeploymentManifest, error) {
+func (s *ConcoursePlugin) newDeploymentManifest(cloudConfig []byte) (enaml.DeploymentManifest, error) {
 	cd := concourse.NewDeployment()
-	cd.DeploymentName = c.DeploymentName
-	cd.ConcourseUserName = c.ConcourseUsername
-	cd.ConcourseURL = c.ExternalURL
-	cd.NetworkName = c.NetworkName
-	cd.WebIPs = c.WebIPs
-	cd.WebVMType = c.WebVMType
-	cd.WorkerVMType = c.WorkerVMType
-	cd.DatabaseVMType = c.DatabaseVMType
-	cd.DatabaseStorageType = c.DatabaseStorageType
-	cd.AZs = c.AZs
-	cd.WorkerInstances = c.WorkerInstances
-	cd.ConcourseReleaseURL = c.ConcourseReleaseURL
-	cd.ConcourseReleaseSHA = c.ConcourseReleaseSHA
-	cd.ConcourseReleaseVer = c.ConcourseReleaseVersion
-	cd.StemcellAlias = c.StemcellAlias
-	cd.StemcellOS = c.StemcellOS
-	cd.StemcellVersion = c.StemcellVersion
-	cd.GardenReleaseURL = c.GardenReleaseURL
-	cd.GardenReleaseSHA = c.GardenReleaseSHA
-	cd.GardenReleaseVer = c.GardenReleaseVersion
+	cd.DeploymentName = s.cfg.DeploymentName
+	cd.ConcourseUserName = s.cfg.ConcourseUsername
+	cd.ConcourseURL = s.cfg.ExternalURL
+	cd.NetworkName = s.cfg.NetworkName
+	cd.WebIPs = s.cfg.WebIPs
+	cd.WebVMType = s.cfg.WebVMType
+	cd.WorkerVMType = s.cfg.WorkerVMType
+	cd.DatabaseVMType = s.cfg.DatabaseVMType
+	cd.DatabaseStorageType = s.cfg.DatabaseStorageType
+	cd.AZs = s.cfg.AZs
+	cd.WorkerInstances = s.cfg.WorkerInstances
+	cd.ConcourseReleaseURL = s.cfg.ConcourseReleaseURL
+	cd.ConcourseReleaseSHA = s.cfg.ConcourseReleaseSHA
+	cd.ConcourseReleaseVer = s.cfg.ConcourseReleaseVersion
+	cd.StemcellAlias = s.cfg.StemcellAlias
+	cd.StemcellOS = s.cfg.StemcellOS
+	cd.StemcellVersion = s.cfg.StemcellVersion
+	cd.GardenReleaseURL = s.cfg.GardenReleaseURL
+	cd.GardenReleaseSHA = s.cfg.GardenReleaseSHA
+	cd.GardenReleaseVer = s.cfg.GardenReleaseVersion
 
 	url, err := url.Parse(cd.ConcourseURL)
 	if err != nil {
