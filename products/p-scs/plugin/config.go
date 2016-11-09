@@ -1,8 +1,7 @@
 package pscs
 
 import (
-	"fmt"
-
+	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
 
 	cli "gopkg.in/urfave/cli.v2"
@@ -11,13 +10,13 @@ import (
 // Config is used as input for generating instance groups.
 type Config struct {
 	DeploymentName        string
-	VMType                string
-	AZs                   []string
+	VMType                string   `omg:"vm-type"`
+	AZs                   []string `omg:"az"`
 	SystemDomain          string
-	AppDomains            []string
+	AppDomains            []string `omg:"app-domain"`
 	Network               string
-	StemcellVersion       string
-	SkipSSLVerify         bool
+	StemcellVersion       string `omg:"stemcell-ver"`
+	SkipSSLVerify         bool   `omg:"skip-ssl-verify"`
 	BrokerUsername        string
 	BrokerPassword        string
 	WorkerClientSecret    string
@@ -25,47 +24,15 @@ type Config struct {
 	InstancesPassword     string
 	BrokerDashboardSecret string
 	EncryptionKey         string
-	CFAdminPassword       string
-	UAAAdminClientSecret  string
+	CFAdminPassword       string `omg:"admin-password"`
+	UAAAdminClientSecret  string `omg:"uaa-admin-secret"`
 }
 
 func configFromContext(c *cli.Context) (*Config, error) {
-	var missingFlags []string
-
-	getString := func(flag string) string {
-		v := c.String(flag)
-		if v == "" {
-			missingFlags = append(missingFlags, flag)
-		}
-		return v
-	}
-
-	getStringSlice := func(flag string) []string {
-		v := c.StringSlice(flag)
-		if len(v) == 0 {
-			missingFlags = append(missingFlags, flag)
-		}
-		return v
-	}
-
-	cfg := &Config{
-		DeploymentName:        getString("deployment-name"),
-		VMType:                getString("vm-type"),
-		AZs:                   getStringSlice("az"),
-		SystemDomain:          getString("system-domain"),
-		AppDomains:            getStringSlice("app-domain"),
-		Network:               getString("network"),
-		StemcellVersion:       getString("stemcell-ver"),
-		SkipSSLVerify:         c.Bool("skip-ssl-verify"),
-		BrokerUsername:        getString("broker-username"),
-		BrokerPassword:        getString("broker-password"),
-		WorkerClientSecret:    getString("worker-client-secret"),
-		WorkerPassword:        getString("worker-password"),
-		InstancesPassword:     getString("instances-password"),
-		BrokerDashboardSecret: getString("broker-dashboard-secret"),
-		EncryptionKey:         getString("encryption-key"),
-		CFAdminPassword:       getString("admin-password"),
-		UAAAdminClientSecret:  getString("uaa-admin-secret"),
+	cfg := &Config{}
+	err := pcli.UnmarshalFlags(cfg, c)
+	if err != nil {
+		return nil, err
 	}
 
 	makePassword(&cfg.BrokerUsername)
@@ -76,11 +43,7 @@ func configFromContext(c *cli.Context) (*Config, error) {
 	makePassword(&cfg.BrokerDashboardSecret)
 	makePassword(&cfg.EncryptionKey)
 
-	var err error
-	if len(missingFlags) > 0 {
-		err = fmt.Errorf("p-scs: missing flags: %#v", missingFlags)
-	}
-	return cfg, err
+	return cfg, nil
 }
 
 func makePassword(s *string) {
