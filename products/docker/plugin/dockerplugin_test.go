@@ -36,7 +36,10 @@ var _ = Describe("given docker Plugin", func() {
 				"--disk-type", "medium",
 				"--ip", "1.2.3.4",
 				"--az", "z1",
+				"--registry-mirror", "my.mirror.com",
 				"--stemcell-ver", "12.3.44",
+				"--stemcell-sha", "abcdef",
+				"--stemcell-url", "https://stemcells.com/foo",
 				"--container-definition", "./fixtures/sample-docker.yml",
 				"--insecure-registry", controlRegistry1,
 				"--insecure-registry", controlRegistry2,
@@ -71,6 +74,7 @@ var _ = Describe("given docker Plugin", func() {
 				}, cloudConfigBytes, nil)
 			}).ShouldNot(Panic(), "these flags should not cause a panic, b/c they should exist")
 		})
+
 		It("then it should set the give values as the release values", func() {
 			cloudConfigBytes, _ := ioutil.ReadFile("./fixtures/sample-aws.yml")
 			controlver := "asdfasdf"
@@ -84,6 +88,8 @@ var _ = Describe("given docker Plugin", func() {
 				"--ip", "1.2.3.4",
 				"--az", "z1",
 				"--stemcell-ver", "12.3.44",
+				"--stemcell-url", "https://stemcells.com/foo",
+				"--stemcell-sha", "abcdef",
 				"--container-definition", "./fixtures/sample-docker.yml",
 				"--docker-release-ver", controlver,
 				"--docker-release-url", controlurl,
@@ -112,6 +118,8 @@ var _ = Describe("given docker Plugin", func() {
 				"--ip", "1.2.3.4",
 				"--az", "z1",
 				"--stemcell-ver", "12.3.44",
+				"--stemcell-url", "https://stemcells.com/foo",
+				"--stemcell-sha", "abcdef",
 				"--container-definition", "./fixtures/sample-docker.yml",
 				"--registry-mirror", controlMirror1,
 				"--registry-mirror", controlMirror2,
@@ -238,6 +246,8 @@ var _ = Describe("given docker Plugin", func() {
 				"--ip", controlIP,
 				"--az", "z1",
 				"--stemcell-ver", "12.3.44",
+				"--stemcell-url", "https://stemcells.com/foo",
+				"--stemcell-sha", "abcdef",
 				"--container-definition", "this-file-does-not-exist",
 			}, cloudConfigBytes, nil)
 		})
@@ -267,6 +277,9 @@ var _ = Describe("given docker Plugin", func() {
 				"--disk-type", controlDisk,
 				"--ip", controlIP,
 				"--az", "z1",
+				"--registry-mirror", "my.registry.com",
+				"--stemcell-url", "http://stemcells.com/foo",
+				"--stemcell-sha", "abcdef",
 				"--stemcell-ver", "12.3.44",
 				"--container-definition", "./fixtures/sample-docker.yml",
 			}, cloudConfigBytes, nil)

@@ -21,8 +21,9 @@ const (
 	BoshDockerReleaseURL = "https://bosh.io/d/github.com/cf-platform-eng/docker-boshrelease?v=28.0.1"
 	BoshDockerReleaseVer = "28.0.1"
 	BoshDockerReleaseSHA = "448eaa2f478dc8794933781b478fae02aa44ed6b"
-	defaultReleaseName   = "docker"
-	defaultStemcellName  = "trusty"
+
+	defaultReleaseName  = "docker"
+	defaultStemcellName = "trusty"
 )
 
 type jobBucket struct {
@@ -32,20 +33,27 @@ type jobBucket struct {
 }
 
 type Plugin struct {
-	PluginVersion      string
-	DeploymentName     string
-	Containers         interface{}
-	NetworkName        string
-	IPs                []string
-	VMTypeName         string
-	DiskTypeName       string
-	AZs                []string
-	StemcellName       string
-	StemcellURL        string
-	StemcellVersion    string
-	StemcellSHA        string
-	RegistryMirrors    []string
-	InsecureRegistries []string
+	PluginVersion string      `omg:"-"`
+	Containers    interface{} `omg:"-"`
+
+	DeploymentName      string
+	NetworkName         string   `omg:"network"`
+	IPs                 []string `omg:"ip"`
+	VMTypeName          string   `omg:"vm-type"`
+	DiskTypeName        string   `omg:"disk-type"`
+	AZs                 []string `omg:"az"`
+	RegistryMirrors     []string `omg:"registry-mirror,optional"`
+	InsecureRegistries  []string `omg:"insecure-registry,optional"`
+	ContainerDefinition string
+
+	StemcellName    string
+	StemcellURL     string `omg:"stemcell-url"`
+	StemcellVersion string `omg:"stemcell-ver"`
+	StemcellSHA     string `omg:"stemcell-sha"`
+
+	DockerReleaseURL     string `omg:"docker-release-url"`
+	DockerReleaseVersion string `omg:"docker-release-ver"`
+	DockerReleaseSHA     string `omg:"docker-release-sha"`
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -102,37 +110,25 @@ func (s *Plugin) setContainerDefinitionFromFile(filename string) interface{} {
 	return res
 }
 
-func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b []byte, err error) {
-	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
+func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([]byte, error) {
 	flgs := s.GetFlags()
-	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
-	s.Containers = s.setContainerDefinitionFromFile(c.String("container-definition"))
-	s.IPs = c.StringSlice("ip")
-	s.AZs = c.StringSlice("az")
-	s.InsecureRegistries = c.StringSlice("insecure-registry")
-	s.RegistryMirrors = c.StringSlice("registry-mirror")
-	s.DeploymentName = c.String("deployment-name")
-	s.NetworkName = c.String("network")
-	s.StemcellName = c.String("stemcell-name")
-	s.StemcellVersion = c.String("stemcell-ver")
-	s.StemcellSHA = c.String("stemcell-sha")
-	s.StemcellURL = c.String("stemcell-url")
-	s.VMTypeName = c.String("vm-type")
-	s.DiskTypeName = c.String("disk-type")
-
-	if err = s.flagValidation(); err != nil {
-		lo.G.Error("invalid arguments: ", err)
+	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
+	err := pcli.UnmarshalFlags(s, c)
+	if err != nil {
 		return nil, err
 	}
+
+	InferFromCloudDecorate(flagsToInferFromCloudConfig, cloudConfig, args, flgs)
+	s.Containers = s.setContainerDefinitionFromFile(s.ContainerDefinition)
 
 	if err = s.cloudconfigValidation(enaml.NewCloudConfigManifest(cloudConfig)); err != nil {
 		lo.G.Error("invalid settings for cloud config on target bosh: ", err)
 		return nil, err
 	}
-	lo.G.Debug("context", c)
-	var dm = new(enaml.DeploymentManifest)
+
+	dm := new(enaml.DeploymentManifest)
 	dm.SetName(s.DeploymentName)
-	dm.AddRemoteRelease(defaultReleaseName, c.String("docker-release-ver"), c.String("docker-release-url"), c.String("docker-release-sha"))
+	dm.AddRemoteRelease(defaultReleaseName, s.DockerReleaseVersion, s.DockerReleaseURL, s.DockerReleaseSHA)
 	dm.AddRemoteStemcell(s.StemcellName, s.StemcellName, s.StemcellVersion, s.StemcellURL, s.StemcellSHA)
 
 	dm.AddInstanceGroup(s.NewDockerInstanceGroup())
@@ -147,7 +143,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b
 }
 
 func (s *Plugin) NewDockerInstanceGroup() (ig *enaml.InstanceGroup) {
-	ig = &enaml.InstanceGroup{
+	return &enaml.InstanceGroup{
 		Name:               s.DeploymentName,
 		Instances:          len(s.IPs),
 		VMType:             s.VMTypeName,
@@ -165,7 +161,6 @@ func (s *Plugin) NewDockerInstanceGroup() (ig *enaml.InstanceGroup) {
 			MaxInFlight: 1,
 		},
 	}
-	return
 }
 
 func (s *Plugin) createDockerJob() enaml.InstanceJob {
@@ -228,38 +223,6 @@ func (s *Plugin) cloudconfigValidation(cloudConfig *enaml.CloudConfigManifest) (
 
 	if len(cloudConfig.Networks) == 0 {
 		err = fmt.Errorf("no networks found in cloud config")
-	}
-	return
-}
-
-func (s *Plugin) flagValidation() (err error) {
-	lo.G.Debug("validating given flags")
-
-	if len(s.IPs) <= 0 {
-		err = fmt.Errorf("no `ip` given")
-	}
-
-	if s.Containers == nil {
-		err = fmt.Errorf("no valid container definition in given file")
-	}
-
-	if len(s.AZs) <= 0 {
-		err = fmt.Errorf("no `az` given")
-	}
-
-	if s.NetworkName == "" {
-		err = fmt.Errorf("no `network-name` given")
-	}
-
-	if s.VMTypeName == "" {
-		err = fmt.Errorf("no `vm-type` given")
-	}
-	if s.DiskTypeName == "" {
-		err = fmt.Errorf("no `disk-type` given")
-	}
-
-	if s.StemcellVersion == "" {
-		err = fmt.Errorf("no `stemcell-ver` given")
 	}
 	return
 }
