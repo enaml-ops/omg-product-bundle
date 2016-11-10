@@ -1,116 +1,36 @@
 package config
 
 import (
+	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
 	"gopkg.in/urfave/cli.v2"
 )
 
-func RequiredSecretFlags() []string {
-	return []string{
-		"db-uaa-password",
-		"push-apps-manager-password",
-		"system-services-password",
-		"system-verification-password",
-		"opentsdb-firehose-nozzle-client-secret",
-		"identity-client-secret",
-		"login-client-secret",
-		"portal-client-secret",
-		"autoscaling-service-client-secret",
-		"system-passwords-client-secret",
-		"cc-service-dashboards-client-secret",
-		"gorouter-client-secret",
-		"notifications-client-secret",
-		"notifications-ui-client-secret",
-		"cloud-controller-username-lookup-client-secret",
-		"cc-routing-client-secret",
-		"apps-metrics-client-secret",
-		"apps-metrics-processing-client-secret",
-		"admin-password",
-		"nats-pass",
-		"mysql-bootstrap-password",
-		"consul-encryption-key",
-		"smoke-tests-password",
-		"doppler-shared-secret",
-		"doppler-client-secret",
-		"cc-bulk-api-password",
-		"cc-internal-api-password",
-		"ssh-proxy-uaa-secret",
-		"cc-db-encryption-key",
-		"db-ccdb-password",
-		"diego-db-passphrase",
-		"uaa-admin-secret",
-		"router-pass",
-		"mysql-proxy-api-password",
-		"mysql-admin-password",
-		"db-console-password",
-		"cc-staging-upload-password",
-		"db-app_usage-password",
-		"apps-manager-secret-token",
-		"db-autoscale-password",
-		"db-notifications-password",
+func NewSecret(c *cli.Context) (*Secret, error) {
+	s := Secret{}
+	err := pcli.UnmarshalFlags(&s, c)
+	if err != nil {
+		return nil, err
 	}
+
+	s.AutoscaleBrokerPassword = pluginutil.NewPassword(16)
+	return &s, nil
 }
 
-func NewSecret(c *cli.Context) Secret {
-	return Secret{
-		UAADBPassword:                             c.String("db-uaa-password"),
-		PushAppsManagerPassword:                   c.String("push-apps-manager-password"),
-		SystemServicesPassword:                    c.String("system-services-password"),
-		SystemVerificationPassword:                c.String("system-verification-password"),
-		OpentsdbFirehoseNozzleClientSecret:        c.String("opentsdb-firehose-nozzle-client-secret"),
-		IdentityClientSecret:                      c.String("identity-client-secret"),
-		LoginClientSecret:                         c.String("login-client-secret"),
-		PortalClientSecret:                        c.String("portal-client-secret"),
-		AutoScalingServiceClientSecret:            c.String("autoscaling-service-client-secret"),
-		SystemPasswordsClientSecret:               c.String("system-passwords-client-secret"),
-		CCServiceDashboardsClientSecret:           c.String("cc-service-dashboards-client-secret"),
-		GoRouterClientSecret:                      c.String("gorouter-client-secret"),
-		NotificationsClientSecret:                 c.String("notifications-client-secret"),
-		NotificationsUIClientSecret:               c.String("notifications-ui-client-secret"),
-		CloudControllerUsernameLookupClientSecret: c.String("cloud-controller-username-lookup-client-secret"),
-		CCRoutingClientSecret:                     c.String("cc-routing-client-secret"),
-		AppsMetricsClientSecret:                   c.String("apps-metrics-client-secret"),
-		AppsMetricsProcessingClientSecret:         c.String("apps-metrics-processing-client-secret"),
-		AdminPassword:                             c.String("admin-password"),
-		NATSPassword:                              c.String("nats-pass"),
-		MySQLBootstrapPassword:                    c.String("mysql-bootstrap-password"),
-		ConsulEncryptKeys:                         c.StringSlice("consul-encryption-key"),
-		SmokeTestsPassword:                        c.String("smoke-tests-password"),
-		DopplerSharedSecret:                       c.String("doppler-shared-secret"),
-		DopplerSecret:                             c.String("doppler-client-secret"),
-		CCBulkAPIPassword:                         c.String("cc-bulk-api-password"),
-		CCInternalAPIPassword:                     c.String("cc-internal-api-password"),
-		SSHProxyClientSecret:                      c.String("ssh-proxy-uaa-secret"),
-		DbEncryptionKey:                           c.String("cc-db-encryption-key"),
-		CCDBPassword:                              c.String("db-ccdb-password"),
-		DiegoDBPassphrase:                         c.String("diego-db-passphrase"),
-		AdminSecret:                               c.String("uaa-admin-secret"),
-		LDAPUserPassword:                          c.String("uaa-ldap-user-password"),
-		RouterPass:                                c.String("router-pass"),
-		MySQLProxyAPIPassword:                     c.String("mysql-proxy-api-password"),
-		MySQLAdminPassword:                        c.String("mysql-admin-password"),
-		ConsoleDBPassword:                         c.String("db-console-password"),
-		StagingUploadPassword:                     c.String("cc-staging-upload-password"),
-		AppUsageDBPassword:                        c.String("db-app_usage-password"),
-		AppsManagerSecretToken:                    c.String("apps-manager-secret-token"),
-		AutoscaleBrokerPassword:                   pluginutil.NewPassword(16),
-		AutoscaleDBPassword:                       c.String("db-autoscale-password"),
-	}
-}
-
+// Secret contains the secrets for a Cloud Foundry deployment.
 type Secret struct {
 	AdminPassword                             string
-	MySQLBootstrapPassword                    string
-	NATSPassword                              string
+	MySQLBootstrapPassword                    string `omg:"mysql-bootstrap-password"`
+	NATSPassword                              string `omg:"nats-pass"`
 	SmokeTestsPassword                        string
-	DopplerSecret                             string
+	DopplerSecret                             string `omg:"doppler-client-secret"`
 	DopplerSharedSecret                       string
-	CCBulkAPIPassword                         string
-	CCInternalAPIPassword                     string
-	SSHProxyClientSecret                      string
-	DiegoDBPassphrase                         string
-	AdminSecret                               string
-	UAADBPassword                             string
+	CCBulkAPIPassword                         string `omg:"cc-bulk-api-password"`
+	CCInternalAPIPassword                     string `omg:"cc-internal-api-password"`
+	SSHProxyClientSecret                      string `omg:"ssh-proxy-uaa-secret"`
+	DiegoDBPassphrase                         string `omg:"diego-db-passphrase"`
+	AdminSecret                               string `omg:"uaa-admin-secret"`
+	UAADBPassword                             string `omg:"db-uaa-password"`
 	PushAppsManagerPassword                   string
 	SystemServicesPassword                    string
 	SystemVerificationPassword                string
@@ -118,28 +38,28 @@ type Secret struct {
 	IdentityClientSecret                      string
 	LoginClientSecret                         string
 	PortalClientSecret                        string
-	AutoScalingServiceClientSecret            string
+	AutoScalingServiceClientSecret            string `omg:"autoscaling-service-client-secret"`
 	SystemPasswordsClientSecret               string
-	CCServiceDashboardsClientSecret           string
-	GoRouterClientSecret                      string
+	CCServiceDashboardsClientSecret           string `omg:"cc-service-dashboards-client-secret"`
+	GoRouterClientSecret                      string `omg:"gorouter-client-secret"`
 	NotificationsClientSecret                 string
-	NotificationsUIClientSecret               string
+	NotificationsUIClientSecret               string `omg:"notifications-ui-client-secret"`
 	CloudControllerUsernameLookupClientSecret string
-	CCRoutingClientSecret                     string
+	CCRoutingClientSecret                     string `omg:"cc-routing-client-secret"`
 	AppsMetricsClientSecret                   string
 	AppsMetricsProcessingClientSecret         string
-	LDAPUserPassword                          string
-	DbEncryptionKey                           string
-	CCDBPassword                              string
-	StagingUploadPassword                     string
-	MySQLProxyAPIPassword                     string
+	LDAPUserPassword                          string `omg:"uaa-ldap-user-password,optional"`
+	DbEncryptionKey                           string `omg:"cc-db-encryption-key"`
+	CCDBPassword                              string `omg:"db-ccdb-password"`
+	StagingUploadPassword                     string `omg:"cc-staging-upload-password"`
+	MySQLProxyAPIPassword                     string `omg:"mysql-proxy-api-password"`
 	RouterPass                                string
-	MySQLAdminPassword                        string
-	ConsoleDBPassword                         string
-	ConsulEncryptKeys                         []string
-	AppUsageDBPassword                        string
+	MySQLAdminPassword                        string   `omg:"mysql-admin-password"`
+	ConsoleDBPassword                         string   `omg:"db-console-password"`
+	ConsulEncryptKeys                         []string `omg:"consul-encryption-key"`
+	AppUsageDBPassword                        string   `omg:"db-app_usage-password"`
 	AppsManagerSecretToken                    string
-	AutoscaleBrokerPassword                   string
-	AutoscaleDBPassword                       string
-	NotificationsDBPassword                   string
+	AutoscaleBrokerPassword                   string `omg:"-"` // always autogenerated
+	AutoscaleDBPassword                       string `omg:"db-autoscale-password"`
+	NotificationsDBPassword                   string `omg:"db-notifications-password"`
 }

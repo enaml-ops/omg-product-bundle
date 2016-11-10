@@ -1,21 +1,8 @@
 package config
 
-import "gopkg.in/urfave/cli.v2"
-
-func RequiredInstanceCountFlags() []string {
-	return []string{"cc-instances", "uaa-instances", "cc-worker-instances"}
-}
-
-func NewInstanceCount(c *cli.Context) InstanceCount {
-	return InstanceCount{
-		CloudControllerInstances:       c.Int("cc-instances"),
-		UAAInstances:                   c.Int("uaa-instances"),
-		CloudControllerWorkerInstances: c.Int("cc-worker-instances"),
-	}
-}
-
+// InstanceCount contains the configurable instance counts for a cloud foundry deployment.
 type InstanceCount struct {
-	CloudControllerWorkerInstances int
-	CloudControllerInstances       int
-	UAAInstances                   int
+	CloudControllerWorkerInstances int `omg:"cc-worker-instances"`
+	CloudControllerInstances       int `omg:"cc-instances"`
+	UAAInstances                   int `omg:"uaa-instances"`
 }

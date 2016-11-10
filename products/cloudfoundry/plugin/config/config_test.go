@@ -36,6 +36,7 @@ func BuildConfigContext() *cli.Context {
 		"--consul-agent-key", "value",
 		"--consul-server-cert", "value",
 		"--consul-server-key", "value",
+		"--consul-encryption-key", "value",
 		"--bbs-server-ca-cert", "value",
 		"--bbs-client-cert", "value",
 		"--bbs-client-key", "value",
