@@ -53,21 +53,21 @@ type Plugin struct {
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
-		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "ip", Usage: "multiple static ips for each vault VM Node"},
-		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "az", Usage: "list of AZ names to use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "network", Usage: "the name of the network to use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "vm-type", Usage: "name of your desired vm type"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "disk-type", Usage: "name of your desired disk type"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: s.GetMeta().Stemcell.Name, Usage: "the name of the stemcell you will use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-release-url", Value: BoshVaultReleaseURL, Usage: "vault bosh release url"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-release-version", Value: BoshVaultReleaseVer, Usage: "vault bosh release version"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "vault-release-sha", Value: BoshVaultReleaseSHA, Usage: "vault bosh release sha"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "consul-release-url", Value: BoshConsulReleaseURL, Usage: "consul bosh release url"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "consul-release-version", Value: BoshConsulReleaseVer, Usage: "consul bosh release version"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "consul-release-sha", Value: BoshConsulReleaseSHA, Usage: "consul bosh release sha"},
+		pcli.CreateStringSliceFlag("ip", "multiple static ips for each vault VM Node"),
+		pcli.CreateStringSliceFlag("az", "list of AZ names to use"),
+		pcli.CreateStringFlag("network", "the name of the network to use"),
+		pcli.CreateStringFlag("vm-type", "name of your desired vm type"),
+		pcli.CreateStringFlag("disk-type", "name of your desired disk type"),
+		pcli.CreateStringFlag("stemcell-url", "the url of the stemcell you wish to use"),
+		pcli.CreateStringFlag("stemcell-ver", "the version number of the stemcell you wish to use"),
+		pcli.CreateStringFlag("stemcell-sha", "the sha of the stemcell you will use"),
+		pcli.CreateStringFlag("stemcell-name", "the name of the stemcell you will use", s.GetMeta().Stemcell.Name),
+		pcli.CreateStringFlag("vault-release-url", "vault bosh release url", BoshVaultReleaseURL),
+		pcli.CreateStringFlag("vault-release-version", "vault bosh release version", BoshVaultReleaseVer),
+		pcli.CreateStringFlag("vault-release-sha", "vault bosh release sha", BoshVaultReleaseSHA),
+		pcli.CreateStringFlag("consul-release-url", "consul bosh release url", BoshConsulReleaseURL),
+		pcli.CreateStringFlag("consul-release-version", "consul bosh release version", BoshConsulReleaseVer),
+		pcli.CreateStringFlag("consul-release-sha", "consul bosh release sha", BoshConsulReleaseSHA),
 	}
 }
 

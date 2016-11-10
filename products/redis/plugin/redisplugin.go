@@ -31,26 +31,41 @@ type jobBucket struct {
 	JobType   int
 	Instances int
 }
+
 type Plugin struct {
-	PluginVersion string
+	PluginVersion   string   `omg:"-"`
+	LeaderIP        []string `omg:"leader-ip"`
+	LeaderInstances int
+	RedisPassword   string `omg:"redis-pass"`
+	PoolInstances   int
+	DiskSize        string
+	SlaveInstances  int
+	ErrandInstances int
+	SlaveIP         []string `omg:"slave-ip"`
+	NetworkName     string
+	VMSize          string `omg:"vm-size"`
+	StemcellURL     string `omg:"stemcell-url"`
+	StemcellVersion string `omg:"stemcell-ver"`
+	StemcellSHA     string `omg:"stemcell-sha"`
+	StemcellName    string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
-		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "leader-ip", Usage: "multiple static ips for each redis leader vm"},
-		pcli.Flag{FlagType: pcli.IntFlag, Name: "leader-instances", Value: "1", Usage: "the number of leader instances to provision"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "redis-pass", Value: "red1s", Usage: "the password to use for connecting redis nodes"},
-		pcli.Flag{FlagType: pcli.IntFlag, Name: "pool-instances", Value: "2", Usage: "number of instances in the redis cluster"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "disk-size", Value: "4096", Usage: "size of disk on VMs"},
-		pcli.Flag{FlagType: pcli.IntFlag, Name: "slave-instances", Value: "1", Usage: "number of slave VMs"},
-		pcli.Flag{FlagType: pcli.IntFlag, Name: "errand-instances", Value: "1", Usage: "number of errand VMs"},
-		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: "slave-ip", Usage: "list of slave VM Ips"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "network-name", Usage: "name of your target network"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "vm-size", Usage: "name of your desired vm size"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-url", Usage: "the url of the stemcell you wish to use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-ver", Usage: "the version number of the stemcell you wish to use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-sha", Usage: "the sha of the stemcell you will use"},
-		pcli.Flag{FlagType: pcli.StringFlag, Name: "stemcell-name", Value: s.GetMeta().Stemcell.Name, Usage: "the name of the stemcell you will use"},
+		pcli.CreateStringSliceFlag("leader-ip", "multiple static ips for each redis leader vm"),
+		pcli.CreateIntFlag("leader-instances", "the number of leader instances to provision", "1"),
+		pcli.CreateStringFlag("redis-pass", "the password to use for connecting redis nodes", "red1s"),
+		pcli.CreateIntFlag("pool-instances", "number of instances in the redis cluster", "2"),
+		pcli.CreateStringFlag("disk-size", "size of disk on VMs", "4096"),
+		pcli.CreateIntFlag("slave-instances", "number of slave VMs", "1"),
+		pcli.CreateIntFlag("errand-instances", "number of errand VMs", "1"),
+		pcli.CreateStringSliceFlag("slave-ip", "list of slave VM Ips"),
+		pcli.CreateStringFlag("network-name", "name of your target network"),
+		pcli.CreateStringFlag("vm-size", "name of your desired vm size"),
+		pcli.CreateStringFlag("stemcell-url", "the url of the stemcell you wish to use"),
+		pcli.CreateStringFlag("stemcell-ver", "the version number of the stemcell you wish to use"),
+		pcli.CreateStringFlag("stemcell-sha", "the sha of the stemcell you will use"),
+		pcli.CreateStringFlag("stemcell-name", "the name of the stemcell you will use", s.GetMeta().Stemcell.Name),
 	}
 }
 
@@ -77,18 +92,21 @@ func (s *Plugin) GetMeta() product.Meta {
 	}
 }
 
-func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b []byte, err error) {
+func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([]byte, error) {
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
 
-	if err := s.flagValidation(c); err != nil {
-		lo.G.Error("invalid arguments: ", err)
+	err := pcli.UnmarshalFlags(s, c)
+	if err != nil {
 		return nil, err
 	}
 
-	if err := s.cloudconfigValidation(c, enaml.NewCloudConfigManifest(cloudConfig)); err != nil {
+	err = s.cloudconfigValidation(c, enaml.NewCloudConfigManifest(cloudConfig))
+
+	if err != nil {
 		lo.G.Error("invalid settings for cloud config on target bosh: ", err)
 		return nil, err
 	}
+
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)
 	dm.SetName("enaml-redis")
@@ -102,22 +120,22 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b
 		"redis": struct{}{},
 	}
 	dm.AddRemoteRelease("redis", BoshReleaseVer, BoshReleaseURL, BoshReleaseSHA)
-	dm.AddRemoteStemcell(c.String("stemcell-name"), c.String("stemcell-name"), c.String("stemcell-ver"), c.String("stemcell-url"), c.String("stemcell-sha"))
+	dm.AddRemoteStemcell(s.StemcellName, s.StemcellName, s.StemcellVersion, s.StemcellURL, s.StemcellSHA)
 
 	for _, bkt := range []jobBucket{
-		jobBucket{JobName: "redis_leader_z1", JobType: Master, Instances: c.Int("leader-instances")},
-		jobBucket{JobName: "redis_z1", JobType: Pool, Instances: c.Int("pool-instances")},
-		jobBucket{JobName: "redis_test_slave_z1", JobType: Slave, Instances: c.Int("slave-instances")},
-		jobBucket{JobName: "acceptance-tests", JobType: Errand, Instances: c.Int("errand-instances")},
+		jobBucket{JobName: "redis_leader_z1", JobType: Master, Instances: s.LeaderInstances},
+		jobBucket{JobName: "redis_z1", JobType: Pool, Instances: s.PoolInstances},
+		jobBucket{JobName: "redis_test_slave_z1", JobType: Slave, Instances: s.SlaveInstances},
+		jobBucket{JobName: "acceptance-tests", JobType: Errand, Instances: s.ErrandInstances},
 	} {
 		dm.AddJob(NewRedisJob(
 			bkt.JobName,
-			c.String("network-name"),
-			c.String("redis-pass"),
-			c.String("disk-size"),
-			c.String("vm-size"),
-			c.StringSlice("leader-ip"),
-			c.StringSlice("slave-ip"),
+			s.NetworkName,
+			s.RedisPassword,
+			s.DiskSize,
+			s.VMSize,
+			s.LeaderIP,
+			s.SlaveIP,
 			bkt.Instances,
 			bkt.JobType,
 		))
@@ -127,9 +145,9 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b
 
 func (s *Plugin) cloudconfigValidation(c *cli.Context, cloudConfig *enaml.CloudConfigManifest) (err error) {
 	lo.G.Debug("running cloud config validation")
-	var vmsize = c.String("vm-size")
-	var disksize = c.String("disk-size")
-	var netname = c.String("network-name")
+	var vmsize = s.VMSize
+	var disksize = s.DiskSize
+	var netname = s.NetworkName
 
 	for _, vmtype := range cloudConfig.VMTypes {
 		err = fmt.Errorf("vm size %s does not exist in cloud config. options are: %v", vmsize, cloudConfig.VMTypes)
@@ -166,32 +184,6 @@ func (s *Plugin) cloudconfigValidation(c *cli.Context, cloudConfig *enaml.CloudC
 	if len(cloudConfig.Networks) == 0 {
 		err = fmt.Errorf("no networks found in cloud config")
 	}
-	return
-}
-
-func (s *Plugin) flagValidation(c *cli.Context) (err error) {
-	lo.G.Debug("validating given flags")
-
-	if len(c.StringSlice("leader-ip")) <= 0 {
-		err = fmt.Errorf("no `leader-ip` given")
-	}
-
-	if len(c.StringSlice("slave-ip")) <= 0 {
-		err = fmt.Errorf("no `slave-ip` given")
-	}
-
-	if len(c.String("network-name")) <= 0 {
-		err = fmt.Errorf("no `network-name` given")
-	}
-
-	if len(c.String("vm-size")) <= 0 {
-		err = fmt.Errorf("no `vm-size` given")
-	}
-
-	if len(c.String("stemcell-ver")) <= 0 {
-		err = fmt.Errorf("no `stemcell-ver` given")
-	}
-
 	return
 }
 
