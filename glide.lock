@@ -1,5 +1,5 @@
-hash: 8466037361a07a270bf198ae8ba06f97360223ea659af34c92337d3331abf579
-updated: 2016-11-09T13:11:28.072813916-06:00
+hash: b740e179b99de61f042d85efa19692c2647d81c3c1b3cc40f5ee8446e54f249c
+updated: 2016-11-10T13:15:44.528056381-06:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -17,7 +17,7 @@ imports:
   - cloudproperties/azure
   - enamlbosh
 - name: github.com/enaml-ops/pluginlib
-  version: 36d3e5078466835523fe0bc4e0ff10d95c079fb6
+  version: 0aef30e4611e3f1362c804e6fc8a35cee4e002b4
   subpackages:
   - cred
   - pcli
@@ -36,7 +36,7 @@ imports:
 - name: github.com/kr/fs
   version: 2788f0dbd16903de03cb8186e5c7d97b69ad387b
 - name: github.com/onsi/ginkgo
-  version: c07a44f02cf4a895e331f4f473c0943ee116c668
+  version: 00054c0bb96fc880d4e0be1b90937fad438c5290
   subpackages:
   - config
   - internal/codelocation
