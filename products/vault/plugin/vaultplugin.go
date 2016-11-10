@@ -31,23 +31,24 @@ type jobBucket struct {
 	JobType   int
 	Instances int
 }
+
 type Plugin struct {
-	PluginVersion    string
-	NetworkName      string
-	IPs              []string
-	VMTypeName       string
-	DiskTypeName     string
-	AZs              []string
+	PluginVersion    string   `omg:"-"`
+	NetworkName      string   `omg:"network"`
+	IPs              []string `omg:"ip"`
+	VMTypeName       string   `omg:"vm-type"`
+	DiskTypeName     string   `omg:"disk-type"`
+	AZs              []string `omg:"az"`
 	StemcellName     string
-	StemcellURL      string
-	StemcellVersion  string
-	StemcellSHA      string
-	VaultReleaseURL  string
-	VaultReleaseVer  string
-	VaultReleaseSHA  string
-	ConsulReleaseURL string
-	ConsulReleaseVer string
-	ConsulReleaseSHA string
+	StemcellURL      string `omg:"stemcell-url"`
+	StemcellVersion  string `omg:"stemcell-ver"`
+	StemcellSHA      string `omg:"stemcell-sha"`
+	VaultReleaseURL  string `omg:"vault-release-url"`
+	VaultReleaseVer  string `omg:"vault-release-version"`
+	VaultReleaseSHA  string `omg:"vault-release-sha"`
+	ConsulReleaseURL string `omg:"consul-release-url"`
+	ConsulReleaseVer string `omg:"consul-release-version"`
+	ConsulReleaseSHA string `omg:"consul-release-sha"`
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -100,34 +101,20 @@ func (s *Plugin) GetMeta() product.Meta {
 	}
 }
 
-func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b []byte, err error) {
+func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([]byte, error) {
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(s.GetFlags()))
 
-	s.IPs = c.StringSlice("ip")
-	s.AZs = c.StringSlice("az")
-	s.NetworkName = c.String("network")
-	s.StemcellName = c.String("stemcell-name")
-	s.StemcellVersion = c.String("stemcell-ver")
-	s.StemcellSHA = c.String("stemcell-sha")
-	s.StemcellURL = c.String("stemcell-url")
-	s.VMTypeName = c.String("vm-type")
-	s.DiskTypeName = c.String("disk-type")
-	s.VaultReleaseURL = c.String("vault-release-url")
-	s.VaultReleaseVer = c.String("vault-release-version")
-	s.VaultReleaseSHA = c.String("vault-release-sha")
-	s.ConsulReleaseURL = c.String("consul-release-url")
-	s.ConsulReleaseVer = c.String("consul-release-version")
-	s.ConsulReleaseSHA = c.String("consul-release-sha")
-
-	if err = s.flagValidation(); err != nil {
-		lo.G.Error("invalid arguments: ", err)
+	err := pcli.UnmarshalFlags(s, c)
+	if err != nil {
 		return nil, err
 	}
 
-	if err = s.cloudconfigValidation(enaml.NewCloudConfigManifest(cloudConfig)); err != nil {
+	err = s.cloudconfigValidation(enaml.NewCloudConfigManifest(cloudConfig))
+	if err != nil {
 		lo.G.Error("invalid settings for cloud config on target bosh: ", err)
 		return nil, err
 	}
+
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)
 	dm.SetName("vault")
@@ -218,45 +205,6 @@ func (s *Plugin) cloudconfigValidation(cloudConfig *enaml.CloudConfigManifest) (
 			err = nil
 			break
 		}
-	}
-
-	if len(cloudConfig.VMTypes) == 0 {
-		err = fmt.Errorf("no vm sizes found in cloud config")
-	}
-
-	if len(cloudConfig.DiskTypes) == 0 {
-		err = fmt.Errorf("no disk sizes found in cloud config")
-	}
-
-	if len(cloudConfig.Networks) == 0 {
-		err = fmt.Errorf("no networks found in cloud config")
-	}
-	return
-}
-
-func (s *Plugin) flagValidation() (err error) {
-	lo.G.Debug("validating given flags")
-
-	if len(s.IPs) <= 0 {
-		err = fmt.Errorf("no `ip` given")
-	}
-	if len(s.AZs) <= 0 {
-		err = fmt.Errorf("no `az` given")
-	}
-
-	if s.NetworkName == "" {
-		err = fmt.Errorf("no `network-name` given")
-	}
-
-	if s.VMTypeName == "" {
-		err = fmt.Errorf("no `vm-type` given")
-	}
-	if s.DiskTypeName == "" {
-		err = fmt.Errorf("no `disk-type` given")
-	}
-
-	if s.StemcellVersion == "" {
-		err = fmt.Errorf("no `stemcell-ver` given")
 	}
 	return
 }

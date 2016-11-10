@@ -1,8 +1,7 @@
 package prabbitmq
 
 import (
-	"fmt"
-
+	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
 
 	cli "gopkg.in/urfave/cli.v2"
@@ -10,84 +9,39 @@ import (
 
 // Config is used as input for generating instance groups.
 type Config struct {
-	DeploymentName            string
-	AZs                       []string
+	DeploymentName            string   `omg:"deployment-name"`
+	AZs                       []string `omg:"az"`
+	AdminPassword             string   `omg:"rabbit-admin-password"`
 	SystemDomain              string
-	AdminPassword             string
 	ServiceAdminPassword      string
-	PublicIP                  string
+	PublicIP                  string `omg:"rabbit-public-ip"`
 	Network                   string
-	StemcellVersion           string
-	ServerIPs                 []string
-	BrokerIP                  string
+	StemcellVersion           string   `omg:"stemcell-ver"`
+	ServerIPs                 []string `omg:"rabbit-server-ip"`
+	BrokerIP                  string   `omg:"rabbit-broker-ip"`
 	BrokerPassword            string
 	SyslogAddress             string
 	SyslogPort                int
-	NATSMachines              []string
-	NATSPort                  int
-	NATSPassword              string
-	HAProxyStatsAdminPassword string
+	NATSMachines              []string `omg:"nats-machine-ip"`
+	NATSPort                  int      `omg:"nats-port"`
+	NATSPassword              string   `omg:"nats-pass"`
+	HAProxyStatsAdminPassword string   `omg:"haproxy-stats-password"`
 	SystemServicesPassword    string
-	SkipSSLVerify             bool
-	MetronZone                string
-	MetronSecret              string
-	EtcdMachines              []string
-	BrokerVMType              string
-	ServerVMType              string
-	HAProxyVMType             string
+	SkipSSLVerify             bool     `omg:"skip-ssl-verify"`
+	MetronZone                string   `omg:"doppler-zone"`
+	MetronSecret              string   `omg:"doppler-shared-secret"`
+	EtcdMachines              []string `omg:"etcd-machine-ip"`
+	BrokerVMType              string   `omg:"rabbit-broker-vm-type"`
+	ServerVMType              string   `omg:"rabbit-server-vm-type"`
+	HAProxyVMType             string   `omg:"rabbit-haproxy-vm-type"`
 }
 
 func configFromContext(c *cli.Context) (*Config, error) {
-	var missingFlags []string
 
-	getString := func(flag string) string {
-		v := c.String(flag)
-		if v == "" {
-			missingFlags = append(missingFlags, flag)
-		}
-		return v
-	}
-	getInt := func(flag string) int {
-		v := c.Int(flag)
-		if v == 0 { // TODO is this okay?
-			missingFlags = append(missingFlags, flag)
-		}
-		return v
-	}
-	getStringSlice := func(flag string) []string {
-		v := c.StringSlice(flag)
-		if len(v) == 0 {
-			missingFlags = append(missingFlags, flag)
-		}
-		return v
-	}
-
-	cfg := &Config{
-		DeploymentName:            getString("deployment-name"),
-		AZs:                       getStringSlice("az"),
-		AdminPassword:             getString("rabbit-admin-password"),
-		ServiceAdminPassword:      getString("service-admin-password"),
-		SystemDomain:              getString("system-domain"),
-		Network:                   getString("network"),
-		StemcellVersion:           getString("stemcell-ver"),
-		ServerIPs:                 getStringSlice("rabbit-server-ip"),
-		BrokerIP:                  getString("rabbit-broker-ip"),
-		BrokerPassword:            getString("broker-password"),
-		SyslogAddress:             getString("syslog-address"),
-		SyslogPort:                getInt("syslog-port"),
-		NATSMachines:              getStringSlice("nats-machine-ip"),
-		NATSPort:                  getInt("nats-port"),
-		NATSPassword:              getString("nats-pass"),
-		HAProxyStatsAdminPassword: getString("haproxy-stats-password"),
-		SystemServicesPassword:    getString("system-services-password"),
-		SkipSSLVerify:             c.Bool("skip-ssl-verify"),
-		MetronZone:                getString("doppler-zone"),
-		MetronSecret:              getString("doppler-shared-secret"),
-		EtcdMachines:              getStringSlice("etcd-machine-ip"),
-		PublicIP:                  getString("rabbit-public-ip"),
-		BrokerVMType:              getString("rabbit-broker-vm-type"),
-		ServerVMType:              getString("rabbit-server-vm-type"),
-		HAProxyVMType:             getString("rabbit-haproxy-vm-type"),
+	cfg := &Config{}
+	err := pcli.UnmarshalFlags(cfg, c)
+	if err != nil {
+		return nil, err
 	}
 
 	makePassword(&cfg.AdminPassword)
@@ -96,11 +50,7 @@ func configFromContext(c *cli.Context) (*Config, error) {
 	makePassword(&cfg.NATSPassword)
 	makePassword(&cfg.HAProxyStatsAdminPassword)
 
-	var err error
-	if len(missingFlags) > 0 {
-		err = fmt.Errorf("prabbitmq: missing flags: %#v", missingFlags)
-	}
-	return cfg, err
+	return cfg, nil
 }
 
 func makePassword(s *string) {

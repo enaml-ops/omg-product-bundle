@@ -94,6 +94,8 @@ var _ = Describe("given vault Plugin", func() {
 				"--disk-type", controlDisk,
 				"--ip", controlIP,
 				"--az", "z1",
+				"--stemcell-url", "something",
+				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 				"--stemcell-ver", "12.3.44",
 			}, cloudConfigBytes, nil)
 			Ω(err).ShouldNot(HaveOccurred())
