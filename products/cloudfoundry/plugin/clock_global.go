@@ -86,7 +86,7 @@ func (c *clockGlobal) newCloudControllerClockJob(ccng *cloud_controller_ng.Cloud
 			},
 		},
 		LoggerEndpoint: &cloud_controller_clock.LoggerEndpoint{
-			Port: 443,
+			Port: c.Config.LoggregatorPort,
 		},
 		Ssl: &cloud_controller_clock.Ssl{
 			SkipCertVerify: c.Config.SkipSSLCertVerify,
