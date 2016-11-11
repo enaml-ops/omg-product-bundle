@@ -84,10 +84,10 @@ func newCloudControllerNgJob(c *CloudControllerPartition) enaml.InstanceJob {
 			SystemDomainOrganization: "system",
 			SupportAddress:           c.Config.SupportAddress,
 			Login: &ccnglib.Login{
-				Url: fmt.Sprintf("https://login.%s", c.Config.SystemDomain),
+				Url: fmt.Sprintf("https://uaa.%s", c.Config.SystemDomain),
 			},
 			Cc: &ccnglib.Cc{
-				AllowedCorsDomains:    []string{fmt.Sprintf("https://login.%s", c.Config.SystemDomain)},
+				AllowedCorsDomains:    []string{fmt.Sprintf("https://uaa.%s", c.Config.SystemDomain)},
 				AllowAppSshAccess:     c.Config.AllowSSHAccess,
 				DefaultToDiegoBackend: true,
 				Buildpacks: &ccnglib.Buildpacks{

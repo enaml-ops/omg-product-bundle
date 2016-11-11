@@ -318,15 +318,15 @@ func (s *UAA) CreateLogin() (login *uaa.Login) {
 		SelfServiceLinksEnabled: s.Config.SelfServiceLinksEnabled,
 		Protocol:                s.Config.UAALoginProtocol,
 		Links: &uaa.Links{
-			Signup: fmt.Sprintf("%s://login.%s/create_account", s.Config.UAALoginProtocol, s.Config.SystemDomain),
-			Passwd: fmt.Sprintf("%s://login.%s/forgot_password", s.Config.UAALoginProtocol, s.Config.SystemDomain),
+			Signup: fmt.Sprintf("%s://uaa.%s/create_account", s.Config.UAALoginProtocol, s.Config.SystemDomain),
+			Passwd: fmt.Sprintf("%s://uaa.%s/forgot_password", s.Config.UAALoginProtocol, s.Config.SystemDomain),
 		},
 		Url: fmt.Sprintf("%s://uaa.%s", s.Config.UAALoginProtocol, s.Config.SystemDomain),
 		Notifications: &uaa.Notifications{
 			Url: fmt.Sprintf("%s://notifications.%s", s.Config.UAALoginProtocol, s.Config.SystemDomain),
 		},
 		Saml: &uaa.Saml{
-			Entityid:                   fmt.Sprintf("%s://login.%s", s.Config.UAALoginProtocol, s.Config.SystemDomain),
+			Entityid:                   fmt.Sprintf("%s://uaa.%s", s.Config.UAALoginProtocol, s.Config.SystemDomain),
 			ServiceProviderKey:         s.Config.SAMLServiceProviderKey,
 			ServiceProviderCertificate: s.Config.SAMLServiceProviderCertificate,
 			SignRequest:                true,
@@ -391,7 +391,7 @@ func (s *UAA) createRouteRegistrarJob() enaml.InstanceJob {
 						"name":                  "uaa",
 						"port":                  8080,
 						"registration_interval": "40s",
-						"uris":                  []string{fmt.Sprintf("uaa.%s", s.Config.SystemDomain), fmt.Sprintf("*.uaa.%s", s.Config.SystemDomain), fmt.Sprintf("login.%s", s.Config.SystemDomain), fmt.Sprintf("*.login.%s", s.Config.SystemDomain)},
+						"uris":                  []string{fmt.Sprintf("uaa.%s", s.Config.SystemDomain), fmt.Sprintf("*.uaa.%s", s.Config.SystemDomain), fmt.Sprintf("uaa.%s", s.Config.SystemDomain), fmt.Sprintf("*.uaa.%s", s.Config.SystemDomain)},
 					},
 				},
 			},

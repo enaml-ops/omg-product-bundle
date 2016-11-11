@@ -259,14 +259,14 @@ var _ = Describe("UAA Partition", func() {
 
 			Ω(props.Login.Links).ShouldNot(BeNil())
 			links := props.Login.Links.(*uaa.Links)
-			Ω(links.Passwd).Should(Equal("https://login.sys.test.com/forgot_password"))
-			Ω(links.Signup).Should(Equal("https://login.sys.test.com/create_account"))
+			Ω(links.Passwd).Should(Equal("https://uaa.sys.test.com/forgot_password"))
+			Ω(links.Signup).Should(Equal("https://uaa.sys.test.com/create_account"))
 
 			Ω(props.Login.Notifications).ShouldNot(BeNil())
 			Ω(props.Login.Notifications.Url).Should(Equal("https://notifications.sys.test.com"))
 
 			Ω(props.Login.Saml).ShouldNot(BeNil())
-			Ω(props.Login.Saml.Entityid).Should(Equal("https://login.sys.test.com"))
+			Ω(props.Login.Saml.Entityid).Should(Equal("https://uaa.sys.test.com"))
 			Ω(props.Login.Saml.SignRequest).Should(BeTrue())
 			Ω(props.Login.Saml.WantAssertionSigned).Should(BeFalse())
 			Ω(props.Login.Saml.ServiceProviderKey).Should(Equal("saml-key"))
@@ -296,7 +296,7 @@ var _ = Describe("UAA Partition", func() {
 			Ω(route["name"]).Should(Equal("uaa"))
 			Ω(route["port"]).Should(Equal(8080))
 			Ω(route["registration_interval"]).Should(Equal("40s"))
-			Ω(route["uris"]).Should(ConsistOf("uaa.sys.test.com", "*.uaa.sys.test.com", "login.sys.test.com", "*.login.sys.test.com"))
+			Ω(route["uris"]).Should(ConsistOf("uaa.sys.test.com", "*.uaa.sys.test.com", "uaa.sys.test.com", "*.uaa.sys.test.com"))
 		})
 	})
 })

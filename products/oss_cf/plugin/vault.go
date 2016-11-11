@@ -154,7 +154,7 @@ func getKeyCertObject(systemDomain string, appDomain []string) ([]byte, error) {
 		systemDomain,
 		"*." + systemDomain,
 		"*.uaa." + systemDomain,
-		"*.login." + systemDomain,
+		"*.uaa." + systemDomain,
 	}
 	for _, ad := range appDomain {
 		hosts = append(hosts, "*."+ad)

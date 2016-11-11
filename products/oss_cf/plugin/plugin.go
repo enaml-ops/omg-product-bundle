@@ -398,8 +398,8 @@ func (s *Plugin) getDeploymentManifest(c *cli.Context, config *config.Config) (*
 
 	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: c.String("stemcell-version"), Alias: c.String("stemcell-name")})
 
-	dm.Update.MaxInFlight = 1
-	dm.Update.Canaries = 1
+	dm.Update.MaxInFlight = 10
+	dm.Update.Canaries = 10
 	dm.Update.Serial = false
 	dm.Update.CanaryWatchTime = "30000-300000"
 	dm.Update.UpdateWatchTime = "30000-300000"
