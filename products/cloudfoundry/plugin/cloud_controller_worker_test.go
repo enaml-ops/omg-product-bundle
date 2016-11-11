@@ -53,6 +53,7 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 			config.DopplerSharedSecret = "metronsecret"
 			config.CCDBUsername = "ccdbuser"
 			config.CCDBPassword = "ccdbpass"
+			config.LoggregatorPort = 4443
 
 			cloudControllerWorker = NewCloudControllerWorkerPartition(config)
 		})
@@ -97,6 +98,9 @@ var _ = Describe("Cloud Controller Worker Partition", func() {
 			Ω(props.SystemDomain).Should(Equal("sys.yourdomain.com"))
 			Ω(props.AppDomains).Should(ConsistOf("apps.yourdomain.com"))
 			Ω(props.SystemDomainOrganization).Should(Equal("system"))
+
+			Ω(props.LoggerEndpoint).ShouldNot(BeNil())
+			Ω(props.LoggerEndpoint.Port).Should(Equal(4443))
 
 			ssl := props.Ssl
 			Ω(ssl).ShouldNot(BeNil())

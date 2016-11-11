@@ -53,9 +53,12 @@ func newCloudControllerWorkerJob(c *CloudControllerWorkerPartition) enaml.Instan
 		Name:    "cloud_controller_worker",
 		Release: CFReleaseName,
 		Properties: &ccworkerlib.CloudControllerWorkerJob{
-			Domain:                   c.Config.SystemDomain,
-			SystemDomain:             c.Config.SystemDomain,
-			AppDomains:               c.Config.AppDomains,
+			Domain:       c.Config.SystemDomain,
+			SystemDomain: c.Config.SystemDomain,
+			AppDomains:   c.Config.AppDomains,
+			LoggerEndpoint: &ccworkerlib.LoggerEndpoint{
+				Port: c.Config.LoggregatorPort,
+			},
 			SystemDomainOrganization: "system",
 			Ssl: &ccworkerlib.Ssl{
 				SkipCertVerify: c.Config.SkipSSLCertVerify,
