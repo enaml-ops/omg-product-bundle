@@ -6,9 +6,14 @@ import (
 
 	"github.com/enaml-ops/enaml"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/auctioneer"
+	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/cc_uploader"
+	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/converger"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/file_server"
+	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/nsync"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/route_emitter"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/ssh_proxy"
+	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/stager"
+	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/tps"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/plugin/config"
 	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/xchapter7x/lo"
@@ -52,9 +57,14 @@ func (d *diegoBrain) ToInstanceGroup() *enaml.InstanceGroup {
 	statsdJob := d.Statsd.CreateJob()
 
 	ig.AddJob(d.newAuctioneer())
+	ig.AddJob(d.newCCUploader())
+	ig.AddJob(d.newConverger())
 	ig.AddJob(d.newFileServer())
+	ig.AddJob(d.newNsync())
 	ig.AddJob(d.newRouteEmitter())
 	ig.AddJob(d.newSSHProxy())
+	ig.AddJob(d.newStager())
+	ig.AddJob(d.newTPS())
 	ig.AddJob(&consulJob)
 	ig.AddJob(&metronJob)
 	ig.AddJob(&statsdJob)
@@ -80,12 +90,80 @@ func (d *diegoBrain) newAuctioneer() *enaml.InstanceJob {
 	}
 }
 
+func (d *diegoBrain) newCCUploader() *enaml.InstanceJob {
+	return &enaml.InstanceJob{
+		Name:    "cc_uploader",
+		Release: DiegoReleaseName,
+		Properties: &cc_uploader.CcUploaderJob{
+			Capi: &cc_uploader.Capi{
+				CcUploader: &cc_uploader.CcUploader{
+					Cc: &cc_uploader.Cc{
+						JobPollingIntervalInSeconds: d.Config.CCUploaderJobPollInterval,
+					},
+				},
+			},
+			Diego: &cc_uploader.Diego{
+				Ssl: &cc_uploader.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
+			},
+		},
+	}
+}
+
+func (d *diegoBrain) newConverger() *enaml.InstanceJob {
+	return &enaml.InstanceJob{
+		Name:    "converger",
+		Release: DiegoReleaseName,
+		Properties: &converger.ConvergerJob{
+			Diego: &converger.Diego{
+				Converger: &converger.Converger{
+					Bbs: &converger.Bbs{
+						ApiLocation: defaultBBSAPILocation,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
+					},
+				},
+			},
+		},
+	}
+}
+
 func (d *diegoBrain) newFileServer() *enaml.InstanceJob {
 	return &enaml.InstanceJob{
 		Name:    "file_server",
 		Release: DiegoReleaseName,
 		Properties: &file_server.FileServerJob{
-			Diego: &file_server.Diego{},
+			Diego: &file_server.Diego{
+				FileServer: &file_server.FileServer{},
+			},
+		},
+	}
+}
+
+func (d *diegoBrain) newNsync() *enaml.InstanceJob {
+	return &enaml.InstanceJob{
+		Name:    "nsync",
+		Release: DiegoReleaseName,
+		Properties: &nsync.NsyncJob{
+			Capi: &nsync.Capi{
+				Nsync: &nsync.Nsync{
+					Cc: &nsync.Cc{
+						BaseUrl:                  prefixSystemDomain(d.Config.SystemDomain, "api"),
+						BasicAuthUsername:        d.Config.CCInternalAPIUser,
+						BasicAuthPassword:        d.Config.CCInternalAPIPassword,
+						PollingIntervalInSeconds: d.Config.CCUploaderJobPollInterval,
+					},
+					Bbs: &nsync.Bbs{
+						ApiLocation: defaultBBSAPILocation,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
+					},
+				},
+			},
+			Diego: &nsync.Diego{
+				Ssl: &nsync.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
+			},
 		},
 	}
 }
@@ -146,6 +224,63 @@ func (d *diegoBrain) newSSHProxy() *enaml.InstanceJob {
 					UaaTokenUrl:     prefixSystemDomain(d.Config.SystemDomain, "uaa") + "/oauth/token",
 					HostKey:         privateKey,
 				},
+			},
+		},
+	}
+}
+
+func (d *diegoBrain) newStager() *enaml.InstanceJob {
+	return &enaml.InstanceJob{
+		Name:    "stager",
+		Release: CFReleaseName,
+		Properties: &stager.StagerJob{
+			Capi: &stager.Capi{
+				Stager: &stager.Stager{
+					Bbs: &stager.Bbs{
+						ApiLocation: defaultBBSAPILocation,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
+						RequireSsl:  d.Config.BBSRequireSSL,
+					},
+					Cc: &stager.Cc{
+						BasicAuthUsername: d.Config.CCInternalAPIUser,
+						BasicAuthPassword: d.Config.CCInternalAPIPassword,
+						ExternalPort:      d.Config.CCExternalPort,
+					},
+				},
+			},
+			Diego: &stager.Diego{
+				Ssl: &stager.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
+			},
+		},
+	}
+}
+
+func (d *diegoBrain) newTPS() *enaml.InstanceJob {
+	return &enaml.InstanceJob{
+		Name:    "tps",
+		Release: CFReleaseName,
+		Properties: &tps.TpsJob{
+			Capi: &tps.Capi{
+				Tps: &tps.Tps{
+					TrafficControllerUrl: fmt.Sprintf("wss://doppler.%s:%d", d.Config.SystemDomain, d.Config.LoggregatorPort),
+					Bbs: &tps.Bbs{
+						ApiLocation: defaultBBSAPILocation,
+						CaCert:      d.Config.BBSCACert,
+						ClientCert:  d.Config.BBSClientCert,
+						ClientKey:   d.Config.BBSClientKey,
+						RequireSsl:  d.Config.BBSRequireSSL,
+					},
+					Cc: &tps.Cc{
+						BasicAuthUsername: d.Config.CCInternalAPIUser,
+						BasicAuthPassword: d.Config.CCInternalAPIPassword,
+						ExternalPort:      d.Config.CCExternalPort,
+					},
+				},
+			},
+			Diego: &tps.Diego{
+				Ssl: &tps.Ssl{SkipCertVerify: d.Config.SkipSSLCertVerify},
 			},
 		},
 	}
