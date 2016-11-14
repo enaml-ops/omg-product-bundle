@@ -28,3 +28,9 @@ Currently under development
 - docker registry
 - p-rabbitmq
 - p-spring-cloud-services
+
+## Version Compatibility
+
+currently uses pluginlib v1 w/ protocol version 2. will not work with omg-cli
+prior to v1.0.0.
+
