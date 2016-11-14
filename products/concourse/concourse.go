@@ -97,6 +97,11 @@ func (d *Deployment) Initialize(cloudConfig []byte) error {
 	if err != nil {
 		return err
 	}
+
+	if d.ConcoursePassword == "" {
+		return fmt.Errorf("Must supply concourse password")
+	}
+
 	var web *enaml.InstanceGroup
 	var db *enaml.InstanceGroup
 	var worker *enaml.InstanceGroup

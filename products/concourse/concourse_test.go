@@ -142,6 +142,7 @@ var _ = Describe("Concourse Deployment", func() {
 			BeforeEach(func() {
 				deployment.StemcellAlias = "trusty"
 				deployment.StemcellVersion = "3262.2"
+				deployment.ConcoursePassword = "password"
 			})
 			It("initializes without error", func() {
 				err := deployment.Initialize(cc)
@@ -175,6 +176,7 @@ var _ = Describe("Concourse Deployment", func() {
 				deployment.DatabaseVMType = "small"
 				deployment.DatabaseStorageType = "large"
 				deployment.StemcellAlias = "ubuntu"
+				deployment.ConcoursePassword = "password"
 			})
 
 			It("should be valid", func() {

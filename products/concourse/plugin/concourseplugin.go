@@ -11,7 +11,7 @@ import (
 	"github.com/enaml-ops/pluginlib/cred"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
-	"github.com/enaml-ops/pluginlib/productv1"
+	"github.com/enaml-ops/pluginlib/product"
 	"github.com/xchapter7x/lo"
 )
 
@@ -174,6 +174,7 @@ func (s *ConcoursePlugin) newDeploymentManifest(cloudConfig []byte) (enaml.Deplo
 	cd := concourse.NewDeployment()
 	cd.DeploymentName = s.cfg.DeploymentName
 	cd.ConcourseUserName = s.cfg.ConcourseUsername
+	cd.ConcoursePassword = s.cfg.ConcoursePassword
 	cd.ConcourseURL = s.cfg.ExternalURL
 	cd.NetworkName = s.cfg.NetworkName
 	cd.WebIPs = s.cfg.WebIPs
