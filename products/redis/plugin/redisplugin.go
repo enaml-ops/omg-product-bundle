@@ -44,9 +44,9 @@ type Plugin struct {
 	SlaveIP         []string `omg:"slave-ip"`
 	NetworkName     string
 	VMSize          string `omg:"vm-size"`
-	StemcellURL     string `omg:"stemcell-url"`
+	StemcellURL     string `omg:"stemcell-url,optional"`
 	StemcellVersion string `omg:"stemcell-ver"`
-	StemcellSHA     string `omg:"stemcell-sha"`
+	StemcellSHA     string `omg:"stemcell-sha,optional"`
 	StemcellName    string
 }
 

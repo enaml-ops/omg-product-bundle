@@ -42,9 +42,7 @@ var _ = Describe("given redis Plugin", func() {
 				"--vm-size", controlVM,
 				"--leader-ip", controlIP,
 				"--slave-ip", controlIP,
-				"--stemcell-url", "something",
 				"--stemcell-ver", "12.3.44",
-				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 			}, cloudConfigBytes, nil)
 			Ω(err).Should(HaveOccurred())
 		})
@@ -77,9 +75,7 @@ var _ = Describe("given redis Plugin", func() {
 				"--vm-size", controlVM,
 				"--leader-ip", controlIP,
 				"--slave-ip", controlIP,
-				"--stemcell-url", "something",
 				"--stemcell-ver", "12.3.44",
-				"--stemcell-sha", "ilkjag09dhsg90ahsd09gsadg9",
 			}, cloudConfigBytes, nil)
 			Ω(err).ShouldNot(HaveOccurred())
 			deployment = enaml.NewDeploymentManifest(dmBytes)
