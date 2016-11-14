@@ -1,5 +1,5 @@
-hash: dd8d16a3702d132cccc6947eed23e2b46eb6b2d5286f1a6bacd9816adc621465
-updated: 2016-11-10T15:13:02.319938003-07:00
+hash: d305f7cf10fcf04b5ae7193f20d9a73331e48560c8a7061f7ae8b35c4a08f543
+updated: 2016-11-14T14:17:56.242391187-05:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -17,7 +17,7 @@ imports:
   - cloudproperties/azure
   - enamlbosh
 - name: github.com/enaml-ops/pluginlib
-  version: 9b1f0bfca3c8eac75dd32dab144ad31e79846de8
+  version: 399f71c718525e0b9481a633bbfde9c888638961
   subpackages:
   - cred
   - pcli
@@ -55,7 +55,7 @@ imports:
   - reporters/stenographer/support/go-isatty
   - types
 - name: github.com/onsi/gomega
-  version: ff4bc6b6f9f5affa66635cd04d31d2a7ee21ffd6
+  version: 2b6ed62707a2f5fdf1ba9cd856cdeec6bfff6b61
   subpackages:
   - format
   - ghttp
