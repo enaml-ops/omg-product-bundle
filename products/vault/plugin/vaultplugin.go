@@ -40,9 +40,9 @@ type Plugin struct {
 	DiskTypeName     string   `omg:"disk-type"`
 	AZs              []string `omg:"az"`
 	StemcellName     string
-	StemcellURL      string `omg:"stemcell-url"`
+	StemcellURL      string `omg:"stemcell-url,optional"`
 	StemcellVersion  string `omg:"stemcell-ver"`
-	StemcellSHA      string `omg:"stemcell-sha"`
+	StemcellSHA      string `omg:"stemcell-sha,optional"`
 	VaultReleaseURL  string `omg:"vault-release-url"`
 	VaultReleaseVer  string `omg:"vault-release-version"`
 	VaultReleaseSHA  string `omg:"vault-release-sha"`
