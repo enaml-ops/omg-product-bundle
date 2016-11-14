@@ -16,12 +16,12 @@ import (
 )
 
 const (
-	defaultConcourseReleaseURL = "https://bosh.io/d/github.com/concourse/concourse?v=2.2.1"
-	defaultConcourseReleaseSHA = "879d5cb45d12f173ff4c7912c7c7cdcd3e18c442"
-	defaultConcourseReleaseVer = "2.2.1"
-	defaultGardenReleaseURL    = "https://bosh.io/d/github.com/cloudfoundry-incubator/garden-runc-release?v=0.8.0"
-	defaultGardenReleaseSHA    = "20e98ea84c8f4426bba00bbca17d931e27d3c07d"
-	defaultGardenReleaseVer    = "0.8.0"
+	defaultConcourseReleaseURL = "http://bosh.io/d/github.com/concourse/concourse?v=2.4.0"
+	defaultConcourseReleaseSHA = "8eb1e707594b47adc7bfa10c89fe17524caf8461"
+	defaultConcourseReleaseVer = "2.4.0"
+	defaultGardenReleaseURL    = "http://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.0.0"
+	defaultGardenReleaseSHA    = "2f29b4d9eedbe6b79efe3703b68a4d3c785649f4"
+	defaultGardenReleaseVer    = "1.0.0"
 
 	concoursePassword      = "concourse-password"
 	concourseUsername      = "concourse-username"
