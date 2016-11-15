@@ -5,7 +5,7 @@ package garden
 */
 type GardenJob struct {
 
-	/*Garden - Descr: list of comma-separated hosts for which the http and https proxies will be skipped Default: <nil>
+	/*Garden - Descr: Maximum container capacity to advertise. It is not recommended to set this larger than 250. Default: 250
 */
 	Garden *Garden `yaml:"garden,omitempty"`
 

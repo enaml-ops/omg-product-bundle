@@ -15,10 +15,10 @@ const (
 	CFLinuxReleaseURI     = "https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-rootfs-release?v=1.37.0"
 	CFLinuxReleaseSHA     = "fc2a1f3cfbb953a22f9e0bff93f964477bd921b9"
 
-	GardenReleaseName    = "garden-linux"
-	GardenReleaseVersion = "0.342.0"
-	GardenReleaseURI     = "https://bosh.io/d/github.com/cloudfoundry-incubator/garden-linux-release?v=0.342.0"
-	GardenReleaseSHA     = "dbfd8e7e3560286b6d8c02ba9065a50289e8e0f3"
+	GardenReleaseName    = "garden-runc"
+	GardenReleaseVersion = "1.0.3"
+	GardenReleaseURI     = "https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.0.3"
+	GardenReleaseSHA     = "0c04b944d50ec778f5b34304fd4bc8fc0ed83b2b"
 
 	DiegoReleaseName    = "diego"
 	DiegoReleaseVersion = "0.1487.0"

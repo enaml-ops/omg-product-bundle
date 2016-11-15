@@ -5,100 +5,116 @@ package garden
 */
 type Garden struct {
 
-	/*DestroyContainersOnStart - Descr: destroy existing containers when the server starts up Default: false
-*/
-	DestroyContainersOnStart interface{} `yaml:"destroy_containers_on_start,omitempty"`
-
-	/*NoProxy - Descr: list of comma-separated hosts for which the http and https proxies will be skipped Default: <nil>
-*/
-	NoProxy interface{} `yaml:"no_proxy,omitempty"`
-
-	/*InsecureDockerRegistryList - Descr: list of IP:PORT tuples and CIDR subnet masks. Pulling from docker registries with self signed certificates will not be permitted if the registry's address is not listed here. Default: []
-*/
-	InsecureDockerRegistryList interface{} `yaml:"insecure_docker_registry_list,omitempty"`
-
-	/*GraphCleanupThresholdInMb - Descr: Total size of all filesystem layers downloaded from Docker registries before graph cleanup is activated. -1 disables graph cleanup. Default: -1
-*/
-	GraphCleanupThresholdInMb interface{} `yaml:"graph_cleanup_threshold_in_mb,omitempty"`
-
-	/*HttpProxy - Descr: http proxy that the Garden server process will use Default: <nil>
-*/
-	HttpProxy interface{} `yaml:"http_proxy,omitempty"`
-
-	/*LogLevel - Descr: log level for the Garden server - can be debug, info, error or fatal Default: <nil>
-*/
-	LogLevel interface{} `yaml:"log_level,omitempty"`
-
-	/*NetworkPool - Descr: A CIDR subnet mask specifying the range of subnets available to be assigned to containers. Default: 10.254.0.0/22
-*/
-	NetworkPool interface{} `yaml:"network_pool,omitempty"`
-
 	/*DenyNetworks - Descr: List of CIDR blocks to which containers will be denied access. Default: []
 */
 	DenyNetworks interface{} `yaml:"deny_networks,omitempty"`
 
-	/*DockerRegistryEndpoint - Descr: URL pointing to the Docker registry to use to fetch Docker images. If unset, this will default to the Docker default. Default: <nil>
+	/*NoProxy - Descr: List of comma-separated hosts that should skip connecting to the proxy Default: <nil>
 */
-	DockerRegistryEndpoint interface{} `yaml:"docker_registry_endpoint,omitempty"`
-
-	/*MaxContainers - Descr: Maximum number of containers that garden will have running at the same time. It is not recommended to set this larger than 250. Default: 250
-*/
-	MaxContainers interface{} `yaml:"max_containers,omitempty"`
-
-	/*PersistentImageList - Descr: List of Rootfs Paths (directories or docker URLs) which will never be deleted during graph cleanup Default: []
-*/
-	PersistentImageList interface{} `yaml:"persistent_image_list,omitempty"`
+	NoProxy interface{} `yaml:"no_proxy,omitempty"`
 
 	/*PortPool - Descr: An integer used to denote how many ports are avaliable for Net In calls. Uses the Garden default if not set. Default: <nil>
 */
 	PortPool *PortPool `yaml:"port_pool,omitempty"`
 
-	/*NetworkMtu - Descr: Maximum network transmission unit length in bytes. Default: 1500
+	/*DockerRegistryEndpoint - Descr: An URL pointing to the Docker registry to use to fetch Docker images. If unset, this will default to the Docker default. Default: <nil>
 */
-	NetworkMtu interface{} `yaml:"network_mtu,omitempty"`
-
-	/*AllowHostAccess - Descr: A boolean stating whether or not containers started on this host should be able to reach this host. Default: false
-*/
-	AllowHostAccess interface{} `yaml:"allow_host_access,omitempty"`
-
-	/*Dropsonde - Descr: a URL that points at the Metron agent to which metrics are forwarded. By default, it matches with the default of Metron. Default: <nil>
-*/
-	Dropsonde *Dropsonde `yaml:"dropsonde,omitempty"`
-
-	/*ListenNetwork - Descr: Garden server connection mode (tcp or unix). Default: unix
-*/
-	ListenNetwork interface{} `yaml:"listen_network,omitempty"`
-
-	/*DnsServers - Descr: Override DNS servers to be used in containers; defaults to the same as the host Default: []
-*/
-	DnsServers interface{} `yaml:"dns_servers,omitempty"`
-
-	/*AllowNetworks - Descr: List of CIDR blocks to which containers will be allowed access (applied after deny). Default: []
-*/
-	AllowNetworks interface{} `yaml:"allow_networks,omitempty"`
-
-	/*DefaultContainerGraceTime - Descr: duration after which to reap idle containers Default: 5m
-*/
-	DefaultContainerGraceTime interface{} `yaml:"default_container_grace_time,omitempty"`
-
-	/*DefaultContainerRootfs - Descr: path to the rootfs to use when a container specifies no rootfs Default: /var/vcap/packages/busybox
-*/
-	DefaultContainerRootfs interface{} `yaml:"default_container_rootfs,omitempty"`
-
-	/*ListenAddress - Descr: Garden server listening address. Default: /var/vcap/data/garden/garden.sock
-*/
-	ListenAddress interface{} `yaml:"listen_address,omitempty"`
-
-	/*Tag - Descr: a string that is a server-wide identifier used for 'global' configuration Default: <nil>
-*/
-	Tag interface{} `yaml:"tag,omitempty"`
+	DockerRegistryEndpoint interface{} `yaml:"docker_registry_endpoint,omitempty"`
 
 	/*DebugListenAddress - Descr: tcp address on which to serve debug info Default: 0.0.0.0:17013
 */
 	DebugListenAddress interface{} `yaml:"debug_listen_address,omitempty"`
 
-	/*HttpsProxy - Descr: https proxy that the Garden server process will use Default: <nil>
+	/*ListenAddress - Descr: Garden server listening address. Default: /var/vcap/data/garden/garden.sock
+*/
+	ListenAddress interface{} `yaml:"listen_address,omitempty"`
+
+	/*ExperimentalRootlessMode - Descr: A boolean stating whether or not to run garden-server as non-root user Default: false
+*/
+	ExperimentalRootlessMode interface{} `yaml:"experimental_rootless_mode,omitempty"`
+
+	/*LogLevel - Descr: log level for the Garden server - can be debug, info, error or fatal Default: info
+*/
+	LogLevel interface{} `yaml:"log_level,omitempty"`
+
+	/*DefaultContainerGraceTime - Descr: duration after which to reap idle containers Default: 5m
+*/
+	DefaultContainerGraceTime interface{} `yaml:"default_container_grace_time,omitempty"`
+
+	/*HttpProxy - Descr: Http proxy that Garden process should use Default: <nil>
+*/
+	HttpProxy interface{} `yaml:"http_proxy,omitempty"`
+
+	/*NetworkMtu - Descr: Maximum network transmission unit length in bytes. Default: 1500
+*/
+	NetworkMtu interface{} `yaml:"network_mtu,omitempty"`
+
+	/*HttpsProxy - Descr: Https proxy that Garden process should use Default: <nil>
 */
 	HttpsProxy interface{} `yaml:"https_proxy,omitempty"`
+
+	/*MaxContainers - Descr: Maximum container capacity to advertise. It is not recommended to set this larger than 250. Default: 250
+*/
+	MaxContainers interface{} `yaml:"max_containers,omitempty"`
+
+	/*AllowNetworks - Descr: List of CIDR blocks to which containers will be allowed access (applied after deny). Default: []
+*/
+	AllowNetworks interface{} `yaml:"allow_networks,omitempty"`
+
+	/*NetworkPlugin - Descr: Path to an optional network plugin binary Default: <nil>
+*/
+	NetworkPlugin interface{} `yaml:"network_plugin,omitempty"`
+
+	/*DnsServers - Descr: Override DNS servers to be used in containers; defaults to the same as the host Default: []
+*/
+	DnsServers interface{} `yaml:"dns_servers,omitempty"`
+
+	/*DestroyContainersOnStart - Descr: If true, all existing containers will be destroyed any time the garden server starts up Default: false
+*/
+	DestroyContainersOnStart interface{} `yaml:"destroy_containers_on_start,omitempty"`
+
+	/*DefaultContainerRootfs - Descr: path to the rootfs to use when a container specifies no rootfs Default: /var/vcap/packages/busybox
+*/
+	DefaultContainerRootfs interface{} `yaml:"default_container_rootfs,omitempty"`
+
+	/*NetworkPluginExtraArgs - Descr: An array of additional arguments which will be passed to the network plugin binary Default: []
+*/
+	NetworkPluginExtraArgs interface{} `yaml:"network_plugin_extra_args,omitempty"`
+
+	/*NetworkPool - Descr: A CIDR subnet mask specifying the range of subnets available to be assigned to containers. Default: 10.254.0.0/22
+*/
+	NetworkPool interface{} `yaml:"network_pool,omitempty"`
+
+	/*ImagePlugin - Descr: Path to an optional image plugin binary Default: <nil>
+*/
+	ImagePlugin interface{} `yaml:"image_plugin,omitempty"`
+
+	/*ListenNetwork - Descr: Garden server connection mode (tcp or unix). Default: unix
+*/
+	ListenNetwork interface{} `yaml:"listen_network,omitempty"`
+
+	/*PersistentImageList - Descr: List of Rootfs Paths (directories or docker URLs) which will never be deleted during graph cleanup Default: []
+*/
+	PersistentImageList interface{} `yaml:"persistent_image_list,omitempty"`
+
+	/*GraphCleanupThresholdInMb - Descr: Total size of all filesystem layers downloaded from Docker registries before graph cleanup is activated. -1 disables graph cleanup. Default: -1
+*/
+	GraphCleanupThresholdInMb interface{} `yaml:"graph_cleanup_threshold_in_mb,omitempty"`
+
+	/*AllowHostAccess - Descr: A boolean stating whether or not containers started on this host should be able to reach this host. Default: false
+*/
+	AllowHostAccess interface{} `yaml:"allow_host_access,omitempty"`
+
+	/*ApparmorProfile - Descr:  Default: garden-default
+*/
+	ApparmorProfile interface{} `yaml:"apparmor_profile,omitempty"`
+
+	/*Dropsonde - Descr: A string identifier that will be used when reporting metrics to Dropsonde. Default: <nil>
+*/
+	Dropsonde *Dropsonde `yaml:"dropsonde,omitempty"`
+
+	/*InsecureDockerRegistryList - Descr: A list of IP:PORT tuples that we allow pulling docker images from using self-signed certificates. Default: []
+*/
+	InsecureDockerRegistryList interface{} `yaml:"insecure_docker_registry_list,omitempty"`
 
 }
