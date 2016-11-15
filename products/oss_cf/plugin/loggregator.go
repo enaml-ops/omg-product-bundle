@@ -65,6 +65,7 @@ func (l *loggregatorTrafficController) createLoggregatorTrafficControllerJob() e
 				},
 			},
 			Uaa: &ltc.Uaa{
+				Url: "https://uaa." + l.Config.SystemDomain,
 				Clients: &ltc.Clients{
 					Doppler: &ltc.ClientsDoppler{
 						Secret: l.Config.DopplerSecret,

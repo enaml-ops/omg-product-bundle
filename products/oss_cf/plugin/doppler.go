@@ -39,6 +39,7 @@ func (s *Doppler) ToInstanceGroup() (ig *enaml.InstanceGroup) {
 			s.createSyslogDrainBinderJob(),
 			s.StatsdInjector.CreateJob(),
 		},
+
 		Networks: []enaml.Network{
 			enaml.Network{Name: s.Config.NetworkName, StaticIPs: s.Config.DopplerIPs},
 		},
