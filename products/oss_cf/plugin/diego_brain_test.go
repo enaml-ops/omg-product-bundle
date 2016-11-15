@@ -5,7 +5,6 @@ import (
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/auctioneer"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/cc_uploader"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/consul_agent"
-	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/converger"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/file_server"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/metron_agent"
 	"github.com/enaml-ops/omg-product-bundle/products/oss_cf/enaml-gen/nsync"
@@ -113,12 +112,12 @@ var _ = Describe("given a Diego Brain Partition", func() {
 
 			By("configuring the CC uploader")
 			job = ig.GetJobByName("cc_uploader")
-			Ω(job.Release).Should(Equal(DiegoReleaseName))
+			Ω(job.Release).Should(Equal(CFReleaseName))
 			cc := job.Properties.(*cc_uploader.CcUploaderJob)
 			Ω(cc.Diego.Ssl.SkipCertVerify).Should(BeFalse())
 			Ω(cc.Capi.CcUploader.Cc.JobPollingIntervalInSeconds).Should(Equal(25))
 
-			By("configuring the converger")
+			/*By("configuring the converger")
 			job = ig.GetJobByName("converger")
 			Ω(job.Release).Should(Equal(DiegoReleaseName))
 			c := job.Properties.(*converger.ConvergerJob)
@@ -126,6 +125,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 			Ω(c.Diego.Converger.Bbs.CaCert).Should(Equal("cacert"))
 			Ω(c.Diego.Converger.Bbs.ClientCert).Should(Equal("clientcert"))
 			Ω(c.Diego.Converger.Bbs.ClientKey).Should(Equal("clientkey"))
+			*/
 
 			By("configuring the file server")
 			job = ig.GetJobByName("file_server")
@@ -135,7 +135,7 @@ var _ = Describe("given a Diego Brain Partition", func() {
 
 			By("configuring nsync")
 			job = ig.GetJobByName("nsync")
-			Ω(job.Release).Should(Equal(DiegoReleaseName))
+			Ω(job.Release).Should(Equal(CFReleaseName))
 			n := job.Properties.(*nsync.NsyncJob)
 			Ω(n.Diego.Ssl.SkipCertVerify).Should(BeFalse())
 			Ω(n.Capi.Nsync.Bbs.ApiLocation).Should(Equal("bbs.service.cf.internal:8889"))

@@ -58,7 +58,7 @@ func (d *diegoBrain) ToInstanceGroup() *enaml.InstanceGroup {
 
 	ig.AddJob(d.newAuctioneer())
 	ig.AddJob(d.newCCUploader())
-	ig.AddJob(d.newConverger())
+	//ig.AddJob(d.newConverger())
 	ig.AddJob(d.newFileServer())
 	ig.AddJob(d.newNsync())
 	ig.AddJob(d.newRouteEmitter())
@@ -93,7 +93,7 @@ func (d *diegoBrain) newAuctioneer() *enaml.InstanceJob {
 func (d *diegoBrain) newCCUploader() *enaml.InstanceJob {
 	return &enaml.InstanceJob{
 		Name:    "cc_uploader",
-		Release: DiegoReleaseName,
+		Release: CFReleaseName,
 		Properties: &cc_uploader.CcUploaderJob{
 			Capi: &cc_uploader.Capi{
 				CcUploader: &cc_uploader.CcUploader{
@@ -143,7 +143,7 @@ func (d *diegoBrain) newFileServer() *enaml.InstanceJob {
 func (d *diegoBrain) newNsync() *enaml.InstanceJob {
 	return &enaml.InstanceJob{
 		Name:    "nsync",
-		Release: DiegoReleaseName,
+		Release: CFReleaseName,
 		Properties: &nsync.NsyncJob{
 			Capi: &nsync.Capi{
 				Nsync: &nsync.Nsync{
