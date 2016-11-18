@@ -2,7 +2,6 @@ package gemfire_plugin
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/enaml-ops/enaml"
@@ -10,27 +9,47 @@ import (
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/enaml-ops/pluginlib/productv1"
-	"gopkg.in/urfave/cli.v2"
 )
 
 type Plugin struct {
-	Version string
+	Version string `omg:"-"`
+
+	DeploymentName         string
+	NetworkName            string
+	GemfireReleaseVer      string
+	StemcellName           string
+	StemcellVer            string
+	StemcellAlias          string
+	AZs                    []string `omg:"az"`
+	LocatorStaticIPs       []string `omg:"locator-static-ip"`
+	ServerStaticIPs        []string `omg:"server-static-ip,optional"`
+	ServerInstanceCount    int
+	GemfireLocatorPort     int
+	GemfireLocatorRestPort int
+	GemfireServerPort      int
+	GemfireLocatorVMMemory int    `omg:"gemfire-locator-vm-memory"`
+	GemfireLocatorVMSize   string `omg:"gemfire-locator-vm-size"`
+	GemfireServerVMSize    string `omg:"gemfire-server-vm-size"`
+	GemfireServerVMMemory  int    `omg:"gemfire-server-vm-memory"`
+	ServerDevRestAPIPort   int    `omg:"gemfire-dev-rest-api-port"`
+	ServerDevActive        bool   `omg:"gemfire-dev-rest-api-active"`
 }
 
-// GetProduct generates a BOSH deployment manifest for p-rabbitmq.
+// GetProduct generates a BOSH deployment manifest for p-gemfire.
 func (p *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([]byte, error) {
-	var deploymentManifest = new(enaml.DeploymentManifest)
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(p.GetFlags()))
-
-	if err := checkRequiredFields(c); err != nil {
+	err := pcli.UnmarshalFlags(p, c)
+	if err != nil {
 		return nil, err
 	}
-	deploymentManifest.SetName(c.String("deployment-name"))
-	deploymentManifest.AddRelease(enaml.Release{Name: releaseName, Version: c.String("gemfire-release-ver")})
+
+	deploymentManifest := new(enaml.DeploymentManifest)
+	deploymentManifest.SetName(p.DeploymentName)
+	deploymentManifest.AddRelease(enaml.Release{Name: releaseName, Version: p.GemfireReleaseVer})
 	deploymentManifest.AddStemcell(enaml.Stemcell{
-		OS:      c.String("stemcell-name"),
-		Version: c.String("stemcell-ver"),
-		Alias:   c.String("stemcell-alias"),
+		OS:      p.StemcellName,
+		Version: p.StemcellVer,
+		Alias:   p.StemcellAlias,
 	})
 	deploymentManifest.Update = enaml.Update{
 		MaxInFlight:     1,
@@ -40,65 +59,25 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([
 		Canaries:        1,
 	}
 
-	azs := c.StringSlice("az")
-	networkname := c.String("network-name")
-	locatorstaticips := c.StringSlice("locator-static-ip")
-	locatorport := c.Int("gemfire-locator-port")
-	locatorrestport := c.Int("gemfire-locator-rest-port")
-	locatorvmmemory := c.Int("gemfire-locator-vm-memory")
-	locatorvmtype := c.String("gemfire-locator-vm-size")
-	locator := NewLocatorGroup(networkname, locatorstaticips, locatorport, locatorrestport, locatorvmmemory, locatorvmtype)
+	locator := NewLocatorGroup(p.NetworkName, p.LocatorStaticIPs, p.GemfireLocatorPort, p.GemfireLocatorRestPort, p.GemfireLocatorVMMemory, p.GemfireLocatorVMSize)
 	locatorInstanceGroup := locator.GetInstanceGroup()
-	locatorInstanceGroup.Stemcell = c.String("stemcell-alias")
-	locatorInstanceGroup.AZs = azs
+	locatorInstanceGroup.Stemcell = p.StemcellAlias
+	locatorInstanceGroup.AZs = p.AZs
 	deploymentManifest.AddInstanceGroup(locatorInstanceGroup)
 
-	serverport := c.Int("gemfire-server-port")
-	servervmtype := c.String("gemfire-server-vm-size")
-	serverInstanceCount := c.Int("server-instance-count")
-	serverStaticIPs := c.StringSlice("server-static-ip")
-	servervmmemory := c.Int("gemfire-server-vm-memory")
-	serverdevrestport := c.Int("gemfire-dev-rest-api-port")
-	serverdevrestactive := c.Bool("gemfire-dev-rest-api-active")
-	server := NewServerGroup(networkname, serverport, serverInstanceCount, serverStaticIPs, servervmtype, servervmmemory, serverdevrestport, serverdevrestactive, locator)
+	server := NewServerGroup(p.NetworkName, p.GemfireServerPort, p.ServerInstanceCount, p.ServerStaticIPs, p.GemfireServerVMSize, p.GemfireServerVMMemory, p.ServerDevRestAPIPort, p.ServerDevActive, locator)
 	serverInstanceGroup := server.GetInstanceGroup()
-	serverInstanceGroup.Stemcell = c.String("stemcell-alias")
-	serverInstanceGroup.AZs = azs
+	serverInstanceGroup.Stemcell = p.StemcellAlias
+	serverInstanceGroup.AZs = p.AZs
 	deploymentManifest.AddInstanceGroup(serverInstanceGroup)
 	return deploymentManifest.Bytes(), nil
-}
-
-var requiredFlags = []string{
-	"az",
-	"network-name",
-	"locator-static-ip",
-	"gemfire-locator-vm-size",
-	"gemfire-server-vm-size",
-}
-
-func checkRequiredFields(c *cli.Context) error {
-	for _, flagname := range requiredFlags {
-		err := validate(flagname, c)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func makeEnvVarName(flagName string) string {
 	return "OMG_" + strings.Replace(strings.ToUpper(flagName), "-", "_", -1)
 }
 
-func validate(flagName string, c *cli.Context) error {
-
-	if c.IsSet(flagName) || os.Getenv(makeEnvVarName(flagName)) != "" {
-		return nil
-	}
-	return fmt.Errorf("error: sorry you need to give me an `--%s`", flagName)
-}
-
-// GetMeta returns metadata about the p-rabbitmq product.
+// GetMeta returns metadata about the p-gemfire product.
 func (p *Plugin) GetMeta() product.Meta {
 	return product.Meta{
 		Name: "p-gemfire",

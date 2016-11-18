@@ -14,11 +14,10 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("pgemfire plugin", func() {
+var _ = Describe("p-gemfire plugin", func() {
 	var gPlugin *Plugin
 
-	Context("When a commnd line args are populate as ENV Vars", func() {
-
+	Context("When flags are read from environment variables", func() {
 		var controlAZName = "blah"
 		BeforeEach(func() {
 			gPlugin = &Plugin{Version: "0.0"}
@@ -38,6 +37,7 @@ var _ = Describe("pgemfire plugin", func() {
 				"--gemfire-server-vm-size", "asdf",
 			}, []byte{}, nil)
 			Expect(err).ShouldNot(HaveOccurred(), "should pass env var isset required value check")
+			Expect(gPlugin.AZs).Should(ConsistOf(controlAZName))
 		})
 
 		It("should properly set up the Availability Zones", func() {
@@ -57,7 +57,7 @@ var _ = Describe("pgemfire plugin", func() {
 		})
 	})
 
-	Context("When a commnd line args are passed", func() {
+	Context("When flags are read from the command line", func() {
 		BeforeEach(func() {
 			gPlugin = &Plugin{Version: "0.0"}
 		})
@@ -116,7 +116,7 @@ var _ = Describe("pgemfire plugin", func() {
 			Expect(err).Should(HaveOccurred())
 		})
 
-		It("should not require server-instance-count field", func() {
+		It("should not require --server-instance-count field", func() {
 			_, err := gPlugin.GetProduct([]string{
 				"pgemfire-command",
 				"--az", "asdf",
