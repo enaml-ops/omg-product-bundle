@@ -28,44 +28,52 @@ const (
 )
 
 type Plugin struct {
-	PluginVersion               string
-	DeploymentName              string
-	NetworkName                 string
-	IPs                         []string
-	ProxyIPs                    []string
-	VMTypeName                  string
-	DiskTypeName                string
-	AZs                         []string
-	StemcellVersion             string
-	SyslogAddress               string
-	SyslogPort                  string
-	SyslogTransport             string
-	AdminPassword               string
-	SeededDBPassword            string
+	PluginVersion              string `omg:"-"`
+	DeploymentName             string
+	BaseDomain                 string
+	NotificationRecipientEmail string
+	StemcellVer                string
+
+	CFMySQLReleaseVersion         string `omg:"cf-mysql-release-version"`
+	MySQLBackupReleaseVersion     string `omg:"mysql-backup-release-version"`
+	ServiceBackupReleaseVersion   string `omg:"service-backup-release-version"`
+	MySQLMonitoringReleaseVersion string `omg:"mysql-monitoring-release-version"`
+
+	AZs           []string `omg:"az"`
+	NetworkName   string   `omg:"network"`
+	VMTypeName    string   `omg:"vm-type"`
+	DiskTypeName  string   `omg:"disk-type"`
+	IPs           []string `omg:"ip"`
+	ProxyIPs      []string `omg:"proxy-ip"`
+	MonitoringIPs []string `omg:"monitoring-ip"`
+	BrokerIPs     []string `omg:"broker-ip"`
+
+	CFAdminPassword          string `omg:"admin-password"`
+	NotificationClientSecret string `omg:"notifications-client-secret"`
+	UaaAdminClientSecret     string `omg:"uaa-admin-secret"`
+	NatsUser                 string
+	NatsPassword             string `omg:"nats-pass"`
+	NatsPort                 string
+	NatsIPs                  []string `omg:"nats-machine-ip"`
+	SyslogAddress            string   `omg:"syslog-address,optional"`
+	SyslogPort               string   `omg:"syslog-port,optional"`
+	SyslogTransport          string   `omg:"syslog-transport,optional"`
+
+	AdminPassword               string `omg:"mysql-admin-password"`
+	SeededDBPassword            string `omg:"seeded-db-password"`
 	GaleraHealthcheckUsername   string
 	GaleraHealthcheckPassword   string
-	GaleraHealthcheckDBPassword string
+	GaleraHealthcheckDBPassword string `omg:"galera-healthcheck-db-password"`
 	ClusterHealthPassword       string
-	BaseDomain                  string
-	NotificationClientSecret    string
-	UaaAdminClientSecret        string
-	NotificationRecipientEmail  string
 	BackupEndpointUser          string
 	BackupEndpointPassword      string
-	NatsPassword                string
-	NatsUser                    string
-	NatsPort                    string
-	NatsIPs                     []string
-	ProxyAPIUser                string
-	ProxyAPIPass                string
-	MonitoringIPs               []string
-	BrokerIPs                   []string
 	BrokerQuotaEnforcerPassword string
+	ProxyAPIUser                string `omg:"proxy-api-username"`
+	ProxyAPIPass                string `omg:"proxy-api-password"`
 	BrokerAuthUsername          string
 	BrokerAuthPassword          string
 	BrokerCookieSecret          string
 	ServiceSecret               string
-	CFAdminPassword             string
 }
 
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
@@ -207,46 +215,8 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b
 		c = pluginutil.NewContext(args, pluginutil.ToCliFlagArray(flgs))
 	}
 
-	s.IPs = c.StringSlice("ip")
-	s.ProxyIPs = c.StringSlice("proxy-ip")
-	s.AZs = c.StringSlice("az")
-	s.DeploymentName = c.String("deployment-name")
-	s.NetworkName = c.String("network")
-	s.StemcellVersion = c.String("stemcell-ver")
-	s.VMTypeName = c.String("vm-type")
-	s.DiskTypeName = c.String("disk-type")
-	s.AdminPassword = c.String("mysql-admin-password")
-	s.SeededDBPassword = c.String("seeded-db-password")
-	s.SyslogAddress = c.String("syslog-address")
-	s.SyslogPort = c.String("syslog-port")
-	s.SyslogTransport = c.String("syslog-transport")
-	s.GaleraHealthcheckUsername = c.String("galera-healthcheck-username")
-	s.GaleraHealthcheckPassword = c.String("galera-healthcheck-password")
-	s.GaleraHealthcheckDBPassword = c.String("galera-healthcheck-db-password")
-	s.ClusterHealthPassword = c.String("cluster-health-password")
-	s.BaseDomain = c.String("base-domain")
-	s.NotificationRecipientEmail = c.String("notification-recipient-email")
-	s.NotificationClientSecret = c.String("notifications-client-secret")
-	s.UaaAdminClientSecret = c.String("uaa-admin-secret")
-	s.BackupEndpointUser = c.String("backup-endpoint-user")
-	s.BackupEndpointPassword = c.String("backup-endpoint-password")
-	s.NatsUser = c.String("nats-user")
-	s.NatsPassword = c.String("nats-pass")
-	s.NatsPort = c.String("nats-port")
-	s.NatsIPs = c.StringSlice("nats-machine-ip")
-	s.ProxyAPIUser = c.String("proxy-api-username")
-	s.ProxyAPIPass = c.String("proxy-api-password")
-	s.MonitoringIPs = c.StringSlice("monitoring-ip")
-	s.BrokerIPs = c.StringSlice("broker-ip")
-	s.BrokerQuotaEnforcerPassword = c.String("broker-quota-enforcer-password")
-	s.BrokerAuthUsername = c.String("broker-auth-username")
-	s.BrokerAuthPassword = c.String("broker-auth-password")
-	s.BrokerCookieSecret = c.String("broker-cookie-secret")
-	s.ServiceSecret = c.String("service-secret")
-	s.CFAdminPassword = c.String("admin-password")
-
-	if err = s.flagValidation(); err != nil {
-		lo.G.Error("invalid arguments: ", err)
+	err = pcli.UnmarshalFlags(s, c)
+	if err != nil {
 		return nil, err
 	}
 
@@ -258,12 +228,12 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b
 	lo.G.Debug("context", c)
 	var dm = new(enaml.DeploymentManifest)
 	dm.SetName(s.DeploymentName)
-	dm.AddRelease(enaml.Release{Name: CFMysqlReleaseName, Version: c.String("cf-mysql-release-version")})
-	dm.AddRelease(enaml.Release{Name: MysqlBackupReleaseName, Version: c.String("mysql-backup-release-version")})
-	dm.AddRelease(enaml.Release{Name: ServiceBackupReleaseName, Version: c.String("service-backup-release-version")})
-	dm.AddRelease(enaml.Release{Name: MysqlMonitoringReleaseName, Version: c.String("mysql-monitoring-release-version")})
+	dm.AddRelease(enaml.Release{Name: CFMysqlReleaseName, Version: s.CFMySQLReleaseVersion})
+	dm.AddRelease(enaml.Release{Name: MysqlBackupReleaseName, Version: s.MySQLBackupReleaseVersion})
+	dm.AddRelease(enaml.Release{Name: ServiceBackupReleaseName, Version: s.ServiceBackupReleaseVersion})
+	dm.AddRelease(enaml.Release{Name: MysqlMonitoringReleaseName, Version: s.MySQLMonitoringReleaseVersion})
 
-	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: s.StemcellVersion, Alias: StemcellAlias})
+	dm.AddStemcell(enaml.Stemcell{OS: StemcellName, Version: s.StemcellVer, Alias: StemcellAlias})
 	dm.AddInstanceGroup(NewMysqlPartition(s))
 	dm.AddInstanceGroup(NewProxyPartition(s))
 	dm.AddInstanceGroup(NewMonitoringPartition(s))
@@ -320,34 +290,6 @@ func (s *Plugin) cloudconfigValidation(cloudConfig *enaml.CloudConfigManifest) (
 
 	if len(cloudConfig.Networks) == 0 {
 		err = fmt.Errorf("no networks found in cloud config")
-	}
-	return
-}
-
-func (s *Plugin) flagValidation() (err error) {
-	lo.G.Debug("validating given flags")
-
-	if len(s.IPs) <= 0 {
-		err = fmt.Errorf("no `ip` given")
-	}
-
-	if len(s.AZs) <= 0 {
-		err = fmt.Errorf("no `az` given")
-	}
-
-	if s.NetworkName == "" {
-		err = fmt.Errorf("no `network-name` given")
-	}
-
-	if s.VMTypeName == "" {
-		err = fmt.Errorf("no `vm-type` given")
-	}
-	if s.DiskTypeName == "" {
-		err = fmt.Errorf("no `disk-type` given")
-	}
-
-	if s.StemcellVersion == "" {
-		err = fmt.Errorf("no `stemcell-ver` given")
 	}
 	return
 }
