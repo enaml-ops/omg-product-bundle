@@ -9,12 +9,16 @@ type Gemfire struct {
 */
 	Locator *Locator `yaml:"locator,omitempty"`
 
-	/*Server - Descr: RAM allocated to the VM Default: <nil>
+	/*Authn - Descr: what should the value of the gemfire property for security-client-authenticator be Default: DummyAuthenticator.create
 */
-	Server *Server `yaml:"server,omitempty"`
+	Authn *Authn `yaml:"authn,omitempty"`
 
-	/*ClusterTopology - Descr: Number of cache servers per cluster Default: 0
+	/*ClusterTopology - Descr: Number of locators per cluster Default: 0
 */
 	ClusterTopology *ClusterTopology `yaml:"cluster_topology,omitempty"`
+
+	/*Server - Descr: activate the dev rest api on your gemfire server nodes Default: false
+*/
+	Server *Server `yaml:"server,omitempty"`
 
 }

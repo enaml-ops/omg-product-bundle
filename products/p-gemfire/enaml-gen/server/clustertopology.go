@@ -5,12 +5,12 @@ package server
 */
 type ClusterTopology struct {
 
-	/*NumberOfLocators - Descr: Number of locators per cluster Default: 0
-*/
-	NumberOfLocators interface{} `yaml:"number_of_locators,omitempty"`
-
 	/*NumberOfServers - Descr: Number of cache servers per cluster Default: 0
 */
 	NumberOfServers interface{} `yaml:"number_of_servers,omitempty"`
+
+	/*NumberOfLocators - Descr: Number of locators per cluster Default: 0
+*/
+	NumberOfLocators interface{} `yaml:"number_of_locators,omitempty"`
 
 }

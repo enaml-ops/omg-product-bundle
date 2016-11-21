@@ -5,12 +5,12 @@ package locator
 */
 type LocatorJob struct {
 
+	/*Gemfire - Descr: Port the Locator will listen on for REST API Default: 8080
+*/
+	Gemfire *Gemfire `yaml:"gemfire,omitempty"`
+
 	/*ExternalDependencies - Descr: System domain Default: <nil>
 */
 	ExternalDependencies *ExternalDependencies `yaml:"external_dependencies,omitempty"`
-
-	/*Gemfire - Descr: Current topology Default: 2
-*/
-	Gemfire *Gemfire `yaml:"gemfire,omitempty"`
 
 }

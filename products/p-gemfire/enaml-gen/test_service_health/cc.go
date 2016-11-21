@@ -5,7 +5,7 @@ package test_service_health
 */
 type Cc struct {
 
-	/*Api - Descr: Password for authentication Default: <nil>
+	/*Api - Descr: CF Org to use for test app Default: system
 */
 	Api *Api `yaml:"api,omitempty"`
 

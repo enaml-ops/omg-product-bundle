@@ -5,7 +5,7 @@ package server
 */
 type ServerJob struct {
 
-	/*Gemfire - Descr: Number of cache servers per cluster Default: 0
+	/*Gemfire - Descr: what should the value of the gemfire property for security-client-authenticator be Default: DummyAuthenticator.create
 */
 	Gemfire *Gemfire `yaml:"gemfire,omitempty"`
 

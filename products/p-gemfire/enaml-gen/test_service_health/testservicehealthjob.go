@@ -5,13 +5,13 @@ package test_service_health
 */
 type TestServiceHealthJob struct {
 
-	/*Gemfire - Descr: Name to give test app in order to bind test GemFire CF service Default: gemfire-smoke-test-app-e897eb2d-d5dc-4186-8cee
-*/
-	Gemfire *Gemfire `yaml:"gemfire,omitempty"`
-
 	/*Cc - Descr: Cloud Controller Application Domain Default: <nil>
 */
 	Cc *Cc `yaml:"cc,omitempty"`
+
+	/*Gemfire - Descr: Name to give test app in order to bind test GemFire CF service Default: gemfire-smoke-test-app-e897eb2d-d5dc-4186-8cee
+*/
+	Gemfire *Gemfire `yaml:"gemfire,omitempty"`
 
 	/*Broker - Descr: Gemfire service broker API address Default: <nil>
 */
