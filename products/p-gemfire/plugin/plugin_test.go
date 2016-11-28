@@ -1,14 +1,18 @@
 package gemfire_plugin_test
 
 import (
+	"bytes"
+	"encoding/base64"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 
 	"gopkg.in/yaml.v2"
 
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/server"
+	gemlocator "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/locator"
+	gemserver "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/server"
 	. "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -57,7 +61,123 @@ var _ = Describe("p-gemfire plugin", func() {
 		})
 	})
 
-	Context("When flags are read from the command line", func() {
+	Context("when arguments for authentication are set", func() {
+		BeforeEach(func() {
+			gPlugin = &Plugin{Version: "0.0"}
+		})
+
+		Context("and authn is not activated", func() {
+			It("should not require any authentication fields to be present", func() {
+				_, err := gPlugin.GetProduct([]string{
+					"pgemfire-command",
+					"--az", "z1",
+					"--network-name", "net1",
+					"--locator-static-ip", "1.0.0.2",
+					"--server-instance-count", "1",
+					"--gemfire-locator-vm-size", "asdf",
+					"--gemfire-server-vm-size", "asdf",
+					"--stemcell-alias", "ubuntu",
+					"--use-authn=false",
+				}, []byte{}, nil)
+				Expect(err).ShouldNot(HaveOccurred())
+			})
+		})
+		Context("and not all auth flags are given", func() {
+			It("should require all authentication fields to be present", func() {
+				_, err := gPlugin.GetProduct([]string{
+					"pgemfire-command",
+					"--az", "z1",
+					"--network-name", "net1",
+					"--locator-static-ip", "1.0.0.2",
+					"--server-instance-count", "1",
+					"--gemfire-locator-vm-size", "asdf",
+					"--gemfire-server-vm-size", "asdf",
+					"--stemcell-alias", "ubuntu",
+					"--use-authn",
+					"--public-key-pass", "blah",
+				}, []byte{}, nil)
+				Expect(err).Should(HaveOccurred())
+			})
+		})
+		Context("and all auth flags are set", func() {
+			var manifest *enaml.DeploymentManifest
+			var locator = new(gemlocator.LocatorJob)
+			var server = new(gemserver.ServerJob)
+			var controlAuthenticator = "blah"
+			var controlRemoteKeystorePath = "/user/bin/store.key"
+			var controlKeyPass = "something-pass"
+			var controlLocalKeyPath = "fixtures/keystore.key"
+			var controlJARPath = "fixtures/my.jar"
+
+			BeforeEach(func() {
+				manifestBytes, err := gPlugin.GetProduct([]string{
+					"pgemfire-command",
+					"--az", "z1",
+					"--network-name", "net1",
+					"--locator-static-ip", "1.0.0.2",
+					"--server-instance-count", "1",
+					"--gemfire-locator-vm-size", "asdf",
+					"--gemfire-server-vm-size", "asdf",
+					"--stemcell-alias", "ubuntu",
+					"--use-authn",
+					"--security-client-authenticator", controlAuthenticator,
+					"--keystore-remote-path", controlRemoteKeystorePath,
+					"--public-key-pass", controlKeyPass,
+					"--keystore-local-path", controlLocalKeyPath,
+					"--security-jar-local-path", controlJARPath,
+				}, []byte{}, nil)
+				Expect(err).ShouldNot(HaveOccurred())
+				manifest = enaml.NewDeploymentManifest(manifestBytes)
+				locatorBytes, _ := yaml.Marshal(manifest.GetInstanceGroupByName("locator-group").GetJobByName("locator").Properties)
+				serverBytes, _ := yaml.Marshal(manifest.GetInstanceGroupByName("server-group").GetJobByName("server").Properties)
+				yaml.Unmarshal(locatorBytes, locator)
+				yaml.Unmarshal(serverBytes, server)
+			})
+
+			It("Should configure Authn values", func() {
+				Ω(server.Gemfire.Authn).ShouldNot(BeNil())
+				Ω(locator.Gemfire.Authn).ShouldNot(BeNil())
+			})
+
+			It("should base64 encode the contents of the keystore given", func() {
+				buf := new(bytes.Buffer)
+				b, err := ioutil.ReadFile(controlLocalKeyPath)
+				Ω(err).ShouldNot(HaveOccurred())
+				encoder := base64.NewEncoder(base64.StdEncoding, buf)
+				encoder.Write(b)
+				encoder.Close()
+				Ω(server.Gemfire.Authn.KeystoreBits).Should(Equal(buf.String()))
+			})
+
+			It("should base64 encode the contents of the security jar given", func() {
+				buf := new(bytes.Buffer)
+				b, err := ioutil.ReadFile(controlJARPath)
+				Ω(err).ShouldNot(HaveOccurred())
+				encoder := base64.NewEncoder(base64.StdEncoding, buf)
+				encoder.Write(b)
+				encoder.Close()
+				Ω(locator.Gemfire.Authn.SecurityJarBase64Bits).Should(Equal(buf.String()))
+			})
+
+			It("should set the keystore password", func() {
+				Ω(server.Gemfire.Authn.SecurityPublickeyPass).Should(Equal(controlKeyPass))
+			})
+
+			It("should activate authn", func() {
+				Ω(server.Gemfire.Authn.Enabled).Should(BeTrue())
+			})
+
+			It("should set the keystore remote path ", func() {
+				Ω(server.Gemfire.Authn.SecurityKeystoreFilepath).Should(Equal(controlRemoteKeystorePath))
+			})
+
+			It("should set the security client ", func() {
+				Ω(server.Gemfire.Authn.SecurityClientAuthenticator).Should(Equal(controlAuthenticator))
+			})
+		})
+	})
+
+	Context("When a commnd line args are passed", func() {
 		BeforeEach(func() {
 			gPlugin = &Plugin{Version: "0.0"}
 		})
@@ -265,7 +385,7 @@ var _ = Describe("p-gemfire plugin", func() {
 				Expect(err).ShouldNot(HaveOccurred())
 				manifest := enaml.NewDeploymentManifest(manifestBytes)
 				instanceGroup := manifest.GetInstanceGroupByName("server-group")
-				var properties = new(server.ServerJob)
+				var properties = new(gemserver.ServerJob)
 				propertiesBytes, _ := yaml.Marshal(instanceGroup.GetJobByName("server").Properties)
 				yaml.Unmarshal(propertiesBytes, properties)
 				Expect(properties.Gemfire.ClusterTopology.NumberOfServers).Should(Equal(givenStaticCount), fmt.Sprintf("we should match ips given not instance count given"))
@@ -291,7 +411,7 @@ var _ = Describe("p-gemfire plugin", func() {
 				Expect(err).ShouldNot(HaveOccurred())
 				manifest := enaml.NewDeploymentManifest(manifestBytes)
 				instanceGroup := manifest.GetInstanceGroupByName("server-group")
-				var properties = new(server.ServerJob)
+				var properties = new(gemserver.ServerJob)
 				propertiesBytes, _ := yaml.Marshal(instanceGroup.GetJobByName("server").Properties)
 				yaml.Unmarshal(propertiesBytes, properties)
 				Expect(properties.Gemfire.Server.DevRestApi.Port).Should(Equal(controlPort), fmt.Sprintf("should overwrite the port default"))

@@ -53,7 +53,7 @@ func (s *ServerGroup) getNetwork() enaml.Network {
 	return network
 }
 
-func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
+func (s *ServerGroup) GetInstanceGroup(authnConfig server.Authn) *enaml.InstanceGroup {
 	instanceGroup := new(enaml.InstanceGroup)
 	instanceGroup.Name = serverGroup
 	instanceGroup.AddNetwork(s.getNetwork())
@@ -64,6 +64,7 @@ func (s *ServerGroup) GetInstanceGroup() *enaml.InstanceGroup {
 		Release: releaseName,
 		Properties: server.ServerJob{
 			Gemfire: &server.Gemfire{
+				Authn: &authnConfig,
 				Locator: &server.Locator{
 					Addresses: s.Locator.StaticIPs,
 					Port:      s.Locator.Port,

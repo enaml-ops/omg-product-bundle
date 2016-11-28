@@ -25,7 +25,7 @@ func NewLocatorGroup(networkname string, staticips []string, port, restport, vmm
 	return lg
 }
 
-func (s *LocatorGroup) GetInstanceGroup() *enaml.InstanceGroup {
+func (s *LocatorGroup) GetInstanceGroup(authnConfig locator.Authn) *enaml.InstanceGroup {
 	instanceGroup := new(enaml.InstanceGroup)
 	instanceGroup.Name = locatorGroup
 	network := enaml.Network{
@@ -43,6 +43,7 @@ func (s *LocatorGroup) GetInstanceGroup() *enaml.InstanceGroup {
 		Release: releaseName,
 		Properties: locator.LocatorJob{
 			Gemfire: &locator.Gemfire{
+				Authn: &authnConfig,
 				Locator: &locator.Locator{
 					Addresses: s.StaticIPs,
 					Port:      s.Port,

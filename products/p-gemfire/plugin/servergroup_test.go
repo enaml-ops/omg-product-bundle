@@ -2,10 +2,11 @@ package gemfire_plugin_test
 
 import (
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/server"
+	gemserver "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/server"
 	. "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	yaml "gopkg.in/yaml.v2"
 )
 
 var _ = Describe("server Group", func() {
@@ -33,8 +34,15 @@ var _ = Describe("server Group", func() {
 		BeforeEach(func() {
 			locatorGroup = NewLocatorGroup(controlNetworkName, controlLocatorStaticIPs, controlPort, controlRestPort, controlVMMemory, controlVMType)
 			serverGroup = NewServerGroup(controlNetworkName, controlServerPort, controlInstanceCount, []string{}, controlVMType, controlServerVMMemory, controlDevRestPort, controlDevRestActive, locatorGroup)
-			instanceGroup = serverGroup.GetInstanceGroup()
+			instanceGroup = serverGroup.GetInstanceGroup(gemserver.Authn{})
 			staticIPs = instanceGroup.GetNetworkByName(controlNetworkName).StaticIPs
+		})
+
+		It("Should create an instance group with an authn config", func() {
+			server := new(gemserver.ServerJob)
+			serverBytes, _ := yaml.Marshal(instanceGroup.GetJobByName("server").Properties)
+			yaml.Unmarshal(serverBytes, server)
+			Ω(server.Gemfire.Authn).ShouldNot(BeNil())
 		})
 
 		Context("and static server IPs are given", func() {
@@ -43,7 +51,7 @@ var _ = Describe("server Group", func() {
 			BeforeEach(func() {
 
 				serverGroup = NewServerGroup(controlNetworkName, controlServerPort, controlInstanceCount, controlServerStaticIPs, controlVMType, controlServerVMMemory, controlDevRestPort, controlDevRestActive, locatorGroup)
-				instanceGroup = serverGroup.GetInstanceGroup()
+				instanceGroup = serverGroup.GetInstanceGroup(gemserver.Authn{})
 				staticIPs = instanceGroup.GetNetworkByName(controlNetworkName).StaticIPs
 			})
 
@@ -79,24 +87,24 @@ var _ = Describe("server Group", func() {
 		})
 
 		It("Should create map to properties.gemfire.server.addresses", func() {
-			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(server.ServerJob)
+			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(gemserver.ServerJob)
 			Ω(jobProperties.Gemfire.Locator.Addresses).Should(Equal(controlLocatorStaticIPs))
 		})
 
 		It("Should create valid job properties for cluster topology", func() {
-			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(server.ServerJob)
+			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(gemserver.ServerJob)
 			Ω(jobProperties.Gemfire.ClusterTopology.NumberOfLocators).Should(Equal(len(controlLocatorStaticIPs)), "number of locators should be derived from the number of StaticIPs")
 			Ω(jobProperties.Gemfire.ClusterTopology.NumberOfServers).Should(Equal(controlInstanceCount), "number of locators should be derived from the given instance count value")
 		})
 
 		It("Should create valid job properties for server configuration", func() {
-			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(server.ServerJob)
+			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(gemserver.ServerJob)
 			Ω(jobProperties.Gemfire.Server.Port).Should(Equal(controlServerPort), "server port should match the user given value")
 			Ω(jobProperties.Gemfire.Server.VmMemory).Should(Equal(controlServerVMMemory), "server vm memory should mathc the user given value")
 		})
 		Context("when given a dev rest api config value", func() {
 			It("should set the values in the server", func() {
-				jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(server.ServerJob)
+				jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(gemserver.ServerJob)
 				Ω(jobProperties.Gemfire.Server.DevRestApi.Port).Should(Equal(controlDevRestPort))
 				Ω(jobProperties.Gemfire.Server.DevRestApi.Active).Should(Equal(controlDevRestActive))
 			})

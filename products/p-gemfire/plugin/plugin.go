@@ -1,48 +1,93 @@
 package gemfire_plugin
 
 import (
+	"bytes"
+	"encoding/base64"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/enaml-ops/enaml"
+	"github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/locator"
+	"github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/server"
 	"github.com/enaml-ops/pluginlib/cred"
 	"github.com/enaml-ops/pluginlib/pcli"
 	"github.com/enaml-ops/pluginlib/pluginutil"
 	"github.com/enaml-ops/pluginlib/productv1"
+	"github.com/xchapter7x/lo"
 )
 
 type Plugin struct {
 	Version string `omg:"-"`
 
-	DeploymentName         string
-	NetworkName            string
-	GemfireReleaseVer      string
-	StemcellName           string
-	StemcellVer            string
-	StemcellAlias          string
-	AZs                    []string `omg:"az"`
-	LocatorStaticIPs       []string `omg:"locator-static-ip"`
-	ServerStaticIPs        []string `omg:"server-static-ip,optional"`
-	ServerInstanceCount    int
-	GemfireLocatorPort     int
-	GemfireLocatorRestPort int
-	GemfireServerPort      int
-	GemfireLocatorVMMemory int    `omg:"gemfire-locator-vm-memory"`
-	GemfireLocatorVMSize   string `omg:"gemfire-locator-vm-size"`
-	GemfireServerVMSize    string `omg:"gemfire-server-vm-size"`
-	GemfireServerVMMemory  int    `omg:"gemfire-server-vm-memory"`
-	ServerDevRestAPIPort   int    `omg:"gemfire-dev-rest-api-port"`
-	ServerDevActive        bool   `omg:"gemfire-dev-rest-api-active"`
+	DeploymentName              string
+	NetworkName                 string
+	GemfireReleaseVer           string
+	StemcellName                string
+	StemcellVer                 string
+	StemcellAlias               string
+	AZs                         []string `omg:"az"`
+	LocatorStaticIPs            []string `omg:"locator-static-ip"`
+	ServerStaticIPs             []string `omg:"server-static-ip,optional"`
+	ServerInstanceCount         int
+	GemfireLocatorPort          int
+	GemfireLocatorRestPort      int
+	GemfireServerPort           int
+	GemfireLocatorVMMemory      int    `omg:"gemfire-locator-vm-memory"`
+	GemfireLocatorVMSize        string `omg:"gemfire-locator-vm-size"`
+	GemfireServerVMSize         string `omg:"gemfire-server-vm-size"`
+	GemfireServerVMMemory       int    `omg:"gemfire-server-vm-memory"`
+	ServerDevRestAPIPort        int    `omg:"gemfire-dev-rest-api-port"`
+	ServerDevActive             bool   `omg:"gemfire-dev-rest-api-active"`
+	AuthnActive                 bool   `omg:"use-authn,optional"`
+	SecurityClientAuthenticator string `omg:"security-client-authenticator,optional"`
+	KeystoreRemotePath          string `omg:"keystore-remote-path,optional"`
+	PublicKeyPass               string `omg:"public-key-pass,optional"`
+	KeystoreLocalPath           string `omg:"keystore-local-path,optional"`
+	SecurityJarLocalPath        string `omg:"security-jar-local-path,optional"`
+}
+
+func (p *Plugin) authnFlagsValid() bool {
+	if p.AuthnActive {
+		flagValues := []string{
+			p.PublicKeyPass,
+			p.KeystoreLocalPath,
+			p.SecurityJarLocalPath,
+		}
+
+		for _, val := range flagValues {
+
+			if val == "" {
+				return false
+			}
+		}
+
+		if _, err := os.Stat(p.KeystoreLocalPath); os.IsNotExist(err) {
+			lo.G.Errorf("file does not exist: %v", p.KeystoreLocalPath)
+			return false
+		}
+
+		if _, err := os.Stat(p.SecurityJarLocalPath); os.IsNotExist(err) {
+			lo.G.Errorf("file does not exist: %v", p.SecurityJarLocalPath)
+			return false
+		}
+	}
+	return true
 }
 
 // GetProduct generates a BOSH deployment manifest for p-gemfire.
 func (p *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([]byte, error) {
 	c := pluginutil.NewContext(args, pluginutil.ToCliFlagArray(p.GetFlags()))
 	err := pcli.UnmarshalFlags(p, c)
+
 	if err != nil {
 		return nil, err
 	}
 
+	if !p.authnFlagsValid() {
+		return nil, ActiveAuthNErr
+	}
 	deploymentManifest := new(enaml.DeploymentManifest)
 	deploymentManifest.SetName(p.DeploymentName)
 	deploymentManifest.AddRelease(enaml.Release{Name: releaseName, Version: p.GemfireReleaseVer})
@@ -59,18 +104,55 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([
 		Canaries:        1,
 	}
 
-	locator := NewLocatorGroup(p.NetworkName, p.LocatorStaticIPs, p.GemfireLocatorPort, p.GemfireLocatorRestPort, p.GemfireLocatorVMMemory, p.GemfireLocatorVMSize)
-	locatorInstanceGroup := locator.GetInstanceGroup()
+	ltr := NewLocatorGroup(p.NetworkName, p.LocatorStaticIPs, p.GemfireLocatorPort, p.GemfireLocatorRestPort, p.GemfireLocatorVMMemory, p.GemfireLocatorVMSize)
+	locatorInstanceGroup := ltr.GetInstanceGroup(p.getLocatorAuthn())
 	locatorInstanceGroup.Stemcell = p.StemcellAlias
 	locatorInstanceGroup.AZs = p.AZs
 	deploymentManifest.AddInstanceGroup(locatorInstanceGroup)
 
-	server := NewServerGroup(p.NetworkName, p.GemfireServerPort, p.ServerInstanceCount, p.ServerStaticIPs, p.GemfireServerVMSize, p.GemfireServerVMMemory, p.ServerDevRestAPIPort, p.ServerDevActive, locator)
-	serverInstanceGroup := server.GetInstanceGroup()
+	svr := NewServerGroup(p.NetworkName, p.GemfireServerPort, p.ServerInstanceCount, p.ServerStaticIPs, p.GemfireServerVMSize, p.GemfireServerVMMemory, p.ServerDevRestAPIPort, p.ServerDevActive, ltr)
+	serverInstanceGroup := svr.GetInstanceGroup(p.getServerAuthn())
 	serverInstanceGroup.Stemcell = p.StemcellAlias
 	serverInstanceGroup.AZs = p.AZs
 	deploymentManifest.AddInstanceGroup(serverInstanceGroup)
 	return deploymentManifest.Bytes(), nil
+}
+
+func (p *Plugin) getLocatorAuthn() locator.Authn {
+	authn := locator.Authn{}
+
+	if p.AuthnActive {
+
+		buf := new(bytes.Buffer)
+
+		if b, err := ioutil.ReadFile(p.SecurityJarLocalPath); err == nil {
+			encoder := base64.NewEncoder(base64.StdEncoding, buf)
+			encoder.Write(b)
+			encoder.Close()
+			authn.SecurityJarBase64Bits = buf.String()
+		}
+	}
+	return authn
+}
+
+func (p *Plugin) getServerAuthn() server.Authn {
+	authn := server.Authn{}
+
+	if p.AuthnActive {
+		buf := new(bytes.Buffer)
+
+		if b, err := ioutil.ReadFile(p.KeystoreLocalPath); err == nil {
+			encoder := base64.NewEncoder(base64.StdEncoding, buf)
+			encoder.Write(b)
+			encoder.Close()
+			authn.KeystoreBits = buf.String()
+		}
+		authn.Enabled = true
+		authn.SecurityPublickeyPass = p.PublicKeyPass
+		authn.SecurityKeystoreFilepath = p.KeystoreRemotePath
+		authn.SecurityClientAuthenticator = p.SecurityClientAuthenticator
+	}
+	return authn
 }
 
 func makeEnvVarName(flagName string) string {
@@ -212,6 +294,38 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 			Name:     "gemfire-release-ver",
 			Value:    releaseVersion,
 			Usage:    "the version of the release to use for the deployment",
+		},
+		pcli.Flag{
+			FlagType: pcli.BoolFlag,
+			Name:     "use-authn",
+			Usage:    "activates authN for your gemfire deployment",
+		},
+		pcli.Flag{
+			FlagType: pcli.StringFlag,
+			Name:     "security-client-authenticator",
+			Value:    SecurityClientAuthenticatorDefault,
+			Usage:    "will populate: what should the value of the gemfire property for security-client-authenticator be - gemfire.authn.security_client_authenticator",
+		},
+		pcli.Flag{
+			FlagType: pcli.StringFlag,
+			Name:     "keystore-remote-path",
+			Value:    KeystoreRemotePathDefault,
+			Usage:    "will populate: path on remote system for your keystore - gemfire.authn.security_keystore_filepath",
+		},
+		pcli.Flag{
+			FlagType: pcli.StringFlag,
+			Name:     "public-key-pass",
+			Usage:    "will populate: password for the given key - gemfire.authn.security_publickey_pass",
+		},
+		pcli.Flag{
+			FlagType: pcli.StringFlag,
+			Name:     "keystore-local-path",
+			Usage:    "will populate: keystore file bits, base64 encoded - gemfire.authn.keystore_bits",
+		},
+		pcli.Flag{
+			FlagType: pcli.StringFlag,
+			Name:     "security-jar-local-path",
+			Usage:    "will populate: base64 encoding of authentication security jar - gemfire.authn.security_jar_base64_bits",
 		},
 	}
 }

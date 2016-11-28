@@ -2,10 +2,11 @@ package gemfire_plugin_test
 
 import (
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/locator"
+	gemlocator "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/locator"
 	. "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	yaml "gopkg.in/yaml.v2"
 )
 
 var _ = Describe("Locator Group", func() {
@@ -24,7 +25,14 @@ var _ = Describe("Locator Group", func() {
 
 	BeforeEach(func() {
 		locatorGroup = NewLocatorGroup(controlNetworkName, controlStaticIPs, controlPort, controlRestPort, controlVMMemory, controlVMType)
-		instanceGroup = locatorGroup.GetInstanceGroup()
+		instanceGroup = locatorGroup.GetInstanceGroup(gemlocator.Authn{})
+	})
+
+	It("Should create an instance group with an authn config", func() {
+		locator := new(gemlocator.LocatorJob)
+		locatorBytes, _ := yaml.Marshal(instanceGroup.GetJobByName("locator").Properties)
+		yaml.Unmarshal(locatorBytes, locator)
+		Ω(locator.Gemfire.Authn).ShouldNot(BeNil())
 	})
 
 	Context("when a locator ip list is set", func() {
@@ -41,7 +49,7 @@ var _ = Describe("Locator Group", func() {
 		})
 
 		It("Should create map to properties.gemfire.locator.addresses", func() {
-			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(locator.LocatorJob)
+			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(gemlocator.LocatorJob)
 			Ω(jobProperties.Gemfire.Locator.Addresses).Should(Equal(controlStaticIPs))
 		})
 	})
@@ -53,10 +61,10 @@ var _ = Describe("Locator Group", func() {
 	})
 
 	Context("when valid gemfire.properties are set", func() {
-		var jobProperties locator.LocatorJob
+		var jobProperties gemlocator.LocatorJob
 
 		BeforeEach(func() {
-			jobProperties = instanceGroup.GetJobByName("locator").Properties.(locator.LocatorJob)
+			jobProperties = instanceGroup.GetJobByName("locator").Properties.(gemlocator.LocatorJob)
 		})
 
 		It("should set a rest-port", func() {
