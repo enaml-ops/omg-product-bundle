@@ -6,7 +6,6 @@ import (
 	. "github.com/enaml-ops/omg-product-bundle/products/p-gemfire/plugin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	yaml "gopkg.in/yaml.v2"
 )
 
 var _ = Describe("Locator Group", func() {
@@ -25,14 +24,7 @@ var _ = Describe("Locator Group", func() {
 
 	BeforeEach(func() {
 		locatorGroup = NewLocatorGroup(controlNetworkName, controlStaticIPs, controlPort, controlRestPort, controlVMMemory, controlVMType)
-		instanceGroup = locatorGroup.GetInstanceGroup(gemlocator.Authn{})
-	})
-
-	It("Should create an instance group with an authn config", func() {
-		locator := new(gemlocator.LocatorJob)
-		locatorBytes, _ := yaml.Marshal(instanceGroup.GetJobByName("locator").Properties)
-		yaml.Unmarshal(locatorBytes, locator)
-		Ω(locator.Gemfire.Authn).ShouldNot(BeNil())
+		instanceGroup = locatorGroup.GetInstanceGroup()
 	})
 
 	Context("when a locator ip list is set", func() {

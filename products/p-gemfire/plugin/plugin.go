@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/enaml-ops/enaml"
-	"github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/locator"
 	"github.com/enaml-ops/omg-product-bundle/products/p-gemfire/enaml-gen/server"
 	"github.com/enaml-ops/pluginlib/cred"
 	"github.com/enaml-ops/pluginlib/pcli"
@@ -105,7 +104,7 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([
 	}
 
 	ltr := NewLocatorGroup(p.NetworkName, p.LocatorStaticIPs, p.GemfireLocatorPort, p.GemfireLocatorRestPort, p.GemfireLocatorVMMemory, p.GemfireLocatorVMSize)
-	locatorInstanceGroup := ltr.GetInstanceGroup(p.getLocatorAuthn())
+	locatorInstanceGroup := ltr.GetInstanceGroup()
 	locatorInstanceGroup.Stemcell = p.StemcellAlias
 	locatorInstanceGroup.AZs = p.AZs
 	deploymentManifest.AddInstanceGroup(locatorInstanceGroup)
@@ -118,8 +117,7 @@ func (p *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) ([
 	return deploymentManifest.Bytes(), nil
 }
 
-func (p *Plugin) getLocatorAuthn() locator.Authn {
-	authn := locator.Authn{}
+func (p *Plugin) getSecurityJar() string {
 
 	if p.AuthnActive {
 
@@ -129,10 +127,10 @@ func (p *Plugin) getLocatorAuthn() locator.Authn {
 			encoder := base64.NewEncoder(base64.StdEncoding, buf)
 			encoder.Write(b)
 			encoder.Close()
-			authn.SecurityJarBase64Bits = buf.String()
+			return buf.String()
 		}
 	}
-	return authn
+	return ""
 }
 
 func (p *Plugin) getServerAuthn() server.Authn {
@@ -151,6 +149,7 @@ func (p *Plugin) getServerAuthn() server.Authn {
 		authn.SecurityPublickeyPass = p.PublicKeyPass
 		authn.SecurityKeystoreFilepath = p.KeystoreRemotePath
 		authn.SecurityClientAuthenticator = p.SecurityClientAuthenticator
+		authn.SecurityJarBase64Bits = p.getSecurityJar()
 	}
 	return authn
 }

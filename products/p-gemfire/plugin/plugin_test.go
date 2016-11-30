@@ -136,7 +136,6 @@ var _ = Describe("p-gemfire plugin", func() {
 
 			It("Should configure Authn values", func() {
 				Ω(server.Gemfire.Authn).ShouldNot(BeNil())
-				Ω(locator.Gemfire.Authn).ShouldNot(BeNil())
 			})
 
 			It("should base64 encode the contents of the keystore given", func() {
@@ -156,7 +155,7 @@ var _ = Describe("p-gemfire plugin", func() {
 				encoder := base64.NewEncoder(base64.StdEncoding, buf)
 				encoder.Write(b)
 				encoder.Close()
-				Ω(locator.Gemfire.Authn.SecurityJarBase64Bits).Should(Equal(buf.String()))
+				Ω(server.Gemfire.Authn.SecurityJarBase64Bits).Should(Equal(buf.String()))
 			})
 
 			It("should set the keystore password", func() {
