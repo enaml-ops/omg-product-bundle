@@ -5,24 +5,24 @@ package test_service_health
 */
 type Api struct {
 
-	/*Username - Descr: Username to authenticate with Default: <nil>
+	/*Url - Descr: Cloud Controller API address Default: <nil>
 */
-	Username interface{} `yaml:"username,omitempty"`
+	Url interface{} `yaml:"url,omitempty"`
+
+	/*Org - Descr: CF Org to use for test app Default: system
+*/
+	Org interface{} `yaml:"org,omitempty"`
 
 	/*Password - Descr: Password for authentication Default: <nil>
 */
 	Password interface{} `yaml:"password,omitempty"`
 
-	/*Url - Descr: Cloud Controller API address Default: <nil>
-*/
-	Url interface{} `yaml:"url,omitempty"`
-
 	/*Space - Descr: CF Space with in Org to use for test app Default: gemfire-smoke-test-space-57818572-4437-45d8-a25b-d71e5f5eae7d
 */
 	Space interface{} `yaml:"space,omitempty"`
 
-	/*Org - Descr: CF Org to use for test app Default: system
+	/*Username - Descr: Username to authenticate with Default: <nil>
 */
-	Org interface{} `yaml:"org,omitempty"`
+	Username interface{} `yaml:"username,omitempty"`
 
 }

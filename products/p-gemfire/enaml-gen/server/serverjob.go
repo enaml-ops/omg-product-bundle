@@ -5,7 +5,7 @@ package server
 */
 type ServerJob struct {
 
-	/*Gemfire - Descr: what should the value of the gemfire property for security-client-authenticator be Default: DummyAuthenticator.create
+	/*Gemfire - Descr: password for the given key Default: <nil>
 */
 	Gemfire *Gemfire `yaml:"gemfire,omitempty"`
 

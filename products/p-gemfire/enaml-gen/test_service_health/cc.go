@@ -5,12 +5,12 @@ package test_service_health
 */
 type Cc struct {
 
-	/*Api - Descr: CF Org to use for test app Default: system
-*/
-	Api *Api `yaml:"api,omitempty"`
-
 	/*AppDomain - Descr: Cloud Controller Application Domain Default: <nil>
 */
 	AppDomain interface{} `yaml:"app_domain,omitempty"`
+
+	/*Api - Descr: CF Org to use for test app Default: system
+*/
+	Api *Api `yaml:"api,omitempty"`
 
 }

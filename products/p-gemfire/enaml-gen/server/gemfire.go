@@ -5,20 +5,20 @@ package server
 */
 type Gemfire struct {
 
-	/*Locator - Descr: Port the Locator is listening on Default: <nil>
+	/*Locator - Descr: List of GemFire Locator addresses of the form X.X.X.X Default: <nil>
 */
 	Locator *Locator `yaml:"locator,omitempty"`
 
-	/*Authn - Descr: what should the value of the gemfire property for security-client-authenticator be Default: DummyAuthenticator.create
+	/*Server - Descr: RAM allocated to the VM Default: <nil>
 */
-	Authn *Authn `yaml:"authn,omitempty"`
+	Server *Server `yaml:"server,omitempty"`
 
 	/*ClusterTopology - Descr: Number of locators per cluster Default: 0
 */
 	ClusterTopology *ClusterTopology `yaml:"cluster_topology,omitempty"`
 
-	/*Server - Descr: activate the dev rest api on your gemfire server nodes Default: false
+	/*Authn - Descr: password for the given key Default: <nil>
 */
-	Server *Server `yaml:"server,omitempty"`
+	Authn *Authn `yaml:"authn,omitempty"`
 
 }

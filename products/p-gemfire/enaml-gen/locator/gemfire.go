@@ -5,16 +5,12 @@ package locator
 */
 type Gemfire struct {
 
-	/*Locator - Descr: Port the Locator will listen on for REST API Default: 8080
+	/*Locator - Descr: RAM allocated to the locator VM in MB Default: <nil>
 */
 	Locator *Locator `yaml:"locator,omitempty"`
 
 	/*ClusterTopology - Descr: min number of locators which should be present Default: 2
 */
 	ClusterTopology *ClusterTopology `yaml:"cluster_topology,omitempty"`
-
-	/*Authn - Descr: base64 encoding of authentication security jar Default: 
-*/
-	Authn *Authn `yaml:"authn,omitempty"`
 
 }

@@ -5,7 +5,7 @@ package test_service_health
 */
 type TestServiceHealthJob struct {
 
-	/*Cc - Descr: Cloud Controller Application Domain Default: <nil>
+	/*Cc - Descr: CF Org to use for test app Default: system
 */
 	Cc *Cc `yaml:"cc,omitempty"`
 

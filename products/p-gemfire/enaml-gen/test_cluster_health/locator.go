@@ -5,10 +5,6 @@ package test_cluster_health
 */
 type Locator struct {
 
-	/*Plan1Addresses - Descr: List of GemFire Locator addresses for plan 1 of the form X.X.X.X Default: <nil>
-*/
-	Plan1Addresses interface{} `yaml:"plan_1_addresses,omitempty"`
-
 	/*Plan2Addresses - Descr: List of GemFire Locator addresses for plan 2 of the form X.X.X.X Default: <nil>
 */
 	Plan2Addresses interface{} `yaml:"plan_2_addresses,omitempty"`
@@ -20,5 +16,9 @@ type Locator struct {
 	/*Port - Descr: Port the Locator is listening on Default: 55221
 */
 	Port interface{} `yaml:"port,omitempty"`
+
+	/*Plan1Addresses - Descr: List of GemFire Locator addresses for plan 1 of the form X.X.X.X Default: <nil>
+*/
+	Plan1Addresses interface{} `yaml:"plan_1_addresses,omitempty"`
 
 }
