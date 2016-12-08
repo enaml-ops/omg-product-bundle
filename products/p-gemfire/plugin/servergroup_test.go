@@ -13,6 +13,7 @@ var _ = Describe("server Group", func() {
 	var serverGroup *ServerGroup
 
 	Context("when valid server argument values are given w/o static server IPs", func() {
+		var controlClientAccessor = "templates.security.SimpleAuthorization.create"
 		var controlNetworkName = "my-network"
 		var controlJobName = "server"
 		var staticIPs []string
@@ -101,6 +102,18 @@ var _ = Describe("server Group", func() {
 			jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(gemserver.ServerJob)
 			Ω(jobProperties.Gemfire.Server.Port).Should(Equal(controlServerPort), "server port should match the user given value")
 			Ω(jobProperties.Gemfire.Server.VmMemory).Should(Equal(controlServerVMMemory), "server vm memory should mathc the user given value")
+		})
+
+		Context("when given a gemfire.authn.security-client-accessor value", func() {
+			BeforeEach(func() {
+				instanceGroup = serverGroup.GetInstanceGroup(gemserver.Authn{
+					SecurityClientAccessor: controlClientAccessor,
+				})
+			})
+			It("should set the value in the server job properties", func() {
+				jobProperties := instanceGroup.GetJobByName(controlJobName).Properties.(gemserver.ServerJob)
+				Ω(jobProperties.Gemfire.Authn.SecurityClientAccessor).Should(Equal(controlClientAccessor))
+			})
 		})
 		Context("when given a dev rest api config value", func() {
 			It("should set the values in the server", func() {

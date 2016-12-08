@@ -22,6 +22,7 @@ const (
 	defaultDevRestPort                 = "7070"
 	defaultDevRestActive               = "true"
 	SecurityClientAuthenticatorDefault = "DummyAuthenticator.create"
+	SecurityClientAccessorDefault      = "templates.security.SimpleAuthorization.create"
 	KeystoreRemotePathDefault          = "/usr/local/share/ca-certificates/gemfire.cer"
 )
 

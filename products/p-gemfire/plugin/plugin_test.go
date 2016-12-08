@@ -108,6 +108,7 @@ var _ = Describe("p-gemfire plugin", func() {
 			var controlKeyPass = "something-pass"
 			var controlLocalKeyPath = "fixtures/keystore.key"
 			var controlJARPath = "fixtures/my.jar"
+			var controlAccessor = "templates.security.SimpleAuthorization.create"
 
 			BeforeEach(func() {
 				manifestBytes, err := gPlugin.GetProduct([]string{
@@ -120,6 +121,7 @@ var _ = Describe("p-gemfire plugin", func() {
 					"--gemfire-server-vm-size", "asdf",
 					"--stemcell-alias", "ubuntu",
 					"--use-authn",
+					"--security-client-accessor", controlAccessor,
 					"--security-client-authenticator", controlAuthenticator,
 					"--keystore-remote-path", controlRemoteKeystorePath,
 					"--public-key-pass", controlKeyPass,
@@ -170,8 +172,12 @@ var _ = Describe("p-gemfire plugin", func() {
 				Ω(server.Gemfire.Authn.SecurityKeystoreFilepath).Should(Equal(controlRemoteKeystorePath))
 			})
 
-			It("should set the security client ", func() {
+			It("should set the security client authenticator ", func() {
 				Ω(server.Gemfire.Authn.SecurityClientAuthenticator).Should(Equal(controlAuthenticator))
+			})
+
+			It("should set the security client accessor ", func() {
+				Ω(server.Gemfire.Authn.SecurityClientAccessor).Should(Equal(controlAccessor))
 			})
 		})
 	})

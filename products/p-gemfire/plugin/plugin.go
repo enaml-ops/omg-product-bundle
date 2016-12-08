@@ -41,6 +41,7 @@ type Plugin struct {
 	ServerDevActive             bool   `omg:"gemfire-dev-rest-api-active"`
 	AuthnActive                 bool   `omg:"use-authn,optional"`
 	SecurityClientAuthenticator string `omg:"security-client-authenticator,optional"`
+	SecurityClientAccessor      string `omg:"security-client-accessor,optional"`
 	KeystoreRemotePath          string `omg:"keystore-remote-path,optional"`
 	PublicKeyPass               string `omg:"public-key-pass,optional"`
 	KeystoreLocalPath           string `omg:"keystore-local-path,optional"`
@@ -146,6 +147,7 @@ func (p *Plugin) getServerAuthn() server.Authn {
 			authn.KeystoreBits = buf.String()
 		}
 		authn.Enabled = true
+		authn.SecurityClientAccessor = p.SecurityClientAccessor
 		authn.SecurityPublickeyPass = p.PublicKeyPass
 		authn.SecurityKeystoreFilepath = p.KeystoreRemotePath
 		authn.SecurityClientAuthenticator = p.SecurityClientAuthenticator
@@ -304,6 +306,12 @@ func (p *Plugin) GetFlags() []pcli.Flag {
 			Name:     "security-client-authenticator",
 			Value:    SecurityClientAuthenticatorDefault,
 			Usage:    "will populate: what should the value of the gemfire property for security-client-authenticator be - gemfire.authn.security_client_authenticator",
+		},
+		pcli.Flag{
+			FlagType: pcli.StringFlag,
+			Name:     "security-client-accessor",
+			Value:    SecurityClientAccessorDefault,
+			Usage:    "will populate: what should the value of the gemfire property for security-client-accessor be - gemfire.authn.security_client_accessor",
 		},
 		pcli.Flag{
 			FlagType: pcli.StringFlag,
