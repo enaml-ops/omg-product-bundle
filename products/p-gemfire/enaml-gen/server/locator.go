@@ -5,12 +5,12 @@ package server
 */
 type Locator struct {
 
-	/*Port - Descr: Port the Locator is listening on Default: <nil>
-*/
-	Port interface{} `yaml:"port,omitempty"`
-
 	/*Addresses - Descr: List of GemFire Locator addresses of the form X.X.X.X Default: <nil>
 */
 	Addresses interface{} `yaml:"addresses,omitempty"`
+
+	/*Port - Descr: Port the Locator is listening on Default: <nil>
+*/
+	Port interface{} `yaml:"port,omitempty"`
 
 }

@@ -5,7 +5,7 @@ package test_cluster_health
 */
 type TestClusterHealthJob struct {
 
-	/*Gemfire - Descr: List of GemFire Locator addresses for plan 1 of the form X.X.X.X Default: <nil>
+	/*Gemfire - Descr: Configuration for plans deployed by product Default: []
 */
 	Gemfire *Gemfire `yaml:"gemfire,omitempty"`
 

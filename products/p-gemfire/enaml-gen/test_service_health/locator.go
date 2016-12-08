@@ -5,12 +5,12 @@ package test_service_health
 */
 type Locator struct {
 
-	/*RestPort - Descr: Port for REST API on a Gemfire cache server to test data validity Default: <nil>
-*/
-	RestPort interface{} `yaml:"rest_port,omitempty"`
-
 	/*Ip - Descr: IP address of a Gemfire cache server to test data validity Default: <nil>
 */
 	Ip interface{} `yaml:"ip,omitempty"`
+
+	/*RestPort - Descr: Port for REST API on a Gemfire cache server to test data validity Default: <nil>
+*/
+	RestPort interface{} `yaml:"rest_port,omitempty"`
 
 }

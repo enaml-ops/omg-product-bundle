@@ -5,12 +5,12 @@ package test_service_health
 */
 type Cc struct {
 
+	/*Api - Descr: CF Space with in Org to use for test app Default: gemfire-smoke-test-space-57818572-4437-45d8-a25b-d71e5f5eae7d
+*/
+	Api *Api `yaml:"api,omitempty"`
+
 	/*AppDomain - Descr: Cloud Controller Application Domain Default: <nil>
 */
 	AppDomain interface{} `yaml:"app_domain,omitempty"`
-
-	/*Api - Descr: CF Org to use for test app Default: system
-*/
-	Api *Api `yaml:"api,omitempty"`
 
 }

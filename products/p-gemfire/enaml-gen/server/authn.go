@@ -5,17 +5,17 @@ package server
 */
 type Authn struct {
 
-	/*SecurityJarBase64Bits - Descr: base64 encoding of authentication security jar Default: 
+	/*KeystoreBits - Descr: keystore file bits, base64 encoded Default: <nil>
 */
-	SecurityJarBase64Bits interface{} `yaml:"security_jar_base64_bits,omitempty"`
+	KeystoreBits interface{} `yaml:"keystore_bits,omitempty"`
+
+	/*SecurityClientAccessor - Descr: authorization accessor classname Default: <nil>
+*/
+	SecurityClientAccessor interface{} `yaml:"security_client_accessor,omitempty"`
 
 	/*SecurityClientAuthenticator - Descr: what should the value of the gemfire property for security-client-authenticator be Default: DummyAuthenticator.create
 */
 	SecurityClientAuthenticator interface{} `yaml:"security_client_authenticator,omitempty"`
-
-	/*SecurityKeystoreFilepath - Descr: path on remote system for your keystore Default: /var/vcap/store
-*/
-	SecurityKeystoreFilepath interface{} `yaml:"security_keystore_filepath,omitempty"`
 
 	/*SecurityPublickeyPass - Descr: password for the given key Default: <nil>
 */
@@ -25,8 +25,12 @@ type Authn struct {
 */
 	Enabled interface{} `yaml:"enabled,omitempty"`
 
-	/*KeystoreBits - Descr: keystore file bits, base64 encoded Default: <nil>
+	/*SecurityJarBase64Bits - Descr: base64 encoding of authentication security jar Default: 
 */
-	KeystoreBits interface{} `yaml:"keystore_bits,omitempty"`
+	SecurityJarBase64Bits interface{} `yaml:"security_jar_base64_bits,omitempty"`
+
+	/*SecurityKeystoreFilepath - Descr: path on remote system for your keystore Default: /var/vcap/store
+*/
+	SecurityKeystoreFilepath interface{} `yaml:"security_keystore_filepath,omitempty"`
 
 }

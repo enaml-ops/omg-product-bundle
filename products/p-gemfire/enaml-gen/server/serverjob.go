@@ -5,7 +5,7 @@ package server
 */
 type ServerJob struct {
 
-	/*Gemfire - Descr: password for the given key Default: <nil>
+	/*Gemfire - Descr: Port the Locator is listening on Default: <nil>
 */
 	Gemfire *Gemfire `yaml:"gemfire,omitempty"`
 

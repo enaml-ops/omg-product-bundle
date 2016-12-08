@@ -5,20 +5,20 @@ package server
 */
 type Server struct {
 
-	/*RestPort - Descr: Port for the REST endpoint for administration Default: 8080
-*/
-	RestPort interface{} `yaml:"rest_port,omitempty"`
-
-	/*DevRestApi - Descr: activate the dev rest api on your gemfire server nodes Default: false
+	/*DevRestApi - Descr: the port your dev rest api will listen on Default: 7070
 */
 	DevRestApi *DevRestApi `yaml:"dev_rest_api,omitempty"`
+
+	/*VmMemory - Descr: RAM allocated to the VM Default: <nil>
+*/
+	VmMemory interface{} `yaml:"vm_memory,omitempty"`
 
 	/*Port - Descr: Port the Server will listen on Default: 55001
 */
 	Port interface{} `yaml:"port,omitempty"`
 
-	/*VmMemory - Descr: RAM allocated to the VM Default: <nil>
+	/*RestPort - Descr: Port for the REST endpoint for administration Default: 8080
 */
-	VmMemory interface{} `yaml:"vm_memory,omitempty"`
+	RestPort interface{} `yaml:"rest_port,omitempty"`
 
 }
