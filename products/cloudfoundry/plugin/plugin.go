@@ -57,6 +57,7 @@ func init() {
 //GetFlags -
 func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 	return []pcli.Flag{
+		pcli.CreateStringFlag("deployment-name", "cloud foundry deployment name", DeploymentName),
 		pcli.CreateStringFlag("cf-release-version", "version for cf bosh release", CFReleaseVersion),
 		pcli.CreateStringFlag("garden-release-version", "version for garden bosh release", GardenReleaseVersion),
 		pcli.CreateStringFlag("diego-release-version", "version for diego bosh release", DiegoReleaseVersion),
@@ -368,7 +369,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b
 
 func (s *Plugin) getDeploymentManifest(c *cli.Context, config *config.Config) (*enaml.DeploymentManifest, error) {
 	dm := enaml.NewDeploymentManifest([]byte(``))
-	dm.SetName(DeploymentName)
+	dm.SetName(c.String("deployment-name"))
 
 	dm.AddRelease(enaml.Release{
 		Name:    CFReleaseName,

@@ -22,7 +22,6 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 
 		Context("when 'stemcell-name' flag is given by the user", func() {
 			var ertPlugin *Plugin
-
 			BeforeEach(func() {
 				ertPlugin = new(Plugin)
 			})
@@ -40,6 +39,23 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 				for _, instanceGroup := range manifest.InstanceGroups {
 					Expect(instanceGroup.Stemcell).Should(Equal(controlStemcellAlias), fmt.Sprintf("stemcell for instance group %v was not set properly", instanceGroup.Name))
 				}
+			})
+		})
+
+		Context("when 'deployment-name' flag is given by the user", func() {
+			var ertPlugin *Plugin
+			var dm *enaml.DeploymentManifest
+			BeforeEach(func() {
+				ertPlugin = new(Plugin)
+			})
+			It("then it should overwrite the default and use the value given", func() {
+				args := []string{"ert-plugin"}
+				args = append(args, ertRequiredFlags("stem-cell-name")...)
+				args = append(args, "--deployment-name", "cf-staging")
+				dmBytes, err := ertPlugin.GetProduct(args,[]byte{}, nil)
+				Ω(err).ShouldNot(HaveOccurred())
+				dm = enaml.NewDeploymentManifest(dmBytes)
+				Ω(dm.Name).Should(Equal("cf-staging"))
 			})
 		})
 	})

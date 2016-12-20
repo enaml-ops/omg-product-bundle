@@ -32,6 +32,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 }
 
 type Config struct {
+	DeploymentName                string   `omg:"deployment-name,optional"`
 	AZs                           []string `omg:"az"`
 	StemcellName                  string
 	NetworkName                   string `omg:"network"`

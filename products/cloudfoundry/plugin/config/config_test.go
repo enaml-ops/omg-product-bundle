@@ -13,6 +13,7 @@ func BuildConfigContext() *cli.Context {
 	plugin := new(cloudfoundry.Plugin)
 	c := plugin.GetContext([]string{
 		"cloudfoundry",
+		"--deployment-name", "cf-staging",
 		"--az", "z1",
 		"--network", "theNetwork",
 		"--system-domain", "sys.yourdomain.com",
@@ -154,7 +155,7 @@ var _ = Describe("Config", func() {
 		It("then should return error", func() {
 			plugin := new(cloudfoundry.Plugin)
 			c := plugin.GetContext([]string{
-				"cloudfoundry",
+				"--deployment-name", "cloudfoundry",
 				"--az", "z1",
 			})
 			config, err := NewConfig(c)
@@ -171,6 +172,10 @@ var _ = Describe("Config", func() {
 			config, err = NewConfig(c)
 			Ω(err).ShouldNot(HaveOccurred())
 			Ω(config).ShouldNot(BeNil())
+		})
+
+		It("then deployment name should be set", func() {
+			Ω(config.DeploymentName).Should(Equal("cf-staging"))
 		})
 
 		It("then az should be set", func() {
