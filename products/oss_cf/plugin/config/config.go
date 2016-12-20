@@ -13,6 +13,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 		return nil, err
 	}
 	config := &Config{
+		DeploymentName:                c.String("deployment-name"),
 		AZs:                           c.StringSlice("az"),
 		StemcellName:                  c.String("stemcell-name"),
 		NetworkName:                   c.String("network"),
@@ -72,6 +73,7 @@ func NewConfig(c *cli.Context) (*Config, error) {
 }
 
 type Config struct {
+	DeploymentName                string
 	AZs                           []string
 	StemcellName                  string
 	NetworkName                   string

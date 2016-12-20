@@ -61,6 +61,7 @@ func (s *Plugin) GetFlags() (flags []pcli.Flag) {
 		pcli.CreateStringFlag("cf-mysql-release-sha", "sha for cf-mysql bosh release", CFMysqlReleaseSHA),
 		pcli.CreateStringFlag("cflinuxfs2-release-sha", "sha for cflinuxfs2 bosh release", CFLinuxReleaseSHA),
 
+		pcli.CreateStringFlag("deployment-name", "name for the deployment", DeploymentName),
 		pcli.CreateStringFlag("stemcell-version", "version of stemcell", s.GetMeta().Stemcell.Version),
 
 		// shared for all instance groups:
@@ -357,7 +358,7 @@ func (s *Plugin) GetProduct(args []string, cloudConfig []byte, cs cred.Store) (b
 
 func (s *Plugin) getDeploymentManifest(c *cli.Context, config *config.Config) (*enaml.DeploymentManifest, error) {
 	dm := enaml.NewDeploymentManifest([]byte(``))
-	dm.SetName(DeploymentName)
+	dm.SetName(c.String("deployment-name"))
 
 	dm.AddRelease(enaml.Release{
 		Name:    CFReleaseName,

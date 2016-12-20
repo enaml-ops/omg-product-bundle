@@ -42,6 +42,23 @@ var _ = Describe("Cloud Foundry Plugin", func() {
 				}
 			})
 		})
+
+		Context("when 'deployment-name' flag is given by the user", func() {
+			var ertPlugin *Plugin
+			var dm *enaml.DeploymentManifest
+			BeforeEach(func() {
+				ertPlugin = new(Plugin)
+			})
+			It("then it should overwrite the default and use the value given", func() {
+				args := []string{"ert-plugin"}
+				args = append(args, ertRequiredFlags("stem-cell-name")...)
+				args = append(args, "--deployment-name", "cf-staging")
+				dmBytes, err := ertPlugin.GetProduct(args, []byte{}, nil)
+				Ω(err).ShouldNot(HaveOccurred())
+				dm = enaml.NewDeploymentManifest(dmBytes)
+				Ω(dm.Name).Should(Equal("cf-staging"))
+			})
+		})
 	})
 
 	Describe("given InferFromCloudDecorate", func() {
