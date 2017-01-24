@@ -1,5 +1,5 @@
-hash: d305f7cf10fcf04b5ae7193f20d9a73331e48560c8a7061f7ae8b35c4a08f543
-updated: 2016-11-14T14:17:56.242391187-05:00
+hash: 07c92aea70f468ece3463506c184c32a89adacf3766071310dc7f988a4efa352
+updated: 2017-01-24T12:36:00.572109294-07:00
 imports:
 - name: github.com/cloudfoundry/bosh-init
   version: afa267bec2ba83d7572075ca34ac4c000a29023d
@@ -17,7 +17,7 @@ imports:
   - cloudproperties/azure
   - enamlbosh
 - name: github.com/enaml-ops/pluginlib
-  version: 399f71c718525e0b9481a633bbfde9c888638961
+  version: c244e6734dd27c48b5d3cf32d8e1d1c9c0f943a7
   subpackages:
   - cred
   - pcli
@@ -80,7 +80,7 @@ imports:
 - name: github.com/pkg/errors
   version: 248dadf4e9068a0b3e79f02ed0a610d935de5302
 - name: github.com/pkg/sftp
-  version: 4d0e916071f68db74f8a73926335f809396d6b42
+  version: ef9d88fbd130eb74c44ff86725c8bfdd94152ebe
 - name: github.com/square/certstrap
   version: b6aef507a0840bf78bac99e7ffa6e6eb5c2c3c9f
   subpackages:

@@ -36,7 +36,7 @@ import:
 - package: github.com/onsi/gomega
 - package: github.com/hashicorp/yamux
 - package: github.com/enaml-ops/pluginlib
-  version: master 
+  version: c244e6734dd27c48b5d3cf32d8e1d1c9c0f943a7 
 - package: github.com/golang/protobuf
   subpackages:
   - proto

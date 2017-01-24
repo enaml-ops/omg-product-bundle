@@ -112,6 +112,11 @@ var _ = Describe("Vault helpers", func() {
 				appDomains := c.StringSlice("app-domain")
 				Ω(appDomains).Should(ConsistOf("apps.example.com", "apps2.example.com"))
 			})
+
+			It("properly unmarshals boolean flags", func() {
+				Ω(c.Bool("uaa-enable-selfservice-links")).Should(BeFalse())
+				Ω(c.Bool("uaa-ldap-enabled")).Should(BeTrue())
+			})
 		})
 	})
 })
