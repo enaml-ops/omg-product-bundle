@@ -79,8 +79,8 @@ crosscompile:
           GOOS=darwin go build -o sfogliatelle-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/sfogliatelle/cmd/sfogliatelle/main.go
           GOOS=linux go build -o oss-cf-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/oss_cf/cmd/oss_cf/main.go
           GOOS=darwin go build -o oss-cf-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/oss_cf/cmd/oss_cf/main.go
-          GOOS=linux go build -o minio-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/minio/cmd/main.go
-          GOOS=darwin go build -o minio-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/minio/cmd/main.go
+          GOOS=linux go build -o minio-plugin-linux -ldflags "-s -w -X main.Version=${VERSION}" ./products/minio/cmd/minio/main.go
+          GOOS=darwin go build -o minio-plugin-osx -ldflags "-s -w -X main.Version=${VERSION}" ./products/minio/cmd/minio/main.go
 
     - script:
         name: add repo to artifact
