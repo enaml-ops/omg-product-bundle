@@ -5,12 +5,27 @@ package atc
 */
 type AtcJob struct {
 
+	/*BindPort - Descr: Port on which the ATC should listen for HTTP traffic.
+ Default: 8080
+*/
+	BindPort interface{} `yaml:"bind_port,omitempty"`
+
+	/*AllowSelfSignedCertificates - Descr: Allow self-signed certificates.
+ Default: false
+*/
+	AllowSelfSignedCertificates interface{} `yaml:"allow_self_signed_certificates,omitempty"`
+
 	/*TlsKey - Descr: SSL private key to use for encrypting HTTPS traffic.
 
 If not specified, only HTTP will be enabled.
  Default: <nil>
 */
 	TlsKey interface{} `yaml:"tls_key,omitempty"`
+
+	/*LogDbQueries - Descr: Log database queries. Log level is debug, so requires development mode.
+ Default: false
+*/
+	LogDbQueries interface{} `yaml:"log_db_queries,omitempty"`
 
 	/*TlsCert - Descr: SSL cert to use for HTTPS.
 
@@ -19,16 +34,22 @@ If not specified, only HTTP will be enabled.
 */
 	TlsCert interface{} `yaml:"tls_cert,omitempty"`
 
-	/*DevelopmentMode - Descr: Loosen up security for development purposes. This allows the ATC to be
-configured with no authentication methods.
- Default: false
+	/*TlsBindPort - Descr: Port on which the ATC should listen for HTTPS traffic.
+ Default: 4443
 */
-	DevelopmentMode interface{} `yaml:"development_mode,omitempty"`
+	TlsBindPort interface{} `yaml:"tls_bind_port,omitempty"`
 
-	/*BindIp - Descr: IP address on which the ATC should listen for HTTP traffic.
- Default: 0.0.0.0
+	/*OldResourceGracePeriod - Descr: How long to cache the result of a get step after a newer version of the
+resource is found. Use Go duration format (1m = 1 minute).
+ Default: 5m
 */
-	BindIp interface{} `yaml:"bind_ip,omitempty"`
+	OldResourceGracePeriod interface{} `yaml:"old_resource_grace_period,omitempty"`
+
+	/*Riemann - Descr: If configured, detailed metrics will be emitted to the specified Riemann
+server.
+ Default: 
+*/
+	Riemann *Riemann `yaml:"riemann,omitempty"`
 
 	/*ResourceCacheCleanupInterval - Descr: The interval, in Go duration format (1m = 1 minute), on which to check
 for and release old caches of resource versions.
@@ -41,66 +62,48 @@ for and release old caches of resource versions.
 */
 	PostgresqlDatabase interface{} `yaml:"postgresql_database,omitempty"`
 
-	/*Postgresql - Descr: Address of a PostgreSQL server to connect to, in `HOST:PORT` format.
+	/*DevelopmentMode - Descr: Loosen up security for development purposes. This allows the ATC to be
+configured with no authentication methods.
+ Default: false
+*/
+	DevelopmentMode interface{} `yaml:"development_mode,omitempty"`
 
-If not specified, one will be autodiscovered via BOSH links.
+	/*GithubAuth - Descr: Override default OAuth endpoint for Github Enterprise.
  Default: <nil>
-*/
-	Postgresql *Postgresql `yaml:"postgresql,omitempty"`
-
-	/*Riemann - Descr: If configured, detailed metrics will be emitted to the specified Riemann
-server.
- Default: 
-*/
-	Riemann *Riemann `yaml:"riemann,omitempty"`
-
-	/*GithubAuth - Descr: GitHub client ID to use for OAuth.
-
-The application must be configured with its callback URL as
-`{external_url}/auth/github/callback` (replacing `{external_url}`
-with the actual value).
- Default: 
 */
 	GithubAuth *GithubAuth `yaml:"github_auth,omitempty"`
 
-	/*BindPort - Descr: Port on which the ATC should listen for HTTP traffic.
- Default: 8080
+	/*AuthDuration - Descr: Length of time for which tokens are valid. Afterwards, users will have to log back in.
+Use Go duration format (48h = 48 hours).
+ Default: 24h
 */
-	BindPort interface{} `yaml:"bind_port,omitempty"`
+	AuthDuration interface{} `yaml:"auth_duration,omitempty"`
 
-	/*OldResourceGracePeriod - Descr: How long to cache the result of a get step after a newer version of the
-resource is found. Use Go duration format (1m = 1 minute).
- Default: 5m
+	/*Postgresql - Descr: Name of the database to use.
+ Default: atc
 */
-	OldResourceGracePeriod interface{} `yaml:"old_resource_grace_period,omitempty"`
+	Postgresql *Postgresql `yaml:"postgresql,omitempty"`
 
 	/*BasicAuthPassword - Descr: Password for HTTP basic auth, in plaintext.
  Default: 
 */
 	BasicAuthPassword interface{} `yaml:"basic_auth_password,omitempty"`
 
-	/*ExternalUrl - Descr: Externally reachable URL of the ATCs. Required for OAuth.
-
-Typically this is the URL that you as a user would use to reach your CI.
-For multiple ATCs it would go to some sort of load balancer.
- Default: <nil>
+	/*UaaAuth - Descr: List of space GUIDs for Cloud Foundry spaces whose developers
+will have access.
+ Default: []
 */
-	ExternalUrl interface{} `yaml:"external_url,omitempty"`
+	UaaAuth *UaaAuth `yaml:"uaa_auth,omitempty"`
 
-	/*TlsBindPort - Descr: Port on which the ATC should listen for HTTPS traffic.
- Default: 4443
+	/*GenericOauth - Descr: Application client ID for enabling generic OAuth. Default: 
 */
-	TlsBindPort interface{} `yaml:"tls_bind_port,omitempty"`
+	GenericOauth *GenericOauth `yaml:"generic_oauth,omitempty"`
 
-	/*PubliclyViewable - Descr: Allow viewing of pipelines as an anonymous user. Destructive operations
-still require auth, and the output of builds will only be visible if
-their job is configured with `public: true`.
-
-This is useful for open-source projects, or as a convenience to make
-monitoring your pipeline status easier.
- Default: false
+	/*Yeller - Descr: If configured, errors emitted to the logs will also be emitted to Yeller.
+This is only really useful for Concourse developers.
+ Default: 
 */
-	PubliclyViewable interface{} `yaml:"publicly_viewable,omitempty"`
+	Yeller *Yeller `yaml:"yeller,omitempty"`
 
 	/*PeerUrl - Descr: Address used internally to reach the ATC. This will be auto-generated
 using the IP of each ATC VM if not specified.
@@ -114,10 +117,23 @@ You should otherwise leave this value blank.
 */
 	PeerUrl interface{} `yaml:"peer_url,omitempty"`
 
+	/*ExternalUrl - Descr: Externally reachable URL of the ATCs. Required for OAuth.
+
+Typically this is the URL that you as a user would use to reach your CI.
+For multiple ATCs it would go to some sort of load balancer.
+ Default: <nil>
+*/
+	ExternalUrl interface{} `yaml:"external_url,omitempty"`
+
 	/*BasicAuthUsername - Descr: Username for HTTP basic auth.
  Default: 
 */
 	BasicAuthUsername interface{} `yaml:"basic_auth_username,omitempty"`
+
+	/*BindIp - Descr: IP address on which the ATC should listen for HTTP traffic.
+ Default: 0.0.0.0
+*/
+	BindIp interface{} `yaml:"bind_ip,omitempty"`
 
 	/*DefaultCheckInterval - Descr: The interval, in Go duration format (1m = 1 minute), on which to check
 for new versions of resources.
@@ -127,10 +143,5 @@ This can also be specified on a per-resource basis by specifying
  Default: 1m
 */
 	DefaultCheckInterval interface{} `yaml:"default_check_interval,omitempty"`
-
-	/*Yeller - Descr: Environment name to specify for errors emitted to Yeller.
- Default: 
-*/
-	Yeller *Yeller `yaml:"yeller,omitempty"`
 
 }

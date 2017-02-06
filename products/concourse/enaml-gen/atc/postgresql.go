@@ -5,15 +5,15 @@ package atc
 */
 type Postgresql struct {
 
-	/*Role - Descr: Name of role to connect with.
- Default: atc
-*/
-	Role *Role `yaml:"role,omitempty"`
-
 	/*Database - Descr: Name of the database to use.
  Default: atc
 */
 	Database interface{} `yaml:"database,omitempty"`
+
+	/*Role - Descr: Password to use when connecting.
+ Default: <nil>
+*/
+	Role *Role `yaml:"role,omitempty"`
 
 	/*Address - Descr: Address of a PostgreSQL server to connect to, in `HOST:PORT` format.
 

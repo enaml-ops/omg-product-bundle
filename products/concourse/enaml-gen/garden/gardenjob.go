@@ -5,7 +5,7 @@ package garden
 */
 type GardenJob struct {
 
-	/*Garden - Descr: List of comma-separated hosts that should skip connecting to the proxy Default: <nil>
+	/*Garden - Descr: List of CIDR blocks to which containers will be denied access. Default: []
 */
 	Garden *Garden `yaml:"garden,omitempty"`
 

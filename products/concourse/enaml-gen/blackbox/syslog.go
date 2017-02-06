@@ -5,7 +5,7 @@ package blackbox
 */
 type Syslog struct {
 
-	/*Destination - Descr: transport protocol for syslog drain (udp/tcp/tls) Default: tls
+	/*Destination - Descr: address for syslog drain (including port) Default: <nil>
 */
 	Destination *Destination `yaml:"destination,omitempty"`
 

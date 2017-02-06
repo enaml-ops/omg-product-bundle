@@ -5,6 +5,13 @@ package baggageclaim
 */
 type BaggageclaimJob struct {
 
+	/*VolumesImageSizeMb - Descr: The size in megabytes of the volumes image to allocate. This is allocated
+under /var/vcap/data, so should leave enough space for everything else.
+Defaults to the filesystem size minus 10Gig.
+ Default: -1
+*/
+	VolumesImageSizeMb interface{} `yaml:"volumes_image_size_mb,omitempty"`
+
 	/*BindIp - Descr: IP address on which Baggageclaim should listen for HTTP traffic.
  Default: 0.0.0.0
 */

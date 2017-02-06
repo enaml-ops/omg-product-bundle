@@ -5,8 +5,7 @@ package blackbox
 */
 type BlackboxJob struct {
 
-	/*Blackbox - Descr: directory with subdirectories containing log files. log lines will be tagged with subdirectory name.
- Default: /var/vcap/sys/log
+	/*Blackbox - Descr: address for syslog drain (including port) Default: <nil>
 */
 	Blackbox *Blackbox `yaml:"blackbox,omitempty"`
 

@@ -5,6 +5,11 @@ package postgresql
 */
 type PostgresqlJob struct {
 
+	/*BindIp - Descr: IP address on which the PostgresSQL server will listen.
+ Default: 0.0.0.0
+*/
+	BindIp interface{} `yaml:"bind_ip,omitempty"`
+
 	/*BindPort - Descr: Port on which the PostgresSQL server will listen.
  Default: 5432
 */
@@ -20,10 +25,5 @@ to create for the database.
  Default: 500
 */
 	MaxConnections interface{} `yaml:"max_connections,omitempty"`
-
-	/*BindIp - Descr: IP address on which the PostgresSQL server will listen.
- Default: 0.0.0.0
-*/
-	BindIp interface{} `yaml:"bind_ip,omitempty"`
 
 }

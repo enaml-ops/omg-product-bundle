@@ -5,6 +5,11 @@ package atc
 */
 type GithubAuth struct {
 
+	/*AuthUrl - Descr: Override default OAuth endpoint for Github Enterprise.
+ Default: <nil>
+*/
+	AuthUrl interface{} `yaml:"auth_url,omitempty"`
+
 	/*ClientId - Descr: GitHub client ID to use for OAuth.
 
 The application must be configured with its callback URL as
@@ -13,17 +18,6 @@ with the actual value).
  Default: 
 */
 	ClientId interface{} `yaml:"client_id,omitempty"`
-
-	/*ApiUrl - Descr: Override default API endpoint URL for Github Enterprise. Must end in a
-trailing slash.
- Default: <nil>
-*/
-	ApiUrl interface{} `yaml:"api_url,omitempty"`
-
-	/*AuthUrl - Descr: Override default OAuth endpoint for Github Enterprise.
- Default: <nil>
-*/
-	AuthUrl interface{} `yaml:"auth_url,omitempty"`
 
 	/*ClientSecret - Descr: GitHub client secret to use for OAuth.
 
@@ -34,15 +28,21 @@ with the actual value).
 */
 	ClientSecret interface{} `yaml:"client_secret,omitempty"`
 
+	/*TokenUrl - Descr: Override default access token endpoint for Github Enterprise.
+ Default: <nil>
+*/
+	TokenUrl interface{} `yaml:"token_url,omitempty"`
+
+	/*ApiUrl - Descr: Override default API endpoint URL for Github Enterprise. Must end in a
+trailing slash.
+ Default: <nil>
+*/
+	ApiUrl interface{} `yaml:"api_url,omitempty"`
+
 	/*Authorize - Descr: An array of different criteria to check for when authorizing a GitHub
 user. If empty, GitHub authorization is effectively disabled.
  Default: []
 */
 	Authorize interface{} `yaml:"authorize,omitempty"`
-
-	/*TokenUrl - Descr: Override default access token endpoint for Github Enterprise.
- Default: <nil>
-*/
-	TokenUrl interface{} `yaml:"token_url,omitempty"`
 
 }
