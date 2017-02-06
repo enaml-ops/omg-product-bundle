@@ -1,0 +1,13 @@
+name: groundcrew
+properties:
+  http_proxy_url: my-http-proxy-url
+  https_proxy_url: my-https-proxy-url
+  no_proxy:
+  - localhost
+  - test.com
+  additional_resource_types:
+  - image: mydocker/sample
+    type: mydocker_sample
+  - image: otherDocker/sample
+    type: otherDocker_sample
+release: concourse

@@ -23,31 +23,35 @@ const (
 	defaultGardenReleaseSHA    = "ef218cc8cc2ea5a874a59becabdf957e52976939"
 	defaultGardenReleaseVer    = "1.0.4"
 
-	concoursePassword      = "concourse-password"
-	concourseUsername      = "concourse-username"
-	externalURL            = "external-url"
-	webIPs                 = "web-ip"
-	networkName            = "network-name"
-	az                     = "az"
-	deploymentName         = "deployment-name"
-	webVMType              = "web-vm-type"
-	databaseVMType         = "database-vm-type"
-	workerVMType           = "worker-vm-type"
-	workerInstances        = "worker-instance-count"
-	databaseStorageType    = "database-storage-type"
-	postgresqlDbPwd        = "concourse-db-pwd"
-	concourseReleaseURL    = "concourse-release-url"
-	concourseReleaseSHA    = "concourse-release-sha"
-	concourseReleaseVer    = "concourse-release-ver"
-	gardenReleaseURL       = "garden-release-url"
-	gardenReleaseSHA       = "garden-release-sha"
-	gardenReleaseVer       = "garden-release-ver"
-	stemcellAlias          = "stemcell-alias"
-	stemcellOS             = "stemcell-os"
-	stemcellVersion        = "stemcell-version"
-	defaultStemcellAlias   = "trusty"
-	defaultStemcellName    = "ubuntu-trusty"
-	defaultStemcellVersion = "latest"
+	concoursePassword       = "concourse-password"
+	concourseUsername       = "concourse-username"
+	externalURL             = "external-url"
+	webIPs                  = "web-ip"
+	networkName             = "network-name"
+	az                      = "az"
+	deploymentName          = "deployment-name"
+	webVMType               = "web-vm-type"
+	databaseVMType          = "database-vm-type"
+	workerVMType            = "worker-vm-type"
+	workerInstances         = "worker-instance-count"
+	databaseStorageType     = "database-storage-type"
+	postgresqlDbPwd         = "concourse-db-pwd"
+	httpProxyURL            = "http-proxy-url"
+	httpsProxyURL           = "https-proxy-url"
+	noProxy                 = "no-proxy"
+	additionalResourceTypes = "additional-resource-types"
+	concourseReleaseURL     = "concourse-release-url"
+	concourseReleaseSHA     = "concourse-release-sha"
+	concourseReleaseVer     = "concourse-release-ver"
+	gardenReleaseURL        = "garden-release-url"
+	gardenReleaseSHA        = "garden-release-sha"
+	gardenReleaseVer        = "garden-release-ver"
+	stemcellAlias           = "stemcell-alias"
+	stemcellOS              = "stemcell-os"
+	stemcellVersion         = "stemcell-version"
+	defaultStemcellAlias    = "trusty"
+	defaultStemcellName     = "ubuntu-trusty"
+	defaultStemcellVersion  = "latest"
 )
 
 // Config contains the configuration for a Concourse deployment.
@@ -77,6 +81,11 @@ type Config struct {
 	StemcellAlias   string
 	StemcellOS      string `omg:"stemcell-os"`
 	StemcellVersion string
+
+	HTTPProxyURL            string   `omg:"http-proxy-url,optional"`
+	HTTPSProxyURL           string   `omg:"https-proxy-url,optional"`
+	NoProxy                 []string `omg:"no-proxy,optional"`
+	AdditionalResourceTypes []string `omg:"additional-resource-types,optional"`
 }
 
 // ConcoursePlugin is an omg product plugin for deploying Concourse.
@@ -100,6 +109,11 @@ func (s *ConcoursePlugin) GetFlags() (flags []pcli.Flag) {
 		pcli.Flag{FlagType: pcli.StringFlag, Name: databaseStorageType, Usage: "type of disk type for database job"},
 		pcli.Flag{FlagType: pcli.IntFlag, Name: workerInstances, Value: "1", Usage: "number of worker instances"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: postgresqlDbPwd, Usage: "password for postgres db"},
+
+		pcli.Flag{FlagType: pcli.StringFlag, Name: httpProxyURL, Usage: "http proxy url"},
+		pcli.Flag{FlagType: pcli.StringFlag, Name: httpsProxyURL, Usage: "https proxy url"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: noProxy, Usage: "slice of no proxy domains"},
+		pcli.Flag{FlagType: pcli.StringSliceFlag, Name: additionalResourceTypes, Usage: "slice of additional resource types specify as image name, type will be referenced with underscore ie repo/image will be repo_image"},
 
 		pcli.Flag{FlagType: pcli.StringFlag, Name: concourseReleaseURL, Value: defaultConcourseReleaseURL, Usage: "release url for concourse bosh release"},
 		pcli.Flag{FlagType: pcli.StringFlag, Name: concourseReleaseSHA, Value: defaultConcourseReleaseSHA, Usage: "release sha for concourse bosh release"},
@@ -193,6 +207,10 @@ func (s *ConcoursePlugin) newDeploymentManifest(cloudConfig []byte) (enaml.Deplo
 	cd.GardenReleaseURL = s.cfg.GardenReleaseURL
 	cd.GardenReleaseSHA = s.cfg.GardenReleaseSHA
 	cd.GardenReleaseVer = s.cfg.GardenReleaseVersion
+	cd.HTTPProxyURL = s.cfg.HTTPProxyURL
+	cd.HTTPSProxyURL = s.cfg.HTTPSProxyURL
+	cd.NoProxy = s.cfg.NoProxy
+	cd.AdditionalResourceTypes = s.cfg.AdditionalResourceTypes
 
 	url, err := url.Parse(cd.ConcourseURL)
 	if err != nil {

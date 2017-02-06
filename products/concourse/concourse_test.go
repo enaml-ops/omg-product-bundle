@@ -29,6 +29,34 @@ var _ = Describe("Concourse Deployment", func() {
 		})
 	})
 
+	Describe("given CreateBaggageClaimJob", func() {
+		Context("when not setting additional flags", func() {
+			It("job properties should be empty", func() {
+				job := deployment.CreateGroundCrewJob()
+				Ω(job).ShouldNot(BeNil())
+				controlYaml, err := ioutil.ReadFile("./fixtures/groundCrew-noproperties.yml")
+				Ω(err).ShouldNot(HaveOccurred())
+				b, err := yaml.Marshal(job)
+				Ω(err).ShouldNot(HaveOccurred())
+				Ω(b).Should(MatchYAML(string(controlYaml)))
+			})
+		})
+		Context("when setting additional flags", func() {
+			It("job properties should not be empty", func() {
+				deployment.HTTPProxyURL = "my-http-proxy-url"
+				deployment.HTTPSProxyURL = "my-https-proxy-url"
+				deployment.NoProxy = []string{"localhost", "test.com"}
+				deployment.AdditionalResourceTypes = []string{"mydocker/sample", "otherDocker/sample"}
+				job := deployment.CreateGroundCrewJob()
+				Ω(job).ShouldNot(BeNil())
+				controlYaml, err := ioutil.ReadFile("./fixtures/groundCrew.yml")
+				Ω(err).ShouldNot(HaveOccurred())
+				b, err := yaml.Marshal(job)
+				Ω(err).ShouldNot(HaveOccurred())
+				Ω(b).Should(MatchYAML(string(controlYaml)))
+			})
+		})
+	})
 	Describe("given CreateAtcJob", func() {
 		Context("when called without TLS cert/key flags", func() {
 			It("should not emit YAML for TLS settings", func() {

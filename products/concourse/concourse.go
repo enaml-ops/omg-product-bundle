@@ -2,6 +2,7 @@ package concourse
 
 import (
 	"fmt"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 
@@ -23,31 +24,41 @@ const (
 //Deployment -
 type Deployment struct {
 	//enaml.Deployment
-	manifest            *enaml.DeploymentManifest
-	ConcourseURL        string
-	ConcourseUserName   string
-	ConcoursePassword   string
-	NetworkName         string
-	WebIPs              []string
-	AZs                 []string
-	WorkerInstances     int
-	DeploymentName      string
-	PostgresPassword    string
-	WebVMType           string `omg:"web-vm-type"`
-	WorkerVMType        string
-	DatabaseVMType      string
-	DatabaseStorageType string
-	ConcourseReleaseVer string
-	ConcourseReleaseURL string
-	ConcourseReleaseSHA string
-	StemcellVersion     string
-	StemcellAlias       string
-	StemcellOS          string
-	GardenReleaseVer    string
-	GardenReleaseURL    string
-	GardenReleaseSHA    string
-	TLSCert             string
-	TLSKey              string
+	manifest                *enaml.DeploymentManifest
+	ConcourseURL            string
+	ConcourseUserName       string
+	ConcoursePassword       string
+	NetworkName             string
+	WebIPs                  []string
+	AZs                     []string
+	WorkerInstances         int
+	DeploymentName          string
+	PostgresPassword        string
+	WebVMType               string `omg:"web-vm-type"`
+	WorkerVMType            string
+	DatabaseVMType          string
+	DatabaseStorageType     string
+	ConcourseReleaseVer     string
+	ConcourseReleaseURL     string
+	ConcourseReleaseSHA     string
+	StemcellVersion         string
+	StemcellAlias           string
+	StemcellOS              string
+	GardenReleaseVer        string
+	GardenReleaseURL        string
+	GardenReleaseSHA        string
+	TLSCert                 string
+	TLSKey                  string
+	HTTPProxyURL            string
+	HTTPSProxyURL           string
+	NoProxy                 []string
+	AdditionalResourceTypes []string
+}
+
+//AdditionalResource - struct that is used for adding additional resources
+type AdditionalResource struct {
+	Type  string `yaml:"type"`
+	Image string `yaml:"image"`
 }
 
 //NewDeployment -
@@ -258,7 +269,24 @@ func (d *Deployment) CreateBaggageClaimJob() (job *enaml.InstanceJob) {
 
 //CreateGroundCrewJob -
 func (d *Deployment) CreateGroundCrewJob() (job *enaml.InstanceJob) {
-	job = enaml.NewInstanceJob("groundcrew", concourseReleaseName, groundcrew.GroundcrewJob{})
+	groundCrewJob := groundcrew.GroundcrewJob{}
+	if d.HTTPProxyURL != "" {
+		groundCrewJob.HttpProxyUrl = d.HTTPProxyURL
+	}
+	if d.HTTPSProxyURL != "" {
+		groundCrewJob.HttpsProxyUrl = d.HTTPSProxyURL
+	}
+	if len(d.NoProxy) > 0 {
+		groundCrewJob.NoProxy = d.NoProxy
+	}
+	if len(d.AdditionalResourceTypes) > 0 {
+		var additionalResources []AdditionalResource
+		for _, additionalResource := range d.AdditionalResourceTypes {
+			additionalResources = append(additionalResources, AdditionalResource{Type: strings.Replace(additionalResource, "/", "_", -1), Image: additionalResource})
+		}
+		groundCrewJob.AdditionalResourceTypes = additionalResources
+	}
+	job = enaml.NewInstanceJob("groundcrew", concourseReleaseName, groundCrewJob)
 	return
 }
 
