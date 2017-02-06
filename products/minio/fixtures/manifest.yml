@@ -1,0 +1,38 @@
+name: minio
+
+releases:
+- name: minio
+  sha1: 0629ca0118749c539c9dc4ac457af411198c274a
+  url: https://github.com/Pivotal-Field-Engineering/minio-release/releases/download/v1/minio-1.tgz
+  version: "1"
+
+stemcells:
+- alias: trusty
+  os: ubuntu-trusty
+  version: latest
+
+instance_groups:
+- name: minio-server
+  azs: [z1]
+  instances: 1
+  jobs:
+  - name: minio-server
+    release: minio
+    properties:
+      credential:
+        accesskey: sample-access-key
+        secretkey: sample-secret-key
+      region: us-east-1
+  vm_type: small
+  stemcell: trusty
+  persistent_disk_type: small
+  networks:
+  - name: theNetwork
+    static_ips:
+    - 10.244.0.2
+
+update:
+  canaries: 1
+  canary_watch_time: 1000-60000
+  update_watch_time: 1000-60000
+  max_in_flight: 3
